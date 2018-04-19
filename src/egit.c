@@ -101,4 +101,5 @@ void egit_init(emacs_env *env)
     // repository
     DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));
     DEFUN("git-repository-init", FUNC(egit_repository_init, 1, 2, "PATH &optional IS-BARE", ""));
+    DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
 }

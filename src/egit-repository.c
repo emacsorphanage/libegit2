@@ -52,3 +52,19 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
+
+emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
+{
+    if (!em_assert(env, em_stringp, _path)) return em_nil;
+
+    git_repository *repo;
+    int retval;
+    {
+        char *path = em_get_string(env, _path);
+        retval = git_repository_open(&repo, path);
+        free(path);
+    }
+    if (egit_dispatch_error(env, retval)) return em_nil;
+
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
+}
