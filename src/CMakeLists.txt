@@ -1,5 +1,8 @@
 file(GLOB ELIBGIT2_SRCS *.c)
 
-add_library(elibgit2 SHARED ${ELIBGIT2_SRCS})
+add_library(egit2 SHARED ${ELIBGIT2_SRCS})
 
-target_link_libraries(elibgit2 git2)
+target_link_libraries(egit2 git2)
+target_include_directories(egit2 SYSTEM PRIVATE "${libgit2_SOURCE_DIR}/include")
+target_include_directories(egit2 SYSTEM PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../uthash")
+target_compile_options(egit2 PRIVATE -Wall -Wextra)
