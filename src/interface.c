@@ -9,6 +9,7 @@
 #define INTERN(val) env->intern(env, (val))
 
 emacs_value em_nil, em_stringp, em_t;
+emacs_value em_git_repository_p;
 
 static emacs_value _cons, _defalias, _define_error, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
@@ -23,6 +24,8 @@ void em_init(emacs_env *env)
     em_nil = GLOBREF(INTERN("nil"));
     em_stringp = GLOBREF(INTERN("stringp"));
     em_t = GLOBREF(INTERN("t"));
+
+    em_git_repository_p = GLOBREF(INTERN("git-repository-p"));
 
     _cons = GLOBREF(INTERN("cons"));
     _defalias = GLOBREF(INTERN("defalias"));
@@ -57,11 +60,7 @@ bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
 {
     bool cond = env->is_not_nil(env, em_funcall(env, predicate, 1, arg));
     if (!cond)
-        env->non_local_exit_signal(
-            env, _wrong_type_argument,
-            em_cons(env, predicate, em_cons(env, arg, em_nil))
-        );
-
+        em_signal_wrong_type(env, predicate, arg);
     return cond;
 }
 
@@ -76,6 +75,15 @@ void em_signal_void(emacs_env *env)
 {
     env->non_local_exit_signal(env, _not_implemented, em_nil);
 }
+
+void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actual)
+{
+    env->non_local_exit_signal(
+        env, _wrong_type_argument,
+        em_cons(env, expected, em_cons(env, actual, em_nil))
+    );
+}
+
 
 char *em_get_string(emacs_env *env, emacs_value arg)
 {

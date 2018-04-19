@@ -1,20 +1,14 @@
+#include <string.h>
+
 #include "git2.h"
 
 #include "egit.h"
 #include "interface.h"
 #include "egit-repository.h"
 
-static bool _egit_repository_p(emacs_env *env, emacs_value _obj)
-{
-    if (!em_user_ptrp(env, _obj))
-        return false;
-    egit_object *obj = (egit_object*)env->get_user_ptr(env, _obj);
-    return obj->type == EGIT_REPOSITORY;
-}
-
 emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 {
-    return _egit_repository_p(env, obj) ? em_t : em_nil;
+    return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
 }
 
 emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
@@ -67,4 +61,22 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     if (egit_dispatch_error(env, retval)) return em_nil;
 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
+}
+
+emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
+{
+    if (!egit_assert_type(env, _repo, EGIT_REPOSITORY, em_git_repository_p)) return em_nil;
+
+    git_repository *repo = egit_extract(env, _repo);
+    const char *path = git_repository_path(repo);
+    return env->make_string(env, path, strlen(path));
+}
+
+emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
+{
+    if (!egit_assert_type(env, _repo, EGIT_REPOSITORY, em_git_repository_p)) return em_nil;
+
+    git_repository *repo = egit_extract(env, _repo);
+    const char *path = git_repository_workdir(repo);
+    return path ? env->make_string(env, path, strlen(path)) : em_nil;
 }

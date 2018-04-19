@@ -25,6 +25,22 @@ typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
 
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
 
+egit_type egit_get_type(emacs_env *env, emacs_value _obj)
+{
+    if (!em_user_ptrp(env, _obj))
+        return EGIT_UNKNOWN;
+    egit_object *obj = (egit_object*)env->get_user_ptr(env, _obj);
+    return obj->type;
+}
+
+bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_value predicate)
+{
+    if (type == egit_get_type(env, obj))
+        return true;
+    em_signal_wrong_type(env, predicate, obj);
+    return false;
+}
+
 static void egit_free(void* _obj)
 {
     egit_object *obj = (egit_object*) _obj;
@@ -38,6 +54,8 @@ static void egit_free(void* _obj)
     switch (obj->type) {
     case EGIT_REPOSITORY:
         git_repository_free(obj->ptr);
+        break;
+    case EGIT_UNKNOWN:
         break;
     }
 
@@ -59,6 +77,12 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
     }
 
     return env->make_user_ptr(env, egit_free, obj);
+}
+
+void *egit_extract(emacs_env *env, emacs_value _obj)
+{
+    egit_object *obj = (egit_object*)env->get_user_ptr(env, _obj);
+    return obj->ptr;
 }
 
 emacs_value egit_dispatch_void(emacs_env *env,
@@ -102,4 +126,6 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));
     DEFUN("git-repository-init", FUNC(egit_repository_init, 1, 2, "PATH &optional IS-BARE", ""));
     DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
+    DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
+    DEFUN("git-repository-workdir", FUNC(egit_repository_workdir, 1, 1, "REPO", ""));
 }
