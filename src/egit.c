@@ -5,6 +5,7 @@
 #include "uthash.h"
 
 #include "interface.h"
+#include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit.h"
 
@@ -135,12 +136,21 @@ void egit_init(emacs_env *env)
     // Clone
     DEFUN("git-clone", FUNC(egit_clone, 2, 2, "URL PATH", ""));
 
+    // Reference
+    DEFUN("git-reference-name", FUNC(egit_reference_name, 1, 1, "REF", ""));
+    DEFUN("git-reference-owner", FUNC(egit_reference_owner, 1, 1, "REF", ""));
+    DEFUN("git-reference-resolve", FUNC(egit_reference_resolve, 1, 1, "REF", ""));
+    DEFUN("git-reference-target", FUNC(egit_reference_target, 1, 1, "REF", ""));
+
+    DEFUN("git-reference-p", FUNC(egit_reference_p, 1, 1, "OBJ", ""));
+
     // Repository
     DEFUN("git-repository-init", FUNC(egit_repository_init, 1, 2, "PATH &optional IS-BARE", ""));
     DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
     DEFUN("git-repository-open-bare", FUNC(egit_repository_open_bare, 1, 1, "PATH", ""));
 
     DEFUN("git-repository-commondir", FUNC(egit_repository_commondir, 1, 1, "REPO", ""));
+    DEFUN("git-repository-head", FUNC(egit_repository_head, 1, 1, "REPO", ""));
     DEFUN("git-repository-ident", FUNC(egit_repository_ident, 1, 1, "REPO", ""));
     DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
     DEFUN("git-repository-state", FUNC(egit_repository_state, 1, 1, "REPO", ""));

@@ -1,5 +1,3 @@
-#include "git2.h"
-
 #ifndef EGIT_REPOSITORY_H
 #define EGIT_REPOSITORY_H
 
@@ -9,6 +7,7 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path);
 emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path);
 
 emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo);
+emacs_value egit_repository_head(emacs_env *env, emacs_value _repo);
 emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo);
 emacs_value egit_repository_path(emacs_env *env, emacs_value _repo);
 emacs_value egit_repository_state(emacs_env *env, emacs_value _repo);

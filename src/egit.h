@@ -8,6 +8,8 @@
     do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
 #define EGIT_ASSERT_REPOSITORY(val) \
     do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_git_repository_p)) return em_nil; } while (0)
+#define EGIT_ASSERT_REFERENCE(val) \
+    do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_git_reference_p)) return em_nil; } while (0)
 #define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
 #define EGIT_CHECK_ERROR(val) \
     do { if (egit_dispatch_error(env, (val))) return em_nil; } while (0)

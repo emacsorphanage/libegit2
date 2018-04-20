@@ -102,6 +102,16 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     return em_cons(env, _name, _email);
 }
 
+emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_reference *ref;
+    int retval = git_repository_head(&ref, repo);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
 emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
