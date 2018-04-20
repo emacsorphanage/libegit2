@@ -70,6 +70,49 @@ work.
 	load-path = build
 ```
 
+## Contributing
+
+### Adding a function
+
+1. Find the section that the function belongs to (i.e. `git_SECTION_xyz`).
+2. Create, if necessary, `src/egit-SECTION.h` and `src/egit-SECTION.c`.
+3. In `src/egit-SECTION.h`, declare the function with `EGIT_DEFUN`. See existing headers for
+   examples.
+4. In `src/egit-SECTION.c`, document the function with `EGIT_DOC`. See existing files for examples.
+5. In `src/egit-SECTION.c`, implement the function. See existing files for examples.
+   1. Always check argument types in the beginning. Use `EGIT_ASSERT` for this. These macros may return.
+   2. Then, extract the data needed from `emacs_value`. This may involve allocating buffers for strings.
+   3. Call the `libgit2` backend function.
+   4. Free any memory you might need to free that was allocated in step 2.
+   5. Check the error code if applicable with `EGIT_CHECK_ERROR`. This macro may return.
+   6. Create return value and return.
+6. In `src/egit.c`, create a `DEFUN` call in `egit_init`. You may need to include a new header.
+
+### Adding a type
+
+Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer. To
+do this we use a hash table with reference counting semantics to ensure that no object is freed out
+of turn. There are two reasons for this:
+
+- Several user pointers may point to the same libgit2 structure. Therefore we cannot unconditionally
+  free the structure in the user pointer finalizer. In other words, the user pointers cannot be
+  assumed to take full ownership of the structure.
+- If e.g. a `git_object` is kept alive, its repository must be kept alive, too. We cannot assume
+  that the finalizer for the repository is always called after that of the object.
+
+1. In `src/egit.h` add an entry to the `egit_type` enum for the new type.
+2. In `src/egit.h` ass a new `EGIT_ASSERT` macro for the new type.
+3. In `src/egit.c` add a new entry to the `egit_decref_wrapper` switch statement to free a
+   structure. If the new structure needs to keep other objects alive (usually the "owner" in libgit2
+   terms), also call `egit_decref_wrapped` on these (see existing code for examples).
+4. In `src/egit.c` add a new entry to the `egit_wrap` switch statement to increase the reference
+   counts of other objects that must be kept alive.
+5. In `src/egit.c` add a new entry to the `egit_typeof` switch statement.
+6. In `src/egit.c` add a new `egit_TYPE_p` predicate function.
+7. In `src/egit.c` create a `DEFUN` call in `egit_init` for the predicate function.
+8. In `interface.h` add two new symbols, `TYPE-p` and `TYPE`.
+9. In `interface.c` initialize those symbols in the `em_init` function.
+
 ## Function list
 
 This is a complete list of functions in libgit2. It therefore serves more or less as an upper bound
