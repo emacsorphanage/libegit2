@@ -8,6 +8,9 @@
 #define GLOBREF(val) env->make_global_ref(env, (val))
 #define INTERN(val) env->intern(env, (val))
 
+// We store some globa references to emacs objects, mostly symbols,
+// so that we don't have to waste time calling intern later on.
+
 emacs_value em_nil, em_stringp, em_t;
 
 // Git object predicates
@@ -18,6 +21,7 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
     em_cherrypick_sequence, em_bisect, em_rebase, em_rebase_interactive, em_rebase_merge,
     em_apply_mailbox, em_apply_mailbox_or_rebase;
 
+// Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
 
@@ -58,6 +62,13 @@ void em_init(emacs_env *env)
     em_define_error(env, _not_implemented, "Not implemented");
 }
 
+/**
+ * Call an Emacs function without error checking.
+ * @param env The active Emacs environment.
+ * @param func The function to call.
+ * @param nargs The number of arguments that follow.
+ * @return The function return value.
+ */
 static emacs_value em_funcall(emacs_env *env, emacs_value func, ptrdiff_t nargs, ...)
 {
     emacs_value args[nargs];
@@ -86,11 +97,6 @@ void em_signal_giterr(emacs_env *env, int _klass, const char* _msg)
     env->non_local_exit_signal(env, _giterr, em_cons(env, klass, em_cons(env, msg, em_nil)));
 }
 
-void em_signal_void(emacs_env *env)
-{
-    env->non_local_exit_signal(env, _not_implemented, em_nil);
-}
-
 void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actual)
 {
     env->non_local_exit_signal(
@@ -98,7 +104,6 @@ void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actu
         em_cons(env, expected, em_cons(env, actual, em_nil))
     );
 }
-
 
 char *em_get_string(emacs_env *env, emacs_value arg)
 {
@@ -134,21 +139,4 @@ void em_provide(emacs_env *env, const char *feature)
 bool em_user_ptrp(emacs_env *env, emacs_value val)
 {
     return env->is_not_nil(env, em_funcall(env, _user_ptrp, 1, val));
-}
-
-emacs_value em_vector_vargs(emacs_env *env, ptrdiff_t nargs, va_list vargs)
-{
-    emacs_value args[nargs];
-    for (ptrdiff_t i = 0; i < nargs; i++)
-        args[i] = va_arg(vargs, emacs_value);
-    return env->funcall(env, _vector, nargs, args);
-}
-
-emacs_value em_vector(emacs_env *env, ptrdiff_t nargs, ...)
-{
-    va_list vargs;
-    va_start(vargs, nargs);
-    emacs_value retval = em_vector_vargs(env, nargs, vargs);
-    va_end(vargs);
-    return retval;
 }

@@ -12,12 +12,8 @@
 #include "egit-revparse.h"
 #include "egit.h"
 
+// Hash table of stored objects
 egit_object *object_store = NULL;
-
-typedef emacs_value (*func_1)(emacs_env*, emacs_value);
-typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
-
-#define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj)
 {
@@ -47,6 +43,7 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
 
 void egit_decref_wrapped(void *obj)
 {
+    // Look up the wrapper struct in the hash table, and call egit_decref_wrapper
     egit_object *wrapper;
     HASH_FIND_PTR(object_store, &obj, wrapper);
     egit_decref_wrapper(wrapper);
@@ -54,14 +51,18 @@ void egit_decref_wrapped(void *obj)
 
 void egit_decref_wrapper(void *_obj)
 {
+    // The argument type must be void* to make this function work as an Emacs finalizer
     egit_object *obj = (egit_object*)_obj;
     obj->refcount--;
 
     if (obj->refcount != 0)
         return;
 
+    // First, delete the wrapper from the object store
     HASH_DEL(object_store, obj);
 
+    // Decref any owner objects if applicable, and free the libgit2 struct
+    // Note that this object must be freed before calling decref on others
     switch (obj->type) {
     case EGIT_COMMIT:
     case EGIT_TREE:
@@ -86,16 +87,29 @@ void egit_decref_wrapper(void *_obj)
         break;
     }
 
+    // Finally, free the wrapper struct
     free(obj);
 }
 
-egit_object *egit_incref(egit_type type, void *obj)
+/**
+ * Increase the reference count of the given pointer.
+ * If the pointer does not exist in the object store, add it with a refcount of one.
+ * Otherwise, increase the refcount by one.
+ * @param type The type of the libgit2 structure to store.
+ * @param obj The pointer to store.
+ * @return Pointer to the egit_object wrapper struct.
+ */
+static egit_object *egit_incref(egit_type type, void *obj)
 {
     egit_object *retval;
     HASH_FIND_PTR(object_store, &obj, retval);
+
     if (retval)
+        // Object is already stored, just incref
         retval->refcount++;
+
     else {
+        // Object must be added
         retval = (egit_object*)malloc(sizeof(egit_object));
         retval->type = type;
         retval->refcount = 1;
@@ -119,8 +133,10 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
         }
     }
 
+    // Ensure that the object is added to the store, with a reference
     egit_object *obj = egit_incref(type, data);
 
+    // Increase refcounts of owner object(s), if applicable
     switch (type) {
     case EGIT_COMMIT:
     case EGIT_TREE:
@@ -136,8 +152,15 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
         break;
     }
 
+    // Make an Emacs user pointer to the wrapper, and return
     return env->make_user_ptr(env, egit_decref_wrapper, obj);
 }
+
+typedef emacs_value (*func_1)(emacs_env*, emacs_value);
+typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
+
+// Get an argument index, or nil. Useful for simulating optional arguments.
+#define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
 
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {

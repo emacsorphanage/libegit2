@@ -9,6 +9,10 @@ int plugin_is_GPL_compatible;
 
 static bool initialized = false;
 
+/**
+ * Initialize the libegit2 module.
+ * This is only done once, no matter how many times it's called.
+ */
 int emacs_module_init(struct emacs_runtime *ert)
 {
     if (initialized)
