@@ -21,6 +21,13 @@
 #define EGIT_CHECK_ERROR(val)                                           \
     do { if (egit_dispatch_error(env, (val))) return em_nil; } while (0)
 
+#define EGIT_RET_BUF_AS_STRING(buf)                                     \
+    do {                                                                \
+        emacs_value ret = env->make_string(env, (buf).ptr, (buf).size); \
+        git_buf_free(&(buf));                                           \
+        return ret;                                                     \
+    } while (0)
+
 typedef enum {
     EGIT_UNKNOWN,
     EGIT_REPOSITORY,

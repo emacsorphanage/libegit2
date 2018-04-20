@@ -9,11 +9,17 @@ EGIT_DEFUN(repository_open, emacs_value _path);
 EGIT_DEFUN(repository_open_bare, emacs_value _path);
 
 EGIT_DEFUN(repository_commondir, emacs_value _repo);
+EGIT_DEFUN(repository_get_namespace, emacs_value _repo);
 EGIT_DEFUN(repository_head, emacs_value _repo);
+EGIT_DEFUN(repository_head_for_worktree, emacs_value _repo, emacs_value _name);
 EGIT_DEFUN(repository_ident, emacs_value _repo);
+EGIT_DEFUN(repository_message, emacs_value _repo);
 EGIT_DEFUN(repository_path, emacs_value _repo);
 EGIT_DEFUN(repository_state, emacs_value _repo);
 EGIT_DEFUN(repository_workdir, emacs_value _repo);
+
+EGIT_DEFUN(repository_detach_head, emacs_value _repo);
+EGIT_DEFUN(repository_message_remove, emacs_value _repo);
 
 EGIT_DEFUN(repository_p, emacs_value obj);
 EGIT_DEFUN(repository_bare_p, emacs_value _repo);

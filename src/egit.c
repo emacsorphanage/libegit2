@@ -148,11 +148,17 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-open-bare", repository_open_bare, 1, 1);
 
     DEFUN("git-repository-commondir", repository_commondir, 1, 1);
+    DEFUN("git-repository-get-namespace", repository_get_namespace, 1, 1);
     DEFUN("git-repository-head", repository_head, 1, 1);
+    DEFUN("git-repository-head-for-worktree", repository_head_for_worktree, 2, 2);
     DEFUN("git-repository-ident", repository_ident, 1, 1);
+    DEFUN("git-repository-message", repository_message, 1, 1);
     DEFUN("git-repository-path", repository_path, 1, 1);
     DEFUN("git-repository-state", repository_state, 1, 1);
     DEFUN("git-repository-workdir", repository_workdir, 1, 1);
+
+    DEFUN("git-repository-detach-head", repository_detach_head, 1, 1);
+    DEFUN("git-repository-message-remove", repository_message_remove, 1, 1);
 
     DEFUN("git-repository-p", repository_p, 1, 1);
     DEFUN("git-repository-bare-p", repository_bare_p, 1, 1);

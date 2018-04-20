@@ -114,6 +114,16 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     return em_cons(env, _name, _email);
 }
 
+EGIT_DOC(repository_get_namespace, "REPO",
+         "Return the currently active namespace for REPO, or nil.");
+emacs_value egit_repository_get_namespace(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    const char *namespace = git_repository_get_namespace(repo);
+    return namespace ? env->make_string(env, namespace, strlen(namespace)) : em_nil;
+}
+
 EGIT_DOC(repository_head, "REPO",
          "Retrieve and resolve the reference pointed at by HEAD in REPO.");
 emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
@@ -124,6 +134,40 @@ emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
     int retval = git_repository_head(&ref, repo);
     EGIT_CHECK_ERROR(retval);
     return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
+EGIT_DOC(repository_head_for_worktree, "REPO NAME",
+         "Return the HEAD for the worktree named NAME at REPO.");
+emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo, emacs_value _name)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_name);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_reference *ref;
+    int retval;
+    {
+        char *name = em_get_string(env, _name);
+        retval = git_repository_head_for_worktree(&ref, repo, name);
+        free(name);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
+EGIT_DOC(repository_message, "REPO",
+         "Return the prepared commit message for REPO, or nil.\n"
+         "This is the contents of .git/MERGE_MSG.");
+emacs_value egit_repository_message(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_buf buf = {NULL, 0, 0};
+    int retval = git_repository_message(&buf, repo);
+    if (retval == GIT_ENOTFOUND) return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    EGIT_RET_BUF_AS_STRING(buf);
 }
 
 EGIT_DOC(repository_path, "REPO",
@@ -180,6 +224,36 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_workdir(repo);
     return path ? env->make_string(env, path, strlen(path)) : em_nil;
+}
+
+
+// =============================================================================
+// Operations
+
+EGIT_DOC(repository_detach_head, "REPO",
+         "Detach the head of REPO.\n\n"
+         "If HEAD is already detached and points to a commit, do nothing.\n"
+         "If HEAD is already detached and points to a non-commitish, error.\n"
+         "Otherwise, update HEAD, making it point to the peeled commit.");
+emacs_value egit_repository_detach_head(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval = git_repository_detach_head(repo);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(repository_message_remove, "REPO",
+         "Remove the stored commit message of REPO.\n"
+         "This deletes the file .git/MERGE_MSG.  It is an error if the file does not exist.");
+emacs_value egit_repository_message_remove(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval = git_repository_message_remove(repo);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
 }
 
 
