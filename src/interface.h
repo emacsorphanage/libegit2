@@ -7,8 +7,9 @@
 
 extern emacs_value em_nil, em_stringp, em_t;
 
-// Git object predicates
+// Git object predicates and types
 extern emacs_value em_git_object_p, em_git_repository_p, em_git_reference_p;
+extern emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object;
 
 // Repository states
 extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,

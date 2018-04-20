@@ -185,6 +185,21 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     return true;
 }
 
+EGIT_DOC(typeof, "OBJ", "Return the type of the git pointer OBJ, or nil.");
+static emacs_value egit_typeof(emacs_env *env, emacs_value val)
+{
+    switch (egit_get_type(env, val)) {
+    case EGIT_REPOSITORY: return em_repository;
+    case EGIT_REFERENCE: return em_reference;
+    case EGIT_COMMIT: return em_commit;
+    case EGIT_TREE: return em_tree;
+    case EGIT_BLOB: return em_blob;
+    case EGIT_TAG: return em_tag;
+    case EGIT_OBJECT: return em_object;
+    default: return em_nil;
+    }
+}
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -195,6 +210,8 @@ bool egit_dispatch_error(emacs_env *env, int retval)
 
 void egit_init(emacs_env *env)
 {
+    DEFUN("git-typeof", typeof, 1, 1);
+
     // Clone
     DEFUN("git-clone", clone, 2, 2);
 

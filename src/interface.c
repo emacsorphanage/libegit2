@@ -15,6 +15,7 @@ emacs_value em_nil, em_stringp, em_t;
 
 // Git object predicates
 emacs_value em_git_object_p, em_git_repository_p, em_git_reference_p;
+emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -35,6 +36,14 @@ void em_init(emacs_env *env)
     em_git_object_p = GLOBREF(INTERN("git-object-p"));
     em_git_repository_p = GLOBREF(INTERN("git-repository-p"));
     em_git_reference_p = GLOBREF(INTERN("git-reference-p"));
+
+    em_repository = GLOBREF(INTERN("repository"));
+    em_reference = GLOBREF(INTERN("reference"));
+    em_commit = GLOBREF(INTERN("commit"));
+    em_tree = GLOBREF(INTERN("tree"));
+    em_blob = GLOBREF(INTERN("blob"));
+    em_tag = GLOBREF(INTERN("tag"));
+    em_object = GLOBREF(INTERN("object"));
 
     em_merge = GLOBREF(INTERN("merge"));
     em_revert = GLOBREF(INTERN("revert"));
