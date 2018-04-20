@@ -6,7 +6,9 @@
 #define INTERFACE_H
 
 extern emacs_value em_nil, em_stringp, em_t;
-extern emacs_value em_git_repository_p;
+
+// Git object predicates
+extern emacs_value em_git_repository_p, em_git_reference_p;
 
 // Repository states
 extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,

@@ -41,9 +41,16 @@ bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_val
     return false;
 }
 
-static void egit_free(void* _obj)
+void egit_decref_wrapped(void *obj)
 {
-    egit_object *obj = (egit_object*) _obj;
+    egit_object *wrapper;
+    HASH_FIND_PTR(object_store, &obj, wrapper);
+    egit_decref_wrapper(wrapper);
+}
+
+void egit_decref_wrapper(void *_obj)
+{
+    egit_object *obj = (egit_object*)_obj;
     obj->refcount--;
 
     if (obj->refcount != 0)
@@ -52,6 +59,12 @@ static void egit_free(void* _obj)
     HASH_DEL(object_store, obj);
 
     switch (obj->type) {
+    case EGIT_REFERENCE: {
+        git_repository *repo = git_reference_owner(obj->ptr);
+        git_reference_free(obj->ptr);
+        egit_decref_wrapped(repo);
+        break;
+    }
     case EGIT_REPOSITORY:
         git_repository_free(obj->ptr);
         break;
@@ -62,21 +75,36 @@ static void egit_free(void* _obj)
     free(obj);
 }
 
-emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
+egit_object *egit_incref(egit_type type, void *obj)
 {
-    egit_object *obj;
-    HASH_FIND_PTR(object_store, &data, obj);
-    if (obj)
-        obj->refcount++;
+    egit_object *retval;
+    HASH_FIND_PTR(object_store, &obj, retval);
+    if (retval)
+        retval->refcount++;
     else {
-        obj = (egit_object*)malloc(sizeof(egit_object));
-        obj->type = type;
-        obj->refcount = 1;
-        obj->ptr = data;
-        HASH_ADD_PTR(object_store, ptr, obj);
+        retval = (egit_object*)malloc(sizeof(egit_object));
+        retval->type = type;
+        retval->refcount = 1;
+        retval->ptr = obj;
+        HASH_ADD_PTR(object_store, ptr, retval);
     }
 
-    return env->make_user_ptr(env, egit_free, obj);
+    return retval;
+}
+
+emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
+{
+    egit_object *obj = egit_incref(type, data);
+
+    switch (type) {
+    case EGIT_REFERENCE:
+        egit_incref(EGIT_REPOSITORY, git_reference_owner(data));
+        break;
+    default:
+        break;
+    }
+
+    return env->make_user_ptr(env, egit_decref_wrapper, obj);
 }
 
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
@@ -115,6 +143,7 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-commondir", FUNC(egit_repository_commondir, 1, 1, "REPO", ""));
     DEFUN("git-repository-ident", FUNC(egit_repository_ident, 1, 1, "REPO", ""));
     DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
+    DEFUN("git-repository-state", FUNC(egit_repository_state, 1, 1, "REPO", ""));
     DEFUN("git-repository-workdir", FUNC(egit_repository_workdir, 1, 1, "REPO", ""));
 
     DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));

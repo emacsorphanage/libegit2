@@ -9,7 +9,9 @@
 #define INTERN(val) env->intern(env, (val))
 
 emacs_value em_nil, em_stringp, em_t;
-emacs_value em_git_repository_p;
+
+// Git object predicates
+emacs_value em_git_repository_p, em_git_reference_p;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -31,6 +33,7 @@ void em_init(emacs_env *env)
     em_t = GLOBREF(INTERN("t"));
 
     em_git_repository_p = GLOBREF(INTERN("git-repository-p"));
+    em_git_reference_p = GLOBREF(INTERN("git-reference-p"));
 
     em_merge = GLOBREF(INTERN("merge"));
     em_revert = GLOBREF(INTERN("revert"));

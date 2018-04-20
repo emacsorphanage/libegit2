@@ -14,7 +14,8 @@
 
 typedef enum {
     EGIT_UNKNOWN,
-    EGIT_REPOSITORY
+    EGIT_REPOSITORY,
+    EGIT_REFERENCE,
 } egit_type;
 
 typedef struct {
@@ -26,6 +27,9 @@ typedef struct {
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj);
 bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_value predicate);
+
+void egit_decref_wrapped(void *obj);
+void egit_decref_wrapper(void *obj);
 emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr);
 
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data);
