@@ -11,7 +11,7 @@
 emacs_value em_nil, em_stringp, em_t;
 
 // Git object predicates
-emacs_value em_git_repository_p, em_git_reference_p;
+emacs_value em_git_object_p, em_git_repository_p, em_git_reference_p;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -32,6 +32,7 @@ void em_init(emacs_env *env)
     em_stringp = GLOBREF(INTERN("stringp"));
     em_t = GLOBREF(INTERN("t"));
 
+    em_git_object_p = GLOBREF(INTERN("git-object-p"));
     em_git_repository_p = GLOBREF(INTERN("git-repository-p"));
     em_git_reference_p = GLOBREF(INTERN("git-reference-p"));
 

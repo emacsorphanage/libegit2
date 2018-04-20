@@ -13,6 +13,8 @@
 
 #define EGIT_ASSERT_STRING(val)                                         \
     do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
+#define EGIT_ASSERT_OBJECT(val)                                         \
+    do { if (!egit_assert_object(env, (val))) return em_nil; } while (0)
 #define EGIT_ASSERT_REPOSITORY(val)                                     \
     do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_git_repository_p)) return em_nil; } while (0)
 #define EGIT_ASSERT_REFERENCE(val)                                      \
@@ -32,6 +34,11 @@ typedef enum {
     EGIT_UNKNOWN,
     EGIT_REPOSITORY,
     EGIT_REFERENCE,
+    EGIT_COMMIT,
+    EGIT_TREE,
+    EGIT_BLOB,
+    EGIT_TAG,
+    EGIT_OBJECT,
 } egit_type;
 
 typedef struct {

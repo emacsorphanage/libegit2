@@ -32,6 +32,16 @@ bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_val
     return false;
 }
 
+bool egit_assert_object(emacs_env *env, emacs_value obj)
+{
+    egit_type type = egit_get_type(env, obj);
+    if (type == EGIT_COMMIT || type == EGIT_TREE ||
+        type == EGIT_BLOB || type == EGIT_TAG || type == EGIT_OBJECT)
+        return true;
+    em_signal_wrong_type(env, em_git_object_p, obj);
+    return false;
+}
+
 void egit_decref_wrapped(void *obj)
 {
     egit_object *wrapper;
@@ -50,6 +60,16 @@ void egit_decref_wrapper(void *_obj)
     HASH_DEL(object_store, obj);
 
     switch (obj->type) {
+    case EGIT_COMMIT:
+    case EGIT_TREE:
+    case EGIT_BLOB:
+    case EGIT_TAG:
+    case EGIT_OBJECT: {
+        git_repository *repo = git_object_owner(obj->ptr);
+        git_object_free(obj->ptr);
+        egit_decref_wrapped(repo);
+        break;
+    }
     case EGIT_REFERENCE: {
         git_repository *repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
@@ -85,9 +105,27 @@ egit_object *egit_incref(egit_type type, void *obj)
 
 emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
 {
+    // If it's a git_object, try to be more specific
+    if (type == EGIT_OBJECT) {
+        switch (git_object_type(data)) {
+        case GIT_OBJ_COMMIT: type = EGIT_COMMIT; break;
+        case GIT_OBJ_TREE: type = EGIT_TREE; break;
+        case GIT_OBJ_BLOB: type = EGIT_BLOB; break;
+        case GIT_OBJ_TAG: type = EGIT_TAG; break;
+        default: break;
+        }
+    }
+
     egit_object *obj = egit_incref(type, data);
 
     switch (type) {
+    case EGIT_COMMIT:
+    case EGIT_TREE:
+    case EGIT_BLOB:
+    case EGIT_TAG:
+    case EGIT_OBJECT:
+        egit_incref(EGIT_REPOSITORY, git_object_owner(data));
+        break;
     case EGIT_REFERENCE:
         egit_incref(EGIT_REPOSITORY, git_reference_owner(data));
         break;
