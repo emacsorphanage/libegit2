@@ -7,8 +7,13 @@
 int plugin_is_GPL_compatible;
 
 
+static bool initialized = false;
+
 int emacs_module_init(struct emacs_runtime *ert)
 {
+    if (initialized)
+        return 0;
+
     emacs_env *env = ert->get_environment(ert);
 
     // Initialize libgit2
@@ -21,5 +26,6 @@ int emacs_module_init(struct emacs_runtime *ert)
     egit_init(env);
 
     em_provide(env, "libegit2");
+    initialized = true;
     return 0;
 }

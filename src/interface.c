@@ -20,14 +20,10 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 
 static emacs_value _cons, _defalias, _define_error, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
-static bool initialized = false;
 
 
 void em_init(emacs_env *env)
 {
-    if (initialized)
-        return;
-
     em_nil = GLOBREF(INTERN("nil"));
     em_stringp = GLOBREF(INTERN("stringp"));
     em_t = GLOBREF(INTERN("t"));
@@ -60,8 +56,6 @@ void em_init(emacs_env *env)
 
     em_define_error(env, _giterr, "Git error");
     em_define_error(env, _not_implemented, "Not implemented");
-
-    initialized = true;
 }
 
 static emacs_value em_funcall(emacs_env *env, emacs_value func, ptrdiff_t nargs, ...)
