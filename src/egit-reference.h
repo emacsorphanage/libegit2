@@ -1,11 +1,13 @@
+#include "egit.h"
+
 #ifndef EGIT_REFERENCE_H
 #define EGIT_REFERENCE_H
 
-emacs_value egit_reference_name(emacs_env *env, emacs_value _ref);
-emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref);
-emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref);
-emacs_value egit_reference_target(emacs_env *env, emacs_value _ref);
+EGIT_DEFUN(reference_name, emacs_value _ref);
+EGIT_DEFUN(reference_owner, emacs_value _ref);
+EGIT_DEFUN(reference_resolve, emacs_value _ref);
+EGIT_DEFUN(reference_target, emacs_value _ref);
 
-emacs_value egit_reference_p(emacs_env *env, emacs_value obj);
+EGIT_DEFUN(reference_p, emacs_value obj);
 
 #endif /* EGIT_REFERENCE_H */

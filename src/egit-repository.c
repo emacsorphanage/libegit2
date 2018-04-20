@@ -10,6 +10,7 @@
 // =============================================================================
 // Constructors
 
+EGIT_DOC(clone, "URL PATH", "Clone the repository at URL to PATH and return it.");
 emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_url);
@@ -29,6 +30,9 @@ emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(repository_init, "PATH &optional IS-BARE",
+         "Initialize a repository at PATH and return it.\n"
+         "If IS-BARE then create a bare repository.");
 emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value _is_bare)
 {
     EGIT_ASSERT_STRING(_path);
@@ -46,6 +50,7 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(repository_open, "PATH", "Open an existing repository at PATH.");
 emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_path);
@@ -62,6 +67,9 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(repository_open_bare, "PATH",
+         "Open an existing bare repository at PATH.\n"
+         "This is faster than `git-repository-open'.");
 emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_path);
@@ -82,6 +90,7 @@ emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
 // =============================================================================
 // Getters
 
+EGIT_DOC(repository_commondir, "REPO", "Return the shared common directory for REPO.");
 emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -90,6 +99,9 @@ emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
     return env->make_string(env, path, strlen(path));
 }
 
+EGIT_DOC(repository_ident, "REPO",
+         "Return the configured identity to use for reflogs in REPO.\n"
+         "The return value is a cons cell (name . email).");
 emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -102,6 +114,8 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     return em_cons(env, _name, _email);
 }
 
+EGIT_DOC(repository_head, "REPO",
+         "Retrieve and resolve the reference pointed at by HEAD in REPO.");
 emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -112,6 +126,9 @@ emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
+EGIT_DOC(repository_path, "REPO",
+         "Return the path to REPO.\n"
+         "This is the path to the .git folder for normal repositories.");
 emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -120,6 +137,21 @@ emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
     return env->make_string(env, path, strlen(path));
 }
 
+EGIT_DOC(repository_state, "REPO",
+         "Return the current state of REPO, indicating whether an operation is in progress.\n"
+         "Possible return values are:\n"
+         "  - nil\n"
+         "  - `merge'\n"
+         "  - `revert'\n"
+         "  - `revert-sequence'\n"
+         "  - `cherrypick'\n"
+         "  - `cherrypick-sequence'\n"
+         "  - `bisect'\n"
+         "  - `rebase'\n"
+         "  - `rebase-interactive'\n"
+         "  - `rebase-merge'\n"
+         "  - `apply-mailbox'\n"
+         "  - `apply-mailbox-or-rebase'");
 emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -128,7 +160,7 @@ emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
     switch (state) {
     case GIT_REPOSITORY_STATE_MERGE: return em_merge;
     case GIT_REPOSITORY_STATE_REVERT: return em_revert;
-    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return em_cherrypick_sequence;
+    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return em_revert_sequence;
     case GIT_REPOSITORY_STATE_CHERRYPICK: return em_cherrypick;
     case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return em_cherrypick_sequence;
     case GIT_REPOSITORY_STATE_BISECT: return em_bisect;
@@ -141,6 +173,7 @@ emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
     }
 }
 
+EGIT_DOC(repository_workdir, "REPO", "Return the path to the working directory of REPO, or nil.");
 emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -153,11 +186,13 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
 // =============================================================================
 // Predicates
 
+EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
 emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_bare_p, "REPO", "Return non-nil if REPO is a bare repository.");
 emacs_value egit_repository_bare_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -165,6 +200,7 @@ emacs_value egit_repository_bare_p(emacs_env *env, emacs_value _repo)
     return git_repository_is_bare(repo) ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_empty_p, "REPO", "Return non-nil if REPO is empty.");
 emacs_value egit_repository_empty_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -174,6 +210,7 @@ emacs_value egit_repository_empty_p(emacs_env *env, emacs_value _repo)
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_head_detached_p, "REPO", "Return non-nil if REPO is in detached head state.");
 emacs_value egit_repository_head_detached_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -183,6 +220,7 @@ emacs_value egit_repository_head_detached_p(emacs_env *env, emacs_value _repo)
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_head_unborn_p, "REPO", "Return non-nil if REPO's HEAD is unborn.");
 emacs_value egit_repository_head_unborn_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -192,6 +230,7 @@ emacs_value egit_repository_head_unborn_p(emacs_env *env, emacs_value _repo)
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_shallow_p, "REPO", "Return non-nil if REPO was a shallow clone.");
 emacs_value egit_repository_shallow_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -199,6 +238,7 @@ emacs_value egit_repository_shallow_p(emacs_env *env, emacs_value _repo)
     return git_repository_is_shallow(repo) ? em_t : em_nil;
 }
 
+EGIT_DOC(repository_worktree_p, "REPO", "Return non-nil if REPO is a linked worktree.");
 emacs_value egit_repository_worktree_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);

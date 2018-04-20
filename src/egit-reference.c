@@ -10,6 +10,7 @@
 // =============================================================================
 // Getters
 
+EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
 emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
@@ -18,6 +19,7 @@ emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
     return env->make_string(env, name, strlen(name));
 }
 
+EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
 emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
@@ -26,6 +28,8 @@ emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(reference_resolve, "REF",
+         "Iteratively peel REF until it resolves directly to an OID.");
 emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
@@ -36,6 +40,8 @@ emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REFERENCE, newref);
 }
 
+EGIT_DOC(reference_target, "REF",
+         "Return the OID pointed to by REF, or nil if REF is not direct");
 emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
@@ -50,6 +56,7 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
 // =============================================================================
 // Predicates
 
+EGIT_DOC(reference_p, "OBJ", "Return non-nil if OBJ is a git reference.");
 emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;

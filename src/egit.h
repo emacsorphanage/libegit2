@@ -4,14 +4,21 @@
 #ifndef EGIT_H
 #define EGIT_H
 
-#define EGIT_ASSERT_STRING(val) \
+#define EGIT_DOC(name, args, docstring)                                 \
+    const char *egit_##name##__doc = (docstring "\n\n(fn " args ")")
+
+#define EGIT_DEFUN(name, ...)                                   \
+    extern const char *egit_##name##__doc;                      \
+    emacs_value egit_##name(emacs_env *env, __VA_ARGS__)        \
+
+#define EGIT_ASSERT_STRING(val)                                         \
     do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
-#define EGIT_ASSERT_REPOSITORY(val) \
+#define EGIT_ASSERT_REPOSITORY(val)                                     \
     do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_git_repository_p)) return em_nil; } while (0)
-#define EGIT_ASSERT_REFERENCE(val) \
+#define EGIT_ASSERT_REFERENCE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_git_reference_p)) return em_nil; } while (0)
 #define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
-#define EGIT_CHECK_ERROR(val) \
+#define EGIT_CHECK_ERROR(val)                                           \
     do { if (egit_dispatch_error(env, (val))) return em_nil; } while (0)
 
 typedef enum {

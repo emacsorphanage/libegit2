@@ -14,16 +14,6 @@ egit_object *object_store = NULL;
 typedef emacs_value (*func_1)(emacs_env*, emacs_value);
 typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
 
-#define FUNC(target, min_nargs, max_nargs, arglist, docstring)          \
-    env->make_function(                                                 \
-        env, (min_nargs), (max_nargs),                                  \
-        egit_dispatch_##max_nargs,                                      \
-        docstring "\n\n(fn " arglist ")",                               \
-        (target)                                                        \
-    )
-
-#define DEFUN(name, func) em_defun(env, (name), (func))
-
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj)
@@ -131,36 +121,44 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     return true;
 }
 
+#define DEFUN(ename, cname, min_nargs, max_nargs)                       \
+    em_defun(env, (ename),                                              \
+             env->make_function(                                        \
+                 env, (min_nargs), (max_nargs),                         \
+                 egit_dispatch_##max_nargs,                             \
+                 egit_##cname##__doc,                                   \
+                 egit_##cname))
+
 void egit_init(emacs_env *env)
 {
     // Clone
-    DEFUN("git-clone", FUNC(egit_clone, 2, 2, "URL PATH", ""));
+    DEFUN("git-clone", clone, 2, 2);
 
     // Reference
-    DEFUN("git-reference-name", FUNC(egit_reference_name, 1, 1, "REF", ""));
-    DEFUN("git-reference-owner", FUNC(egit_reference_owner, 1, 1, "REF", ""));
-    DEFUN("git-reference-resolve", FUNC(egit_reference_resolve, 1, 1, "REF", ""));
-    DEFUN("git-reference-target", FUNC(egit_reference_target, 1, 1, "REF", ""));
+    DEFUN("git-reference-name", reference_name, 1, 1);
+    DEFUN("git-reference-owner", reference_owner, 1, 1);
+    DEFUN("git-reference-resolve", reference_resolve, 1, 1);
+    DEFUN("git-reference-target", reference_target, 1, 1);
 
-    DEFUN("git-reference-p", FUNC(egit_reference_p, 1, 1, "OBJ", ""));
+    DEFUN("git-reference-p", reference_p, 1, 1);
 
     // Repository
-    DEFUN("git-repository-init", FUNC(egit_repository_init, 1, 2, "PATH &optional IS-BARE", ""));
-    DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
-    DEFUN("git-repository-open-bare", FUNC(egit_repository_open_bare, 1, 1, "PATH", ""));
+    DEFUN("git-repository-init", repository_init, 1, 2);
+    DEFUN("git-repository-open", repository_open, 1, 1);
+    DEFUN("git-repository-open-bare", repository_open_bare, 1, 1);
 
-    DEFUN("git-repository-commondir", FUNC(egit_repository_commondir, 1, 1, "REPO", ""));
-    DEFUN("git-repository-head", FUNC(egit_repository_head, 1, 1, "REPO", ""));
-    DEFUN("git-repository-ident", FUNC(egit_repository_ident, 1, 1, "REPO", ""));
-    DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
-    DEFUN("git-repository-state", FUNC(egit_repository_state, 1, 1, "REPO", ""));
-    DEFUN("git-repository-workdir", FUNC(egit_repository_workdir, 1, 1, "REPO", ""));
+    DEFUN("git-repository-commondir", repository_commondir, 1, 1);
+    DEFUN("git-repository-head", repository_head, 1, 1);
+    DEFUN("git-repository-ident", repository_ident, 1, 1);
+    DEFUN("git-repository-path", repository_path, 1, 1);
+    DEFUN("git-repository-state", repository_state, 1, 1);
+    DEFUN("git-repository-workdir", repository_workdir, 1, 1);
 
-    DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));
-    DEFUN("git-repository-bare-p", FUNC(egit_repository_bare_p, 1, 1, "REPO", ""));
-    DEFUN("git-repository-empty-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
-    DEFUN("git-repository-head-detached-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
-    DEFUN("git-repository-head-unborn-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
-    DEFUN("git-repository-shallow-p", FUNC(egit_repository_shallow_p, 1, 1, "REPO", ""));
-    DEFUN("git-repository-worktree-p", FUNC(egit_repository_worktree_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-p", repository_p, 1, 1);
+    DEFUN("git-repository-bare-p", repository_bare_p, 1, 1);
+    DEFUN("git-repository-empty-p", repository_empty_p, 1, 1);
+    DEFUN("git-repository-head-detached-p", repository_empty_p, 1, 1);
+    DEFUN("git-repository-head-unborn-p", repository_empty_p, 1, 1);
+    DEFUN("git-repository-shallow-p", repository_shallow_p, 1, 1);
+    DEFUN("git-repository-worktree-p", repository_worktree_p, 1, 1);
 }
