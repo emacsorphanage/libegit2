@@ -79,21 +79,6 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
     return env->make_user_ptr(env, egit_free, obj);
 }
 
-void *egit_extract(emacs_env *env, emacs_value _obj)
-{
-    egit_object *obj = (egit_object*)env->get_user_ptr(env, _obj);
-    return obj->ptr;
-}
-
-emacs_value egit_dispatch_void(emacs_env *env,
-                               ptrdiff_t nargs __attribute__((unused)),
-                               emacs_value *args __attribute__((unused)),
-                               void *data __attribute__((unused)))
-{
-    em_signal_void(env);
-    return em_nil;
-}
-
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_1 func = (func_1) data;

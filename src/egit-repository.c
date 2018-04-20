@@ -13,8 +13,8 @@ emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 
 emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
 {
-    if (!em_assert(env, em_stringp, _url)) return em_nil;
-    if (!em_assert(env, em_stringp, _path)) return em_nil;
+    EGIT_ASSERT_STRING(_url);
+    EGIT_ASSERT_STRING(_path);
 
     git_repository *repo;
     int retval;
@@ -25,14 +25,14 @@ emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
         free(url);
         free(path);
     }
-    if (egit_dispatch_error(env, retval)) return em_nil;
+    EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value _is_bare)
 {
-    if (!em_assert(env, em_stringp, _path)) return em_nil;
+    EGIT_ASSERT_STRING(_path);
 
     git_repository *repo;
     int retval;
@@ -42,14 +42,14 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
         retval = git_repository_init(&repo, path, is_bare);
         free(path);
     }
-    if (egit_dispatch_error(env, retval)) return em_nil;
+    EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
 {
-    if (!em_assert(env, em_stringp, _path)) return em_nil;
+    EGIT_ASSERT_STRING(_path);
 
     git_repository *repo;
     int retval;
@@ -58,25 +58,23 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
         retval = git_repository_open(&repo, path);
         free(path);
     }
-    if (egit_dispatch_error(env, retval)) return em_nil;
+    EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
 {
-    if (!egit_assert_type(env, _repo, EGIT_REPOSITORY, em_git_repository_p)) return em_nil;
-
-    git_repository *repo = egit_extract(env, _repo);
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_path(repo);
     return env->make_string(env, path, strlen(path));
 }
 
 emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
 {
-    if (!egit_assert_type(env, _repo, EGIT_REPOSITORY, em_git_repository_p)) return em_nil;
-
-    git_repository *repo = egit_extract(env, _repo);
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_workdir(repo);
     return path ? env->make_string(env, path, strlen(path)) : em_nil;
 }

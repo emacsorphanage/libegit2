@@ -4,6 +4,14 @@
 #ifndef EGIT_H
 #define EGIT_H
 
+#define EGIT_ASSERT_STRING(val) \
+    do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
+#define EGIT_ASSERT_REPOSITORY(val) \
+    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_git_repository_p)) return em_nil; } while (0)
+#define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
+#define EGIT_CHECK_ERROR(val) \
+    do { if (egit_dispatch_error(env, (val))) return em_nil; } while (0)
+
 typedef enum {
     EGIT_UNKNOWN,
     EGIT_REPOSITORY
@@ -19,7 +27,6 @@ typedef struct {
 egit_type egit_get_type(emacs_env *env, emacs_value _obj);
 bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_value predicate);
 emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr);
-void *egit_extract(emacs_env *env, emacs_value _obj);
 
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data);
 emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data);
