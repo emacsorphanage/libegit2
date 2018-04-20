@@ -6,8 +6,10 @@
 
 #include "interface.h"
 #include "egit-clone.h"
+#include "egit-object.h"
 #include "egit-reference.h"
 #include "egit-repository.h"
+#include "egit-revparse.h"
 #include "egit.h"
 
 egit_object *object_store = NULL;
@@ -173,6 +175,12 @@ void egit_init(emacs_env *env)
     // Clone
     DEFUN("git-clone", clone, 2, 2);
 
+    // Object
+    DEFUN("git-object-id", object_id, 1, 1);
+    DEFUN("git-object-short-id", object_short_id, 1, 1);
+
+    DEFUN("git-object-p", object_p, 1, 1);
+
     // Reference
     DEFUN("git-reference-name", reference_name, 1, 1);
     DEFUN("git-reference-owner", reference_owner, 1, 1);
@@ -206,4 +214,7 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-head-unborn-p", repository_empty_p, 1, 1);
     DEFUN("git-repository-shallow-p", repository_shallow_p, 1, 1);
     DEFUN("git-repository-worktree-p", repository_worktree_p, 1, 1);
+
+    // Revparse
+    DEFUN("git-revparse-single", revparse_single, 2, 2);
 }

@@ -50,6 +50,7 @@ typedef struct {
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj);
 bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_value predicate);
+bool egit_assert_object(emacs_env *env, emacs_value obj);
 
 void egit_decref_wrapped(void *obj);
 void egit_decref_wrapper(void *obj);
