@@ -8,6 +8,4 @@ EGIT_DEFUN(reference_owner, emacs_value _ref);
 EGIT_DEFUN(reference_resolve, emacs_value _ref);
 EGIT_DEFUN(reference_target, emacs_value _ref);
 
-EGIT_DEFUN(reference_p, emacs_value obj);
-
 #endif /* EGIT_REFERENCE_H */

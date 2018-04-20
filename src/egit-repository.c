@@ -240,12 +240,6 @@ emacs_value egit_repository_message_remove(emacs_env *env, emacs_value _repo)
 // =============================================================================
 // Predicates
 
-EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
-emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
-}
-
 EGIT_DOC(repository_bare_p, "REPO", "Return non-nil if REPO is a bare repository.");
 emacs_value egit_repository_bare_p(emacs_env *env, emacs_value _repo)
 {

@@ -51,13 +51,3 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
     const char *oid_s = git_oid_tostr_s(oid);
     return env->make_string(env, oid_s, strlen(oid_s));
 }
-
-
-// =============================================================================
-// Predicates
-
-EGIT_DOC(reference_p, "OBJ", "Return non-nil if OBJ is a git reference.");
-emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;
-}

@@ -200,6 +200,26 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     }
 }
 
+EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
+static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
+{
+    egit_type type = egit_get_type(env, obj);
+    return (type == EGIT_COMMIT || type == EGIT_TREE || type == EGIT_BLOB ||
+            type == EGIT_TAG || type == EGIT_OBJECT) ? em_t : em_nil;
+}
+
+EGIT_DOC(reference_p, "OBJ", "Return non-nil if OBJ is a git reference.");
+static emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;
+}
+
+EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
+static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
+}
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -210,7 +230,11 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
 
 void egit_init(emacs_env *env)
 {
+    // Type checkers
     DEFUN("git-typeof", typeof, 1, 1);
+    DEFUN("git-object-p", object_p, 1, 1);
+    DEFUN("git-reference-p", reference_p, 1, 1);
+    DEFUN("git-repository-p", repository_p, 1, 1);
 
     // Clone
     DEFUN("git-clone", clone, 2, 2);
@@ -219,15 +243,11 @@ void egit_init(emacs_env *env)
     DEFUN("git-object-id", object_id, 1, 1);
     DEFUN("git-object-short-id", object_short_id, 1, 1);
 
-    DEFUN("git-object-p", object_p, 1, 1);
-
     // Reference
     DEFUN("git-reference-name", reference_name, 1, 1);
     DEFUN("git-reference-owner", reference_owner, 1, 1);
     DEFUN("git-reference-resolve", reference_resolve, 1, 1);
     DEFUN("git-reference-target", reference_target, 1, 1);
-
-    DEFUN("git-reference-p", reference_p, 1, 1);
 
     // Repository
     DEFUN("git-repository-init", repository_init, 1, 2);
@@ -247,7 +267,6 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-detach-head", repository_detach_head, 1, 1);
     DEFUN("git-repository-message-remove", repository_message_remove, 1, 1);
 
-    DEFUN("git-repository-p", repository_p, 1, 1);
     DEFUN("git-repository-bare-p", repository_bare_p, 1, 1);
     DEFUN("git-repository-empty-p", repository_empty_p, 1, 1);
     DEFUN("git-repository-head-detached-p", repository_empty_p, 1, 1);

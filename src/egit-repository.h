@@ -20,7 +20,6 @@ EGIT_DEFUN(repository_workdir, emacs_value _repo);
 EGIT_DEFUN(repository_detach_head, emacs_value _repo);
 EGIT_DEFUN(repository_message_remove, emacs_value _repo);
 
-EGIT_DEFUN(repository_p, emacs_value obj);
 EGIT_DEFUN(repository_bare_p, emacs_value _repo);
 EGIT_DEFUN(repository_empty_p, emacs_value _repo);
 EGIT_DEFUN(repository_shallow_p, emacs_value _repo);
