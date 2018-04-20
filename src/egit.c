@@ -93,7 +93,7 @@ emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, 
 
 bool egit_dispatch_error(emacs_env *env, int retval)
 {
-    if (retval == 0) return false;
+    if (retval >= 0) return false;
 
     const git_error *err = giterr_last();
     if (!err) return false;
@@ -104,13 +104,21 @@ bool egit_dispatch_error(emacs_env *env, int retval)
 
 void egit_init(emacs_env *env)
 {
-    // clone
+    // Clone
     DEFUN("git-clone", FUNC(egit_clone, 2, 2, "URL PATH", ""));
 
-    // repository
-    DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));
+    // Repository
     DEFUN("git-repository-init", FUNC(egit_repository_init, 1, 2, "PATH &optional IS-BARE", ""));
     DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
+
     DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
     DEFUN("git-repository-workdir", FUNC(egit_repository_workdir, 1, 1, "REPO", ""));
+
+    DEFUN("git-repository-p", FUNC(egit_repository_p, 1, 1, "OBJ", ""));
+    DEFUN("git-repository-bare-p", FUNC(egit_repository_bare_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-empty-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-head-detached-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-head-unborn-p", FUNC(egit_repository_empty_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-shallow-p", FUNC(egit_repository_shallow_p, 1, 1, "REPO", ""));
+    DEFUN("git-repository-worktree-p", FUNC(egit_repository_worktree_p, 1, 1, "REPO", ""));
 }
