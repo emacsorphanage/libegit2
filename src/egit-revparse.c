@@ -5,7 +5,7 @@
 #include "egit-repository.h"
 
 
-EGIT_DOC(revparse_single, "REPO SPEC", "");
+EGIT_DOC(revparse_single, "REPO SPEC", "Return the object referred to by SPEC in REPO.");
 emacs_value egit_revparse_single(emacs_env *env, emacs_value _repo, emacs_value _spec)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
