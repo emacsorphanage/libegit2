@@ -62,6 +62,22 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
+{
+    EGIT_ASSERT_STRING(_path);
+
+    git_repository *repo;
+    int retval;
+    {
+        char *path = em_get_string(env, _path);
+        retval = git_repository_open_bare(&repo, path);
+        free(path);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
+}
+
 
 // =============================================================================
 // Getters

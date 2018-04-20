@@ -19,7 +19,20 @@
     (let ((repo (git-repository-open path)))
       (should (git-repository-p repo))
       (should (equal path (git-repository-workdir repo)))
-      (should (equal (concat path ".git/") (git-repository-path repo))))))
+      (should (equal (concat path ".git/") (git-repository-path repo)))
+      (should (not (git-repository-bare-p repo)))
+      (should (git-repository-empty-p repo)))
+    (should-error (git-repository-open-bare path) :type 'giterr)))
+
+(ert-deftest open-repo-bare ()
+  (with-temp-dir path
+    (shell-command-to-string "git init --bare")
+    (let ((repo (git-repository-open path)))
+      (should (git-repository-bare-p repo))
+      (should (git-repository-empty-p repo)))
+    (let ((repo (git-repository-open-bare path)))
+      (should (git-repository-bare-p repo))
+      (should (git-repository-empty-p repo)))))
 
 (ert-deftest open-repo-nonexistent ()
   (with-temp-dir path
