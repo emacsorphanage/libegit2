@@ -82,12 +82,53 @@ emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
 // =============================================================================
 // Getters
 
+emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    const char *path = git_repository_commondir(repo);
+    return env->make_string(env, path, strlen(path));
+}
+
+emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    const char *name, *email;
+    int retval = git_repository_ident(&name, &email, repo);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value _name = name ? env->make_string(env, name, strlen(name)) : em_nil;
+    emacs_value _email = email ? env->make_string(env, email, strlen(email)) : em_nil;
+    return em_cons(env, _name, _email);
+}
+
 emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_path(repo);
     return env->make_string(env, path, strlen(path));
+}
+
+emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_repository_state_t state = git_repository_state(repo);
+    switch (state) {
+    case GIT_REPOSITORY_STATE_MERGE: return em_merge;
+    case GIT_REPOSITORY_STATE_REVERT: return em_revert;
+    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return em_cherrypick_sequence;
+    case GIT_REPOSITORY_STATE_CHERRYPICK: return em_cherrypick;
+    case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return em_cherrypick_sequence;
+    case GIT_REPOSITORY_STATE_BISECT: return em_bisect;
+    case GIT_REPOSITORY_STATE_REBASE: return em_rebase;
+    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE: return em_rebase_interactive;
+    case GIT_REPOSITORY_STATE_REBASE_MERGE: return em_rebase_merge;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX: return em_apply_mailbox;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return em_apply_mailbox_or_rebase;
+    default: return em_nil;
+    }
 }
 
 emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)

@@ -8,6 +8,11 @@
 extern emacs_value em_nil, em_stringp, em_t;
 extern emacs_value em_git_repository_p;
 
+// Repository states
+extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
+    em_cherrypick_sequence, em_bisect, em_rebase, em_rebase_interactive, em_rebase_merge,
+    em_apply_mailbox, em_apply_mailbox_or_rebase;
+
 void em_init(emacs_env *env);
 
 bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg);

@@ -112,6 +112,8 @@ void egit_init(emacs_env *env)
     DEFUN("git-repository-open", FUNC(egit_repository_open, 1, 1, "PATH", ""));
     DEFUN("git-repository-open-bare", FUNC(egit_repository_open_bare, 1, 1, "PATH", ""));
 
+    DEFUN("git-repository-commondir", FUNC(egit_repository_commondir, 1, 1, "REPO", ""));
+    DEFUN("git-repository-ident", FUNC(egit_repository_ident, 1, 1, "REPO", ""));
     DEFUN("git-repository-path", FUNC(egit_repository_path, 1, 1, "REPO", ""));
     DEFUN("git-repository-workdir", FUNC(egit_repository_workdir, 1, 1, "REPO", ""));
 

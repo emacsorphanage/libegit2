@@ -11,6 +11,11 @@
 emacs_value em_nil, em_stringp, em_t;
 emacs_value em_git_repository_p;
 
+// Repository states
+emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
+    em_cherrypick_sequence, em_bisect, em_rebase, em_rebase_interactive, em_rebase_merge,
+    em_apply_mailbox, em_apply_mailbox_or_rebase;
+
 static emacs_value _cons, _defalias, _define_error, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
 static bool initialized = false;
@@ -26,6 +31,18 @@ void em_init(emacs_env *env)
     em_t = GLOBREF(INTERN("t"));
 
     em_git_repository_p = GLOBREF(INTERN("git-repository-p"));
+
+    em_merge = GLOBREF(INTERN("merge"));
+    em_revert = GLOBREF(INTERN("revert"));
+    em_revert_sequence = GLOBREF(INTERN("revert-sequence"));
+    em_cherrypick = GLOBREF(INTERN("cherrypick"));
+    em_cherrypick_sequence = GLOBREF(INTERN("cherrypick-sequence"));
+    em_bisect = GLOBREF(INTERN("bisect"));
+    em_rebase = GLOBREF(INTERN("rebase"));
+    em_rebase_interactive = GLOBREF(INTERN("rebase-interactive"));
+    em_rebase_merge = GLOBREF(INTERN("rebase-merge"));
+    em_apply_mailbox = GLOBREF(INTERN("apply-mailbox"));
+    em_apply_mailbox_or_rebase = GLOBREF(INTERN("apply-mailbox-or-rebase"));
 
     _cons = GLOBREF(INTERN("cons"));
     _defalias = GLOBREF(INTERN("defalias"));
