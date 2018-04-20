@@ -5,6 +5,7 @@
 #include "uthash.h"
 
 #include "interface.h"
+#include "egit-clone.h"
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit.h"

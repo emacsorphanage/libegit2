@@ -3,7 +3,6 @@
 #ifndef EGIT_REPOSITORY_H
 #define EGIT_REPOSITORY_H
 
-EGIT_DEFUN(clone, emacs_value _url, emacs_value _path);
 EGIT_DEFUN(repository_init, emacs_value _path, emacs_value _is_bare);
 EGIT_DEFUN(repository_open, emacs_value _path);
 EGIT_DEFUN(repository_open_bare, emacs_value _path);

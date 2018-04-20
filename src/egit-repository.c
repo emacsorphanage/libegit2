@@ -10,26 +10,6 @@
 // =============================================================================
 // Constructors
 
-EGIT_DOC(clone, "URL PATH", "Clone the repository at URL to PATH and return it.");
-emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
-{
-    EGIT_ASSERT_STRING(_url);
-    EGIT_ASSERT_STRING(_path);
-
-    git_repository *repo;
-    int retval;
-    {
-        char *url = em_get_string(env, _url);
-        char *path = em_get_string(env, _path);
-        retval = git_clone(&repo, url, path, NULL);
-        free(url);
-        free(path);
-    }
-    EGIT_CHECK_ERROR(retval);
-
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
-}
-
 EGIT_DOC(repository_init, "PATH &optional IS-BARE",
          "Initialize a repository at PATH and return it.\n"
          "If IS-BARE then create a bare repository.");
