@@ -82,6 +82,13 @@ void em_define_error(emacs_env *env, emacs_value symbol, const char *msg);
 void em_defun(emacs_env *env, const char *name, emacs_value func);
 
 /**
+ * Call (expand-file-name PATH) in Emacs.
+ * @param env The active Emacs environment.
+ * @param path The path to expand.
+ */
+emacs_value em_expand_file_name(emacs_env *env, emacs_value path);
+
+/**
  * Provide a feature to Emacs.
  * @param env The active Emacs environment.
  * @param name Symbol name of the feature to provide.

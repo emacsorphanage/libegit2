@@ -10,6 +10,7 @@ emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_url);
     EGIT_ASSERT_STRING(_path);
+    EGIT_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;

@@ -16,6 +16,7 @@ EGIT_DOC(repository_init, "PATH &optional IS-BARE",
 emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value _is_bare)
 {
     EGIT_ASSERT_STRING(_path);
+    EGIT_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;
@@ -34,6 +35,7 @@ EGIT_DOC(repository_open, "PATH", "Open an existing repository at PATH.");
 emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_path);
+    EGIT_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;
@@ -53,6 +55,7 @@ EGIT_DOC(repository_open_bare, "PATH",
 emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
 {
     EGIT_ASSERT_STRING(_path);
+    EGIT_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;

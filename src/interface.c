@@ -23,7 +23,7 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
     em_apply_mailbox, em_apply_mailbox_or_rebase;
 
 // Symbols that are only reachable from within this file.
-static emacs_value _cons, _defalias, _define_error, _giterr,
+static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
 
 
@@ -60,6 +60,7 @@ void em_init(emacs_env *env)
     _cons = GLOBREF(INTERN("cons"));
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
+    _expand_file_name = GLOBREF(INTERN("expand-file-name"));
     _giterr = GLOBREF(INTERN("giterr"));
     _not_implemented = GLOBREF(INTERN("not-implemented"));
     _provide = GLOBREF(INTERN("provide"));
@@ -138,6 +139,11 @@ void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
 void em_defun(emacs_env *env, const char *name, emacs_value func)
 {
     em_funcall(env, _defalias, 2, INTERN(name), func);
+}
+
+emacs_value em_expand_file_name(emacs_env *env, emacs_value path)
+{
+    return em_funcall(env, _expand_file_name, 1, path);
 }
 
 void em_provide(emacs_env *env, const char *feature)
