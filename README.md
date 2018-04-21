@@ -12,10 +12,10 @@ This module is written in C, and aims to be a thin wrapper around libgit2. That 
 functions in the [libgit2 reference](https://libgit2.github.com/libgit2/#HEAD) should translate
 more-or-less directly to Emacs, in the following sense:
 
-- Function names are the same, except with underscores replaced by hyphens. That makes `git-` the
-  universal prefix for this module.
+- Function names are the same, except with underscores replaced by hyphens. The prefix is changed
+  from `git-` to `libgit-`.
 - Predicate functions are given a `-p` suffix, and words like "is" are removed,
-  e.g. `git_repository_is_bare` becomes `git-repository-bare-p`.
+  e.g. `git_repository_is_bare` becomes `libgit-repository-bare-p`.
 - Output parameters become return values.
 - Error codes become error signals (type `giterr`).
 - Return types map to their natural Emacs counterparts, or opaque user pointers when not applicable

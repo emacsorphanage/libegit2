@@ -38,13 +38,13 @@
  * Assert that VAL is a git repository, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_REPOSITORY(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_git_repository_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_libgit_repository_p)) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a git reference, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_REFERENCE(val)                                      \
-    do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_git_reference_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
 
 /**
  * Normalize an emacs_value string path. This macro may return.

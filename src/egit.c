@@ -37,7 +37,7 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
     if (type == EGIT_COMMIT || type == EGIT_TREE ||
         type == EGIT_BLOB || type == EGIT_TAG || type == EGIT_OBJECT)
         return true;
-    em_signal_wrong_type(env, em_git_object_p, obj);
+    em_signal_wrong_type(env, em_libgit_object_p, obj);
     return false;
 }
 
@@ -231,49 +231,49 @@ static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 void egit_init(emacs_env *env)
 {
     // Type checkers
-    DEFUN("git-typeof", typeof, 1, 1);
-    DEFUN("git-object-p", object_p, 1, 1);
-    DEFUN("git-reference-p", reference_p, 1, 1);
-    DEFUN("git-repository-p", repository_p, 1, 1);
+    DEFUN("libgit-typeof", typeof, 1, 1);
+    DEFUN("libgit-object-p", object_p, 1, 1);
+    DEFUN("libgit-reference-p", reference_p, 1, 1);
+    DEFUN("libgit-repository-p", repository_p, 1, 1);
 
     // Clone
-    DEFUN("git-clone", clone, 2, 2);
+    DEFUN("libgit-clone", clone, 2, 2);
 
     // Object
-    DEFUN("git-object-id", object_id, 1, 1);
-    DEFUN("git-object-short-id", object_short_id, 1, 1);
+    DEFUN("libgit-object-id", object_id, 1, 1);
+    DEFUN("libgit-object-short-id", object_short_id, 1, 1);
 
     // Reference
-    DEFUN("git-reference-name", reference_name, 1, 1);
-    DEFUN("git-reference-owner", reference_owner, 1, 1);
-    DEFUN("git-reference-resolve", reference_resolve, 1, 1);
-    DEFUN("git-reference-target", reference_target, 1, 1);
+    DEFUN("libgit-reference-name", reference_name, 1, 1);
+    DEFUN("libgit-reference-owner", reference_owner, 1, 1);
+    DEFUN("libgit-reference-resolve", reference_resolve, 1, 1);
+    DEFUN("libgit-reference-target", reference_target, 1, 1);
 
     // Repository
-    DEFUN("git-repository-init", repository_init, 1, 2);
-    DEFUN("git-repository-open", repository_open, 1, 1);
-    DEFUN("git-repository-open-bare", repository_open_bare, 1, 1);
+    DEFUN("libgit-repository-init", repository_init, 1, 2);
+    DEFUN("libgit-repository-open", repository_open, 1, 1);
+    DEFUN("libgit-repository-open-bare", repository_open_bare, 1, 1);
 
-    DEFUN("git-repository-commondir", repository_commondir, 1, 1);
-    DEFUN("git-repository-get-namespace", repository_get_namespace, 1, 1);
-    DEFUN("git-repository-head", repository_head, 1, 1);
-    DEFUN("git-repository-head-for-worktree", repository_head_for_worktree, 2, 2);
-    DEFUN("git-repository-ident", repository_ident, 1, 1);
-    DEFUN("git-repository-message", repository_message, 1, 1);
-    DEFUN("git-repository-path", repository_path, 1, 1);
-    DEFUN("git-repository-state", repository_state, 1, 1);
-    DEFUN("git-repository-workdir", repository_workdir, 1, 1);
+    DEFUN("libgit-repository-commondir", repository_commondir, 1, 1);
+    DEFUN("libgit-repository-get-namespace", repository_get_namespace, 1, 1);
+    DEFUN("libgit-repository-head", repository_head, 1, 1);
+    DEFUN("libgit-repository-head-for-worktree", repository_head_for_worktree, 2, 2);
+    DEFUN("libgit-repository-ident", repository_ident, 1, 1);
+    DEFUN("libgit-repository-message", repository_message, 1, 1);
+    DEFUN("libgit-repository-path", repository_path, 1, 1);
+    DEFUN("libgit-repository-state", repository_state, 1, 1);
+    DEFUN("libgit-repository-workdir", repository_workdir, 1, 1);
 
-    DEFUN("git-repository-detach-head", repository_detach_head, 1, 1);
-    DEFUN("git-repository-message-remove", repository_message_remove, 1, 1);
+    DEFUN("libgit-repository-detach-head", repository_detach_head, 1, 1);
+    DEFUN("libgit-repository-message-remove", repository_message_remove, 1, 1);
 
-    DEFUN("git-repository-bare-p", repository_bare_p, 1, 1);
-    DEFUN("git-repository-empty-p", repository_empty_p, 1, 1);
-    DEFUN("git-repository-head-detached-p", repository_empty_p, 1, 1);
-    DEFUN("git-repository-head-unborn-p", repository_empty_p, 1, 1);
-    DEFUN("git-repository-shallow-p", repository_shallow_p, 1, 1);
-    DEFUN("git-repository-worktree-p", repository_worktree_p, 1, 1);
+    DEFUN("libgit-repository-bare-p", repository_bare_p, 1, 1);
+    DEFUN("libgit-repository-empty-p", repository_empty_p, 1, 1);
+    DEFUN("libgit-repository-head-detached-p", repository_empty_p, 1, 1);
+    DEFUN("libgit-repository-head-unborn-p", repository_empty_p, 1, 1);
+    DEFUN("libgit-repository-shallow-p", repository_shallow_p, 1, 1);
+    DEFUN("libgit-repository-worktree-p", repository_worktree_p, 1, 1);
 
     // Revparse
-    DEFUN("git-revparse-single", revparse_single, 2, 2);
+    DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 }
