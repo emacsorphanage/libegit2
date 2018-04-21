@@ -19,10 +19,10 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
     EGIT_NORMALIZE_PATH(_path);
 
     git_repository *repo;
+    unsigned int is_bare = EGIT_EXTRACT_BOOLEAN(_is_bare);
     int retval;
     {
         char *path = EGIT_EXTRACT_STRING(_path);
-        unsigned int is_bare = env->is_not_nil(env, _is_bare) ? 1 : 0;
         retval = git_repository_init(&repo, path, is_bare);
         free(path);
     }
@@ -308,10 +308,10 @@ emacs_value egit_repository_set_workdir(
     EGIT_NORMALIZE_PATH(_workdir);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
+    int update_gitlink = EGIT_EXTRACT_BOOLEAN(_update_gitlink);
     int retval;
     {
         char *workdir = EGIT_EXTRACT_STRING(_workdir);
-        int update_gitlink = env->is_not_nil(env, _update_gitlink) ? 1 : 0;
         retval = git_repository_set_workdir(repo, workdir, update_gitlink);
         free(workdir);
     }

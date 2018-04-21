@@ -32,7 +32,7 @@
  * Assert that VAL is a string or nil, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_STRING_OR_NIL(val) \
-    do { if (env->is_not_nil(env, (val))) EGIT_ASSERT_STRING(val); } while (0)
+    do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_STRING(val); } while (0)
 
 /**
  * Assert that VAL is a git object, signal an error and return otherwise.
@@ -68,6 +68,11 @@
 #define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
 
 /**
+ * Extract a boolean from an emacs_value.
+ */
+#define EGIT_EXTRACT_BOOLEAN(val) (env->is_not_nil(env, (val)) ? 1 : 0)
+
+/**
  * Extract a string from an emacs_value.
  * Caller is reponsible for ensuring that the emacs_value represents a string.
  */
@@ -78,7 +83,7 @@
  * Caller is reponsible for ensuring that the emacs_value represents a string or nil.
  */
 #define EGIT_EXTRACT_STRING_OR_NULL(val)                                \
-    (env->is_not_nil(env, (val))) ? em_get_string(env, (val)) : NULL;
+    (EGIT_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL);
 
 /**
  * Free a pointer if it is non-NULL.
