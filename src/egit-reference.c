@@ -75,6 +75,36 @@ emacs_value egit_reference_create_matching(
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
+EGIT_DOC(reference_dup, "REF", "Duplicate an existing reference.");
+emacs_value egit_reference_dup(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_reference *new_ref;
+    int retval = git_reference_dup(&new_ref, ref);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_REFERENCE, new_ref);
+}
+
+EGIT_DOC(reference_dwim, "REPO SHORTHAND", "Lookup a reference by DWIMing its short name.");
+emacs_value egit_reference_dwim(emacs_env *env, emacs_value _repo, emacs_value _shorthand)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_shorthand);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_reference *ref;
+    int retval;
+    {
+        char *shorthand = EGIT_EXTRACT_STRING(_shorthand);
+        retval = git_reference_dwim(&ref, repo, shorthand);
+        free(shorthand);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
 EGIT_DOC(reference_lookup, "REPO NAME", "Lookup a reference by NAME in REPO.");
 emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value _name)
 {

@@ -717,8 +717,8 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-create`
 - :heavy_check_mark: `git-reference-create-matching`
 - :heavy_check_mark: `git-reference-delete`
-- :interrobang: `git-reference-dup` 
-- :interrobang: `git-reference-dwim` 
+- :heavy_check_mark: `git-reference-dup`
+- :heavy_check_mark: `git-reference-dwim`
 - :interrobang: `git-reference-ensure-log` 
 - :interrobang: `git-reference-foreach` 
 - :interrobang: `git-reference-foreach-glob` 
