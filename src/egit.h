@@ -29,6 +29,12 @@
     do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a string or nil, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_STRING_OR_NIL(val) \
+    do { if (env->is_not_nil(env, (val))) EGIT_ASSERT_STRING(val); } while (0)
+
+/**
  * Assert that VAL is a git object, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_OBJECT(val)                                         \
@@ -60,6 +66,36 @@
  * Caller is responsible for ensuring that this is a valid operation.
  */
 #define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
+
+/**
+ * Extract a string from an emacs_value.
+ * Caller is reponsible for ensuring that the emacs_value represents a string.
+ */
+#define EGIT_EXTRACT_STRING(val) em_get_string(env, (val));
+
+/**
+ * Extract a string from an emacs_value, or NULL.
+ * Caller is reponsible for ensuring that the emacs_value represents a string or nil.
+ */
+#define EGIT_EXTRACT_STRING_OR_NULL(val)                                \
+    (env->is_not_nil(env, (val))) ? em_get_string(env, (val)) : NULL;
+
+/**
+ * Free a pointer if it is non-NULL.
+ */
+#define EGIT_FREE(val) do { if (val) free(val); } while (0)
+
+/**
+ * Extract a git_oid from an emacs_value.
+ * Caller is responsible for ensuring that the emacs_value is a string.
+ */
+#define EGIT_EXTRACT_OID(val, tgt)                      \
+    do {                                                \
+        char *__str = em_get_string(env, (val));        \
+        int __retval = git_oid_fromstrp(&(tgt), __str); \
+        free(__str);                                    \
+        EGIT_CHECK_ERROR(__retval);                     \
+    } while (0)
 
 /**
  * If libgit2 signalled an error, pass the error on to Emacs and return.

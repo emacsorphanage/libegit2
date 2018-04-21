@@ -859,22 +859,22 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-repository-open-from-worktree` 
 - :heavy_check_mark: `git-repository-path` 
 - :interrobang: `git-repository-refdb` 
-- :x: `git-repository-reinit-filesystem` (probably too specific)
+- :x: `git-repository-reinit-filesystem` (in `sys`)
 - :interrobang: `git-repository-set-bare` 
 - :interrobang: `git-repository-set-config` 
-- :interrobang: `git-repository-set-head` 
-- :interrobang: `git-repository-set-head-detached` 
+- :heavy_check_mark: `git-repository-set-head` 
+- :heavy_check_mark: `git-repository-set-head-detached` 
 - :interrobang: `git-repository-set-head-detached-from-annotated` 
-- :interrobang: `git-repository-set-ident` 
+- :heavy_check_mark: `git-repository-set-ident` 
 - :interrobang: `git-repository-set-index` 
 - :interrobang: `git-repository-set-namespace` 
 - :interrobang: `git-repository-set-odb` 
 - :interrobang: `git-repository-set-refdb` 
-- :interrobang: `git-repository-set-workdir` 
+- :heavy_check_mark: `git-repository-set-workdir` 
 - :heavy_check_mark: `git-repository-state` 
-- :interrobang: `git-repository-state-cleanup` 
-- :interrobang: `git-repository-submodule-cache-all` 
-- :interrobang: `git-repository-submodule-cache-clear` 
+- :heavy_check_mark: `git-repository-state-cleanup` 
+- :x: `git-repository-submodule-cache-all` (in `sys`)
+- :x: `git-repository-submodule-cache-clear` (in `sys`)
 - :heavy_check_mark: `git-repository-workdir` 
 - :interrobang: `git-repository-wrap-odb`
 

@@ -15,7 +15,7 @@ emacs_value egit_revparse_single(emacs_env *env, emacs_value _repo, emacs_value 
     git_object *obj;
     int retval;
     {
-        char *spec = em_get_string(env, _spec);
+        char *spec = EGIT_EXTRACT_STRING(_spec);
         retval = git_revparse_single(&obj, repo, spec);
         free(spec);
     }

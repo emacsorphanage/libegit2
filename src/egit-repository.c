@@ -21,7 +21,7 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
     git_repository *repo;
     int retval;
     {
-        char *path = em_get_string(env, _path);
+        char *path = EGIT_EXTRACT_STRING(_path);
         unsigned int is_bare = env->is_not_nil(env, _is_bare) ? 1 : 0;
         retval = git_repository_init(&repo, path, is_bare);
         free(path);
@@ -40,7 +40,7 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     git_repository *repo;
     int retval;
     {
-        char *path = em_get_string(env, _path);
+        char *path = EGIT_EXTRACT_STRING(_path);
         retval = git_repository_open(&repo, path);
         free(path);
     }
@@ -60,7 +60,7 @@ emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
     git_repository *repo;
     int retval;
     {
-        char *path = em_get_string(env, _path);
+        char *path = EGIT_EXTRACT_STRING(_path);
         retval = git_repository_open_bare(&repo, path);
         free(path);
     }
@@ -130,7 +130,7 @@ emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo,
     git_reference *ref;
     int retval;
     {
-        char *name = em_get_string(env, _name);
+        char *name = EGIT_EXTRACT_STRING(_name);
         retval = git_repository_head_for_worktree(&ref, repo, name);
         free(name);
     }
@@ -235,6 +235,99 @@ emacs_value egit_repository_message_remove(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_message_remove(repo);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(repository_set_head, "REPO REFNAME",
+         "Make the head of REPO point to the specified reference.");
+emacs_value egit_repository_set_head(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_repository_set_head(repo, refname);
+        free(refname);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
+EGIT_DOC(repository_set_head_detached, "REPO COMMITISH",
+         "Make the head of REPO point directly to the commit.");
+emacs_value egit_repository_set_head_detached(emacs_env *env, emacs_value _repo, emacs_value _commitish)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_commitish);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid commitish;
+    EGIT_EXTRACT_OID(_commitish, commitish);
+
+    int retval = git_repository_set_head_detached(repo, &commitish);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
+EGIT_DOC(repository_set_ident, "REPO &optional NAME EMAIL",
+         "Set the identity to be used for writing reflogs.");
+emacs_value egit_repository_set_ident(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _email)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING_OR_NIL(_name);
+    EGIT_ASSERT_STRING_OR_NIL(_email);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *name = EGIT_EXTRACT_STRING_OR_NULL(_name);
+        char *email = EGIT_EXTRACT_STRING_OR_NULL(_email);
+        retval = git_repository_set_ident(repo, name, email);
+        EGIT_FREE(name);
+        EGIT_FREE(email);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
+EGIT_DOC(repository_set_workdir, "REPO WORKDIR &optional UPDATE-GITLINK",
+         "Set the path to the working directory for REPO to WORKDIR.");
+emacs_value egit_repository_set_workdir(
+    emacs_env *env, emacs_value _repo, emacs_value _workdir, emacs_value _update_gitlink)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_workdir);
+    EGIT_NORMALIZE_PATH(_workdir);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *workdir = EGIT_EXTRACT_STRING(_workdir);
+        int update_gitlink = env->is_not_nil(env, _update_gitlink) ? 1 : 0;
+        retval = git_repository_set_workdir(repo, workdir, update_gitlink);
+        free(workdir);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
+EGIT_DOC(repository_state_cleanup, "REPO",
+         "Remove all the metadata in REPO associated with an ongoing\n"
+         "command like merge, revert, cherry-pick, etc.");
+emacs_value egit_repository_state_cleanup(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval = git_repository_state_cleanup(repo);
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }

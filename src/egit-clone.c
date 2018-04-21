@@ -15,8 +15,8 @@ emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
     git_repository *repo;
     int retval;
     {
-        char *url = em_get_string(env, _url);
-        char *path = em_get_string(env, _path);
+        char *url = EGIT_EXTRACT_STRING(_url);
+        char *path = EGIT_EXTRACT_STRING(_path);
         retval = git_clone(&repo, url, path, NULL);
         free(url);
         free(path);

@@ -158,6 +158,7 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
 
 typedef emacs_value (*func_1)(emacs_env*, emacs_value);
 typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
+typedef emacs_value (*func_3)(emacs_env*, emacs_value, emacs_value, emacs_value);
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
@@ -172,6 +173,12 @@ emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, 
 {
     func_2 func = (func_2) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1));
+}
+
+emacs_value egit_dispatch_3(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_3 func = (func_3) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2));
 }
 
 bool egit_dispatch_error(emacs_env *env, int retval)
@@ -266,6 +273,11 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-repository-detach-head", repository_detach_head, 1, 1);
     DEFUN("libgit-repository-message-remove", repository_message_remove, 1, 1);
+    DEFUN("libgit-repository-set-head", repository_set_head, 2, 2);
+    DEFUN("libgit-repository-set-head-detached", repository_set_head_detached, 2, 2);
+    DEFUN("libgit-repository-set-ident", repository_set_head_detached, 1, 3);
+    DEFUN("libgit-repository-set-workdir", repository_set_head_detached, 2, 3);
+    DEFUN("libgit-repository-state-cleanup", repository_state_cleanup, 1, 1);
 
     DEFUN("libgit-repository-bare-p", repository_bare_p, 1, 1);
     DEFUN("libgit-repository-empty-p", repository_empty_p, 1, 1);
