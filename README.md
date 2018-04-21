@@ -28,6 +28,9 @@ Quality-of-life convenience functionality is better implemented in Emacs Lisp th
 
 ## Building
 
+There is a loader file written in Emacs Lisp that will build the module for you, but the
+`git submodule` steps need to be run manually.
+
 ```
 git submodule init
 git submodule update
@@ -49,11 +52,13 @@ make test
 
 ## Using
 
-Ensure that `libegit2.so` is somewhere in your load path. Then
+Ensure that `libgit.el` is somewhere in your load path. Then
 
 ```elisp
-(require 'libegit2)
+(require 'libgit)
 ```
+
+If the dynamic module was not already built, you should be asked to do it manually.
 
 If you use [Borg](https://github.com/emacscollective/borg), the following `.gitmodules` entry should
 work.
@@ -67,7 +72,6 @@ work.
 	build-step = mkdir -p build
 	build-step = cd build && cmake ..
 	build-step = cd build && make
-	load-path = build
 ```
 
 ## Contributing
