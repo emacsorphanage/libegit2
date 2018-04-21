@@ -716,7 +716,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-cmp` 
 - :heavy_check_mark: `git-reference-create`
 - :heavy_check_mark: `git-reference-create-matching`
-- :interrobang: `git-reference-delete` 
+- :heavy_check_mark: `git-reference-delete`
 - :interrobang: `git-reference-dup` 
 - :interrobang: `git-reference-dwim` 
 - :interrobang: `git-reference-ensure-log` 
@@ -734,7 +734,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-iterator-glob-new` 
 - :interrobang: `git-reference-iterator-new` 
 - :interrobang: `git-reference-list` 
-- :interrobang: `git-reference-lookup` 
+- :heavy_check_mark: `git-reference-lookup`
 - :heavy_check_mark: `git-reference-name` 
 - :interrobang: `git-reference-name-to-id` 
 - :interrobang: `git-reference-next` 

@@ -75,6 +75,39 @@ emacs_value egit_reference_create_matching(
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
+EGIT_DOC(reference_lookup, "REPO NAME", "Lookup a reference by NAME in REPO.");
+emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value _name)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_name);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_reference *ref;
+    int retval;
+    {
+        char *name = EGIT_EXTRACT_STRING(_name);
+        retval = git_reference_lookup(&ref, repo, name);
+        free(name);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
+
+// =============================================================================
+// Operations
+
+EGIT_DOC(reference_delete, "REF", "Delete an existing reference.");
+emacs_value egit_reference_delete(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    int retval = git_reference_delete(ref);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 
 // =============================================================================
 // Getters
