@@ -21,9 +21,9 @@ more-or-less directly to Emacs, in the following sense:
 - Return types map to their natural Emacs counterparts, or opaque user pointers when not applicable
   (e.g. for `git-???` structures). Exceptions: `git-oid` and `git-buf` types are converted to Emacs
   strings.
-- Boolean parameters towards the end of argument lists whose natural default value is false will be
-  made optional.
-  
+- Boolean parameters or pointers towards the end of argument lists whose natural default value is
+  false or NULL will be made optional.
+
 Quality-of-life convenience functionality is better implemented in Emacs Lisp than in C.
 
 ## Building
