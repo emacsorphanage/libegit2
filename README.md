@@ -711,11 +711,11 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### reference
 
-- :interrobang: `git-reference--alloc` 
-- :interrobang: `git-reference--alloc-symbolic` 
+- :x: `git-reference--alloc` (in `sys`)
+- :x: `git-reference--alloc-symbolic` (in `sys`)
 - :interrobang: `git-reference-cmp` 
-- :interrobang: `git-reference-create` 
-- :interrobang: `git-reference-create-matching` 
+- :heavy_check_mark: `git-reference-create`
+- :heavy_check_mark: `git-reference-create-matching`
 - :interrobang: `git-reference-delete` 
 - :interrobang: `git-reference-dup` 
 - :interrobang: `git-reference-dwim` 

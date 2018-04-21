@@ -159,6 +159,10 @@ emacs_value egit_wrap(emacs_env* env, egit_type type, void* data)
 typedef emacs_value (*func_1)(emacs_env*, emacs_value);
 typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
 typedef emacs_value (*func_3)(emacs_env*, emacs_value, emacs_value, emacs_value);
+typedef emacs_value (*func_5)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                              emacs_value, emacs_value);
+typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                              emacs_value, emacs_value, emacs_value);
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
@@ -179,6 +183,20 @@ emacs_value egit_dispatch_3(emacs_env *env, ptrdiff_t nargs, emacs_value *args, 
 {
     func_3 func = (func_3) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2));
+}
+
+emacs_value egit_dispatch_5(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_5 func = (func_5) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4));
+}
+
+emacs_value egit_dispatch_6(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_6 func = (func_6) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5));
 }
 
 bool egit_dispatch_error(emacs_env *env, int retval)
@@ -251,6 +269,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-object-short-id", object_short_id, 1, 1);
 
     // Reference
+    DEFUN("libgit-reference-create", reference_create, 3, 5);
+    DEFUN("libgit-reference-create-matching", reference_create, 3, 6);
+
     DEFUN("libgit-reference-name", reference_name, 1, 1);
     DEFUN("libgit-reference-owner", reference_owner, 1, 1);
     DEFUN("libgit-reference-resolve", reference_resolve, 1, 1);

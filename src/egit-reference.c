@@ -8,6 +8,75 @@
 
 
 // =============================================================================
+// Constructors
+
+EGIT_DOC(reference_create, "REPO NAME ID &optional FORCE LOG-MESSAGE",
+         "Create a new direct reference.");
+emacs_value egit_reference_create(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _id,
+    emacs_value _force, emacs_value _log_message)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_name);
+    EGIT_ASSERT_STRING(_id);
+    EGIT_ASSERT_STRING_OR_NIL(_log_message);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid id;
+    EGIT_EXTRACT_OID(_id, id);
+    int force = EGIT_EXTRACT_BOOLEAN(_force);
+    git_reference *ref;
+    int retval;
+    {
+        char *name = EGIT_EXTRACT_STRING(_name);
+        char *log_message = EGIT_EXTRACT_STRING_OR_NULL(_log_message);
+        retval = git_reference_create(&ref, repo, name, &id, force, log_message);
+        free(name);
+        EGIT_FREE(log_message);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
+EGIT_DOC(reference_create_matching, "REPO NAME ID &optional FORCE CURRENT-ID LOG-MESSAGE",
+         "Conditionally create a new direct reference.");
+emacs_value egit_reference_create_matching(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _id,
+    emacs_value _force, emacs_value _current_id, emacs_value _log_message)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_name);
+    EGIT_ASSERT_STRING(_id);
+    EGIT_ASSERT_STRING_OR_NIL(_current_id);
+    EGIT_ASSERT_STRING_OR_NIL(_log_message);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid id, current_id;
+    EGIT_EXTRACT_OID(_id, id);
+    if (EGIT_EXTRACT_BOOLEAN(_current_id))
+        EGIT_EXTRACT_OID(_current_id, current_id);
+    int force = EGIT_EXTRACT_BOOLEAN(_force);
+    git_reference *ref;
+    int retval;
+    {
+        char *name = EGIT_EXTRACT_STRING(_name);
+        char *log_message = EGIT_EXTRACT_STRING_OR_NULL(_log_message);
+        retval = git_reference_create_matching(
+            &ref, repo, name, &id, force,
+            EGIT_EXTRACT_BOOLEAN(_current_id) ? &current_id : NULL,
+            log_message
+        );
+        free(name);
+        EGIT_FREE(log_message);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ref);
+}
+
+
+// =============================================================================
 // Getters
 
 EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
