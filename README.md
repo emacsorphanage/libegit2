@@ -127,6 +127,10 @@ Legend:
 - :x: Function should probably not be implemented (reason given)
 - :interrobang: Undecided
 
+Some functions are defined in libgit2 headers in the `sys` subdirectory, and are not reachable from
+a standard include (i.e. `#include "git2.h"`). For now, we will skip those on the assumption that
+they are more specialized.
+
 ### extra
 
 These are functions that do not have a `libgit2` equivalent.
@@ -824,7 +828,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### repository
 
-- :interrobang: `git-repository--cleanup` 
+- :x: `git-repository--cleanup` (in `sys`)
 - :heavy_check_mark: `git-repository-commondir` 
 - :interrobang: `git-repository-config` 
 - :interrobang: `git-repository-config-snapshot` 
@@ -851,7 +855,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-repository-mergehead-foreach` 
 - :heavy_check_mark: `git-repository-message` 
 - :heavy_check_mark: `git-repository-message-remove` 
-- :interrobang: `git-repository-new` 
+- :x: `git-repository-new` (in `sys`)
 - :interrobang: `git-repository-odb` 
 - :heavy_check_mark: `git-repository-open` 
 - :heavy_check_mark: `git-repository-open-bare` 
@@ -860,8 +864,8 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-repository-path` 
 - :interrobang: `git-repository-refdb` 
 - :x: `git-repository-reinit-filesystem` (in `sys`)
-- :interrobang: `git-repository-set-bare` 
-- :interrobang: `git-repository-set-config` 
+- :x: `git-repository-set-bare` (in `sys`)
+- :x: `git-repository-set-config` (in `sys`)
 - :heavy_check_mark: `git-repository-set-head` 
 - :heavy_check_mark: `git-repository-set-head-detached` 
 - :interrobang: `git-repository-set-head-detached-from-annotated` 
