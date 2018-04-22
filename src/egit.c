@@ -291,10 +291,12 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-remove", reference_delete, 2, 2);
 
     DEFUN("libgit-reference-branch-p", reference_branch_p, 1, 1);
+    DEFUN("libgit-reference-direct-p", reference_direct_p, 1, 1);
     DEFUN("libgit-reference-has-log-p", reference_has_log_p, 2, 2);
     DEFUN("libgit-reference-name-to-id", reference_name_to_id, 2, 2);
     DEFUN("libgit-reference-note-p", reference_note_p, 1, 1);
     DEFUN("libgit-reference-remote-p", reference_remote_p, 1, 1);
+    DEFUN("libgit-reference-symbolic-p", reference_symbolic_p, 1, 1);
     DEFUN("libgit-reference-tag-p", reference_tag_p, 1, 1);
     DEFUN("libgit-reference-valid-name-p", reference_valid_name_p, 1, 1);
 

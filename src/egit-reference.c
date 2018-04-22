@@ -325,6 +325,15 @@ emacs_value egit_reference_branch_p(emacs_env *env, emacs_value _ref)
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(reference_direct_p, "REF", "Non-nil if REF is direct.");
+emacs_value egit_reference_direct_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_ref_t type = git_reference_type(ref);
+    return type == GIT_REF_OID ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_has_log_p, "REPO REFNAME",
          "Check if a reflog exists for a particular reference.");
 emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_value _refname)
@@ -381,6 +390,15 @@ emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_remote(ref);
     return retval ? em_t : em_nil;
+}
+
+EGIT_DOC(reference_symbolic_p, "REF", "Non-nil if REF is symbolic.");
+emacs_value egit_reference_symbolic_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_ref_t type = git_reference_type(ref);
+    return type == GIT_REF_SYMBOLIC ? em_t : em_nil;
 }
 
 EGIT_DOC(reference_tag_p, "REF", "Check if REF is a tag.");

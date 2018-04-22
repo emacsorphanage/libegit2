@@ -145,6 +145,8 @@ These are functions that do not have a `libgit2` equivalent.
 - :heavy_check_mark: `git-reference-p`
 - :heavy_check_mark: `git-repository-p`
 - :heavy_check_mark: `git-typeof`
+- :heavy_check_mark: `git-reference-direct-p`
+- :heavy_check_mark: `git-reference-symbolic-p`
 - other type-checking predicates as we add more types
 
 ### annotated
