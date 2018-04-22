@@ -157,6 +157,24 @@ emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_v
     return em_nil;
 }
 
+EGIT_DOC(reference_remove, "REF", "Remove an existing reference by name.");
+emacs_value egit_reference_remove(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_reference_remove(repo, refname);
+        free(refname);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 
 // =============================================================================
 // Getters

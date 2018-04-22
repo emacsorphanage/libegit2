@@ -13,6 +13,7 @@ EGIT_DEFUN(reference_lookup, emacs_value _repo, emacs_value _name);
 
 EGIT_DEFUN(reference_delete, emacs_value _ref);
 EGIT_DEFUN(reference_ensure_log, emacs_value _repo, emacs_value _refname);
+EGIT_DEFUN(reference_remove, emacs_value _repo, emacs_value _refname);
 
 EGIT_DEFUN(reference_branch_p, emacs_value _ref);
 EGIT_DEFUN(reference_has_log_p, emacs_value _repo, emacs_value _refname);

@@ -742,7 +742,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-normalize-name` 
 - :heavy_check_mark: `git-reference-owner` 
 - :heavy_check_mark: `git-reference-peel`
-- :interrobang: `git-reference-remove` 
+- :heavy_check_mark: `git-reference-remove`
 - :interrobang: `git-reference-rename` 
 - :heavy_check_mark: `git-reference-resolve` 
 - :interrobang: `git-reference-set-target` 
