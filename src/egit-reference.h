@@ -18,6 +18,7 @@ EGIT_DEFUN(reference_branch_p, emacs_value _ref);
 EGIT_DEFUN(reference_has_log_p, emacs_value _repo, emacs_value _refname);
 EGIT_DEFUN(reference_list, emacs_value _repo);
 EGIT_DEFUN(reference_name, emacs_value _ref);
+EGIT_DEFUN(reference_name_to_id, emacs_value _repo, emacs_value _refname);
 EGIT_DEFUN(reference_note_p, emacs_value _ref);
 EGIT_DEFUN(reference_owner, emacs_value _ref);
 EGIT_DEFUN(reference_remote_p, emacs_value _ref);

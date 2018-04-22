@@ -282,6 +282,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-has-log-p", reference_has_log_p, 2, 2);
     DEFUN("libgit-reference-list", reference_list, 1, 1);
     DEFUN("libgit-reference-name", reference_name, 1, 1);
+    DEFUN("libgit-reference-name-to-id", reference_name_to_id, 2, 2);
     DEFUN("libgit-reference-note-p", reference_note_p, 1, 1);
     DEFUN("libgit-reference-owner", reference_owner, 1, 1);
     DEFUN("libgit-reference-remote-p", reference_remote_p, 1, 1);

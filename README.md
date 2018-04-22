@@ -736,7 +736,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-list`
 - :heavy_check_mark: `git-reference-lookup`
 - :heavy_check_mark: `git-reference-name` 
-- :interrobang: `git-reference-name-to-id` 
+- :heavy_check_mark: `git-reference-name-to-id`
 - :interrobang: `git-reference-next` 
 - :interrobang: `git-reference-next-name` 
 - :interrobang: `git-reference-normalize-name` 
