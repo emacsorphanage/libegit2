@@ -209,6 +209,15 @@ emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REFERENCE, newref);
 }
 
+EGIT_DOC(reference_shorthand, "REF", "Get the short name of REF.");
+emacs_value egit_reference_shortname(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    const char *shortname = git_reference_shorthand(ref);
+    return env->make_string(env, shortname, strlen(shortname));
+}
+
 EGIT_DOC(reference_target, "REF",
          "Return the OID pointed to by REF, or nil if REF is not direct");
 emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)

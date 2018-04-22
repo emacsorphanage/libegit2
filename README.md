@@ -752,7 +752,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-rename` 
 - :heavy_check_mark: `git-reference-resolve` 
 - :interrobang: `git-reference-set-target` 
-- :interrobang: `git-reference-shorthand` 
+- :heavy_check_mark: `git-reference-shorthand`
 - :interrobang: `git-reference-symbolic-create` 
 - :interrobang: `git-reference-symbolic-create-matching` 
 - :interrobang: `git-reference-symbolic-set-target` 

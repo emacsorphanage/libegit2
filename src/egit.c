@@ -280,6 +280,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-owner", reference_owner, 1, 1);
     DEFUN("libgit-reference-peel", reference_peel, 1, 2);
     DEFUN("libgit-reference-resolve", reference_resolve, 1, 1);
+    DEFUN("libgit-reference-shorthand", reference_shorthand, 1, 1);
     DEFUN("libgit-reference-target", reference_target, 1, 1);
 
     DEFUN("libgit-reference-delete", reference_delete, 1, 1);

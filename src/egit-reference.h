@@ -20,6 +20,7 @@ EGIT_DEFUN(reference_name, emacs_value _ref);
 EGIT_DEFUN(reference_owner, emacs_value _ref);
 EGIT_DEFUN(reference_peel, emacs_value _ref, emacs_value _type);
 EGIT_DEFUN(reference_resolve, emacs_value _ref);
+EGIT_DEFUN(reference_shorthand, emacs_value _ref);
 EGIT_DEFUN(reference_target, emacs_value _ref);
 
 EGIT_DEFUN(reference_branch_p, emacs_value _ref);
