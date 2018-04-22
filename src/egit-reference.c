@@ -198,6 +198,15 @@ emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
     return env->make_string(env, name, strlen(name));
 }
 
+EGIT_DOC(reference_note_p, "REF", "Check if REF is a note.");
+emacs_value egit_reference_note_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    int retval = git_reference_is_note(ref);
+    return retval ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
 emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
 {
