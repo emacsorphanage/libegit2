@@ -256,6 +256,38 @@ emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(reference_peel, "REF &optional TYPE",
+         "Recursively peel REF until an object of type TYPE is found.\n\n"
+         "TYPE may be any of `commit', `tree', `blob', `tag' or `nil'\n"
+         "(meaning any type).");
+emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _type)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+
+    git_otype type;
+    if (!EGIT_EXTRACT_BOOLEAN(_type))
+        type = GIT_OBJ_ANY;
+    else if (env->eq(env, _type, em_commit))
+        type = GIT_OBJ_COMMIT;
+    else if (env->eq(env, _type, em_tree))
+        type = GIT_OBJ_TREE;
+    else if (env->eq(env, _type, em_blob))
+        type = GIT_OBJ_BLOB;
+    else if (env->eq(env, _type, em_tag))
+        type = GIT_OBJ_TAG;
+    else {
+        em_signal_wrong_value(env, _type);
+        return em_nil;
+    }
+
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_object *obj;
+    int retval = git_reference_peel(&obj, ref, type);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_OBJECT, obj);
+}
+
 EGIT_DOC(reference_remote_p, "REF", "Check if REF is a remote tracking branch.");
 emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
 {
