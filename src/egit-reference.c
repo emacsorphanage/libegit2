@@ -237,6 +237,15 @@ emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REFERENCE, newref);
 }
 
+EGIT_DOC(reference_tag_p, "REF", "Check if REF is a tag.");
+emacs_value egit_reference_tag_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    int retval = git_reference_is_tag(ref);
+    return retval ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_target, "REF",
          "Return the OID pointed to by REF, or nil if REF is not direct");
 emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)

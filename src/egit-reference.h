@@ -21,6 +21,7 @@ EGIT_DEFUN(reference_note_p, emacs_value _ref);
 EGIT_DEFUN(reference_owner, emacs_value _ref);
 EGIT_DEFUN(reference_remote_p, emacs_value _ref);
 EGIT_DEFUN(reference_resolve, emacs_value _ref);
+EGIT_DEFUN(reference_tag_p, emacs_value _ref);
 EGIT_DEFUN(reference_target, emacs_value _ref);
 
 #endif /* EGIT_REFERENCE_H */
