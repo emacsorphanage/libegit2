@@ -161,6 +161,15 @@ emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_v
 // =============================================================================
 // Getters
 
+EGIT_DOC(reference_branch_p, "REF", "Check if REF is a local branch.");
+emacs_value egit_reference_branch_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    int retval = git_reference_is_branch(ref);
+    return retval ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_has_log_p, "REPO REFNAME",
          "Check if a reflog exists for a particular reference.");
 emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_value _refname)
