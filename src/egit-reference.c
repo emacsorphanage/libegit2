@@ -161,6 +161,25 @@ emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_v
 // =============================================================================
 // Getters
 
+EGIT_DOC(reference_has_log_p, "REPO REFNAME",
+         "Check if a reflog exists for a particular reference.");
+emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_reference_has_log(repo, refname);
+        free(refname);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return retval ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
 emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
 {
