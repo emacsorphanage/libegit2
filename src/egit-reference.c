@@ -240,6 +240,18 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
     return env->make_string(env, oid_s, strlen(oid_s));
 }
 
+EGIT_DOC(reference_target_peel, "REF",
+         "Return the peeled OID pointed to by REF, or nil.");
+emacs_value egit_reference_target_peel(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    const git_oid *oid = git_reference_target_peel(ref);
+    if (!oid) return em_nil;
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
 
 // =============================================================================
 // Operations

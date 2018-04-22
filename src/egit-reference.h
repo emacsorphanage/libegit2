@@ -19,6 +19,7 @@ EGIT_DEFUN(reference_resolve, emacs_value _ref);
 EGIT_DEFUN(reference_shorthand, emacs_value _ref);
 EGIT_DEFUN(reference_symbolic_target, emacs_value _ref);
 EGIT_DEFUN(reference_target, emacs_value _ref);
+EGIT_DEFUN(reference_target_peel, emacs_value _ref);
 
 EGIT_DEFUN(reference_delete, emacs_value _ref);
 EGIT_DEFUN(reference_ensure_log, emacs_value _repo, emacs_value _refname);
