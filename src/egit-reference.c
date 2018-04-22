@@ -257,3 +257,18 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
     const char *oid_s = git_oid_tostr_s(oid);
     return env->make_string(env, oid_s, strlen(oid_s));
 }
+
+EGIT_DOC(reference_valid_name_p, "REFNAME", "Check if a reference name is well-formed.");
+emacs_value egit_reference_valid_name_p(emacs_env *env, emacs_value _refname)
+{
+    EGIT_ASSERT_STRING(_refname);
+
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_reference_is_valid_name(refname);
+        free(refname);
+    }
+
+    return retval ? em_t : em_nil;
+}
