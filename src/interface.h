@@ -16,6 +16,9 @@ extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
     em_cherrypick_sequence, em_bisect, em_rebase, em_rebase_interactive, em_rebase_merge,
     em_apply_mailbox, em_apply_mailbox_or_rebase;
 
+// Reference types
+extern emacs_value em_direct, em_symbolic;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.

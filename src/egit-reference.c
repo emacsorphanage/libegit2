@@ -252,6 +252,15 @@ emacs_value egit_reference_target_peel(emacs_env *env, emacs_value _ref)
     return env->make_string(env, oid_s, strlen(oid_s));
 }
 
+EGIT_DOC(reference_type, "REF", "Get the type of REF, either `direct' or `symbolic'.");
+emacs_value egit_reference_type(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_ref_t type = git_reference_type(ref);
+    return type == GIT_REF_OID ? em_direct : em_symbolic;
+}
+
 
 // =============================================================================
 // Operations

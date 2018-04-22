@@ -284,6 +284,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-symbolic-target", reference_symbolic_target, 1, 1);
     DEFUN("libgit-reference-target", reference_target, 1, 1);
     DEFUN("libgit-reference-target-peel", reference_target, 1, 1);
+    DEFUN("libgit-reference-type", reference_type, 1, 1);
 
     DEFUN("libgit-reference-delete", reference_delete, 1, 1);
     DEFUN("libgit-reference-ensure-log", reference_ensure_log, 2, 2);

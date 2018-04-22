@@ -759,7 +759,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-symbolic-target`
 - :heavy_check_mark: `git-reference-target`
 - :heavy_check_mark: `git-reference-target-peel`
-- :interrobang: `git-reference-type`
+- :heavy_check_mark: `git-reference-type`
 
 ### reflog
 

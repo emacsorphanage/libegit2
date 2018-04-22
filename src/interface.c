@@ -22,6 +22,9 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
     em_cherrypick_sequence, em_bisect, em_rebase, em_rebase_interactive, em_rebase_merge,
     em_apply_mailbox, em_apply_mailbox_or_rebase;
 
+// Reference types
+emacs_value em_direct, em_symbolic;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -57,6 +60,9 @@ void em_init(emacs_env *env)
     em_rebase_merge = GLOBREF(INTERN("rebase-merge"));
     em_apply_mailbox = GLOBREF(INTERN("apply-mailbox"));
     em_apply_mailbox_or_rebase = GLOBREF(INTERN("apply-mailbox-or-rebase"));
+
+    em_direct = GLOBREF(INTERN("direct"));
+    em_symbolic = GLOBREF(INTERN("symbolic"));
 
     _cons = GLOBREF(INTERN("cons"));
     _defalias = GLOBREF(INTERN("defalias"));
