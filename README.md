@@ -756,7 +756,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-symbolic-create` 
 - :interrobang: `git-reference-symbolic-create-matching` 
 - :interrobang: `git-reference-symbolic-set-target` 
-- :interrobang: `git-reference-symbolic-target` 
+- :heavy_check_mark: `git-reference-symbolic-target`
 - :heavy_check_mark: `git-reference-target` 
 - :interrobang: `git-reference-target-peel` 
 - :interrobang: `git-reference-type`

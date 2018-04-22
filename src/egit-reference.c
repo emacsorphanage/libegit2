@@ -218,6 +218,16 @@ emacs_value egit_reference_shortname(emacs_env *env, emacs_value _ref)
     return env->make_string(env, shortname, strlen(shortname));
 }
 
+EGIT_DOC(reference_symbolic_target, "REF",
+         "Get the full name to the reference pointed to by a symbolic reference, or nil.");
+emacs_value egit_reference_symbolic_target(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    const char *name = git_reference_symbolic_target(ref);
+    return env->make_string(env, name, strlen(name));
+}
+
 EGIT_DOC(reference_target, "REF",
          "Return the OID pointed to by REF, or nil if REF is not direct");
 emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
