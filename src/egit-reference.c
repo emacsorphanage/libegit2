@@ -216,6 +216,15 @@ emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
     return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
+EGIT_DOC(reference_remote_p, "REF", "Check if REF is a remote tracking branch.");
+emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    int retval = git_reference_is_remote(ref);
+    return retval ? em_t : em_nil;
+}
+
 EGIT_DOC(reference_resolve, "REF",
          "Iteratively peel REF until it resolves directly to an OID.");
 emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
