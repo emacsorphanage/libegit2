@@ -719,17 +719,17 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-delete`
 - :heavy_check_mark: `git-reference-dup`
 - :heavy_check_mark: `git-reference-dwim`
-- :interrobang: `git-reference-ensure-log` 
+- :heavy_check_mark: `git-reference-ensure-log`
 - :interrobang: `git-reference-foreach` 
 - :interrobang: `git-reference-foreach-glob` 
 - :interrobang: `git-reference-foreach-name` 
 - :x: `git-reference-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-reference-has-log` 
-- :interrobang: `git-reference-is-branch` 
-- :interrobang: `git-reference-is-note` 
-- :interrobang: `git-reference-is-remote` 
-- :interrobang: `git-reference-is-tag` 
-- :interrobang: `git-reference-is-valid-name` 
+- :heavy_check_mark: `git-reference-has-log`
+- :heavy_check_mark: `git-reference-is-branch`
+- :heavy_check_mark: `git-reference-is-note`
+- :heavy_check_mark: `git-reference-is-remote`
+- :heavy_check_mark: `git-reference-is-tag`
+- :heavy_check_mark: `git-reference-is-valid-name`
 - :interrobang: `git-reference-iterator-free` 
 - :interrobang: `git-reference-iterator-glob-new` 
 - :interrobang: `git-reference-iterator-new` 
