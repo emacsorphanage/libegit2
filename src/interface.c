@@ -24,7 +24,8 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
-    _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument;
+    _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
+    _wrong_value_argument;
 
 
 void em_init(emacs_env *env)
@@ -67,9 +68,11 @@ void em_init(emacs_env *env)
     _user_ptrp = GLOBREF(INTERN("user-ptrp"));
     _vector = GLOBREF(INTERN("vector"));
     _wrong_type_argument = GLOBREF(INTERN("wrong-type-argument"));
+    _wrong_value_argument = GLOBREF(INTERN("wrong-value-argument"));
 
     em_define_error(env, _giterr, "Git error");
     em_define_error(env, _not_implemented, "Not implemented");
+    em_define_error(env, _wrong_value_argument, "Wrong argument value passed");
 }
 
 /**
@@ -113,6 +116,11 @@ void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actu
         env, _wrong_type_argument,
         em_cons(env, expected, em_cons(env, actual, em_nil))
     );
+}
+
+void em_signal_wrong_value(emacs_env *env, emacs_value actual)
+{
+    env->non_local_exit_signal(env, _wrong_value_argument, actual);
 }
 
 char *em_get_string(emacs_env *env, emacs_value arg)

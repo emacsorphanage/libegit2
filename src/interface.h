@@ -48,6 +48,13 @@ void em_signal_giterr(emacs_env *env, int _klass, const char* _msg);
 void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actual);
 
 /**
+ * Signal a wrong-value-argument error.
+ * @param env The active Emacs environment.
+ * @param actual Emacs value that does not have the expected value.
+ */
+void em_signal_wrong_value(emacs_env *env, emacs_value actual);
+
+/**
  * Return a string from an emacs_value.
  * Caller is responsible for ensuring that the value is a string, and to free the returned pointer.
  * @param env The active Emacs environment.
