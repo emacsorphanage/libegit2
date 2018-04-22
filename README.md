@@ -733,7 +733,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-reference-iterator-free` 
 - :interrobang: `git-reference-iterator-glob-new` 
 - :interrobang: `git-reference-iterator-new` 
-- :interrobang: `git-reference-list` 
+- :heavy_check_mark: `git-reference-list`
 - :heavy_check_mark: `git-reference-lookup`
 - :heavy_check_mark: `git-reference-name` 
 - :interrobang: `git-reference-name-to-id` 
@@ -958,7 +958,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### strarray
 
-- :interrobang: `git-strarray-copy` 
+- :x: `git-strarray-copy`
 - :x: `git-strarray-free` (memory management shouldn't be exposed to Emacs)
 
 ### stream

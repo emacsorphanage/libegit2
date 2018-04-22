@@ -189,6 +189,25 @@ emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_va
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(reference_list, "REPO", "Get a list of all reference names in REPO.");
+emacs_value egit_reference_list(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_strarray out = {NULL, 0};
+    int retval = git_reference_list(&out, repo);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value list = em_nil;
+    for (ptrdiff_t c = out.count-1; c >= 0; c--) {
+        emacs_value str = env->make_string(env, out.strings[c], strlen(out.strings[c]));
+        list = em_cons(env, str, list);
+    }
+    git_strarray_free(&out);
+    return list;
+}
+
 EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
 emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
 {
