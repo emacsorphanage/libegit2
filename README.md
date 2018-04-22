@@ -131,6 +131,12 @@ Some functions are defined in libgit2 headers in the `sys` subdirectory, and are
 a standard include (i.e. `#include "git2.h"`). For now, we will skip those on the assumption that
 they are more specialized.
 
+Estimates (updated periodically):
+- Implemented: 54 (7.0%)
+- Should not implement: 80 (10.4%)
+- To do: 637 (82.6%)
+- Total: 771
+
 ### extra
 
 These are functions that do not have a `libgit2` equivalent.
