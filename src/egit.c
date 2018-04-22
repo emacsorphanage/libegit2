@@ -275,22 +275,23 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-dwim", reference_dwim, 2, 2);
     DEFUN("libgit-reference-lookup", reference_lookup, 2, 2);
 
+    DEFUN("libgit-reference-list", reference_list, 1, 1);
+    DEFUN("libgit-reference-name", reference_name, 1, 1);
+    DEFUN("libgit-reference-owner", reference_owner, 1, 1);
+    DEFUN("libgit-reference-peel", reference_peel, 1, 2);
+    DEFUN("libgit-reference-resolve", reference_resolve, 1, 1);
+    DEFUN("libgit-reference-target", reference_target, 1, 1);
+
     DEFUN("libgit-reference-delete", reference_delete, 1, 1);
     DEFUN("libgit-reference-ensure-log", reference_ensure_log, 2, 2);
     DEFUN("libgit-reference-remove", reference_delete, 2, 2);
 
     DEFUN("libgit-reference-branch-p", reference_branch_p, 1, 1);
     DEFUN("libgit-reference-has-log-p", reference_has_log_p, 2, 2);
-    DEFUN("libgit-reference-list", reference_list, 1, 1);
-    DEFUN("libgit-reference-name", reference_name, 1, 1);
     DEFUN("libgit-reference-name-to-id", reference_name_to_id, 2, 2);
     DEFUN("libgit-reference-note-p", reference_note_p, 1, 1);
-    DEFUN("libgit-reference-owner", reference_owner, 1, 1);
-    DEFUN("libgit-reference-peel", reference_peel, 1, 2);
     DEFUN("libgit-reference-remote-p", reference_remote_p, 1, 1);
-    DEFUN("libgit-reference-resolve", reference_resolve, 1, 1);
     DEFUN("libgit-reference-tag-p", reference_tag_p, 1, 1);
-    DEFUN("libgit-reference-target", reference_target, 1, 1);
     DEFUN("libgit-reference-valid-name-p", reference_valid_name_p, 1, 1);
 
     // Repository

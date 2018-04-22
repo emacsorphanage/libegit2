@@ -126,6 +126,103 @@ emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value
 
 
 // =============================================================================
+// Getters
+
+EGIT_DOC(reference_list, "REPO", "Get a list of all reference names in REPO.");
+emacs_value egit_reference_list(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_strarray out = {NULL, 0};
+    int retval = git_reference_list(&out, repo);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value list = em_nil;
+    for (ptrdiff_t c = out.count-1; c >= 0; c--) {
+        emacs_value str = env->make_string(env, out.strings[c], strlen(out.strings[c]));
+        list = em_cons(env, str, list);
+    }
+    git_strarray_free(&out);
+    return list;
+}
+
+EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
+emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    const char *name = git_reference_name(ref);
+    return env->make_string(env, name, strlen(name));
+}
+
+EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
+emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_repository *repo = git_reference_owner(ref);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
+}
+
+EGIT_DOC(reference_peel, "REF &optional TYPE",
+         "Recursively peel REF until an object of type TYPE is found.\n\n"
+         "TYPE may be any of `commit', `tree', `blob', `tag' or `nil'\n"
+         "(meaning any type).");
+emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _type)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+
+    git_otype type;
+    if (!EGIT_EXTRACT_BOOLEAN(_type))
+        type = GIT_OBJ_ANY;
+    else if (env->eq(env, _type, em_commit))
+        type = GIT_OBJ_COMMIT;
+    else if (env->eq(env, _type, em_tree))
+        type = GIT_OBJ_TREE;
+    else if (env->eq(env, _type, em_blob))
+        type = GIT_OBJ_BLOB;
+    else if (env->eq(env, _type, em_tag))
+        type = GIT_OBJ_TAG;
+    else {
+        em_signal_wrong_value(env, _type);
+        return em_nil;
+    }
+
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_object *obj;
+    int retval = git_reference_peel(&obj, ref, type);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_OBJECT, obj);
+}
+
+EGIT_DOC(reference_resolve, "REF",
+         "Iteratively peel REF until it resolves directly to an OID.");
+emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    git_reference *newref;
+    int retval = git_reference_resolve(&newref, ref);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_REFERENCE, newref);
+}
+
+EGIT_DOC(reference_target, "REF",
+         "Return the OID pointed to by REF, or nil if REF is not direct");
+emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    const git_oid *oid = git_reference_target(ref);
+    if (!oid) return em_nil;
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
+
+// =============================================================================
 // Operations
 
 EGIT_DOC(reference_delete, "REF", "Delete an existing reference.");
@@ -177,7 +274,7 @@ emacs_value egit_reference_remove(emacs_env *env, emacs_value _repo, emacs_value
 
 
 // =============================================================================
-// Getters
+// Predicates
 
 EGIT_DOC(reference_branch_p, "REF", "Check if REF is a local branch.");
 emacs_value egit_reference_branch_p(emacs_env *env, emacs_value _ref)
@@ -205,34 +302,6 @@ emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_va
     EGIT_CHECK_ERROR(retval);
 
     return retval ? em_t : em_nil;
-}
-
-EGIT_DOC(reference_list, "REPO", "Get a list of all reference names in REPO.");
-emacs_value egit_reference_list(emacs_env *env, emacs_value _repo)
-{
-    EGIT_ASSERT_REPOSITORY(_repo);
-
-    git_repository *repo = EGIT_EXTRACT(_repo);
-    git_strarray out = {NULL, 0};
-    int retval = git_reference_list(&out, repo);
-    EGIT_CHECK_ERROR(retval);
-
-    emacs_value list = em_nil;
-    for (ptrdiff_t c = out.count-1; c >= 0; c--) {
-        emacs_value str = env->make_string(env, out.strings[c], strlen(out.strings[c]));
-        list = em_cons(env, str, list);
-    }
-    git_strarray_free(&out);
-    return list;
-}
-
-EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");
-emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
-{
-    EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    const char *name = git_reference_name(ref);
-    return env->make_string(env, name, strlen(name));
 }
 
 EGIT_DOC(reference_name_to_id, "REPO REFNAME",
@@ -265,47 +334,6 @@ emacs_value egit_reference_note_p(emacs_env *env, emacs_value _ref)
     return retval ? em_t : em_nil;
 }
 
-EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
-emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
-{
-    EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    git_repository *repo = git_reference_owner(ref);
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
-}
-
-EGIT_DOC(reference_peel, "REF &optional TYPE",
-         "Recursively peel REF until an object of type TYPE is found.\n\n"
-         "TYPE may be any of `commit', `tree', `blob', `tag' or `nil'\n"
-         "(meaning any type).");
-emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _type)
-{
-    EGIT_ASSERT_REFERENCE(_ref);
-
-    git_otype type;
-    if (!EGIT_EXTRACT_BOOLEAN(_type))
-        type = GIT_OBJ_ANY;
-    else if (env->eq(env, _type, em_commit))
-        type = GIT_OBJ_COMMIT;
-    else if (env->eq(env, _type, em_tree))
-        type = GIT_OBJ_TREE;
-    else if (env->eq(env, _type, em_blob))
-        type = GIT_OBJ_BLOB;
-    else if (env->eq(env, _type, em_tag))
-        type = GIT_OBJ_TAG;
-    else {
-        em_signal_wrong_value(env, _type);
-        return em_nil;
-    }
-
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    git_object *obj;
-    int retval = git_reference_peel(&obj, ref, type);
-    EGIT_CHECK_ERROR(retval);
-
-    return egit_wrap(env, EGIT_OBJECT, obj);
-}
-
 EGIT_DOC(reference_remote_p, "REF", "Check if REF is a remote tracking branch.");
 emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
 {
@@ -315,18 +343,6 @@ emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
     return retval ? em_t : em_nil;
 }
 
-EGIT_DOC(reference_resolve, "REF",
-         "Iteratively peel REF until it resolves directly to an OID.");
-emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
-{
-    EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    git_reference *newref;
-    int retval = git_reference_resolve(&newref, ref);
-    EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, newref);
-}
-
 EGIT_DOC(reference_tag_p, "REF", "Check if REF is a tag.");
 emacs_value egit_reference_tag_p(emacs_env *env, emacs_value _ref)
 {
@@ -334,18 +350,6 @@ emacs_value egit_reference_tag_p(emacs_env *env, emacs_value _ref)
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_tag(ref);
     return retval ? em_t : em_nil;
-}
-
-EGIT_DOC(reference_target, "REF",
-         "Return the OID pointed to by REF, or nil if REF is not direct");
-emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
-{
-    EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    const git_oid *oid = git_reference_target(ref);
-    if (!oid) return em_nil;
-    const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
 }
 
 EGIT_DOC(reference_valid_name_p, "REFNAME", "Check if a reference name is well-formed.");
