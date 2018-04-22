@@ -138,6 +138,25 @@ emacs_value egit_reference_delete(emacs_env *env, emacs_value _ref)
     return em_nil;
 }
 
+EGIT_DOC(reference_ensure_log, "REPO REFNAME",
+         "Ensure there is a reflog for a particular reference");
+emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_reference_ensure_log(repo, refname);
+        free(refname);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 
 // =============================================================================
 // Getters
