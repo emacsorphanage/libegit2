@@ -131,3 +131,39 @@
   (with-temp-dir path
     (run "git" "init" "--bare")
     (should (not (libgit-repository-workdir (libgit-repository-open path))))))
+
+(ert-deftest repository-detach-head ()
+  (with-temp-dir path
+    (run "git" "init")
+    (commit-change "test" "content")
+    (let ((repo (libgit-repository-open path))
+          (id (read-file-nnl ".git/refs/heads/master")))
+      (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/master"))
+      (libgit-repository-detach-head repo)
+      (should (string= (read-file-nnl ".git/HEAD") id)))))
+
+(ert-deftest repository-message-remove ()
+  (with-temp-dir path
+    (run "git" "init")
+    (write ".git/MERGE_MSG" "something\n")
+    (libgit-repository-message-remove (libgit-repository-open path))
+    (should (not (file-exists-p ".git/MERGE_MSG")))))
+
+(ert-deftest repository-set-head ()
+  (with-temp-dir path
+    (run "git" "init")
+    (commit-change "test" "content")
+    (run "git" "branch" "zing")
+    (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/master"))
+    (libgit-repository-set-head (libgit-repository-open path) "refs/heads/zing")
+    (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/zing"))))
+
+(ert-deftest repository-set-head-detached ()
+  (with-temp-dir path
+    (run "git" "init")
+    (commit-change "test" "content")
+    (let ((repo (libgit-repository-open path))
+          (id (read-file-nnl ".git/refs/heads/master")))
+      (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/master"))
+      (libgit-repository-set-head-detached repo id)
+      (should (string= (read-file-nnl ".git/HEAD") id)))))

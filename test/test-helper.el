@@ -21,6 +21,14 @@
   (with-temp-file filename
     (insert content)))
 
+(defun read-file (filename)
+  (with-temp-buffer
+    (insert-file-contents-literally filename)
+    (buffer-string)))
+
+(defun read-file-nnl (filename)
+  (replace-regexp-in-string "\n*\\'" "" (read-file filename)))
+
 (defun commit (&optional msg)
   (run "git" "commit" "--allow-empty-message" "-m" (or msg "")))
 

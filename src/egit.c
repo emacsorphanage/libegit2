@@ -320,7 +320,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-set-head", repository_set_head, 2, 2);
     DEFUN("libgit-repository-set-head-detached", repository_set_head_detached, 2, 2);
     DEFUN("libgit-repository-set-ident", repository_set_ident, 1, 3);
-    DEFUN("libgit-repository-set-workdir", repository_set_head_detached, 2, 3);
+    DEFUN("libgit-repository-set-workdir", repository_set_workdir, 2, 3);
     DEFUN("libgit-repository-state-cleanup", repository_state_cleanup, 1, 1);
 
     DEFUN("libgit-repository-bare-p", repository_bare_p, 1, 1);
