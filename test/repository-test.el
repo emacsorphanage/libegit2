@@ -167,3 +167,37 @@
       (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/master"))
       (libgit-repository-set-head-detached repo id)
       (should (string= (read-file-nnl ".git/HEAD") id)))))
+
+(ert-deftest repository-state-cleanup ()
+  (with-temp-dir path
+    (run "git" "init")
+    (let ((repo (libgit-repository-open path)))
+      (should (not (libgit-repository-state repo)))
+
+      (write ".git/rebase-merge/interactive" "")
+      (write ".git/rebase-apply/rebasing" "")
+      (write ".git/rebase-apply/applying" "")
+      (write ".git/sequencer/todo" "")
+      (write ".git/MERGE_HEAD" "")
+      (write ".git/REVERT_HEAD" "")
+      (write ".git/CHERRY_PICK_HEAD" "")
+      (write ".git/BISECT_LOG" "")
+
+      (should (libgit-repository-state repo))
+      (libgit-repository-state-cleanup repo)
+      (should (not (libgit-repository-state repo))))))
+
+(ert-deftest repository-bare-p ()
+  (with-temp-dir path
+    (run "git" "init")
+    (should (not (libgit-repository-bare-p (libgit-repository-open path)))))
+  (with-temp-dir path
+    (run "git" "init" "--bare")
+    (should (libgit-repository-bare-p (libgit-repository-open path)))))
+
+(ert-deftest repository-empty-p ()
+  (with-temp-dir path
+    (run "git" "init")
+    (should (libgit-repository-empty-p (libgit-repository-open path)))
+    (commit-change "test" "content")
+    (should (not (libgit-repository-empty-p (libgit-repository-open path))))))
