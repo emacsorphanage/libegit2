@@ -79,22 +79,9 @@ emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_commondir(repo);
-    return env->make_string(env, path, strlen(path));
-}
-
-EGIT_DOC(repository_ident, "REPO",
-         "Return the configured identity to use for reflogs in REPO.\n"
-         "The return value is a cons cell (name . email).");
-emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
-{
-    EGIT_ASSERT_REPOSITORY(_repo);
-    git_repository *repo = EGIT_EXTRACT(_repo);
-    const char *name, *email;
-    int retval = git_repository_ident(&name, &email, repo);
-    EGIT_CHECK_ERROR(retval);
-    emacs_value _name = name ? env->make_string(env, name, strlen(name)) : em_nil;
-    emacs_value _email = email ? env->make_string(env, email, strlen(email)) : em_nil;
-    return em_cons(env, _name, _email);
+    emacs_value retval = env->make_string(env, path, strlen(path));
+    EGIT_NORMALIZE_PATH(retval);
+    return retval;
 }
 
 EGIT_DOC(repository_get_namespace, "REPO",
@@ -139,6 +126,21 @@ emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo,
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
+EGIT_DOC(repository_ident, "REPO",
+         "Return the configured identity to use for reflogs in REPO.\n"
+         "The return value is a cons cell (name . email).");
+emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    const char *name, *email;
+    int retval = git_repository_ident(&name, &email, repo);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value _name = name ? env->make_string(env, name, strlen(name)) : em_nil;
+    emacs_value _email = email ? env->make_string(env, email, strlen(email)) : em_nil;
+    return em_cons(env, _name, _email);
+}
+
 EGIT_DOC(repository_message, "REPO",
          "Return the prepared commit message for REPO, or nil.\n"
          "This is the contents of .git/MERGE_MSG.");
@@ -161,7 +163,9 @@ emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_path(repo);
-    return env->make_string(env, path, strlen(path));
+    emacs_value retval = env->make_string(env, path, strlen(path));
+    EGIT_NORMALIZE_PATH(retval);
+    return retval;
 }
 
 EGIT_DOC(repository_state, "REPO",
@@ -206,7 +210,11 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_workdir(repo);
-    return path ? env->make_string(env, path, strlen(path)) : em_nil;
+    if (!path)
+        return em_nil;
+    emacs_value retval = env->make_string(env, path, strlen(path));
+    EGIT_NORMALIZE_PATH(retval);
+    return retval;
 }
 
 

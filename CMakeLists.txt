@@ -13,5 +13,5 @@ add_subdirectory(src)
 
 enable_testing()
 add_test(NAME libegit2_repository
-  COMMAND cask exec ert-runner test/repo-test.el
+  COMMAND cask exec ert-runner test/repository-test.el
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")

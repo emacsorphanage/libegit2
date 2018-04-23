@@ -10,3 +10,21 @@
            (let ((,varname ,path) (default-directory ,path))
              ,@body))
        (delete-directory ,path 'recursive))))
+
+(defun run (&rest args)
+  (unless (= 0 (apply 'call-process (car args) nil nil nil (cdr args)))
+    (error "failed to run '%s'" (mapconcat 'identity args " "))))
+
+(defun write (filename content)
+  (-when-let* ((dir (file-name-directory filename)))
+    (make-directory dir 'parents))
+  (with-temp-file filename
+    (insert content)))
+
+(defun commit (&optional msg)
+  (run "git" "commit" "--allow-empty-message" "-m" (or msg "")))
+
+(defun commit-change (filename content &optional msg)
+  (write filename content)
+  (run "git" "add" filename)
+  (commit msg))
