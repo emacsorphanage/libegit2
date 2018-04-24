@@ -220,6 +220,15 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     return true;
 }
 
+EGIT_DOC(refcount, "OBJ", "Return the reference count of OBJ.");
+static emacs_value egit_refcount(emacs_env *env, emacs_value val)
+{
+    if (egit_get_type(env, val) != EGIT_REPOSITORY)
+        return em_nil;
+    egit_object *wrapper = (egit_object*)env->get_user_ptr(env, val);
+    return env->make_integer(env, wrapper->refcount);
+}
+
 EGIT_DOC(typeof, "OBJ", "Return the type of the git pointer OBJ, or nil.");
 static emacs_value egit_typeof(emacs_env *env, emacs_value val)
 {
@@ -266,6 +275,7 @@ static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 void egit_init(emacs_env *env)
 {
     // Type checkers
+    DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);

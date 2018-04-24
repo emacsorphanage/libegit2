@@ -12,6 +12,10 @@ find_library(git2 libgit2.a)
 add_subdirectory(src)
 
 enable_testing()
-add_test(NAME libegit2_repository
-  COMMAND cask exec ert-runner test/repository-test.el
-  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+set(EGIT_TESTS refcount repository)
+foreach(test ${EGIT_TESTS})
+  add_test(NAME libegit2_${test}
+    COMMAND cask exec ert-runner test/${test}-test.el
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endforeach(test)
