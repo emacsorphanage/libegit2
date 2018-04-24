@@ -179,23 +179,34 @@ bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_val
 bool egit_assert_object(emacs_env *env, emacs_value obj);
 
 /**
- * Decrease the reference count of a git_??? struct.
+ * Decrease the reference count of a git_repository struct.
  * This may cause the object to be freed.
  */
-void egit_decref_wrapped(void *obj);
+void egit_decref_repository(git_repository *wrapped);
 
 /**
- * Decrease the reference count of a egit_object struct.
+ * Decrease the reference count of a egit_object struct that wraps a git_repository.
+ * This will fail if the wrapper wraps something of another type.
  * This may cause the object to be freed.
  * This function is suitable to use as a finalizer for Emacs user pointers.
  */
-void egit_decref_wrapper(void *obj);
+void egit_decref_repository_wrapper(void *wrapper);
 
 /**
- * Wrap a git_??? structure in an emacs_value, adding it to the object store if necessary.
+ * Wrap a git_repository structure in an emacs_value, adding it to the object store if necessary.
+ * @param env The active Emacs environment.
+ * @param ptr The pointer to store.
+ * @return The Emacs value.
+ */
+emacs_value egit_wrap_repository(emacs_env *env, git_repository* ptr);
+
+/**
+ * Wrap a git_??? structure in an emacs_value.
+ * NOTE: Use egit_wrap_repository instead of this one for repositories.
  * @param env The active Emacs environment.
  * @param obj The type of the object.
  * @param ptr The pointer to store.
+ * @return The Emacs value.
  */
 emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr);
 
