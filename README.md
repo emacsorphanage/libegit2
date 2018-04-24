@@ -94,23 +94,20 @@ work.
 
 ### Adding a type
 
-Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer. To
-do this we use a hash table with reference counting semantics to ensure that no object is freed out
-of turn. There are two reasons for this:
+Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer. 
+To do this, we use a wrapper structure with a type information tag. 
 
-- Several user pointers may point to the same libgit2 structure. Therefore we cannot unconditionally
-  free the structure in the user pointer finalizer. In other words, the user pointers cannot be
-  assumed to take full ownership of the structure.
-- If e.g. a `git_object` is kept alive, its repository must be kept alive, too. We cannot assume
-  that the finalizer for the repository is always called after that of the object.
+Usually, objects that belong to a repository need to keep the repository alive until after they are
+freed. To do this, we use a hash table with reference counting semantics for repositories to ensure
+that none of them are freed out of turn.
 
 1. In `src/egit.h` add an entry to the `egit_type` enum for the new type.
 2. In `src/egit.h` ass a new `EGIT_ASSERT` macro for the new type.
-3. In `src/egit.c` add a new entry to the `egit_decref_wrapper` switch statement to free a
-   structure. If the new structure needs to keep other objects alive (usually the "owner" in libgit2
-   terms), also call `egit_decref_wrapped` on these (see existing code for examples).
+3. In `src/egit.c` add a new entry to the `egit_finalize` switch statement to free a
+   structure. If the new structure needs to keep a repository alive (usually the "owner" in libgit2
+   terms), also call `egit_decref_repository` on these (see existing code for examples).
 4. In `src/egit.c` add a new entry to the `egit_wrap` switch statement to increase the reference
-   counts of other objects that must be kept alive.
+   counts of the repository if it must be kept alive.
 5. In `src/egit.c` add a new entry to the `egit_typeof` switch statement.
 6. In `src/egit.c` add a new `egit_TYPE_p` predicate function.
 7. In `src/egit.c` create a `DEFUN` call in `egit_init` for the predicate function.
