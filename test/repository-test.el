@@ -55,6 +55,16 @@
       (should (string= (libgit-reference-name (libgit-repository-head-for-worktree repo "subdir"))
                        "refs/heads/zing")))))
 
+(ert-deftest repository-head-for-worktree ()
+  (with-temp-dir path
+    (run "git" "init")
+    (commit-change "test" "content")
+    (run "git" "branch" "zing")
+    (run "git" "worktree" "add" "subdir" "zing")
+    (let ((repo (libgit-repository-open path)))
+      (should (string= (libgit-reference-name (libgit-repository-head-for-worktree repo "subdir"))
+                       "refs/heads/zing")))))
+
 (ert-deftest repository-ident ()
   (with-temp-dir path
     (run "git" "init")
@@ -168,6 +178,10 @@
       (libgit-repository-set-head-detached repo id)
       (should (string= (read-file-nnl ".git/HEAD") id)))))
 
+(ert-deftest repository-set-workdir ()
+  ;; TODO
+  )
+
 (ert-deftest repository-state-cleanup ()
   (with-temp-dir path
     (run "git" "init")
@@ -201,3 +215,30 @@
     (should (libgit-repository-empty-p (libgit-repository-open path)))
     (commit-change "test" "content")
     (should (not (libgit-repository-empty-p (libgit-repository-open path))))))
+
+(ert-deftest repository-head-detached-p ()
+  ;; TODO
+  )
+
+(ert-deftest repository-shallow-p ()
+  (with-temp-dir (src tgt)
+    (in-dir src
+      (run "git" "init")
+      (commit-change "test" "content")
+      (commit-change "test" "content2"))
+    (run "git" "clone" "--depth" "1" (concat "file://" src) tgt)
+    (let ((repo (libgit-repository-open src)))
+      (should (not (libgit-repository-shallow-p repo))))
+    (let ((repo (libgit-repository-open tgt)))
+      (should (libgit-repository-shallow-p repo)))))
+
+(ert-deftest repository-worktree-p ()
+  (with-temp-dir (src tgt)
+    (in-dir src
+      (run "git" "init")
+      (commit-change "test" "content")
+      (run "git" "worktree" "add" tgt "HEAD"))
+    (let ((repo (libgit-repository-open src)))
+      (should (not (libgit-repository-worktree-p repo))))
+    (let ((repo (libgit-repository-open tgt)))
+      (should (libgit-repository-worktree-p repo)))))

@@ -1,15 +1,25 @@
 (push (concat default-directory "build") load-path)
 (require 'libegit2)
 
-(defmacro with-temp-dir (varname &rest body)
+(defmacro with-temp-dir (varnames &rest body)
   (declare (indent 1))
-  (let ((path (concat temporary-file-directory "libegit2-test/")))
-    `(unwind-protect
-         (progn
-           (make-directory ,path)
-           (let ((,varname ,path) (default-directory ,path))
-             ,@body))
-       (delete-directory ,path 'recursive))))
+  (let* ((cwd (if (listp varnames) temporary-file-directory varnames))
+         (varnames (if (listp varnames) varnames (list varnames)))
+         (bindings (mapcar (lambda (sym)
+                             (list sym (format "%slibegit2-test-%s/"
+                                               temporary-file-directory sym)))
+                           varnames)))
+    `(let (,@bindings)
+       (unwind-protect
+           (progn
+             ,@(mapcar (lambda (sym) `(make-directory ,sym 'parents)) varnames)
+             (let ((default-directory ,cwd))
+               ,@body))
+         ,@(mapcar (lambda (sym) `(delete-directory ,sym 'recursive)) varnames)))))
+
+(defmacro in-dir (dir &rest body)
+  (declare (indent 1))
+  `(let ((default-directory ,dir)) ,@body))
 
 (defun run (&rest args)
   (unless (= 0 (apply 'call-process (car args) nil nil nil (cdr args)))
