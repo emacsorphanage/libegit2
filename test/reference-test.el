@@ -32,11 +32,11 @@
 
 (ert-deftest reference-dup ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-dwim ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-lookup ()
   (with-temp-dir path
@@ -81,76 +81,76 @@
 
 (ert-deftest reference-owner ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-peel ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-resolve ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-shorthand ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-symbolic-target ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-target ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-target-peel ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-target-type ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-delete ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-ensure-log ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-remove ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-branch-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-direct-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-has-log-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-note-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-remote-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-symbolic-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-tag-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest reference-valid-name-p ()
   ;; TODO
-  )
+  (skip-unless nil))

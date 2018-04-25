@@ -180,7 +180,7 @@
 
 (ert-deftest repository-set-workdir ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest repository-state-cleanup ()
   (with-temp-dir path
@@ -218,7 +218,7 @@
 
 (ert-deftest repository-head-detached-p ()
   ;; TODO
-  )
+  (skip-unless nil))
 
 (ert-deftest repository-shallow-p ()
   (with-temp-dir (src tgt)
