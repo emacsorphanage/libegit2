@@ -13,7 +13,7 @@ add_subdirectory(src)
 
 enable_testing()
 
-set(EGIT_TESTS refcount repository)
+set(EGIT_TESTS refcount reference repository)
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test}
     COMMAND cask exec ert-runner test/${test}-test.el

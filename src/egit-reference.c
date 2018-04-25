@@ -156,6 +156,27 @@ emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
     return env->make_string(env, name, strlen(name));
 }
 
+EGIT_DOC(reference_name_to_id, "REPO REFNAME",
+         "Lookup a reference by name and resolve immediately to OID");
+emacs_value egit_reference_name_to_id(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid oid;
+    int retval;
+    {
+        char *refname = EGIT_EXTRACT_STRING(_refname);
+        retval = git_reference_name_to_id(&oid, repo, refname);
+        free(refname);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
 EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
 emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
 {
@@ -351,27 +372,6 @@ emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_va
     EGIT_CHECK_ERROR(retval);
 
     return retval ? em_t : em_nil;
-}
-
-EGIT_DOC(reference_name_to_id, "REPO REFNAME",
-         "Lookup a reference by name and resolve immediately to OID");
-emacs_value egit_reference_name_to_id(emacs_env *env, emacs_value _repo, emacs_value _refname)
-{
-    EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
-
-    git_repository *repo = EGIT_EXTRACT(_repo);
-    git_oid oid;
-    int retval;
-    {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
-        retval = git_reference_name_to_id(&oid, repo, refname);
-        free(refname);
-    }
-    EGIT_CHECK_ERROR(retval);
-
-    const char *oid_s = git_oid_tostr_s(&oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
 }
 
 EGIT_DOC(reference_note_p, "REF", "Check if REF is a note.");
