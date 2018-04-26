@@ -46,3 +46,6 @@
   (write filename content)
   (run "git" "add" filename)
   (commit msg))
+
+(defun path= (a b)
+  (string= (file-truename a) (file-truename b)))

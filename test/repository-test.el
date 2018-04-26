@@ -27,12 +27,12 @@
     (run "git" "init")
     (commit-change "test" "content")
     (run "git" "worktree" "add" "subdir" "HEAD")
-    (should (string= (concat path ".git/")
-                     (libgit-repository-commondir
-                      (libgit-repository-open path))))
-    (should (string= (concat path ".git/")
-                     (libgit-repository-commondir
-                      (libgit-repository-open (concat path "subdir/")))))))
+    (should (path= (concat path ".git/")
+                   (libgit-repository-commondir
+                    (libgit-repository-open path))))
+    (should (path= (concat path ".git/")
+                   (libgit-repository-commondir
+                    (libgit-repository-open (concat path "subdir/")))))))
 
 (ert-deftest repository-head ()
   (with-temp-dir path
@@ -84,8 +84,8 @@
 (ert-deftest repository-path ()
   (with-temp-dir path
     (run "git" "init")
-    (should (string= (libgit-repository-path (libgit-repository-open path))
-                     (concat path ".git/")))))
+    (should (path= (libgit-repository-path (libgit-repository-open path))
+                   (concat path ".git/")))))
 
 (ert-deftest repository-state ()
   (with-temp-dir path
@@ -137,7 +137,7 @@
 (ert-deftest repository-workdir ()
   (with-temp-dir path
     (run "git" "init")
-    (should (string= (libgit-repository-workdir (libgit-repository-open path)) path)))
+    (should (path= (libgit-repository-workdir (libgit-repository-open path)) path)))
   (with-temp-dir path
     (run "git" "init" "--bare")
     (should (not (libgit-repository-workdir (libgit-repository-open path))))))
