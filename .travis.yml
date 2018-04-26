@@ -1,0 +1,31 @@
+language: generic
+sudo: required
+
+os:
+  - linux
+  - osx
+
+env:
+  - EVM_EMACS=emacs-25.1
+  - EVM_EMACS=emacs-25.2
+  - EVM_EMACS=emacs-25.3
+  - EVM_EMACS=emacs-26-pretest
+  - EVM_EMACS=emacs-git-snapshot
+
+matrix:
+  allow_failures:
+    - env: EVM_EMACS=emacs-git-snapshot
+
+before_install:
+  - source .travis-paths.sh
+  - ./.travis-before-install.sh
+  - evm install $EVM_EMACS --use --skip
+
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cask; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -fsSkL https://raw.github.com/cask/cask/master/go | python; fi
+  - cask install
+
+script:
+  - ./.travis-script.sh
