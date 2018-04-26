@@ -42,6 +42,13 @@ cmake ..
 make
 ```
 
+If you're on OSX and using Macports, you may need to set `CMAKE_PREFIX_PATH` to avoid linking
+against the wrong libiconv. For example,
+
+```
+cmake -DCMAKE_PREFIX_PATH=/opt/local ..
+```
+
 ## Testing
 
 Ensure that you have [Cask](https://github.com/cask/cask) installed.
