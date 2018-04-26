@@ -1,5 +1,7 @@
 # libgit2 bindings for Emacs
 
+![Build status](https://travis-ci.org/TheBB/spaceline.svg "Build Status")
+
 This is an *experimental* module for libgit2 bindings to Emacs, intended to boost the performance of
 [magit](https://github.com/magit/magit).
 
