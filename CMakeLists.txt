@@ -13,6 +13,8 @@ add_subdirectory(src)
 
 enable_testing()
 
+# NOTE: These test names must be replicated in .appveyor-script.ps1
+# for the Windows CI. Fixing this is still TODO.
 set(EGIT_TESTS refcount reference repository)
 
 foreach(test ${EGIT_TESTS})

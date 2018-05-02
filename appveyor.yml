@@ -1,0 +1,23 @@
+environment:
+  matrix:
+    - GENERATOR: "MinGW Makefiles"
+
+install:
+  - git submodule update --init --recursive
+  # Use the chocolatey emacs64 package for testing
+  # TODO: Any better solutions? Build Emacs ourselves? What about 64-bit?
+  - cinst emacs64
+
+before_build:
+  - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+  - set PATH=C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+
+build_script:
+  - mkdir build
+  - cd build
+  - cmake .. -G"%GENERATOR%"
+  - cmake --build .
+  - cd ..
+
+test_script:
+  - ps: .\.appveyor-script.ps1
