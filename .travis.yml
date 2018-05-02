@@ -8,7 +8,7 @@ os:
 env:
   - EVM_EMACS=emacs-25.1
   - EVM_EMACS=emacs-25.2
-  - EVM_EMACS=emacs-25.3
+  - EVM_EMACS=emacs-25.3 DEPLOY=1
   - EVM_EMACS=emacs-26-pretest
   - EVM_EMACS=emacs-git-snapshot
 
@@ -18,8 +18,19 @@ matrix:
 
 before_install:
   - source .travis-paths.sh
-  - ./.travis-before-install.sh
+  - "./.travis-before-install.sh"
   - evm install $EVM_EMACS --use --skip
 
 script:
-  - ./.travis-script.sh
+  - "./.travis-script.sh"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: bQWQ1CfKebdRitqps2mto7LLjlbut6tYmmv92/r2jbZa4RILulnyuBQiroKv96hxCZLH5WHRenVBROL7Sd2BZgAMGJgm0sPt5DRB/NxGHTOiW4LkgzzIQr7ViWBiz+pVAjIUaPRBFz/d5KJv0bIsrvSqZ2OTH0DonK+JmCs4luPqnhGJQG+VC25WRV/E2Jn3CGo7Nm/hTFP/CZxi9IPGpf6SQ9FMsJQ38viFUQyuhE3DcbeQe9ZkL4tltxqbP+cKoR569MovJNqdfPlBYijnwRnNuBSojAK2xsrfHQDwwHYQFg0ViAf+ubWcaY8OjRDZTnHqiT8E7RFUMImEZy7zPu+KCoXUNPfWl7PfnpWjiKcz2SOidJKfeH390hsorumv8NkgQnsw3PSCZhEhRhPZ1GWQWa5aCVI7YaNFip/5JzTifaibw6cFxla9pW/EcwTKJQ2drx+5oduvoedlpPd1k7JAgbUo0nItNC9dkIZ+pOUTyZp36+Ztxwj58cnz2pLlIjntzp0HwiH26iCeUkQdlqMAJca0IOGx0y6u1xhpftHppgGHz+1fQjTkGv81yBiNZiUudulrMbIaAFdfPtEmrXfKqNPAVa0EoiTA533CZSuiIP7mAFZIpv/saKtV5a6F4KpJ46FheJYCm8PCAX5pwil6EXUb/UiLS5UOYnRBpaE=
+  skip_cleanup: true
+  file: build/libegit2.so
+  on:
+    branch: deploy
+    repo: TheBB/libegit2
+    condition: $DEPLOY = 1
