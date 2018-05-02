@@ -21,8 +21,9 @@
   `(let ((default-directory ,dir)) ,@body))
 
 (defun run (&rest args)
-  (unless (= 0 (apply 'call-process (car args) nil nil nil (cdr args)))
-    (error "failed to run '%s'" (mapconcat 'identity args " "))))
+  (with-temp-buffer
+    (unless (= 0 (apply 'call-process (car args) nil (cons (current-buffer) t) nil (cdr args)))
+      (error "failed to run '%s', output:\n%s" (mapconcat 'identity args " ") (buffer-string)))))
 
 (defun write (filename content)
   (let ((dir (file-name-directory filename)))
