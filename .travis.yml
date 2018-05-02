@@ -21,11 +21,5 @@ before_install:
   - ./.travis-before-install.sh
   - evm install $EVM_EMACS --use --skip
 
-install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cask; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -fsSkL https://raw.github.com/cask/cask/master/go | python; fi
-  - cask install
-
 script:
   - ./.travis-script.sh
