@@ -24,7 +24,7 @@
 
 (ert-deftest repository-commondir ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (run "git" "worktree" "add" "subdir" "HEAD")
     (should (path= (concat path ".git/")
@@ -36,7 +36,7 @@
 
 (ert-deftest repository-head ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (let ((repo (libgit-repository-open path)))
       (should (string= (libgit-reference-name (libgit-repository-head repo))
@@ -47,7 +47,7 @@
 
 (ert-deftest repository-head-for-worktree ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (run "git" "branch" "zing")
     (run "git" "worktree" "add" "subdir" "zing")
@@ -57,7 +57,7 @@
 
 (ert-deftest repository-head-for-worktree ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (run "git" "branch" "zing")
     (run "git" "worktree" "add" "subdir" "zing")
@@ -67,7 +67,7 @@
 
 (ert-deftest repository-ident ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (let ((repo (libgit-repository-open path)))
       (should (equal '(nil . nil) (libgit-repository-ident repo)))
       (libgit-repository-set-ident repo "John Doe" "john@example.com")
@@ -76,20 +76,20 @@
 
 (ert-deftest repository-message ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (write ".git/MERGE_MSG" "something\n")
     (should (string= (libgit-repository-message (libgit-repository-open path))
                      "something\n"))))
 
 (ert-deftest repository-path ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (should (path= (libgit-repository-path (libgit-repository-open path))
                    (concat path ".git/")))))
 
 (ert-deftest repository-state ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (let ((repo (libgit-repository-open path)))
       (should (not (libgit-repository-state repo)))
 
@@ -136,15 +136,15 @@
 
 (ert-deftest repository-workdir ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (should (path= (libgit-repository-workdir (libgit-repository-open path)) path)))
   (with-temp-dir path
-    (run "git" "init" "--bare")
+    (init "--bare")
     (should (not (libgit-repository-workdir (libgit-repository-open path))))))
 
 (ert-deftest repository-detach-head ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (let ((repo (libgit-repository-open path))
           (id (read-file-nnl ".git/refs/heads/master")))
@@ -154,14 +154,14 @@
 
 (ert-deftest repository-message-remove ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (write ".git/MERGE_MSG" "something\n")
     (libgit-repository-message-remove (libgit-repository-open path))
     (should (not (file-exists-p ".git/MERGE_MSG")))))
 
 (ert-deftest repository-set-head ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (run "git" "branch" "zing")
     (should (string= (read-file-nnl ".git/HEAD") "ref: refs/heads/master"))
@@ -170,7 +170,7 @@
 
 (ert-deftest repository-set-head-detached ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (let ((repo (libgit-repository-open path))
           (id (read-file-nnl ".git/refs/heads/master")))
@@ -184,7 +184,7 @@
 
 (ert-deftest repository-state-cleanup ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (let ((repo (libgit-repository-open path)))
       (should (not (libgit-repository-state repo)))
 
@@ -203,15 +203,15 @@
 
 (ert-deftest repository-bare-p ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (should (not (libgit-repository-bare-p (libgit-repository-open path)))))
   (with-temp-dir path
-    (run "git" "init" "--bare")
+    (init "--bare")
     (should (libgit-repository-bare-p (libgit-repository-open path)))))
 
 (ert-deftest repository-empty-p ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (should (libgit-repository-empty-p (libgit-repository-open path)))
     (commit-change "test" "content")
     (should (not (libgit-repository-empty-p (libgit-repository-open path))))))
@@ -223,7 +223,7 @@
 (ert-deftest repository-shallow-p ()
   (with-temp-dir (src tgt)
     (in-dir src
-      (run "git" "init")
+      (init)
       (commit-change "test" "content")
       (commit-change "test" "content2"))
     (run "git" "clone" "--depth" "1" (concat "file://" src) tgt)
@@ -235,7 +235,7 @@
 (ert-deftest repository-worktree-p ()
   (with-temp-dir (src tgt)
     (in-dir src
-      (run "git" "init")
+      (init)
       (commit-change "test" "content")
       (run "git" "worktree" "add" tgt "HEAD"))
     (let ((repo (libgit-repository-open src)))

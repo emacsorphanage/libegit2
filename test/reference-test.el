@@ -1,6 +1,6 @@
 (ert-deftest reference-create ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let ((repo (libgit-repository-open path))
           (id (read-file-nnl ".git/refs/heads/master")))
@@ -14,7 +14,7 @@
 
 (ert-deftest reference-create-matching ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let ((repo (libgit-repository-open path))
           (current-id (read-file-nnl ".git/refs/heads/master")))
@@ -40,7 +40,7 @@
 
 (ert-deftest reference-lookup ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let* ((repo (libgit-repository-open path)))
       (libgit-reference-lookup repo "refs/heads/master")
@@ -49,7 +49,7 @@
 
 (ert-deftest reference-list ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let* ((repo (libgit-repository-open path))
            (id (read-file-nnl ".git/refs/heads/master")))
@@ -62,7 +62,7 @@
 
 (ert-deftest reference-name ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let ((repo (libgit-repository-open path)))
       (should (string= "HEAD" (libgit-reference-name (libgit-reference-lookup repo "HEAD"))))
@@ -71,7 +71,7 @@
 
 (ert-deftest reference-name-to-id ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "contents")
     (let* ((repo (libgit-repository-open path)))
       (should (string= (read-file-nnl ".git/refs/heads/master")
