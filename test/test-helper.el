@@ -39,8 +39,13 @@
 (defun read-file-nnl (filename)
   (replace-regexp-in-string "\n*\\'" "" (read-file filename)))
 
+(defun init (&rest args)
+  (apply 'run "git" "init" args)
+  (run "git" "config" "user.name" "A U Thor")
+  (run "git" "config" "user.email" "author@example.com"))
+
 (defun commit (&optional msg)
-  (run "git" "commit" "--allow-empty-message" "-m" (or msg "")))
+  (run "git" "commit" "--allow-empty-message" "-m" (or msg "nothing")))
 
 (defun commit-change (filename content &optional msg)
   (write filename content)

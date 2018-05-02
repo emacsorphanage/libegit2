@@ -1,6 +1,6 @@
 (ert-deftest refcount ()
   (with-temp-dir path
-    (run "git" "init")
+    (init)
     (commit-change "test" "content")
     (let ((repo (libgit-repository-open path)))
       (should (= 1 (libgit--refcount repo)))
