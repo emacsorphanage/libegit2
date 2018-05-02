@@ -14,8 +14,9 @@ add_subdirectory(src)
 enable_testing()
 
 set(EGIT_TESTS refcount reference repository)
+
 foreach(test ${EGIT_TESTS})
-  add_test(NAME libegit2_${test}
-    COMMAND cask exec ert-runner test/${test}-test.el
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  add_test(NAME libegit2_${test} COMMAND
+    emacs --batch -L . -L "${CMAKE_CURRENT_SOURCE_DIR}/test"
+    -l test-helper -l ${test}-test -f ert-run-tests-batch-and-exit)
 endforeach(test)

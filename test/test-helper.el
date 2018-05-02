@@ -1,4 +1,3 @@
-(push (concat default-directory "build") load-path)
 (require 'libegit2)
 
 (defmacro with-temp-dir (varnames &rest body)
@@ -26,8 +25,9 @@
     (error "failed to run '%s'" (mapconcat 'identity args " "))))
 
 (defun write (filename content)
-  (-when-let* ((dir (file-name-directory filename)))
-    (make-directory dir 'parents))
+  (let ((dir (file-name-directory filename)))
+    (when dir
+      (make-directory dir 'parents)))
   (with-temp-file filename
     (insert content)))
 
