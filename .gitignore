@@ -1,4 +1,4 @@
 /build
 /.cquery_cached_index
 /compile_commands.json
-/.cask
+/emake.el
