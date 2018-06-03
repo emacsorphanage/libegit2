@@ -1,5 +1,6 @@
 language: generic
 sudo: required
+dist: trusty
 
 os:
   - linux
@@ -20,6 +21,8 @@ before_install:
   - source .travis-paths.sh
   - ./.travis-before-install.sh
   - evm install $EVM_EMACS --use --skip
+  - make emake.el
 
 script:
-  - ./.travis-script.sh
+  - make build/libegit2.so
+  - make test
