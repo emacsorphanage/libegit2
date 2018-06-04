@@ -20,9 +20,8 @@ set(EGIT_TESTS refcount reference repository)
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test} COMMAND
     emacs --batch
-          -L "${CMAKE_CURRENT_SOURCE_DIR}"
+          -L "${CMAKE_CURRENT_BINARY_DIR}"
           -L "${CMAKE_CURRENT_SOURCE_DIR}/test"
-          --eval "(setq libgit--build-dir \"${CMAKE_CURRENT_BINARY_DIR}\")"
           -l libegit2
           -l test-helper
           -l ${test}-test
