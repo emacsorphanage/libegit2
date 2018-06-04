@@ -1,5 +1,3 @@
-(require 'libegit2)
-
 (defmacro with-temp-dir (varnames &rest body)
   (declare (indent 1))
   (let* ((cwd (if (listp varnames) temporary-file-directory varnames))
