@@ -8,6 +8,9 @@ function Run-Test {
     if ($output | select-string -Pattern "FAILED") {
         exit 1
     }
+    if ($output | select-string -Pattern "Cannot open load file") {
+        exit 1
+    }
 }
 
 Run-Test -TestName "refcount"
