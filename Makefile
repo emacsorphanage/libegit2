@@ -14,7 +14,7 @@ build/libegit2.so: libgit2
 	mkdir build
 	cd build && cmake .. && make
 
-test: EMACS_OPTS=-L build/ --eval "(require 'libegit2)"
+test: EMACS_OPTS=-L build/ -l libegit2
 test: emake.el build/libegit2.so
 	$(EMAKE) test ert
 
