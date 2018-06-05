@@ -6,22 +6,28 @@ os:
   - linux
   - osx
 
+cache:
+- directories:
+  - "$HOME/emacs"
+
 env:
-  - EVM_EMACS=emacs-25.1
-  - EVM_EMACS=emacs-25.2
-  - EVM_EMACS=emacs-25.3
-  - EVM_EMACS=emacs-26-pretest
-  - EVM_EMACS=emacs-git-snapshot
+  global:
+    - EMACSCONFFLAGS="--with-x-toolkit=no --without-x --without-all --with-xml2 --with-modules --with-toolkit-scroll-bars=yes --with-gameuser=$USER"
+    - PATH="$HOME/bin:$PATH"
+  matrix:
+    - EMACS_VERSION=25.1
+    - EMACS_VERSION=25.2
+    - EMACS_VERSION=25.3
+    - EMACS_VERSION=26.1
+    - EMACS_VERSION=snapshot
 
 matrix:
   fast_finish: true
   allow_failures:
-    - env: EVM_EMACS=emacs-git-snapshot
+    - env: EMACS_VERSION=snapshot
 
 before_install:
-  - source .travis-paths.sh
-  - ./.travis-before-install.sh
-  - evm install $EVM_EMACS --use --skip
+  - make emacs
   - make emake.el
 
 script:

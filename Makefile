@@ -23,3 +23,21 @@ clean:
 
 emake.el:
 	wget 'https://raw.githubusercontent.com/vermiculus/emake.el/master/emake.el'
+
+emacs-travis.mk:
+	wget 'https://raw.githubusercontent.com/flycheck/emacs-travis/master/emacs-travis.mk'
+ifeq ($(TRAVIS_OS_NAME),osx)
+	cp emacs-travis.mk /tmp/emacs-travis.mk
+	cat /tmp/emacs-travis.mk | sed 's/configure_emacs: install_gnutls//' > emacs-travis.mk
+endif
+
+ifeq ($(TRAVIS_OS_NAME),osx)
+emacs: emacs-travis.mk
+	brew upgrade gnutls
+	$(MAKE) -f emacs-travis.mk install_emacs
+	mkdir -p $(HOME)/bin
+	ln -s $(HOME)/emacs/$(EMACS_VERSION)/nextstep/Emacs.app/Contents/MacOS/Emacs $(HOME)/bin/emacs
+else
+emacs: emacs-travis.mk
+	$(MAKE) -f emacs-travis.mk install_emacs
+endif
