@@ -52,7 +52,7 @@ On successful exit, pass control on to the build step."
   (let ((default-directory libgit--build-dir))
     (set-process-sentinel
      (start-process "libgit-cmake" "*libgit build*" "cmake" "..")
-     (lambda (proc chg)
+     (lambda (proc _event)
        (when (eq 'exit (process-status proc))
          (if (= 0 (process-exit-status proc))
              (libgit--build)
@@ -66,7 +66,7 @@ On successful exit, pass control on to the load step."
   (let ((default-directory libgit--build-dir))
     (set-process-sentinel
      (start-process "libgit-cmake" "*libgit build*" "make")
-     (lambda (proc chg)
+     (lambda (proc _event)
        (when (eq 'exit (process-status proc))
          (if (= 0 (process-exit-status proc))
              (libgit--load)
