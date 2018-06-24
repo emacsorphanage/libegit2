@@ -5,7 +5,7 @@
 ;; Author: Eivind Fonn <evfonn@gmail.com>
 ;; URL: https://github.com/TheBB/libegit2
 ;; Version: 0.0.1
-;; Keywords: git vcs
+;; Keywords: git vc
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
