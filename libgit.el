@@ -86,7 +86,7 @@ On successful exit, pass control on to the load step."
   (cond
    ((file-exists-p libgit--module-file) (libgit--load))
    ((y-or-n-p "libgit must be built, do so now?") (libgit--configure))
-   (error "libgit was not loaded!")))
+   (t (error "libgit was not loaded!"))))
 
 (libgit-load)
 
