@@ -74,7 +74,8 @@ On successful exit, pass control on to the load step."
            (error "libgit: building failed with exit code %d" (process-exit-status proc))))))))
 
 (defun libgit--load ()
-  "Load libegit2."
+  "Load the `libegit2' dynamic module.
+If that fails, then raise an error."
   (unless (featurep 'libegit2)
     (load-file libgit--module-file))
   (unless (featurep 'libegit2)
@@ -82,6 +83,8 @@ On successful exit, pass control on to the load step."
 
 ;;;###autoload
 (defun libgit-load ()
+  "Load the `libegit2' dynamic module.
+If the module is not available, the offer to build it."
   (interactive)
   (cond
    ((file-exists-p libgit--module-file) (libgit--load))
