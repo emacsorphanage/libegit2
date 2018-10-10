@@ -1,43 +1,18 @@
-EENVS  = PACKAGE_FILE="libgit.el"
-EENVS += PACKAGE_LISP="libgit.el"
-EENVS += PACKAGE_TESTS="$(wildcard test/*.el)"
-EENVS += PACKAGE_ARCHIVES="gnu"
-EMAKE  = $(EENVS) emacs -batch -l emake.el $(EMACS_OPTS) --eval "(emake (pop argv))"
+EMAKE_SHA1       ?= 1b23379eb5a9f82d3e2d227d0f217864e40f23e0
+PACKAGE_BASENAME := libgit
 
-.PHONY: emacs clean test
+include emake.mk
 
-libgit2:
+libgit2:                        ## pull down libgit2
 	git submodule init
 	git submodule update
 
-build/libegit2.so: libgit2
+build/libegit2.so: libgit2      ## build the module
 	mkdir build
 	cd build && cmake .. && make
 
-test: EMACS_OPTS=-L build/ -l libegit2
-test: emake.el build/libegit2.so
-	$(EMAKE) test ert
+test: EMACS_ARGS += -L build/ -l libegit2
+test: build/libegit2.so test-ert ## run tests
 
-clean:
+clean:                          ## removes build directories
 	rm -rf build/ libgit2/
-
-emake.el:
-	wget 'https://raw.githubusercontent.com/vermiculus/emake.el/master/emake.el'
-
-emacs-travis.mk:
-	wget 'https://raw.githubusercontent.com/flycheck/emacs-travis/master/emacs-travis.mk'
-ifeq ($(TRAVIS_OS_NAME),osx)
-	cp emacs-travis.mk /tmp/emacs-travis.mk
-	cat /tmp/emacs-travis.mk | sed 's/configure_emacs: install_gnutls//' > emacs-travis.mk
-endif
-
-ifeq ($(TRAVIS_OS_NAME),osx)
-emacs: emacs-travis.mk
-	brew upgrade gnutls
-	$(MAKE) -f emacs-travis.mk install_emacs
-	mkdir -p $(HOME)/bin
-	ln -s $(HOME)/emacs/$(EMACS_VERSION)/nextstep/Emacs.app/Contents/MacOS/Emacs $(HOME)/bin/emacs
-else
-emacs: emacs-travis.mk
-	$(MAKE) -f emacs-travis.mk install_emacs
-endif
