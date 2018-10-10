@@ -1,4 +1,5 @@
 #include "emacs-module.h"
+#include "git2.h"
 #include "uthash.h"
 #include "git2.h"
 

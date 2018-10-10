@@ -13,6 +13,7 @@
 #include "egit-repository.h"
 #include "egit-revparse.h"
 #include "egit-status.h"
+#include "egit-branch.h"
 #include "egit.h"
 
 // Hash table of stored objects
@@ -171,6 +172,8 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
 typedef emacs_value (*func_1)(emacs_env*, emacs_value);
 typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
 typedef emacs_value (*func_3)(emacs_env*, emacs_value, emacs_value, emacs_value);
+typedef emacs_value (*func_4)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                              emacs_value);
 typedef emacs_value (*func_5)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value);
 typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
@@ -195,6 +198,13 @@ emacs_value egit_dispatch_3(emacs_env *env, ptrdiff_t nargs, emacs_value *args, 
 {
     func_3 func = (func_3) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2));
+}
+
+emacs_value egit_dispatch_4(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_4 func = (func_4) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3));
 }
 
 emacs_value egit_dispatch_5(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
@@ -365,4 +375,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
+
+    // Branch
+    DEFUN("libgit-branch-create", branch_create, 3, 4);
 }
