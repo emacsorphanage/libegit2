@@ -387,4 +387,7 @@ void egit_init(emacs_env *env)
 
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
+
+    //Commit
+    DEFUN("libgit-commit-create", commit_create, 1, 8);
 }

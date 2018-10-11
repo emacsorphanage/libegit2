@@ -58,8 +58,18 @@
 #define EGIT_ASSERT_TREE(val)\
   do { if (!egit_assert_type(env, (val), EGIT_TREE, em_tree_p)) return em_nil; } while (0)
 
+/**
+ * Assert that VAL is a commit signature, signal an error and return otherwise.
+ */
 #define EGIT_ASSERT_SIGNATURE(val)\
   do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_signature_p)) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is a commit, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_COMMIT(val)\
+  do { if (!egit_assert_type(env,(val),EGIT_COMMIT, em_commit_p)) return em_nil;} while (0)
+
 /**
  * Normalize an emacs_value string path. This macro may return.
  */
