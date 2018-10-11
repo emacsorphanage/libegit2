@@ -19,6 +19,27 @@ extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 // Reference types
 extern emacs_value em_direct, em_symbolic;
 
+// File statuses
+extern emacs_value em_fs_index_new, em_fs_index_modified, em_fs_index_deleted,
+    em_fs_index_renamed, em_fs_index_typechange, em_fs_wt_new,
+    em_fs_wt_modified, em_fs_wt_deleted, em_fs_wt_typechange, em_fs_wt_renamed,
+    em_fs_wt_unreadable, em_fs_ignored, em_fs_conflicted;
+
+// Symbols for enum git_status_show_t
+extern emacs_value em_status_show_index_only, em_status_show_workdir_only,
+    em_status_show_index_and_workdir;
+
+// Symbols for enum git_status_opt_t
+extern emacs_value em_status_opt_include_untracked,
+    em_status_opt_include_ignored, em_status_opt_include_unmodified,
+    em_status_opt_exclude_submodules, em_status_opt_recurse_untracked_dirs,
+    em_status_opt_disable_pathspec_match, em_status_opt_recurse_ignored_dirs,
+    em_status_opt_renames_head_to_index, em_status_opt_renames_index_to_workdir,
+    em_status_opt_sort_case_sensitively, em_status_opt_sort_case_insensitively,
+    em_status_opt_renames_from_rewrites, em_status_opt_no_refresh,
+    em_status_opt_update_index, em_status_opt_include_unreadable,
+    em_status_opt_include_unreadable_as_untracked;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
