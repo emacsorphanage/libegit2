@@ -11,6 +11,7 @@
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
+#include "egit-commit.h"
 #include "egit.h"
 
 // Hash table of stored objects
@@ -145,7 +146,6 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
         case GIT_OBJ_TREE: type = EGIT_TREE; break;
         case GIT_OBJ_BLOB: type = EGIT_BLOB; break;
         case GIT_OBJ_TAG: type = EGIT_TAG; break;
-        case GIT_OBJ_SIGNATURE: type = EGIT_SIGNATURE; break;
         default: break;
         }
     }
@@ -275,7 +275,7 @@ static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
 EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a signature.");
 static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
 {
-  return egit_get_type((env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
+  return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
 }
 
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
