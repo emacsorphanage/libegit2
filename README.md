@@ -60,6 +60,12 @@ cd build
 make test
 ```
 
+To see more output for debugging new tests you can specify more verbose output.
+
+```
+make test ARGS=-V
+```
+
 ## Using
 
 Ensure that `libgit.el` is somewhere in your load path. Then
