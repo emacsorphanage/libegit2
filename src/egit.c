@@ -273,7 +273,7 @@ static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
 }
 
 EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a signature.");
-static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
+static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
 {
   return egit_get_type((env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
 }
