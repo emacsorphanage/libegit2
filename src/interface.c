@@ -15,7 +15,7 @@ emacs_value em_nil, em_stringp, em_t;
 
 // Git object predicates
 emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p;
-emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object, em_tree_p;
+emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object, em_tree_p, em_commit_p;
 emacs_value em_signature, em_signature_p;
 
 // Repository states
@@ -41,7 +41,8 @@ void em_init(emacs_env *env)
     em_libgit_object_p = GLOBREF(INTERN("libgit-object-p"));
     em_libgit_repository_p = GLOBREF(INTERN("libgit-repository-p"));
     em_libgit_reference_p = GLOBREF(INTERN("libgit-reference-p"));
-    em_signature_p = GLOBREF(INTERN("libgit-signature-p"));
+    em_tree_p = GLOBREF(INTERN("tree-p"));
+    em_signature_p = GLOBREF(INTERN("signature-p"));
     
     em_repository = GLOBREF(INTERN("repository"));
     em_reference = GLOBREF(INTERN("reference"));
@@ -159,6 +160,11 @@ bool em_consp(emacs_env *env, emacs_value cell)
 emacs_value em_car(emacs_env *env, emacs_value cell)
 {
     return em_funcall(env, _car, 1, cell);
+}
+
+emacs_value em_car(emacs_env *env, emacs_value cell)
+{
+  return em_funcall(env, _car, 1, cell);
 }
 
 emacs_value em_cdr(emacs_env *env, emacs_value cell)
