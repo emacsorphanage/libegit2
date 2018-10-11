@@ -381,4 +381,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-create", branch_create, 3, 4);
     DEFUN("libgit-branch-create-from-annotated", branch_create_from_annotated, 3, 4);
     DEFUN("libgit-branch-lookup", branch_lookup, 2, 3);
+    DEFUN("libgit-branch-delete", branch_delete, 1, 1);
 }

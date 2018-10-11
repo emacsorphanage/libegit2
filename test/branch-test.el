@@ -44,3 +44,14 @@
                    (should-error (libgit-branch-lookup repo "third"))
                    (should-error (libgit-branch-lookup repo "master" t)))))
 
+(ert-deftest branch-delete ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let* ((repo (libgit-repository-open path))
+                        (masterref (libgit-branch-lookup repo "master"))
+                        (secondref (libgit-branch-lookup repo "second")))
+                   (should-error (libgit-branch-delete masterref))
+                   (should (libgit-branch-delete secondref)))))
+
