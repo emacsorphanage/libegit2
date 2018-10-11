@@ -28,7 +28,7 @@ emacs_value em_direct, em_symbolic;
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
-    _wrong_value_argument;
+    _wrong_value_argument, _consp, _cdr;
 
 
 void em_init(emacs_env *env)
@@ -65,6 +65,8 @@ void em_init(emacs_env *env)
     em_symbolic = GLOBREF(INTERN("symbolic"));
 
     _cons = GLOBREF(INTERN("cons"));
+    _consp = GLOBREF(INTERN("consp"));
+    _cdr = GLOBREF(INTERN("cdr"));
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
     _expand_file_name = GLOBREF(INTERN("expand-file-name"));
@@ -143,6 +145,16 @@ char *em_get_string(emacs_env *env, emacs_value arg)
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
 {
     return em_funcall(env, _cons, 2, car, cdr);
+}
+
+emacs_value em_consp(emacs_env *env, emacs_value cell)
+{
+  return em_funcall(env, _consp, 1, cell);
+}
+
+emacs_value em_cdr(emacs_env *env, emacs_value cell)
+{
+  return em_funcall(env, _cdr, 1, cell);
 }
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
