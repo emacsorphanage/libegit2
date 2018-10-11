@@ -16,7 +16,7 @@ emacs_value em_nil, em_stringp, em_t;
 // Git object predicates
 emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p;
 emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object;
-emacs_value em_signature;
+emacs_value em_signature, em_signature_p;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
