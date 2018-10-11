@@ -15,7 +15,7 @@ enable_testing()
 
 # NOTE: These test names must be replicated in .appveyor-script.ps1
 # for the Windows CI. Fixing this is still TODO.
-set(EGIT_TESTS refcount reference repository)
+set(EGIT_TESTS refcount reference repository status)
 
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test} COMMAND
