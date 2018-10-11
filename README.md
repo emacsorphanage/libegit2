@@ -211,7 +211,7 @@ These are functions that do not have a `libgit2` equivalent.
 ### branch
 
 - :heavy_check_mark: `git-branch-create`
-- :interrobang: `git-branch-create-from-annotated`
+- :heavy_check_mark: `git-branch-create-from-annotated`
 - :interrobang: `git-branch-delete`
 - :interrobang: `git-branch-is-checked-out`
 - :interrobang: `git-branch-is-head`
