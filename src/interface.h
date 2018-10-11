@@ -84,6 +84,14 @@ emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr);
 emacs_value em_consp(emacs_env *env, emacs_value cell);
 
 /**
+ * Call (car cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell the cell to get the car of.
+ * @return the car of the cell or nil.
+ */
+emacs_value em_car(emacs_env *env, emacs_value cell);
+
+/**
  * Call (cdr cell) in Emacs.
  * @param env The active Emacs environment.
  * @param cell the cell to get the cdr of.
