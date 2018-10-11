@@ -174,6 +174,11 @@ typedef emacs_value (*func_5)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value);
 typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value, emacs_value);
+typedef emacs_value(*func_7)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                             emacs_value, emacs_value, emacs_value, emacs_value);
+typedef emacs_value(*func_8)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                             emacs_value, emacs_value, emacs_value, emacs_value,
+                             emacs_value);
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
@@ -208,6 +213,20 @@ emacs_value egit_dispatch_6(emacs_env *env, ptrdiff_t nargs, emacs_value *args, 
     func_6 func = (func_6) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
                 GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5));
+}
+
+emacs_value egit_dispatch_7(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_7 func = (func_7) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5), GET_SAFE(args, nargs, 6));
+}
+
+emacs_value egit_dispatch_8(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_8 func = (func_8) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5), GET_SAFE(args, nargs, 6), GET_SAFE(args, nargs, 7));
 }
 
 bool egit_dispatch_error(emacs_env *env, int retval)
