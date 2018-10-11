@@ -113,7 +113,7 @@ static void egit_finalize(void* _obj)
     // Note that this object must be freed before potentially freeing owners.
     git_repository *repo = NULL;
     switch (obj->type) {
-    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
+    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT: case EGIT_SIGNATURE:
         repo = git_object_owner(obj->ptr);
         git_object_free(obj->ptr);
         break;
@@ -145,13 +145,14 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
         case GIT_OBJ_TREE: type = EGIT_TREE; break;
         case GIT_OBJ_BLOB: type = EGIT_BLOB; break;
         case GIT_OBJ_TAG: type = EGIT_TAG; break;
+        case GIT_OBJ_SIGNATURE: type = EGIT_SIGNATURE; break;
         default: break;
         }
     }
 
     // Increase refcounts of owner object(s), if applicable
     switch (type) {
-    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
+    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT: case EGIT_SIGNATURE:
         egit_incref_repository(git_object_owner(data)); break;
     case EGIT_REFERENCE:
         egit_incref_repository(git_reference_owner(data)); break;
@@ -240,6 +241,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_BLOB: return em_blob;
     case EGIT_TAG: return em_tag;
     case EGIT_OBJECT: return em_object;
+    case EGIT_SIGNATURE: return em_signature;
     default: return em_nil;
     }
 }
@@ -270,6 +272,12 @@ static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
   return egit_get_type(env, obj) == EGIT_TREE ? em_t : em_nil;
 }
 
+EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a signature.");
+static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
+{
+  return egit_get_type((env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
+}
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -287,6 +295,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-tree-p", tree_p, 1, 1);
+    DEFUN("libgit-signature-p", signature_p, 1, 1);
     
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);

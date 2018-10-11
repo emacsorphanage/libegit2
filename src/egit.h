@@ -58,6 +58,8 @@
 #define EGIT_ASSERT_TREE(val)\
   do { if (!egit_assert_type(env, (val), EGIT_TREE, em_tree)) return em_nil; } while (0)
 
+#define EGIT_ASSERT_SIGNATURE(val)\
+  do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_signature)) return em_nil; } while (0)
 /**
  * Normalize an emacs_value string path. This macro may return.
  */
@@ -137,6 +139,7 @@ typedef enum {
     EGIT_BLOB,
     EGIT_TAG,
     EGIT_OBJECT,
+    EGIT_SIGNATURE,
 } egit_type;
 
 /**
