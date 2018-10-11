@@ -96,3 +96,17 @@ emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _n
 
     return egit_wrap(env, EGIT_REFERENCE, targetRef);
 }
+
+EGIT_DOC(branch_delete, "REF", "Delete branch at REF.");
+emacs_value egit_branch_delete(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    
+    EGIT_CHECK_ERROR(git_reference_is_branch(ref));
+
+    int retval = git_branch_delete(ref);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_t;
+}
