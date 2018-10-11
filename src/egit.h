@@ -53,6 +53,12 @@
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a git tree, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_TREE(val)\
+  do { if (!egit_assert_type(env, (val), EGIT_TREE, em_tree)) return em_nil; } while (0)
+
+/**
  * Normalize an emacs_value string path. This macro may return.
  */
 #define EGIT_NORMALIZE_PATH(val)\
