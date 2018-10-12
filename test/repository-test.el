@@ -178,6 +178,10 @@
       (libgit-repository-set-head-detached repo id)
       (should (string= (read-file-nnl ".git/HEAD") id)))))
 
+(ert-deftest repository-set-namespace ()
+  ;; TODO
+  (skip-unless nil))
+
 (ert-deftest repository-set-workdir ()
   ;; TODO
   (skip-unless nil))

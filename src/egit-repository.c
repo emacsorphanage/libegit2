@@ -306,6 +306,26 @@ emacs_value egit_repository_set_ident(
     return em_nil;
 }
 
+EGIT_DOC(repository_set_namespace, "REPO &optional NAMESPACE",
+         "Sets the active namespace for this Git Repository.");
+emacs_value egit_repository_set_namespace(
+    emacs_env *env, emacs_value _repo, emacs_value _nmspace)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_nmspace);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    int retval;
+    {
+        char *nmspace = EGIT_EXTRACT_STRING(_nmspace);
+        retval = git_repository_set_namespace(repo, nmspace);
+        free(nmspace);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 EGIT_DOC(repository_set_workdir, "REPO WORKDIR &optional UPDATE-GITLINK",
          "Set the path to the working directory for REPO to WORKDIR.");
 emacs_value egit_repository_set_workdir(

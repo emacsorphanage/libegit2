@@ -892,7 +892,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-repository-set-head-detached-from-annotated`
 - :heavy_check_mark: `git-repository-set-ident`
 - :interrobang: `git-repository-set-index`
-- :interrobang: `git-repository-set-namespace`
+- :heavy_check_mark: `git-repository-set-namespace`
 - :interrobang: `git-repository-set-odb`
 - :interrobang: `git-repository-set-refdb`
 - :heavy_check_mark: `git-repository-set-workdir`
