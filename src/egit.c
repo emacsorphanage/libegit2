@@ -6,6 +6,7 @@
 #include "uthash.h"
 
 #include "interface.h"
+#include "egit-blame.h"
 #include "egit-clone.h"
 #include "egit-ignore.h"
 #include "egit-object.h"
@@ -242,6 +243,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_BLOB: return em_blob;
     case EGIT_TAG: return em_tag;
     case EGIT_OBJECT: return em_object;
+    case EGIT_BLAME: return em_blame;
     default: return em_nil;
     }
 }
@@ -264,6 +266,12 @@ EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
 static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
+}
+
+EGIT_DOC(blame_p, "OBJ", "Return non-nil if OBJ is a git blame.");
+static emacs_value egit_blame_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_BLAME ? em_t : em_nil;
 }
 
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
@@ -365,4 +373,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
+
+    // Blame
+    DEFUN("libgit-blame-p", blame_p, 1, 1);
+    DEFUN("libgit-blame-file", blame_file, 2, 3);
 }
