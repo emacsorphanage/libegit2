@@ -75,3 +75,24 @@ emacs_value egit_branch_create_from_annotated(emacs_env *env, emacs_value _repo,
 
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
+
+EGIT_DOC(branch_lookup, "REPO NAME REMOTE", "Lookup branch named NAME in REPO. If REMOTE is non-nil, look for a remote branch.");
+emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _remote)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    EGIT_ASSERT_STRING(_name);
+    
+    git_reference *targetRef;
+    int retval;
+    {
+        char *branch = EGIT_EXTRACT_STRING(_name);
+        int remote = EGIT_EXTRACT_BOOLEAN(_remote);
+        retval = git_branch_lookup(&targetRef, repo, branch, remote ? GIT_BRANCH_REMOTE : GIT_BRANCH_LOCAL);
+        free(branch);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, targetRef);
+}

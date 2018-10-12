@@ -32,3 +32,15 @@
                    (should-error (libgit-branch-create-from-annotated repo "master" "second"))
                    (should (libgit-branch-create-from-annotated repo "master" "second" t)))))
 
+(ert-deftest branch-lookup ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let ((repo (libgit-repository-open path)))
+                   (should (libgit-branch-lookup repo "master"))
+                   (should (libgit-branch-lookup repo "second"))
+                   (should (libgit-branch-lookup repo "second"))
+                   (should-error (libgit-branch-lookup repo "third"))
+                   (should-error (libgit-branch-lookup repo "master" t)))))
+
