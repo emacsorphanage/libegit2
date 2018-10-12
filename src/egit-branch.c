@@ -124,3 +124,15 @@ emacs_value egit_branch_checked_out_p(emacs_env *env, emacs_value _ref)
     return retval ? em_t : em_nil;
 }
 
+EGIT_DOC(branch_head_p, "REF", "Check if branch at REF is HEAD.");
+emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
+{
+
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    
+    EGIT_CHECK_ERROR(git_reference_is_branch(ref));
+
+    int retval = git_branch_is_head(ref);
+    return retval ? em_t : em_nil;
+}
