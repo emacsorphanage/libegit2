@@ -66,6 +66,11 @@
 #define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
 
+/**
+ * Assert that VAL is a git blame, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_BLAME(val)                                      \
+    do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
 
 /**
  * Normalize an emacs_value string path. This macro may return.
@@ -155,6 +160,7 @@ typedef enum {
     EGIT_TAG,
     EGIT_OBJECT,
     EGIT_SIGNATURE,
+    EGIT_BLAME
 } egit_type;
 
 /**

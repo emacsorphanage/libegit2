@@ -6,6 +6,7 @@
 #include "uthash.h"
 
 #include "interface.h"
+#include "egit-blame.h"
 #include "egit-clone.h"
 #include "egit-ignore.h"
 #include "egit-object.h"
@@ -126,8 +127,11 @@ static void egit_finalize(void* _obj)
         git_reference_free(obj->ptr);
         break;
     case EGIT_SIGNATURE:
-      git_signature_free(obj->ptr);
-      break;
+        git_signature_free(obj->ptr);
+        break;
+    case EGIT_BLAME:
+        git_blame_free(obj->ptr);
+        break;
     default: break;
     }
 
@@ -256,8 +260,15 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_BLOB: return em_blob;
     case EGIT_TAG: return em_tag;
     case EGIT_OBJECT: return em_object;
+    case EGIT_BLAME: return em_blame;
     default: return em_nil;
     }
+}
+
+EGIT_DOC(blame_p, "OBJ", "Return non-nil if OBJ is a git blame.");
+static emacs_value egit_blame_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_BLAME ? em_t : em_nil;
 }
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
@@ -286,7 +297,6 @@ static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
 }
 
-
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -304,6 +314,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
+
+    // Blame
+    DEFUN("libgit-blame-p", blame_p, 1, 1);
+    DEFUN("libgit-blame-file", blame_file, 2, 3);
 
     // Branch
     DEFUN("libgit-branch-create", branch_create, 3, 4);

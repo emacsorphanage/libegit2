@@ -13,6 +13,7 @@ function Run-Test {
     }
 }
 
+Run-Test -TestName "blame"
 Run-Test -TestName "branch"
 Run-Test -TestName "ignore"
 Run-Test -TestName "refcount"
