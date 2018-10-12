@@ -217,7 +217,7 @@ These are functions that do not have a `libgit2` equivalent.
 - :interrobang: `git-branch-is-head`
 - :interrobang: `git-branch-iterator-free`
 - :interrobang: `git-branch-iterator-new`
-- :interrobang: `git-branch-lookup`
+- :heavy_check_mark: `git-branch-lookup`
 - :interrobang: `git-branch-move`
 - :interrobang: `git-branch-name`
 - :interrobang: `git-branch-next`
