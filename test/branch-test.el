@@ -55,3 +55,14 @@
                    (should-error (libgit-branch-delete masterref))
                    (should (libgit-branch-delete secondref)))))
 
+(ert-deftest branch-checked-out-p ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let* ((repo (libgit-repository-open path))
+                        (masterref (libgit-branch-lookup repo "master"))
+                        (secondref (libgit-branch-lookup repo "second")))
+                   (should (libgit-branch-checked-out-p masterref))
+                   (should-not (libgit-branch-checked-out-p secondref)))))
+
