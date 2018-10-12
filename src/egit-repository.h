@@ -22,6 +22,7 @@ EGIT_DEFUN(repository_message_remove, emacs_value _repo);
 EGIT_DEFUN(repository_set_head, emacs_value _repo, emacs_value _refname);
 EGIT_DEFUN(repository_set_head_detached, emacs_value _repo, emacs_value _commitish);
 EGIT_DEFUN(repository_set_ident, emacs_value _repo, emacs_value _name, emacs_value _email);
+EGIT_DEFUN(repository_set_namespace, emacs_value _repo, emacs_value _nmspace);
 EGIT_DEFUN(repository_set_workdir, emacs_value _repo, emacs_value _workdir, emacs_value _update_gitlink);
 EGIT_DEFUN(repository_state_cleanup, emacs_value _repo);
 
