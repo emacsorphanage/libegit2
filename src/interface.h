@@ -42,6 +42,12 @@ extern emacs_value em_status_opt_include_untracked,
     em_status_opt_update_index, em_status_opt_include_unreadable,
     em_status_opt_include_unreadable_as_untracked;
 
+// Blame hunk properties
+extern emacs_value em_lines_in_hunk,
+  em_final_commit_id, em_final_start_line_number, em_final_signature,
+  em_orig_commit_id, em_orig_path, em_orig_start_line_number, em_orig_signature,
+  em_boundary;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
