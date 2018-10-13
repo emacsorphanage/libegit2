@@ -100,6 +100,29 @@ emacs_value em_car(emacs_env *env, emacs_value cell);
 emacs_value em_cdr(emacs_env *env, emacs_value cell);
 
 /**
+ * Call (list OBJECTS...) in Emacs.
+ * @param env The active Emacs environment.
+ * @param objects Array of objects.
+ * @param nobjects Number of \p objects.
+ */
+emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects);
+
+/**
+ * Call (listp OBJECT) in Emacs.
+ * @param env The active Emacs environment.
+ * @param object An emacs value.
+ */
+bool em_listp(emacs_env *env, emacs_value object);
+
+/**
+ * Call (length SEQUENCE) in Emacs.
+ * @param env The active Emacs environment.
+ * @param object An emacs sequence.
+ * @return Length of the sequence, or -1 on error.
+ */
+ptrdiff_t em_length(emacs_env *env, emacs_value sequence);
+
+/**
  * Call (define-error SYMBOL MSG) in Emacs.
  * @param env The active Emacs environment.
  * @param car The error symbol.
