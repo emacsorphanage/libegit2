@@ -48,6 +48,12 @@ emacs_value em_status_opt_include_untracked, em_status_opt_include_ignored,
     em_status_opt_include_unreadable,
     em_status_opt_include_unreadable_as_untracked;
 
+// Blame hunk properties
+emacs_value em_lines_in_hunk,
+  em_final_commit_id, em_final_start_line_number, em_final_signature,
+  em_orig_commit_id, em_orig_path, em_orig_start_line_number, em_orig_signature,
+  em_boundary;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -136,6 +142,16 @@ void em_init(emacs_env *env)
     em_status_opt_include_unreadable = GLOBREF(INTERN("include-unreadable"));
     em_status_opt_include_unreadable_as_untracked =
         GLOBREF(INTERN("include-unreadable-as-untracked"));
+
+    em_lines_in_hunk = GLOBREF(INTERN("lines-in-hunk"));
+    em_final_commit_id = GLOBREF(INTERN("final-commit-id"));
+    em_final_start_line_number = GLOBREF(INTERN("final-start-line-number"));
+    em_final_signature = GLOBREF(INTERN("final-signature"));
+    em_orig_commit_id = GLOBREF(INTERN("orig-commit-id"));
+    em_orig_path = GLOBREF(INTERN("orig-path"));
+    em_orig_start_line_number = GLOBREF(INTERN("orig-start-line-number"));
+    em_orig_signature = GLOBREF(INTERN("orig-signature"));
+    em_boundary = GLOBREF(INTERN("boundary"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));

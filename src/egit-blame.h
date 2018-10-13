@@ -8,4 +8,12 @@ EGIT_DEFUN(blame_file,
            emacs_value _path,
            emacs_value _options);
 
+EGIT_DEFUN(blame_get_hunk_byindex,
+           emacs_value _blame,
+           emacs_value _index);
+
+EGIT_DEFUN(blame_get_hunk_byline,
+           emacs_value _blame,
+           emacs_value _line);
+
 #endif /* EGIT_BLAME_H */
