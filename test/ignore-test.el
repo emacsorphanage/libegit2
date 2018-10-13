@@ -3,6 +3,6 @@
     (init)
     (let ((repo (libgit-repository-open path)))
       (libgit-ignore-add-rule repo "testrule")
-      (should (= 1 (libgit-ignore-path-ignored-p repo "testrule")))
+      (should (eql t (libgit-ignore-path-ignored-p repo "testrule")))
       (libgit-ignore-clear-internal-rules repo)
-      (should (= 0 (libgit-ignore-path-ignored-p repo "testrule")))))
+      (should (eql nil (libgit-ignore-path-ignored-p repo "testrule"))))))
