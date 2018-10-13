@@ -79,9 +79,9 @@ emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr);
  * Call (consp cell) in Emacs.
  * @param env The active Emacs environment.
  * @param cell The cell you're testing.
- * @return t if cell is a cons cell, nil otherwise.
+ * @return True if cell is a cons cell, false otherwise.
  */
-emacs_value em_consp(emacs_env *env, emacs_value cell);
+bool em_consp(emacs_env *env, emacs_value cell);
 
 /**
  * Call (car cell) in Emacs.

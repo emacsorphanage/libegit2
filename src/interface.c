@@ -148,19 +148,19 @@ emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
     return em_funcall(env, _cons, 2, car, cdr);
 }
 
-emacs_value em_consp(emacs_env *env, emacs_value cell)
+bool em_consp(emacs_env *env, emacs_value cell)
 {
-  return em_funcall(env, _consp, 1, cell);
+    return env->is_not_nil(env, em_funcall(env, _consp, 1, cell));
 }
 
 emacs_value em_car(emacs_env *env, emacs_value cell)
 {
-  return em_funcall(env, _car, 1, cell);
+    return em_funcall(env, _car, 1, cell);
 }
 
 emacs_value em_cdr(emacs_env *env, emacs_value cell)
 {
-  return em_funcall(env, _cdr, 1, cell);
+    return em_funcall(env, _cdr, 1, cell);
 }
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
