@@ -28,7 +28,7 @@ emacs_value em_direct, em_symbolic;
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
-    _wrong_value_argument, _consp, _car, _cdr;
+    _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length;
 
 
 void em_init(emacs_env *env)
@@ -68,6 +68,9 @@ void em_init(emacs_env *env)
     _consp = GLOBREF(INTERN("consp"));
     _car = GLOBREF(INTERN("car"));
     _cdr = GLOBREF(INTERN("cdr"));
+    _list = GLOBREF(INTERN("list"));
+    _listp = GLOBREF(INTERN("listp"));
+    _length = GLOBREF(INTERN("length"));
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
     _expand_file_name = GLOBREF(INTERN("expand-file-name"));
@@ -161,6 +164,26 @@ emacs_value em_car(emacs_env *env, emacs_value cell)
 emacs_value em_cdr(emacs_env *env, emacs_value cell)
 {
     return em_funcall(env, _cdr, 1, cell);
+}
+
+emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects)
+{
+    return env->funcall(env, _list, nobjects, objects);
+}
+
+bool em_listp(emacs_env *env, emacs_value object)
+{
+    return env->is_not_nil(env, em_funcall(env, _listp, 1, object));
+}
+
+ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
+{
+    emacs_value result = em_funcall(env, _length, 1, sequence);
+    ptrdiff_t length = env->extract_integer(env, result);
+    if (env->non_local_exit_check(env)) {
+        return -1;
+    }
+    return length;
 }
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
