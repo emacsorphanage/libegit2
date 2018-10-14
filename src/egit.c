@@ -379,4 +379,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-file", blame_file, 2, 3);
     DEFUN("libgit-blame-get-hunk-byindex", blame_get_hunk_byindex, 2, 2);
     DEFUN("libgit-blame-get-hunk-byline", blame_get_hunk_byline, 2, 2);
+    DEFUN("libgit-blame-get-hunk-count", blame_get_hunk_count, 1, 1);
 }
