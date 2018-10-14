@@ -162,11 +162,6 @@ emacs_value em_car(emacs_env *env, emacs_value cell)
     return em_funcall(env, _car, 1, cell);
 }
 
-emacs_value em_car(emacs_env *env, emacs_value cell)
-{
-  return em_funcall(env, _car, 1, cell);
-}
-
 emacs_value em_cdr(emacs_env *env, emacs_value cell)
 {
     return em_funcall(env, _cdr, 1, cell);
