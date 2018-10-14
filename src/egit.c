@@ -12,6 +12,7 @@
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
+#include "egit-signature.h"
 #include "egit-status.h"
 #include "egit.h"
 
@@ -115,7 +116,7 @@ static void egit_finalize(void* _obj)
     // Note that this object must be freed before potentially freeing owners.
     git_repository *repo = NULL;
     switch (obj->type) {
-    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
+    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT: case EGIT_SIGNATURE:
         repo = git_object_owner(obj->ptr);
         git_object_free(obj->ptr);
         break;
@@ -266,6 +267,13 @@ static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
 }
 
+EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a git signature.");
+static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
+}
+
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -360,9 +368,6 @@ void egit_init(emacs_env *env)
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 
-    // Status
-    DEFUN("libgit-status-decode", status_decode, 1, 1);
-    DEFUN("libgit-status-file", status_file, 2, 2);
-    DEFUN("libgit-status-foreach", status_foreach, 2, 6);
-    DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
+    // Signature
+    DEFUN("libgit-signature-default", signature_default, 2, 2);
 }

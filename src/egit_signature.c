@@ -4,6 +4,7 @@
 #include "interface.h"
 
 EGIT_DOC(signature_default, "REPO", "Create a new action signature with default user and now timestamp");
+
 emacs_value egit_signature_default(emacs_env *env, emacs_value _repo)
 {
   EGIT_ASSERT_REPOSITORY(_repo);
