@@ -49,7 +49,7 @@ emacs_value em_status_opt_include_untracked, em_status_opt_include_ignored,
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
-    _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length;
+    _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _assq;
 
 
 void em_init(emacs_env *env)
@@ -136,6 +136,7 @@ void em_init(emacs_env *env)
     _list = GLOBREF(INTERN("list"));
     _listp = GLOBREF(INTERN("listp"));
     _length = GLOBREF(INTERN("length"));
+    _assq = GLOBREF(INTERN("assq"));
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
     _expand_file_name = GLOBREF(INTERN("expand-file-name"));
@@ -249,6 +250,11 @@ ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
         return -1;
     }
     return length;
+}
+
+emacs_value em_assq(emacs_env *env, emacs_value key, emacs_value list)
+{
+  return em_funcall(env, _assq, 2, key, list);
 }
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
