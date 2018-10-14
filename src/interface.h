@@ -144,6 +144,15 @@ bool em_listp(emacs_env *env, emacs_value object);
 ptrdiff_t em_length(emacs_env *env, emacs_value sequence);
 
 /**
+ * Call (assq key list) in Emacs.
+ * @param env The active Emacs environment.
+ * @param key The key to lookup.
+ * @param list The associated list (alist).
+ * @return The first cons cell whose car is \p key.
+ */
+emacs_value em_assq(emacs_env *env, emacs_value key, emacs_value list);
+
+/**
  * Call (define-error SYMBOL MSG) in Emacs.
  * @param env The active Emacs environment.
  * @param car The error symbol.
