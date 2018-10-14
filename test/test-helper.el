@@ -46,6 +46,15 @@
 (defun commit (&optional msg)
   (run "git" "commit" "--allow-empty-message" "-m" (or msg "nothing")))
 
+(defun create-branch (&optional name)
+  (run "git" "checkout" "-b" (or name "unnamed")))
+
+(defun checkout (name)
+  (run "git" "checkout" name))
+
+(defun merge (branch-name &optional msg)
+  (run "git" "merge" "--no-ff" branch-name "-m" (or msg "merge commit")))
+
 (defun commit-change (filename content &optional msg)
   (write filename content)
   (run "git" "add" filename)
