@@ -76,6 +76,30 @@ char *em_get_string(emacs_env *env, emacs_value arg);
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr);
 
 /**
+ * Call (consp cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell The cell you're testing.
+ * @return True if cell is a cons cell, false otherwise.
+ */
+bool em_consp(emacs_env *env, emacs_value cell);
+
+/**
+ * Call (car cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell the cell to get the car of.
+ * @return the car of the cell or nil.
+ */
+emacs_value em_car(emacs_env *env, emacs_value cell);
+
+/**
+ * Call (cdr cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell the cell to get the cdr of.
+ * @return the cdr of the cell or nil.
+ */
+emacs_value em_cdr(emacs_env *env, emacs_value cell);
+
+/**
  * Call (define-error SYMBOL MSG) in Emacs.
  * @param env The active Emacs environment.
  * @param car The error symbol.

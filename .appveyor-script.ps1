@@ -2,7 +2,7 @@
 # Instead, we store the stdout/stderr and grep for "FAILED".
 function Run-Test {
     param( $TestName )
-    $command = "emacs --batch -L build -L test -l libegit2 -l test-helper -l $($TestName)-test -f ert-run-tests-batch-and-exit"
+    $command = "C:\emacs\bin\emacs --batch -L build -L test -l libegit2 -l test-helper -l $($TestName)-test -f ert-run-tests-batch-and-exit"
     $output = Invoke-Expression "$command 2>&1"
     Write-Host $output
     if ($output | select-string -Pattern "FAILED") {
