@@ -12,6 +12,7 @@
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
+#include "egit-signature.h"
 #include "egit-status.h"
 #include "egit-branch.h"
 #include "egit.h"
@@ -124,6 +125,9 @@ static void egit_finalize(void* _obj)
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
         break;
+    case EGIT_SIGNATURE:
+      git_signature_free(obj->ptr);
+      break;
     default: break;
     }
 
@@ -276,6 +280,13 @@ static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
 }
 
+EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a git signature.");
+static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
+}
+
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -379,9 +390,6 @@ void egit_init(emacs_env *env)
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 
-    // Status
-    DEFUN("libgit-status-decode", status_decode, 1, 1);
-    DEFUN("libgit-status-file", status_file, 2, 2);
-    DEFUN("libgit-status-foreach", status_foreach, 2, 6);
-    DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
+    // Signature
+    DEFUN("libgit-signature-default", signature_default, 1, 1);
 }

@@ -55,6 +55,19 @@
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a signature, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_SIGNATURE(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is a signature or nil, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
+    do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
+
+
+/**
  * Normalize an emacs_value string path. This macro may return.
  */
 #define EGIT_NORMALIZE_PATH(val)\
@@ -68,6 +81,14 @@
  * Caller is responsible for ensuring that this is a valid operation.
  */
 #define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
+
+/**
+ * Extract a libgit git_??? struct from an emacs_value, or NULL.
+ * Caller is responsible for ensuring that this is a valid operation.
+ */
+
+#define EGIT_EXTRACT_OR_NULL(val)                                \
+  (EGIT_EXTRACT_BOOLEAN(val) ? EGIT_EXTRACT(val) : NULL);
 
 /**
  * Extract a boolean from an emacs_value.
@@ -133,6 +154,7 @@ typedef enum {
     EGIT_BLOB,
     EGIT_TAG,
     EGIT_OBJECT,
+    EGIT_SIGNATURE,
 } egit_type;
 
 /**
