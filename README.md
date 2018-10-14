@@ -183,12 +183,12 @@ These are functions that do not have a `libgit2` equivalent.
 ### blame
 
 - :interrobang: `git-blame-buffer`
-- :interrobang: `git-blame-file`
+- :heavy_check_mark: `git-blame-file`
 - :x: `git-blame-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-blame-get-hunk-byindex`
-- :interrobang: `git-blame-get-hunk-byline`
-- :interrobang: `git-blame-get-hunk-count`
-- :interrobang: `git-blame-init-options`
+- :heavy_check_mark: `git-blame-get-hunk-byindex`
+- :heavy_check_mark: `git-blame-get-hunk-byline`
+- :heavy_check_mark: `git-blame-get-hunk-count`
+- :x: `git-blame-init-options` (options are represented by an `alist`)
 
 ### blob
 
