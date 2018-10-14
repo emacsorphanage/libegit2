@@ -54,6 +54,13 @@ emacs_value em_lines_in_hunk,
   em_orig_commit_id, em_orig_path, em_orig_start_line_number, em_orig_signature,
   em_boundary;
 
+// Blame options
+emacs_value em_flags, em_min_match_characters, em_newest_commit,
+  em_oldest_commit, em_min_line, em_max_line;
+
+// Blame flags
+emacs_value em_first_parent;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -152,6 +159,15 @@ void em_init(emacs_env *env)
     em_orig_start_line_number = GLOBREF(INTERN("orig-start-line-number"));
     em_orig_signature = GLOBREF(INTERN("orig-signature"));
     em_boundary = GLOBREF(INTERN("boundary"));
+
+    em_flags = GLOBREF(INTERN("flags"));
+    em_min_match_characters = GLOBREF(INTERN("min-match-characters"));
+    em_newest_commit = GLOBREF(INTERN("newest-commit"));
+    em_oldest_commit = GLOBREF(INTERN("oldest-commit"));
+    em_min_line = GLOBREF(INTERN("min-line"));
+    em_max_line = GLOBREF(INTERN("max-line"));
+
+    em_first_parent = GLOBREF(INTERN("first-parent"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));

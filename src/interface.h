@@ -48,6 +48,13 @@ extern emacs_value em_lines_in_hunk,
   em_orig_commit_id, em_orig_path, em_orig_start_line_number, em_orig_signature,
   em_boundary;
 
+// Blame options
+extern emacs_value em_flags, em_min_match_characters, em_newest_commit,
+  em_oldest_commit, em_min_line, em_max_line;
+
+// Blame flags
+extern emacs_value em_first_parent;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
