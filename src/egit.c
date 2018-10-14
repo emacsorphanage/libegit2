@@ -124,6 +124,9 @@ static void egit_finalize(void* _obj)
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
         break;
+    case EGIT_BLAME:
+        git_blame_free(obj->ptr);
+        break;
     default: break;
     }
 
