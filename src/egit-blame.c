@@ -4,6 +4,59 @@
 #include "interface.h"
 #include "egit-repository.h"
 
+static void extract_options_flags(emacs_env *env,
+                                  emacs_value eflags,
+                                  uint32_t *flags)
+{
+    *flags = 0;
+    while (env->is_not_nil(env, eflags)) {
+        emacs_value head = em_car(env, eflags);
+        if (env->eq(env, head, em_first_parent)) {
+            *flags |= GIT_BLAME_FIRST_PARENT;
+        }
+        eflags = em_cdr(env, eflags);
+    }
+}
+
+static emacs_value extract_options(emacs_env *env,
+                                   emacs_value eopts,
+                                   git_blame_options *opts)
+{
+    emacs_value flags =
+        em_cdr(env, em_assq(env, em_flags, eopts));
+    emacs_value min_match_characters =
+        em_cdr(env, em_assq(env, em_min_match_characters, eopts));
+    emacs_value newest_commit =
+        em_cdr(env, em_assq(env, em_newest_commit, eopts));
+    emacs_value oldest_commit =
+        em_cdr(env, em_assq(env, em_oldest_commit, eopts));
+    emacs_value min_line =
+        em_cdr(env, em_assq(env, em_min_line, eopts));
+    emacs_value max_line =
+        em_cdr(env, em_assq(env, em_max_line, eopts));
+
+    if (env->is_not_nil(env, flags)) {
+        extract_options_flags(env, flags, &opts->flags);
+    }
+    if (env->is_not_nil(env, min_match_characters)) {
+        opts->min_match_characters =
+            (uint16_t) env->extract_integer(env, min_match_characters);
+    }
+    if (env->is_not_nil(env, newest_commit)) {
+        EGIT_EXTRACT_OID(newest_commit, opts->newest_commit);
+    }
+    if (env->is_not_nil(env, oldest_commit)) {
+        EGIT_EXTRACT_OID(oldest_commit, opts->oldest_commit);
+    }
+    if (env->is_not_nil(env, min_line)) {
+        opts->min_line = (size_t) env->extract_integer(env, min_line);
+    }
+    if (env->is_not_nil(env, max_line)) {
+        opts->max_line = (size_t) env->extract_integer(env, max_line);
+    }
+
+    return em_t;
+}
 
 EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
          "Return the BLAME object for the given file PATH.");
@@ -14,13 +67,23 @@ emacs_value egit_blame_file(emacs_env *env,
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EGIT_ASSERT_STRING(_path);
-    (void)_options; // TODO: handle options as well
 
     git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_blame_options opts;
+    int retval = git_blame_init_options(&opts, GIT_BLAME_OPTIONS_VERSION);
+    EGIT_CHECK_ERROR(retval);
+    if (env->is_not_nil(env, _options)) {
+        if (!env->is_not_nil(env, extract_options(env, _options, &opts))) {
+            // We can fail if an invalid OID is specified in options.
+            return em_nil;
+        }
+    }
+
     char *path = EGIT_EXTRACT_STRING(_path);
 
     git_blame *blame = NULL;
-    int retval = git_blame_file(&blame, repo, path, /*options=*/NULL);
+    retval = git_blame_file(&blame, repo, path, &opts);
     EGIT_FREE(path);
     EGIT_CHECK_ERROR(retval);
 
