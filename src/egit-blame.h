@@ -16,4 +16,7 @@ EGIT_DEFUN(blame_get_hunk_byline,
            emacs_value _blame,
            emacs_value _line);
 
+EGIT_DEFUN(blame_get_hunk_count,
+           emacs_value _blame);
+
 #endif /* EGIT_BLAME_H */

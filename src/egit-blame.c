@@ -123,3 +123,14 @@ emacs_value egit_blame_get_hunk_byline(emacs_env *env,
     return make_blame_hunk(env, hunk);
 }
 
+EGIT_DOC(blame_get_hunk_count, "BLAME",
+         "Return the number of HUNKS in the given BLAME.");
+emacs_value egit_blame_get_hunk_count(emacs_env *env,
+                                      emacs_value _blame)
+{
+    EGIT_ASSERT_BLAME(_blame);
+    git_blame *blame = EGIT_EXTRACT(_blame);
+
+    uint32_t count = git_blame_get_hunk_count(blame);
+    return env->make_integer(env, count);
+}
