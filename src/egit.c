@@ -369,5 +369,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 
     // Signature
-    DEFUN("libgit-signature-default", signature_default, 2, 2);
+    DEFUN("libgit-signature-default", signature_default, 1, 1);
 }
