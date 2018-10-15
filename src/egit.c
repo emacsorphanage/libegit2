@@ -6,6 +6,7 @@
 #include "uthash.h"
 
 #include "interface.h"
+#include "egit-annotated-commit.h"
 #include "egit-blame.h"
 #include "egit-blob.h"
 #include "egit-branch.h"
@@ -197,6 +198,10 @@ static void egit_finalize(void* _obj)
 
     case EGIT_CRED:
         git_cred_free(obj->ptr);
+        break;
+
+    case EGIT_ANNOTATED_COMMIT:
+        git_annotated_commit_free(obj->ptr);
         break;
 
     default: break;
@@ -420,6 +425,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_REFSPEC: return em_refspec;
     case EGIT_SUBMODULE: return em_submodule;
     case EGIT_CRED: return em_cred;
+    case EGIT_ANNOTATED_COMMIT: return em_annotated_commit;
     default: return em_nil;
     }
 }
@@ -431,6 +437,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
         return egit_get_type(env, obj) == EGIT_##caps ? em_t : em_nil;  \
     }
 
+TYPECHECKER(ANNOTATED_COMMIT, annotated_commit, "annotated commit");
 TYPECHECKER(BLAME, blame, "blame");
 TYPECHECKER(BLAME_HUNK, blame_hunk, "blame hunk");
 TYPECHECKER(COMMIT, commit, "commit");
@@ -837,4 +844,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 
     DEFUN("libgit-tree-walk", tree_walk, 3, 3);
+
+    // Annotated commit
+    DEFUN("libgit-annotated-commit-p", annotated_commit_p, 1, 1);
 }

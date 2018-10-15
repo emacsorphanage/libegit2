@@ -13,6 +13,7 @@ function Run-Test {
     }
 }
 
+Run-Test -TestName "annotated-commit"
 Run-Test -TestName "blame"
 Run-Test -TestName "blob"
 Run-Test -TestName "branch"
