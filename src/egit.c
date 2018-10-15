@@ -847,4 +847,5 @@ void egit_init(emacs_env *env)
 
     // Annotated commit
     DEFUN("libgit-annotated-commit-p", annotated_commit_p, 1, 1);
+    DEFUN("libgit-annotated-commit-from-ref", annotated_commit_from_ref, 2, 2);
 }
