@@ -29,6 +29,10 @@
     extern const char *egit_##name##__doc;      \
     emacs_value egit_##name(emacs_env *env)
 
+// Assert that VAL is a git annotated commit, signal an error and return otherwise.
+#define EGIT_ASSERT_ANNOTATED_COMMIT(val)                                          \
+    do { if (!egit_assert_type(env, (val), EGIT_ANNOTATED_COMMIT, em_libgit_annotated_commit_p)) return em_nil; } while (0)
+
 // Assert that VAL is a git blame, signal an error and return otherwise.
 #define EGIT_ASSERT_BLAME(val)                                          \
     do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
@@ -235,7 +239,8 @@ typedef enum {
     EGIT_REMOTE,
     EGIT_REFSPEC,
     EGIT_SUBMODULE,
-    EGIT_CRED
+    EGIT_CRED,
+    EGIT_ANNOTATED_COMMIT
 } egit_type;
 
 /**
