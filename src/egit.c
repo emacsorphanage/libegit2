@@ -7,6 +7,7 @@
 
 #include "interface.h"
 #include "egit-clone.h"
+#include "egit-ignore.h"
 #include "egit-object.h"
 #include "egit-reference.h"
 #include "egit-repository.h"
@@ -284,6 +285,11 @@ void egit_init(emacs_env *env)
 
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);
+
+    // Ignore
+    DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
+    DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
+    DEFUN("libgit-ignore-path-ignored-p", path_ignored_p, 2, 2);
 
     // Object
     DEFUN("libgit-object-id", object_id, 1, 1);
