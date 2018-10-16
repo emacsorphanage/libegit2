@@ -19,6 +19,27 @@ extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 // Reference types
 extern emacs_value em_direct, em_symbolic;
 
+// File statuses
+extern emacs_value em_fs_index_new, em_fs_index_modified, em_fs_index_deleted,
+    em_fs_index_renamed, em_fs_index_typechange, em_fs_wt_new,
+    em_fs_wt_modified, em_fs_wt_deleted, em_fs_wt_typechange, em_fs_wt_renamed,
+    em_fs_wt_unreadable, em_fs_ignored, em_fs_conflicted;
+
+// Symbols for enum git_status_show_t
+extern emacs_value em_status_show_index_only, em_status_show_workdir_only,
+    em_status_show_index_and_workdir;
+
+// Symbols for enum git_status_opt_t
+extern emacs_value em_status_opt_include_untracked,
+    em_status_opt_include_ignored, em_status_opt_include_unmodified,
+    em_status_opt_exclude_submodules, em_status_opt_recurse_untracked_dirs,
+    em_status_opt_disable_pathspec_match, em_status_opt_recurse_ignored_dirs,
+    em_status_opt_renames_head_to_index, em_status_opt_renames_index_to_workdir,
+    em_status_opt_sort_case_sensitively, em_status_opt_sort_case_insensitively,
+    em_status_opt_renames_from_rewrites, em_status_opt_no_refresh,
+    em_status_opt_update_index, em_status_opt_include_unreadable,
+    em_status_opt_include_unreadable_as_untracked;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
@@ -74,6 +95,53 @@ char *em_get_string(emacs_env *env, emacs_value arg);
  * @return The cons cell.
  */
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr);
+
+/**
+ * Call (consp cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell The cell you're testing.
+ * @return True if cell is a cons cell, false otherwise.
+ */
+bool em_consp(emacs_env *env, emacs_value cell);
+
+/**
+ * Call (car cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell the cell to get the car of.
+ * @return the car of the cell or nil.
+ */
+emacs_value em_car(emacs_env *env, emacs_value cell);
+
+/**
+ * Call (cdr cell) in Emacs.
+ * @param env The active Emacs environment.
+ * @param cell the cell to get the cdr of.
+ * @return the cdr of the cell or nil.
+ */
+emacs_value em_cdr(emacs_env *env, emacs_value cell);
+
+/**
+ * Call (list OBJECTS...) in Emacs.
+ * @param env The active Emacs environment.
+ * @param objects Array of objects.
+ * @param nobjects Number of \p objects.
+ */
+emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects);
+
+/**
+ * Call (listp OBJECT) in Emacs.
+ * @param env The active Emacs environment.
+ * @param object An emacs value.
+ */
+bool em_listp(emacs_env *env, emacs_value object);
+
+/**
+ * Call (length SEQUENCE) in Emacs.
+ * @param env The active Emacs environment.
+ * @param object An emacs sequence.
+ * @return Length of the sequence, or -1 on error.
+ */
+ptrdiff_t em_length(emacs_env *env, emacs_value sequence);
 
 /**
  * Call (define-error SYMBOL MSG) in Emacs.

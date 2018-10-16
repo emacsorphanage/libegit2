@@ -60,6 +60,12 @@ cd build
 make test
 ```
 
+To see more output for debugging new tests you can specify more verbose output.
+
+```
+make test ARGS=-V
+```
+
 ## Using
 
 Ensure that `libgit.el` is somewhere in your load path. Then
@@ -961,15 +967,15 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 ### status
 
 - :interrobang: `git-status-byindex`
-- :interrobang: `git-status-file`
-- :interrobang: `git-status-foreach`
-- :interrobang: `git-status-foreach-ext`
-- :interrobang: `git-status-init-options`
+- :heavy_check_mark: `git-status-file`
+- :heavy_check_mark: `git-status-foreach`
+- :heavy_check_mark: `git-status-foreach-ext`
+- :x: `git-status-init-options`
 - :interrobang: `git-status-list-entrycount`
 - :interrobang: `git-status-list-free`
 - :interrobang: `git-status-list-get-perfdata`
 - :interrobang: `git-status-list-new`
-- :interrobang: `git-status-should-ignore`
+- :heavy_check_mark: `git-status-should-ignore`
 
 ### strarray
 

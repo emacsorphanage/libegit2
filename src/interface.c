@@ -25,10 +25,31 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 // Reference types
 emacs_value em_direct, em_symbolic;
 
+// File statuses
+emacs_value em_fs_index_new, em_fs_index_modified, em_fs_index_deleted,
+    em_fs_index_renamed, em_fs_index_typechange, em_fs_wt_new,
+    em_fs_wt_modified, em_fs_wt_deleted, em_fs_wt_typechange, em_fs_wt_renamed,
+    em_fs_wt_unreadable, em_fs_ignored, em_fs_conflicted;
+
+// Symbols for enum git_status_show_t
+emacs_value em_status_show_index_only, em_status_show_workdir_only,
+    em_status_show_index_and_workdir;
+
+// Symbols for enum git_status_opt_t
+emacs_value em_status_opt_include_untracked, em_status_opt_include_ignored,
+    em_status_opt_include_unmodified, em_status_opt_exclude_submodules,
+    em_status_opt_recurse_untracked_dirs, em_status_opt_disable_pathspec_match,
+    em_status_opt_recurse_ignored_dirs, em_status_opt_renames_head_to_index,
+    em_status_opt_renames_index_to_workdir, em_status_opt_sort_case_sensitively,
+    em_status_opt_sort_case_insensitively, em_status_opt_renames_from_rewrites,
+    em_status_opt_no_refresh, em_status_opt_update_index,
+    em_status_opt_include_unreadable,
+    em_status_opt_include_unreadable_as_untracked;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
-    _wrong_value_argument;
+    _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length;
 
 
 void em_init(emacs_env *env)
@@ -64,7 +85,57 @@ void em_init(emacs_env *env)
     em_direct = GLOBREF(INTERN("direct"));
     em_symbolic = GLOBREF(INTERN("symbolic"));
 
+    em_fs_index_new = GLOBREF(INTERN("index-new"));
+    em_fs_index_modified = GLOBREF(INTERN("index-modified"));
+    em_fs_index_deleted = GLOBREF(INTERN("index-deleted"));
+    em_fs_index_renamed = GLOBREF(INTERN("index-renamed"));
+    em_fs_index_typechange = GLOBREF(INTERN("index-typechange"));
+    em_fs_wt_new = GLOBREF(INTERN("wt-new"));
+    em_fs_wt_modified = GLOBREF(INTERN("wt-modified"));
+    em_fs_wt_deleted = GLOBREF(INTERN("wt-deleted"));
+    em_fs_wt_typechange = GLOBREF(INTERN("wt-typechange"));
+    em_fs_wt_renamed = GLOBREF(INTERN("wt-renamed"));
+    em_fs_wt_unreadable = GLOBREF(INTERN("wt-unreadable"));
+    em_fs_ignored = GLOBREF(INTERN("ignored"));
+    em_fs_conflicted = GLOBREF(INTERN("conflicted"));
+
+    em_status_show_index_only = GLOBREF(INTERN("index-only"));
+    em_status_show_workdir_only = GLOBREF(INTERN("workdir-only"));
+    em_status_show_index_and_workdir = GLOBREF(INTERN("index-and-workdir"));
+
+    em_status_opt_include_untracked = GLOBREF(INTERN("include-untracked"));
+    em_status_opt_include_ignored = GLOBREF(INTERN("include-ignored"));
+    em_status_opt_include_unmodified = GLOBREF(INTERN("include-unmodified"));
+    em_status_opt_exclude_submodules = GLOBREF(INTERN("exclude-submodules"));
+    em_status_opt_recurse_untracked_dirs =
+        GLOBREF(INTERN("recurse-untracked-dirs"));
+    em_status_opt_disable_pathspec_match =
+        GLOBREF(INTERN("disable-pathspec-match"));
+    em_status_opt_recurse_ignored_dirs =
+        GLOBREF(INTERN("recurse-ignored-dirs"));
+    em_status_opt_renames_head_to_index =
+        GLOBREF(INTERN("renames-head-to-index"));
+    em_status_opt_renames_index_to_workdir =
+        GLOBREF(INTERN("renames-index-to-workdir"));
+    em_status_opt_sort_case_sensitively =
+        GLOBREF(INTERN("sort-case-sensitively"));
+    em_status_opt_sort_case_insensitively =
+        GLOBREF(INTERN("sort-case-insensitively"));
+    em_status_opt_renames_from_rewrites =
+        GLOBREF(INTERN("renames-from-rewrites"));
+    em_status_opt_no_refresh = GLOBREF(INTERN("no-refresh"));
+    em_status_opt_update_index = GLOBREF(INTERN("update-index"));
+    em_status_opt_include_unreadable = GLOBREF(INTERN("include-unreadable"));
+    em_status_opt_include_unreadable_as_untracked =
+        GLOBREF(INTERN("include-unreadable-as-untracked"));
+
     _cons = GLOBREF(INTERN("cons"));
+    _consp = GLOBREF(INTERN("consp"));
+    _car = GLOBREF(INTERN("car"));
+    _cdr = GLOBREF(INTERN("cdr"));
+    _list = GLOBREF(INTERN("list"));
+    _listp = GLOBREF(INTERN("listp"));
+    _length = GLOBREF(INTERN("length"));
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
     _expand_file_name = GLOBREF(INTERN("expand-file-name"));
@@ -143,6 +214,41 @@ char *em_get_string(emacs_env *env, emacs_value arg)
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
 {
     return em_funcall(env, _cons, 2, car, cdr);
+}
+
+bool em_consp(emacs_env *env, emacs_value cell)
+{
+    return env->is_not_nil(env, em_funcall(env, _consp, 1, cell));
+}
+
+emacs_value em_car(emacs_env *env, emacs_value cell)
+{
+    return em_funcall(env, _car, 1, cell);
+}
+
+emacs_value em_cdr(emacs_env *env, emacs_value cell)
+{
+    return em_funcall(env, _cdr, 1, cell);
+}
+
+emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects)
+{
+    return env->funcall(env, _list, nobjects, objects);
+}
+
+bool em_listp(emacs_env *env, emacs_value object)
+{
+    return env->is_not_nil(env, em_funcall(env, _listp, 1, object));
+}
+
+ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
+{
+    emacs_value result = em_funcall(env, _length, 1, sequence);
+    ptrdiff_t length = env->extract_integer(env, result);
+    if (env->non_local_exit_check(env)) {
+        return -1;
+    }
+    return length;
 }
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)

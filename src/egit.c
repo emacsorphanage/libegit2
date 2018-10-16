@@ -12,6 +12,7 @@
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
+#include "egit-status.h"
 #include "egit.h"
 
 // Hash table of stored objects
@@ -358,4 +359,10 @@ void egit_init(emacs_env *env)
 
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
+
+    // Status
+    DEFUN("libgit-status-decode", status_decode, 1, 1);
+    DEFUN("libgit-status-file", status_file, 2, 2);
+    DEFUN("libgit-status-foreach", status_foreach, 2, 6);
+    DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
 }
