@@ -447,9 +447,9 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### ignore
 
-- :interrobang: `git-ignore-add-rule`
-- :interrobang: `git-ignore-clear-internal-rules`
-- :interrobang: `git-ignore-path-is-ignored`
+- :heavy_check_mark: `git-ignore-add-rule`
+- :heavy_check_mark: `git-ignore-clear-internal-rules`
+- :heavy_check_mark: `git-ignore-path-is-ignored`
 
 ### index
 

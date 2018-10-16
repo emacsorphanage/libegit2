@@ -1,5 +1,6 @@
 #include "emacs-module.h"
 #include "uthash.h"
+#include "git2.h"
 
 #ifndef EGIT_H
 #define EGIT_H
