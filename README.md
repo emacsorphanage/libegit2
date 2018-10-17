@@ -943,7 +943,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### signature
 
-- :interrobang: `git-signature-default`
+- :heavy_check_mark: `git-signature-default`
 - :interrobang: `git-signature-dup`
 - :x: `git-signature-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-signature-from-buffer`
