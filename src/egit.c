@@ -116,7 +116,7 @@ static void egit_finalize(void* _obj)
     // Note that this object must be freed before potentially freeing owners.
     git_repository *repo = NULL;
     switch (obj->type) {
-    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT: case EGIT_SIGNATURE:
+    case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
         repo = git_object_owner(obj->ptr);
         git_object_free(obj->ptr);
         break;
@@ -124,6 +124,9 @@ static void egit_finalize(void* _obj)
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
         break;
+    case EGIT_SIGNATURE:
+      git_signature_free(obj->ptr);
+      break;
     default: break;
     }
 
