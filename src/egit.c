@@ -12,8 +12,8 @@
 #include "egit-reference.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
-#include "egit-signature.h"
 #include "egit-status.h"
+#include "egit-signature.h"
 #include "egit.h"
 
 // Hash table of stored objects
