@@ -306,7 +306,7 @@ emacs_value egit_repository_set_ident(
     return em_nil;
 }
 
-EGIT_DOC(repository_set_namespace, "REPO &optional NAMESPACE",
+EGIT_DOC(repository_set_namespace, "REPO NAMESPACE",
          "Sets the active namespace for this Git Repository.");
 emacs_value egit_repository_set_namespace(
     emacs_env *env, emacs_value _repo, emacs_value _nmspace)
