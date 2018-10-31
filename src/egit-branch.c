@@ -128,7 +128,7 @@ emacs_value egit_branch_delete(emacs_env *env, emacs_value _ref)
     int retval = git_branch_delete(ref);
     EGIT_CHECK_ERROR(retval);
 
-    return em_t;
+    return em_nil;
 }
 
 EGIT_DOC(branch_checked_out_p, "REF", "Check if branch at REF is checked out.");
