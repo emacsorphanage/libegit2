@@ -23,8 +23,10 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
     EGIT_CHECK_ERROR(retval);
     
     const git_oid *oid = git_reference_target(target_ref);
+
     git_commit *commit;
     retval = git_commit_lookup(&commit, repo, oid);
+    git_reference_free(target_ref);
     EGIT_CHECK_ERROR(retval);
 
     git_reference *ref;
@@ -34,6 +36,7 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
         retval = git_branch_create(&ref, repo, name, commit, force);
         free(name);
     }
+    git_commit_free(commit);
     EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REFERENCE, ref);
@@ -61,9 +64,10 @@ emacs_value egit_branch_create_from_annotated(
     EGIT_CHECK_ERROR(retval);
     
     const git_oid *oid = git_reference_target(target_ref);
-    
+
     git_annotated_commit *commit;
     retval = git_annotated_commit_lookup(&commit, repo, oid);
+    git_reference_free(target_ref);
     EGIT_CHECK_ERROR(retval);
 
     git_reference *ref;
@@ -73,6 +77,7 @@ emacs_value egit_branch_create_from_annotated(
         retval = git_branch_create_from_annotated(&ref, repo, name, commit, force);
         free(name);
     }
+    git_annotated_commit_free(commit);
     EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REFERENCE, ref);
