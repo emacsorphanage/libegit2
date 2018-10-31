@@ -2,7 +2,9 @@
 #include "egit-branch.h"
 
 
-EGIT_DOC(branch_create, "REPO NAME COMMITISH FORCE", "Create a new branch in REPO named NAME at COMMITISH and return the refernce to it. If FORCE is non-nil, force creation of the branch.");
+EGIT_DOC(branch_create, "REPO NAME COMMITISH FORCE",
+         "Create a new branch in REPO named NAME at COMMITISH and return the reference to it.\n\n"
+         "If FORCE is non-nil, force creation of the branch.");
 emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -39,8 +41,11 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
-EGIT_DOC(branch_create_from_annotated, "REPO NAME COMMITISH FORCE", "Create a new branch in REPO named NAME at annotated commit COMMITISH and return the refernce to it. If FORCE is non-nil, force creation of the branch.");
-emacs_value egit_branch_create_from_annotated(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
+EGIT_DOC(branch_create_from_annotated, "REPO NAME COMMITISH FORCE",
+         "Create a new branch in REPO named NAME at annotated commit COMMITISH and return the reference to it.\n\n"
+         "If FORCE is non-nil, force creation of the branch.");
+emacs_value egit_branch_create_from_annotated(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EGIT_ASSERT_STRING(_commitish);
@@ -76,7 +81,8 @@ emacs_value egit_branch_create_from_annotated(emacs_env *env, emacs_value _repo,
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
 
-EGIT_DOC(branch_lookup, "REPO NAME REMOTE", "Lookup branch named NAME in REPO. If REMOTE is non-nil, look for a remote branch.");
+EGIT_DOC(branch_lookup, "REPO NAME &optional REMOTE",
+         "Lookup branch named NAME in REPO.\n\nIf REMOTE is non-nil, look for a remote branch.");
 emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _remote)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
