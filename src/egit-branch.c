@@ -24,6 +24,13 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
     
     const git_oid *oid = git_reference_target(target_ref);
 
+    // TODO: Deal with this more robustly
+    if (!oid) {
+        em_signal_giterr(env, 1, "Reference is not direct");
+        git_reference_free(target_ref);
+        return em_nil;
+    }
+
     git_commit *commit;
     retval = git_commit_lookup(&commit, repo, oid);
     git_reference_free(target_ref);
@@ -64,6 +71,13 @@ emacs_value egit_branch_create_from_annotated(
     EGIT_CHECK_ERROR(retval);
     
     const git_oid *oid = git_reference_target(target_ref);
+
+    // TODO: Deal with this more robustly
+    if (!oid) {
+        em_signal_giterr(env, 1, "Reference is not direct");
+        git_reference_free(target_ref);
+        return em_nil;
+    }
 
     git_annotated_commit *commit;
     retval = git_annotated_commit_lookup(&commit, repo, oid);
