@@ -123,10 +123,8 @@ EGIT_DOC(branch_delete, "REF", "Delete branch at REF.");
 emacs_value egit_branch_delete(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    
-    EGIT_CHECK_ERROR(git_reference_is_branch(ref));
 
+    git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_branch_delete(ref);
     EGIT_CHECK_ERROR(retval);
 
@@ -136,25 +134,23 @@ emacs_value egit_branch_delete(emacs_env *env, emacs_value _ref)
 EGIT_DOC(branch_checked_out_p, "REF", "Check if branch at REF is checked out.");
 emacs_value egit_branch_checked_out_p(emacs_env *env, emacs_value _ref)
 {
-
     EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    
-    EGIT_CHECK_ERROR(git_reference_is_branch(ref));
 
+    git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_branch_is_checked_out(ref);
+    EGIT_CHECK_ERROR(retval);
+
     return retval ? em_t : em_nil;
 }
 
 EGIT_DOC(branch_head_p, "REF", "Check if branch at REF is HEAD.");
 emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
 {
-
     EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    
-    EGIT_CHECK_ERROR(git_reference_is_branch(ref));
 
+    git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_branch_is_head(ref);
+    EGIT_CHECK_ERROR(retval);
+
     return retval ? em_t : em_nil;
 }
