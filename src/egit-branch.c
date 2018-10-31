@@ -9,22 +9,20 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EGIT_ASSERT_STRING(_commitish);
-
-    git_repository *repo = EGIT_EXTRACT(_repo);
     EGIT_ASSERT_STRING(_name);
 
+    git_repository *repo = EGIT_EXTRACT(_repo);
     
-    git_reference *targetRef;
+    git_reference *target_ref;
     int retval;
     {
         char *commitish = EGIT_EXTRACT_STRING(_commitish);
-        retval = git_reference_dwim(&targetRef, repo, commitish);
+        retval = git_reference_dwim(&target_ref, repo, commitish);
         free(commitish);
     }
     EGIT_CHECK_ERROR(retval);
     
-    const git_oid *oid = git_reference_target(targetRef);
-    
+    const git_oid *oid = git_reference_target(target_ref);
     git_commit *commit;
     retval = git_commit_lookup(&commit, repo, oid);
     EGIT_CHECK_ERROR(retval);
@@ -49,21 +47,20 @@ emacs_value egit_branch_create_from_annotated(
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EGIT_ASSERT_STRING(_commitish);
-
-    git_repository *repo = EGIT_EXTRACT(_repo);
     EGIT_ASSERT_STRING(_name);
 
+    git_repository *repo = EGIT_EXTRACT(_repo);
     
-    git_reference *targetRef;
+    git_reference *target_ref;
     int retval;
     {
         char *commitish = EGIT_EXTRACT_STRING(_commitish);
-        retval = git_reference_dwim(&targetRef, repo, commitish);
+        retval = git_reference_dwim(&target_ref, repo, commitish);
         free(commitish);
     }
     EGIT_CHECK_ERROR(retval);
     
-    const git_oid *oid = git_reference_target(targetRef);
+    const git_oid *oid = git_reference_target(target_ref);
     
     git_annotated_commit *commit;
     retval = git_annotated_commit_lookup(&commit, repo, oid);
@@ -86,21 +83,21 @@ EGIT_DOC(branch_lookup, "REPO NAME &optional REMOTE",
 emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _remote)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_name);
+
     git_repository *repo = EGIT_EXTRACT(_repo);
 
-    EGIT_ASSERT_STRING(_name);
-    
-    git_reference *targetRef;
+    git_reference *target_ref;
     int retval;
     {
         char *branch = EGIT_EXTRACT_STRING(_name);
         int remote = EGIT_EXTRACT_BOOLEAN(_remote);
-        retval = git_branch_lookup(&targetRef, repo, branch, remote ? GIT_BRANCH_REMOTE : GIT_BRANCH_LOCAL);
+        retval = git_branch_lookup(&target_ref, repo, branch, remote ? GIT_BRANCH_REMOTE : GIT_BRANCH_LOCAL);
         free(branch);
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, targetRef);
+    return egit_wrap(env, EGIT_REFERENCE, target_ref);
 }
 
 EGIT_DOC(branch_delete, "REF", "Delete branch at REF.");
