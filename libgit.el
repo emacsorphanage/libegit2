@@ -84,7 +84,7 @@ If that fails, then raise an error."
 ;;;###autoload
 (defun libgit-load ()
   "Load the `libegit2' dynamic module.
-If the module is not available, the offer to build it."
+If the module is not available, then offer to build it."
   (interactive)
   (cond
    ((file-exists-p libgit--module-file) (libgit--load))
