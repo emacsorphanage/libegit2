@@ -13,6 +13,7 @@ cache:
 env:
   global:
     - PATH="$HOME/bin:$PATH"
+    - MAKE="make -f .travis.mk"
     - EMAKE_SHA1=1b23379eb5a9f82d3e2d227d0f217864e40f23e0
   matrix:
     - EMACS_VERSION=25.3
@@ -25,10 +26,10 @@ matrix:
     - env: EMACS_VERSION=snapshot
 
 before_install:
-  - make emake.mk
-  - make emacs
+  - $MAKE emake.mk
+  - $MAKE emacs
 
 script:
-  - make build/libegit2.so
-  - make compile
-  - make test
+  - $MAKE build/libegit2.so
+  - $MAKE compile
+  - $MAKE test
