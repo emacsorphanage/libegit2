@@ -25,7 +25,7 @@ matrix:
     - env: EMACS_VERSION=snapshot
 
 before_install:
-  - wget "https://raw.githubusercontent.com/vermiculus/emake.el/${EMAKE_SHA1}/emake.mk"
+  - make emake.mk
   - make emacs
 
 script:

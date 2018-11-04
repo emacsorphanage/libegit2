@@ -1,7 +1,10 @@
 EMAKE_SHA1       ?= 1b23379eb5a9f82d3e2d227d0f217864e40f23e0
 PACKAGE_BASENAME := libgit
 
-include emake.mk
+emake.mk:
+	wget "https://raw.githubusercontent.com/vermiculus/emake.el/$(EMAKE_SHA1)/emake.mk"
+
+-include emake.mk
 
 libgit2:                        ## pull down libgit2
 	git submodule init
