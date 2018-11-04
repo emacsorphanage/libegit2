@@ -80,9 +80,9 @@ If you use [Borg](https://github.com/emacscollective/borg), the following `.gitm
 work.
 
 ```
-[submodule "libegit2"]
-    path = lib/libegit2
-    url = git@github.com:TheBB/libegit2.git
+[submodule "libgit"]
+    path = lib/libgit
+    url = git@github.com:magit/libegit2.git
     build-step = git submodule init
     build-step = git submodule update
     build-step = mkdir -p build
