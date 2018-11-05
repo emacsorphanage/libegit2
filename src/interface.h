@@ -5,7 +5,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-extern emacs_value em_nil, em_stringp, em_t;
+extern emacs_value em_nil, em_cons_p, em_stringp, em_t;
 
 // Git object predicates and types
 extern emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p, em_libgit_signature_p;
@@ -180,5 +180,10 @@ void em_provide(emacs_env *env, const char *feature);
  * @return True iff val is a user pointer.
  */
 bool em_user_ptrp(emacs_env *env, emacs_value val);
+
+/**
+ * Return the value of default-directory in Emacs.
+ */
+char *em_default_directory(emacs_env *env);
 
 #endif /* INTERFACE_H */

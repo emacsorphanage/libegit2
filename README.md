@@ -854,7 +854,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-repository-config`
 - :interrobang: `git-repository-config-snapshot`
 - :heavy_check_mark: `git-repository-detach-head`
-- :interrobang: `git-repository-discover`
+- :heavy_check_mark: `git-repository-discover`
 - :interrobang: `git-repository-fetchhead-foreach`
 - :x: `git-repository-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-repository-get-namespace`

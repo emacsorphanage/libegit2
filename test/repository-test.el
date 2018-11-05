@@ -246,3 +246,10 @@
       (should (not (libgit-repository-worktree-p repo))))
     (let ((repo (libgit-repository-open tgt)))
       (should (libgit-repository-worktree-p repo)))))
+
+(ert-deftest repository-discover ()
+  (with-temp-dir (a b)
+    (in-dir a
+      (init))
+    (should (path= (libgit-repository-discover a) (concat a ".git/")))
+    (should-error (libgit-repository-discover b) :type 'giterr)))
