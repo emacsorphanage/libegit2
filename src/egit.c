@@ -303,6 +303,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
+    DEFUN("libgit-signature-p", signature_p, 1, 1);
 
     // Branch
     DEFUN("libgit-branch-create", branch_create, 3, 4);
