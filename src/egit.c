@@ -388,6 +388,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-shallow-p", repository_shallow_p, 1, 1);
     DEFUN("libgit-repository-worktree-p", repository_worktree_p, 1, 1);
 
+    DEFUN("libgit-repository-discover", repository_discover, 0, 3);
+
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 

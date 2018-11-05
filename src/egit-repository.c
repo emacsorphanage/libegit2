@@ -417,3 +417,72 @@ emacs_value egit_repository_worktree_p(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     return git_repository_is_worktree(repo) ? em_t : em_nil;
 }
+
+
+// =============================================================================
+// Miscellaneous
+
+EGIT_DOC(repository_discover, "&optional PATH ACROSS-FS CEILING-DIRS",
+         "Look for a git repository in PATH and return its path.\n"
+         "If ACROSS-FS is nil, lookup will stop when a filesystem change is detected.\n"
+         "CEILING-DIRS is a list of paths where lookup will stop.");
+emacs_value egit_repository_discover(emacs_env *env, emacs_value _path, emacs_value _across_fs, emacs_value _ceiling_dirs)
+{
+    EGIT_ASSERT_STRING_OR_NIL(_path);
+
+    // Check that _ceiling_dirs is a list of strings, and get the total length
+    // of the buffer we need, including separators
+    ptrdiff_t totsize = 0, size;
+    emacs_value cell = _ceiling_dirs;
+    while (EGIT_EXTRACT_BOOLEAN(cell)) {
+        if (!em_assert(env, em_cons_p, cell)) return em_nil;
+
+        emacs_value car = em_car(env, cell);
+        EGIT_ASSERT_STRING(car);
+
+        if (totsize > 0) totsize++;          // Space for the separator
+        env->copy_string_contents(env, car, NULL, &size);
+        totsize += size - 1;                 // Ignore the terminating null character
+
+        cell = em_cdr(env, cell);
+    }
+
+    // Allocate a buffer with the right size, and copy the string contents
+    char *ceiling_dirs = (char*) malloc((totsize + 1) * sizeof(char));
+    char *next = ceiling_dirs;
+    cell = _ceiling_dirs;
+    while (EGIT_EXTRACT_BOOLEAN(cell)) {
+        if (next != ceiling_dirs)
+            *(next++) = GIT_PATH_LIST_SEPARATOR;
+        emacs_value car = em_car(env, cell);
+        env->copy_string_contents(env, car, NULL, &size);
+        env->copy_string_contents(env, car, next, &size);
+        next += size - 1;
+        cell = em_cdr(env, cell);
+    }
+    *next = '\0';
+
+    char *path;
+    if (EGIT_EXTRACT_BOOLEAN(_path)) {
+        EGIT_NORMALIZE_PATH(_path);
+        path = EGIT_EXTRACT_STRING(_path);
+    }
+    else
+        path = em_default_directory(env);
+
+    int across_fs = EGIT_EXTRACT_BOOLEAN(_across_fs);
+
+    git_buf out = {0};
+    int retval = git_repository_discover(&out, path, across_fs, ceiling_dirs);
+    free(path);
+    free(ceiling_dirs);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value ret = env->make_string(env, out.ptr, out.size);
+    EGIT_NORMALIZE_PATH(ret);
+
+    // NOTE: Renamed to git_buf_dispose in newer libgit2
+    git_buf_free(&out);
+
+    return ret;
+}

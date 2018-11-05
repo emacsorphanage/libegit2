@@ -31,4 +31,6 @@ EGIT_DEFUN(repository_empty_p, emacs_value _repo);
 EGIT_DEFUN(repository_shallow_p, emacs_value _repo);
 EGIT_DEFUN(repository_worktree_p, emacs_value _repo);
 
+EGIT_DEFUN(repository_discover, emacs_value _path, emacs_value _across_fs, emacs_value _ceiling_dirs);
+
 #endif /* EGIT_REPOSITORY_H */

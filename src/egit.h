@@ -22,7 +22,7 @@
  */
 #define EGIT_DEFUN(name, ...)                                   \
     extern const char *egit_##name##__doc;                      \
-    emacs_value egit_##name(emacs_env *env, __VA_ARGS__)        \
+    emacs_value egit_##name(emacs_env *env, __VA_ARGS__)
 
 /**
  * Assert that VAL is a string, signal an error and return otherwise.
