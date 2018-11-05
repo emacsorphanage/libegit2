@@ -293,6 +293,14 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
 
+    // Branch
+    DEFUN("libgit-branch-create", branch_create, 3, 4);
+    DEFUN("libgit-branch-create-from-annotated", branch_create_from_annotated, 3, 4);
+    DEFUN("libgit-branch-lookup", branch_lookup, 2, 3);
+    DEFUN("libgit-branch-delete", branch_delete, 1, 1);
+    DEFUN("libgit-branch-checked-out-p", branch_checked_out_p, 1, 1);
+    DEFUN("libgit-branch-head-p", branch_head_p, 1, 1);
+
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);
 
@@ -376,12 +384,4 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
-
-    // Branch
-    DEFUN("libgit-branch-create", branch_create, 3, 4);
-    DEFUN("libgit-branch-create-from-annotated", branch_create_from_annotated, 3, 4);
-    DEFUN("libgit-branch-lookup", branch_lookup, 2, 3);
-    DEFUN("libgit-branch-delete", branch_delete, 1, 1);
-    DEFUN("libgit-branch-checked-out-p", branch_checked_out_p, 1, 1);
-    DEFUN("libgit-branch-head-p", branch_head_p, 1, 1);
 }
