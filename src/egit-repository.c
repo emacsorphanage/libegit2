@@ -455,32 +455,26 @@ emacs_value egit_repository_discover(emacs_env *env, emacs_value _path, emacs_va
     // Check that _ceiling_dirs is a list of strings, and get the total length
     // of the buffer we need, including separators
     ptrdiff_t totsize = 0, size;
-    emacs_value cell = _ceiling_dirs;
-    while (EGIT_EXTRACT_BOOLEAN(cell)) {
-        if (!em_assert(env, em_cons_p, cell)) return em_nil;
-
-        emacs_value car = em_car(env, cell);
+    {
+        EGIT_DOLIST(car, _ceiling_dirs, count);
         EGIT_ASSERT_STRING(car);
-
         if (totsize > 0) totsize++;          // Space for the separator
         env->copy_string_contents(env, car, NULL, &size);
         totsize += size - 1;                 // Ignore the terminating null character
-
-        cell = em_cdr(env, cell);
+        EGIT_DOLIST_END(count);
     }
 
     // Allocate a buffer with the right size, and copy the string contents
     char *ceiling_dirs = (char*) malloc((totsize + 1) * sizeof(char));
     char *next = ceiling_dirs;
-    cell = _ceiling_dirs;
-    while (EGIT_EXTRACT_BOOLEAN(cell)) {
+    {
+        EGIT_DOLIST(car, _ceiling_dirs, copy);
         if (next != ceiling_dirs)
             *(next++) = GIT_PATH_LIST_SEPARATOR;
-        emacs_value car = em_car(env, cell);
         env->copy_string_contents(env, car, NULL, &size);
         env->copy_string_contents(env, car, next, &size);
         next += size - 1;
-        cell = em_cdr(env, cell);
+        EGIT_DOLIST_END(copy);
     }
     *next = '\0';
 

@@ -235,6 +235,29 @@
     } while (0)
 
 /**
+ * Initiate a loop over an Emacs list.
+ * If any element is not a cons cell or nil, it WILL signal an error and return nil.
+ * @param var Variable bound to each car.
+ * @param listvar List to loop over.
+ * @param name Unique name identifying the loop.
+ */
+#define EGIT_DOLIST(var, listvar, name)                             \
+    emacs_value __cell##name = (listvar);                           \
+    __loop##name:                                                   \
+    if (!EGIT_EXTRACT_BOOLEAN(__cell##name)) goto __end##name;      \
+    if (!em_assert(env, em_cons_p, __cell##name)) return em_nil;    \
+    emacs_value (var) = em_car(env, __cell##name)
+
+/**
+ * Close a loop over an Emacs lisp.
+ * @param name: Unique name identifying the loop.
+ */
+#define EGIT_DOLIST_END(name)                   \
+    __cell##name = em_cdr(env, __cell##name);   \
+    goto __loop##name;                          \
+    __end##name:
+
+/**
  * Enum used to distinguish between various types of git_??? structs.
  */
 typedef enum {
