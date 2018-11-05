@@ -13,8 +13,9 @@ function Run-Test {
     }
 }
 
+Run-Test -TestName "branch"
 Run-Test -TestName "ignore"
 Run-Test -TestName "refcount"
 Run-Test -TestName "reference"
 Run-Test -TestName "repository"
-Run-Test -TestName "branch"
+Run-Test -TestName "status"
