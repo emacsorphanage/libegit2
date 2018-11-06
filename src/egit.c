@@ -123,6 +123,12 @@ static void egit_finalize(void* _obj)
         repo = git_object_owner(obj->ptr);
         git_object_free(obj->ptr);
         break;
+    case EGIT_BLAME:
+        git_blame_free(obj->ptr);
+        break;
+    case EGIT_CONFIG:
+        git_config_free(obj->ptr);
+        break;
     case EGIT_REFERENCE:
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
@@ -130,8 +136,8 @@ static void egit_finalize(void* _obj)
     case EGIT_SIGNATURE:
         git_signature_free(obj->ptr);
         break;
-    case EGIT_BLAME:
-        git_blame_free(obj->ptr);
+    case EGIT_TRANSACTION:
+        git_transaction_free(obj->ptr);
         break;
     default: break;
     }
@@ -262,6 +268,8 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_TAG: return em_tag;
     case EGIT_OBJECT: return em_object;
     case EGIT_BLAME: return em_blame;
+    case EGIT_CONFIG: return em_config;
+    case EGIT_TRANSACTION: return em_transaction;
     default: return em_nil;
     }
 }
@@ -276,6 +284,12 @@ EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git commit.");
 static emacs_value egit_commit_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_COMMIT ? em_t : em_nil;
+}
+
+EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git config.");
+static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
 }
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
@@ -298,10 +312,16 @@ static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
 }
 
-EGIT_DOC(signature_p, "OBJ", "return non-nil if OBJ is a git signature.");
+EGIT_DOC(signature_p, "OBJ", "Return non-nil if OBJ is a git signature.");
 static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
+}
+
+EGIT_DOC(transaction_p, "OBJ", "Return non-nil if OBJ is a git transaction.");
+static emacs_value egit_transaction_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_TRANSACTION ? em_t : em_nil;
 }
 
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
@@ -319,10 +339,12 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
+    DEFUN("libgit-config-p", config_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
+    DEFUN("libgit-transaction-p", transaction_p, 1, 1);
 
     // Blame
     DEFUN("libgit-blame-file", blame_file, 2, 3);
