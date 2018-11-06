@@ -8,6 +8,7 @@ EGIT_DEFUN(repository_open, emacs_value _path);
 EGIT_DEFUN(repository_open_bare, emacs_value _path);
 
 EGIT_DEFUN(repository_commondir, emacs_value _repo);
+EGIT_DEFUN(repository_config, emacs_value _repo);
 EGIT_DEFUN(repository_get_namespace, emacs_value _repo);
 EGIT_DEFUN(repository_head, emacs_value _repo);
 EGIT_DEFUN(repository_head_for_worktree, emacs_value _repo, emacs_value _name);

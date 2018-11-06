@@ -84,6 +84,17 @@ emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
     return retval;
 }
 
+EGIT_DOC(repository_config, "REPO", "Return the git config associated with REPO.");
+emacs_value egit_repository_config(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_config *config;
+    int retval = git_repository_config(&config, repo);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_CONFIG, config);
+}
+
 EGIT_DOC(repository_get_namespace, "REPO",
          "Return the currently active namespace for REPO, or nil.");
 emacs_value egit_repository_get_namespace(emacs_env *env, emacs_value _repo)
