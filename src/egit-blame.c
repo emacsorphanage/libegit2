@@ -2,7 +2,6 @@
 
 #include "egit.h"
 #include "interface.h"
-#include "egit-repository.h"
 
 static void extract_options_flags(emacs_env *env, emacs_value eflags, uint32_t *flags)
 {

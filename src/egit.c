@@ -8,6 +8,7 @@
 #include "interface.h"
 #include "egit-blame.h"
 #include "egit-clone.h"
+#include "egit-commit.h"
 #include "egit-ignore.h"
 #include "egit-object.h"
 #include "egit-reference.h"
@@ -271,6 +272,12 @@ static emacs_value egit_blame_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_BLAME ? em_t : em_nil;
 }
 
+EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git commit.");
+static emacs_value egit_commit_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_COMMIT ? em_t : em_nil;
+}
+
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
 static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
 {
@@ -311,6 +318,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);
+    DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
@@ -332,6 +340,9 @@ void egit_init(emacs_env *env)
 
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);
+
+    // Commit
+    DEFUN("libgit-commit-lookup", commit_lookup, 2, 2);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);

@@ -15,6 +15,7 @@ function Run-Test {
 
 Run-Test -TestName "blame"
 Run-Test -TestName "branch"
+Run-Test -TestName "commit"
 Run-Test -TestName "ignore"
 Run-Test -TestName "refcount"
 Run-Test -TestName "reference"

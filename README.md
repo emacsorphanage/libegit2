@@ -271,7 +271,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :x: `git-commit-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-commit-header-field`
 - :interrobang: `git-commit-id`
-- :interrobang: `git-commit-lookup`
+- :heavy_check_mark: `git-commit-lookup`
 - :interrobang: `git-commit-lookup-prefix`
 - :interrobang: `git-commit-message`
 - :interrobang: `git-commit-message-encoding`
