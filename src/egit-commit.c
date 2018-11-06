@@ -48,6 +48,22 @@ emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
     return egit_wrap_repository(env, repo);
 }
 
+EGIT_DOC(commit_nth_gen_ancestor, "COMMIT N",
+         "Return the Nth ancestor of COMMIT, following only first parents");
+emacs_value egit_commit_nth_gen_ancestor(emacs_env *env, emacs_value _commit, emacs_value _n)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    EGIT_ASSERT_INTEGER(_n);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    intmax_t n = EGIT_EXTRACT_INTEGER(_n);
+
+    git_commit *ret;
+    int retval = git_commit_nth_gen_ancestor(&ret, commit, n);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_COMMIT, ret);
+}
+
 EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT.");
 emacs_value egit_commit_parent(emacs_env *env, emacs_value _commit, emacs_value _n)
 {
