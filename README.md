@@ -257,9 +257,9 @@ Probably none of these functions are necessary, since we can expose buffers to E
 ### commit
 
 - :interrobang: `git-commit-amend`
-- :interrobang: `git-commit-author`
+- :heavy_check_mark: `git-commit-author`
 - :interrobang: `git-commit-body`
-- :interrobang: `git-commit-committer`
+- :heavy_check_mark: `git-commit-committer`
 - :interrobang: `git-commit-create`
 - :interrobang: `git-commit-create-buffer`
 - :interrobang: `git-commit-create-from-callback`
@@ -273,7 +273,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-id`
 - :heavy_check_mark: `git-commit-lookup`
 - :interrobang: `git-commit-lookup-prefix`
-- :interrobang: `git-commit-message`
+- :heavy_check_mark: `git-commit-message`
 - :interrobang: `git-commit-message-encoding`
 - :interrobang: `git-commit-message-raw`
 - :heavy_check_mark: `git-commit-nth-gen-ancestor`
@@ -282,7 +282,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-parent-id`
 - :heavy_check_mark: `git-commit-parentcount`
 - :interrobang: `git-commit-raw-header`
-- :interrobang: `git-commit-summary`
+- :heavy_check_mark: `git-commit-summary`
 - :interrobang: `git-commit-time`
 - :interrobang: `git-commit-time-offset`
 - :interrobang: `git-commit-tree`
