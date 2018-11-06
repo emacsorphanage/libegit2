@@ -334,6 +334,12 @@ static emacs_value egit_transaction_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_TRANSACTION ? em_t : em_nil;
 }
 
+EGIT_DOC(tree_p, "OBJ", "Return non-nil if OBJ is a git tree.");
+static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_TREE ? em_t : em_nil;
+}
+
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
     em_defun(env, (ename),                                              \
              env->make_function(                                        \
@@ -355,6 +361,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
     DEFUN("libgit-transaction-p", transaction_p, 1, 1);
+    DEFUN("libgit-tree-p", tree_p, 1, 1);
 
     // Blame
     DEFUN("libgit-blame-file", blame_file, 2, 3);
