@@ -25,6 +25,13 @@
     emacs_value egit_##name(emacs_env *env, __VA_ARGS__)
 
 /**
+ * Variant of EGIT_DEFUN for zero parameters.
+ */
+#define EGIT_DEFUN_0(name)                      \
+    extern const char *egit_##name##__doc;      \
+    emacs_value egit_##name(emacs_env *env)
+
+/**
  * Assert that VAL is a string, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_STRING(val)                                         \

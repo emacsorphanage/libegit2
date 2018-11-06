@@ -14,4 +14,9 @@ EGIT_DEFUN(config_set_bool, emacs_value _config, emacs_value _name, emacs_value 
 EGIT_DEFUN(config_set_int, emacs_value _config, emacs_value _name, emacs_value _value);
 EGIT_DEFUN(config_set_string, emacs_value _config, emacs_value _name, emacs_value _value);
 
+EGIT_DEFUN_0(config_find_global);
+EGIT_DEFUN_0(config_find_programdata);
+EGIT_DEFUN_0(config_find_system);
+EGIT_DEFUN_0(config_find_xdg);
+
 #endif /* EGIT_CONFIG_H */

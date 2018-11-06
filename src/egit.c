@@ -186,6 +186,7 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
     return env->make_user_ptr(env, egit_finalize, wrapper);
 }
 
+typedef emacs_value (*func_0)(emacs_env*);
 typedef emacs_value (*func_1)(emacs_env*, emacs_value);
 typedef emacs_value (*func_2)(emacs_env*, emacs_value, emacs_value);
 typedef emacs_value (*func_3)(emacs_env*, emacs_value, emacs_value, emacs_value);
@@ -198,6 +199,13 @@ typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
+
+emacs_value egit_dispatch_0(emacs_env *env, __attribute__((unused)) ptrdiff_t nargs,
+                            __attribute__((unused)) emacs_value *args, void *data)
+{
+    func_0 func = (func_0) data;
+    return func(env);
+}
 
 emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
@@ -386,6 +394,11 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-set-bool", config_set_bool, 3, 3);
     DEFUN("libgit-config-set-int", config_set_int, 3, 3);
     DEFUN("libgit-config-set-string", config_set_string, 3, 3);
+
+    DEFUN("libgit-config-find-global", config_find_global, 0, 0);
+    DEFUN("libgit-config-find-programdata", config_find_programdata, 0, 0);
+    DEFUN("libgit-config-find-system", config_find_system, 0, 0);
+    DEFUN("libgit-config-find-xdg", config_find_xdg, 0, 0);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
