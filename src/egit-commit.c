@@ -144,3 +144,12 @@ emacs_value egit_commit_parentcount(emacs_env *env, emacs_value _commit)
     unsigned int count = git_commit_parentcount(commit);
     return env->make_integer(env, count);
 }
+
+EGIT_DOC(commit_summary, "COMMIT", "Get the summary of COMMIT (the first paragraph of the message).");
+emacs_value egit_commit_summary(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const char *summary = git_commit_summary(commit);
+    return env->make_string(env, summary, strlen(summary));
+}
