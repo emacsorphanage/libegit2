@@ -38,3 +38,32 @@ emacs_value egit_config_get_string(emacs_env *env, emacs_value _config, emacs_va
     EGIT_CHECK_ERROR(retval);
     return env->make_string(env, value, strlen(value));
 }
+
+EGIT_DOC(config_lock, "CONFIG", "Lock the highest priority backend in CONFIG.");
+emacs_value egit_config_lock(emacs_env *env, emacs_value _config)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    git_config *config = EGIT_EXTRACT(_config);
+    git_transaction *trans;
+    int retval = git_config_lock(&trans, config);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_TRANSACTION, trans);
+}
+
+
+// =============================================================================
+// Setters
+
+EGIT_DOC(config_set_string, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG to VALUE.");
+emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EGIT_ASSERT_STRING(_name);
+    EGIT_ASSERT_STRING(_value);
+    git_config *config = EGIT_EXTRACT(_config);
+    const char *name = EGIT_EXTRACT_STRING(_name);
+    const char *value = EGIT_EXTRACT_STRING(_value);
+    int retval = git_config_set_string(config, name, value);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
