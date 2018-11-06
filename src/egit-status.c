@@ -27,11 +27,8 @@ emacs_value egit_status_decode(emacs_env *env, emacs_value status)
     emacs_value statuses[16];
     int nstatuses;
 
-    /* TODO: Use EGIT_ASSERT_INT or something. */
-    flags = env->extract_integer(env, status);
-    if (env->non_local_exit_check(env)) {
-        return em_nil;
-    }
+    EGIT_ASSERT_INTEGER(status);
+    flags = EGIT_EXTRACT_INTEGER(status);
 
 #define CHECK(name, symbol)                             \
     do {                                                \
