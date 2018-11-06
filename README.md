@@ -280,7 +280,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-owner`
 - :interrobang: `git-commit-parent`
 - :interrobang: `git-commit-parent-id`
-- :interrobang: `git-commit-parentcount`
+- :heavy_check_mark: `git-commit-parentcount`
 - :interrobang: `git-commit-raw-header`
 - :interrobang: `git-commit-summary`
 - :interrobang: `git-commit-time`

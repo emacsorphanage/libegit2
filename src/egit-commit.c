@@ -47,3 +47,12 @@ emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
     git_repository *repo = git_commit_owner(commit);
     return egit_wrap_repository(env, repo);
 }
+
+EGIT_DOC(commit_parentcount, "COMMIT", "Return the number of parents of COMMIT.");
+emacs_value egit_commit_parentcount(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    unsigned int count = git_commit_parentcount(commit);
+    return env->make_integer(env, count);
+}
