@@ -346,6 +346,7 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-commit-id", commit_id, 1, 1);
     DEFUN("libgit-commit-owner", commit_owner, 1, 1);
+    DEFUN("libgit-commit-parent-id", commit_parent_id, 1, 2);
     DEFUN("libgit-commit-parentcount", commit_parentcount, 1, 1);
 
     // Ignore

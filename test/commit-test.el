@@ -22,3 +22,16 @@
            (id (libgit-reference-name-to-id repo "HEAD"))
            (commit (libgit-commit-lookup repo id)))
       (should (= 1 (libgit-commit-parentcount commit))))))
+
+(ert-deftest commit-parent-id ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (let* ((repo (libgit-repository-open path))
+           (parent-id (libgit-reference-name-to-id repo "HEAD")))
+      (commit-change "test" "more content")
+      (let* ((this-id (libgit-reference-name-to-id repo "HEAD"))
+             (commit (libgit-commit-lookup repo this-id)))
+        (should (string= parent-id (libgit-commit-parent-id commit)))
+        (should (string= parent-id (libgit-commit-parent-id commit 0)))
+        (should-error (libgit-commit-parent-id commit 1) :type 'args-out-of-range)))))

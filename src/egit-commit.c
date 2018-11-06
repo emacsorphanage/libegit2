@@ -48,6 +48,24 @@ emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
     return egit_wrap_repository(env, repo);
 }
 
+EGIT_DOC(commit_parent_id, "COMMIT &optional N", "Return the ID of the Nth parent of COMMIT.");
+emacs_value egit_commit_parent_id(emacs_env *env, emacs_value _commit, emacs_value _n)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    EGIT_ASSERT_INTEGER_OR_NIL(_n);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    intmax_t n = EGIT_EXTRACT_INTEGER_OR_DEFAULT(_n, 0);
+
+    const git_oid *oid = git_commit_parent_id(commit, n);
+    if (!oid) {
+        em_signal_args_out_of_range(env, n);
+        return em_nil;
+    }
+
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
 EGIT_DOC(commit_parentcount, "COMMIT", "Return the number of parents of COMMIT.");
 emacs_value egit_commit_parentcount(emacs_env *env, emacs_value _commit)
 {
