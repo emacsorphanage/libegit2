@@ -94,6 +94,13 @@ void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actu
 void em_signal_wrong_value(emacs_env *env, emacs_value actual);
 
 /**
+ * Signal an args-out-of-range error.
+ * @param env The active Emacs environment.
+ * @param index The erroneous index.
+ */
+void em_signal_args_out_of_range(emacs_env *env, intmax_t index);
+
+/**
  * Return a string from an emacs_value.
  * Caller is responsible for ensuring that the value is a string, and to free the returned pointer.
  * @param env The active Emacs environment.
