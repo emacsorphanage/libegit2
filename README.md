@@ -296,27 +296,27 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-config-delete-entry`
 - :interrobang: `git-config-delete-multivar`
 - :x: `git-config-entry-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-config-find-global`
-- :interrobang: `git-config-find-programdata`
-- :interrobang: `git-config-find-system`
-- :interrobang: `git-config-find-xdg`
+- :heavy_check_mark: `git-config-find-global`
+- :heavy_check_mark: `git-config-find-programdata`
+- :heavy_check_mark: `git-config-find-system`
+- :heavy_check_mark: `git-config-find-xdg`
 - :interrobang: `git-config-foreach`
 - :interrobang: `git-config-foreach-match`
 - :x: `git-config-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-config-get-bool`
+- :heavy_check_mark: `git-config-get-bool`
 - :interrobang: `git-config-get-entry`
-- :interrobang: `git-config-get-int32`
-- :interrobang: `git-config-get-int64`
+- :x: `git-config-get-int32` (don't need different integer types)
+- :heavy_check_mark: `git-config-get-int64` (as `-int`)
 - :interrobang: `git-config-get-mapped`
 - :interrobang: `git-config-get-multivar-foreach`
-- :interrobang: `git-config-get-path`
-- :interrobang: `git-config-get-string`
-- :interrobang: `git-config-get-string-buf`
+- :heavy_check_mark: `git-config-get-path`
+- :heavy_check_mark: `git-config-get-string`
+- :x: `git-config-get-string-buf` (probably fine with just `-get-string`)
 - :interrobang: `git-config-init-backend`
 - :x: `git-config-iterator-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-config-iterator-glob-new`
 - :interrobang: `git-config-iterator-new`
-- :interrobang: `git-config-lock`
+- :heavy_check_mark: `git-config-lock`
 - :interrobang: `git-config-lookup-map-value`
 - :interrobang: `git-config-multivar-iterator-new`
 - :interrobang: `git-config-new`
@@ -329,11 +329,11 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-config-parse-int32`
 - :interrobang: `git-config-parse-int64`
 - :interrobang: `git-config-parse-path`
-- :interrobang: `git-config-set-bool`
-- :interrobang: `git-config-set-int32`
-- :interrobang: `git-config-set-int64`
+- :heavy_check_mark: `git-config-set-bool`
+- :x: `git-config-set-int32` (don't need different integer types)
+- :heavy_check_mark: `git-config-set-int64` (as `-int`)
 - :interrobang: `git-config-set-multivar`
-- :interrobang: `git-config-set-string`
+- :heavy_check_mark: `git-config-set-string`
 - :interrobang: `git-config-snapshot`
 
 ### cred
