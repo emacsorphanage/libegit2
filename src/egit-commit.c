@@ -153,3 +153,24 @@ emacs_value egit_commit_summary(emacs_env *env, emacs_value _commit)
     const char *summary = git_commit_summary(commit);
     return env->make_string(env, summary, strlen(summary));
 }
+
+EGIT_DOC(commit_tree, "COMMIT", "Get the tree associated with COMMIT.");
+emacs_value egit_commit_tree(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    git_tree *tree;
+    int retval = git_commit_tree(&tree, commit);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_TREE, tree);
+}
+
+EGIT_DOC(commit_tree_id, "COMMIT", "Get the ID of the tree associated with COMMIT.");
+emacs_value egit_commit_tree_id(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const git_oid *oid = git_commit_tree_id(commit);
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
