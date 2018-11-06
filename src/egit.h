@@ -56,10 +56,10 @@
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_INTEGER(val); } while (0)
 
 /**
- * Assert that VAL is a git object, signal an error and return otherwise.
+ * Assert that VAL is a git blame, signal an error and return otherwise.
  */
-#define EGIT_ASSERT_OBJECT(val)                                         \
-    do { if (!egit_assert_object(env, (val))) return em_nil; } while (0)
+#define EGIT_ASSERT_BLAME(val)                                      \
+    do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a git commit, signal an error and return otherwise.
@@ -74,16 +74,22 @@
     do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
 
 /**
- * Assert that VAL is a git repository, signal an error and return otherwise.
+ * Assert that VAL is a git object, signal an error and return otherwise.
  */
-#define EGIT_ASSERT_REPOSITORY(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_libgit_repository_p)) return em_nil; } while (0)
+#define EGIT_ASSERT_OBJECT(val)                                         \
+    do { if (!egit_assert_object(env, (val))) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a git reference, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_REFERENCE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is a git repository, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_REPOSITORY(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_libgit_repository_p)) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a signature, signal an error and return otherwise.
@@ -98,16 +104,16 @@
     do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, em_libgit_transaction_p)) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a transaction, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_TREE(val)                                           \
+    do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
+
+/**
  * Assert that VAL is a signature or nil, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
-
-/**
- * Assert that VAL is a git blame, signal an error and return otherwise.
- */
-#define EGIT_ASSERT_BLAME(val)                                      \
-    do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
 
 /**
  * Normalize an emacs_value string path. This macro may return.
