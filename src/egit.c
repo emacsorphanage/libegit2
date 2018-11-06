@@ -19,6 +19,7 @@
 #include "egit-signature.h"
 #include "egit-status.h"
 #include "egit-transaction.h"
+#include "egit-tree.h"
 #include "egit.h"
 
 // Hash table of stored objects
@@ -505,4 +506,7 @@ void egit_init(emacs_env *env)
 
     // Transaction
     DEFUN("libgit-transaction-commit", transaction_commit, 1, 1);
+
+    // Tree
+    DEFUN("libgit-tree-id", tree_id, 1, 1);
 }
