@@ -393,6 +393,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-parent-id", commit_parent_id, 1, 2);
     DEFUN("libgit-commit-parentcount", commit_parentcount, 1, 1);
     DEFUN("libgit-commit-summary", commit_summary, 1, 1);
+    DEFUN("libgit-commit-tree", commit_tree, 1, 1);
+    DEFUN("libgit-commit-tree-id", commit_tree_id, 1, 1);
 
     // Config
     DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
