@@ -4,9 +4,7 @@
 #include "interface.h"
 #include "egit-repository.h"
 
-static void extract_options_flags(emacs_env *env,
-                                  emacs_value eflags,
-                                  uint32_t *flags)
+static void extract_options_flags(emacs_env *env, emacs_value eflags, uint32_t *flags)
 {
     *flags = 0;
     while (env->is_not_nil(env, eflags)) {
@@ -18,9 +16,7 @@ static void extract_options_flags(emacs_env *env,
     }
 }
 
-static emacs_value extract_options(emacs_env *env,
-                                   emacs_value eopts,
-                                   git_blame_options *opts)
+static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_options *opts)
 {
     emacs_value flags =
         em_cdr(env, em_assq(env, em_flags, eopts));
@@ -60,10 +56,7 @@ static emacs_value extract_options(emacs_env *env,
 
 EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
          "Return the BLAME object for the given file PATH.");
-emacs_value egit_blame_file(emacs_env *env,
-                            emacs_value _repo,
-                            emacs_value _path,
-                            emacs_value _options)
+emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path, emacs_value _options)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EGIT_ASSERT_STRING(_path);
@@ -150,9 +143,7 @@ emacs_value make_blame_hunk(emacs_env *env, const git_blame_hunk *hunk)
 
 EGIT_DOC(blame_get_hunk_byindex, "BLAME INDEX",
          "Return the HUNK alist with the given INDEX.");
-emacs_value egit_blame_get_hunk_byindex(emacs_env *env,
-                                        emacs_value _blame,
-                                        emacs_value _index)
+emacs_value egit_blame_get_hunk_byindex(emacs_env *env, emacs_value _blame, emacs_value _index)
 {
     EGIT_ASSERT_BLAME(_blame);
 
@@ -169,9 +160,7 @@ emacs_value egit_blame_get_hunk_byindex(emacs_env *env,
 
 EGIT_DOC(blame_get_hunk_byline, "BLAME LINE",
          "Return the HUNK alist for the given LINE.");
-emacs_value egit_blame_get_hunk_byline(emacs_env *env,
-                                       emacs_value _blame,
-                                       emacs_value _line)
+emacs_value egit_blame_get_hunk_byline(emacs_env *env, emacs_value _blame, emacs_value _line)
 {
     EGIT_ASSERT_BLAME(_blame);
 
@@ -188,8 +177,7 @@ emacs_value egit_blame_get_hunk_byline(emacs_env *env,
 
 EGIT_DOC(blame_get_hunk_count, "BLAME",
          "Return the number of HUNKS in the given BLAME.");
-emacs_value egit_blame_get_hunk_count(emacs_env *env,
-                                      emacs_value _blame)
+emacs_value egit_blame_get_hunk_count(emacs_env *env, emacs_value _blame)
 {
     EGIT_ASSERT_BLAME(_blame);
     git_blame *blame = EGIT_EXTRACT(_blame);
