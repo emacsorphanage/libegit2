@@ -29,6 +29,16 @@ emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
 // =============================================================================
 // Getters
 
+EGIT_DOC(commit_id, "COMMIT", "Return the ID of COMMIT.");
+emacs_value egit_commit_id(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const git_oid *oid = git_commit_id(commit);
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
 EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to.");
 emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
 {
