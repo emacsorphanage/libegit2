@@ -78,3 +78,12 @@
            (id (libgit-reference-name-to-id repo "HEAD"))
            (commit (libgit-commit-lookup repo id)))
       (should (string= "here is a message!\n" (libgit-commit-message commit))))))
+
+(ert-deftest commit-summary ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content" "here is a message!\n\nhere is some more info")
+    (let* ((repo (libgit-repository-open path))
+           (id (libgit-reference-name-to-id repo "HEAD"))
+           (commit (libgit-commit-lookup repo id)))
+      (should (string= "here is a message!" (libgit-commit-summary commit))))))

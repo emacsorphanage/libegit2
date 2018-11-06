@@ -14,5 +14,6 @@ EGIT_DEFUN(commit_owner, emacs_value _commit);
 EGIT_DEFUN(commit_parent, emacs_value _commit, emacs_value _n);
 EGIT_DEFUN(commit_parent_id, emacs_value _commit, emacs_value _n);
 EGIT_DEFUN(commit_parentcount, emacs_value _commit);
+EGIT_DEFUN(commit_summary, emacs_value _commit);
 
 #endif /* EGIT_COMMIT_H */
