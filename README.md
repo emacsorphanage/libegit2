@@ -1,7 +1,7 @@
 # libgit2 bindings for Emacs
 
-[![Build status](https://travis-ci.org/magit/libegit2.svg?branch=master "Build Status")](https://travis-ci.org/magit/libegit2)
-[![Build status](https://ci.appveyor.com/api/projects/status/jrisqkoiq07qt2in/branch/master?svg=true)](https://ci.appveyor.com/project/TheBB/libegit2/branch/master)
+[![Travis build status](https://travis-ci.org/magit/libegit2.svg?branch=master "Build Status")](https://travis-ci.org/magit/libegit2)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/jq45m47uubafv9kq/branch/master?svg=true)](https://ci.appveyor.com/project/tarsius/libegit2/branch/master)
 
 This is an *experimental* module for libgit2 bindings to Emacs, intended to boost the performance of
 [magit](https://github.com/magit/magit).
