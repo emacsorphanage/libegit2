@@ -126,3 +126,55 @@ emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_va
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
+
+
+// =============================================================================
+// Miscellaneous
+
+EGIT_DOC(config_find_global, "", "Get the path to the global config file.");
+emacs_value egit_config_find_global(emacs_env *env)
+{
+    git_buf out = {0};
+    int retval = git_config_find_global(&out);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value ret = env->make_string(env, out.ptr, out.size);
+    EGIT_NORMALIZE_PATH(ret);
+    git_buf_free(&out);
+    return ret;
+}
+
+EGIT_DOC(config_find_programdata, "", "Get the path to the config file in ProgramData.");
+emacs_value egit_config_find_programdata(emacs_env *env)
+{
+    git_buf out = {0};
+    int retval = git_config_find_programdata(&out);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value ret = env->make_string(env, out.ptr, out.size);
+    EGIT_NORMALIZE_PATH(ret);
+    git_buf_free(&out);
+    return ret;
+}
+
+EGIT_DOC(config_find_system, "", "Get the path to the system config file.");
+emacs_value egit_config_find_system(emacs_env *env)
+{
+    git_buf out = {0};
+    int retval = git_config_find_system(&out);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value ret = env->make_string(env, out.ptr, out.size);
+    EGIT_NORMALIZE_PATH(ret);
+    git_buf_free(&out);
+    return ret;
+}
+
+EGIT_DOC(config_find_xdg, "", "Get the path to the XDG config file.");
+emacs_value egit_config_find_xdg(emacs_env *env)
+{
+    git_buf out = {0};
+    int retval = git_config_find_xdg(&out);
+    EGIT_CHECK_ERROR(retval);
+    emacs_value ret = env->make_string(env, out.ptr, out.size);
+    EGIT_NORMALIZE_PATH(ret);
+    git_buf_free(&out);
+    return ret;
+}
