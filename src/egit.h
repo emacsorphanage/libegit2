@@ -55,10 +55,16 @@
     do { if (!egit_assert_object(env, (val))) return em_nil; } while (0)
 
 /**
- * Assert that VAL is a git object, signal an error and return otherwise.
+ * Assert that VAL is a git commit, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_COMMIT(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_COMMIT, em_libgit_commit_p)) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is a git config, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_CONFIG(val)                                         \
+    do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a git repository, signal an error and return otherwise.
@@ -77,6 +83,12 @@
  */
 #define EGIT_ASSERT_SIGNATURE(val)                                     \
     do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is a transaction, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_TRANSACTION(val)                                    \
+    do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, em_libgit_transaction_p)) return em_nil; } while (0)
 
 /**
  * Assert that VAL is a signature or nil, signal an error and return otherwise.
@@ -191,7 +203,9 @@ typedef enum {
     EGIT_TAG,
     EGIT_OBJECT,
     EGIT_SIGNATURE,
-    EGIT_BLAME
+    EGIT_BLAME,
+    EGIT_CONFIG,
+    EGIT_TRANSACTION
 } egit_type;
 
 /**
