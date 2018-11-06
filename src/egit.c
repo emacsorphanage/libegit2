@@ -388,6 +388,7 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-config-get-bool", config_get_bool, 2, 2);
     DEFUN("libgit-config-get-int", config_get_int, 2, 2);
+    DEFUN("libgit-config-get-path", config_get_path, 2, 2);
     DEFUN("libgit-config-get-string", config_get_string, 2, 2);
     DEFUN("libgit-config-lock", config_lock, 1, 1);
 
