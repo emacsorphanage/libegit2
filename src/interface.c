@@ -14,10 +14,10 @@
 emacs_value em_nil, em_cons_p, em_stringp, em_t, em_symbol_value;
 
 // Git object predicates
-emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p, em_libgit_signature_p,
-    em_libgit_blame_p;
-emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object, em_signature,
-    em_blame;
+emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
+    em_libgit_signature_p, em_libgit_blame_p, em_libgit_commit_p;
+emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object,
+    em_signature, em_blame;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -80,6 +80,7 @@ void em_init(emacs_env *env)
     em_libgit_reference_p = GLOBREF(INTERN("libgit-reference-p"));
     em_libgit_signature_p = GLOBREF(INTERN("libgit-signature-p"));
     em_libgit_blame_p = GLOBREF(INTERN("libgit-blame-p"));
+    em_libgit_commit_p = GLOBREF(INTERN("libgit-commit-p"));
 
     em_repository = GLOBREF(INTERN("repository"));
     em_reference = GLOBREF(INTERN("reference"));

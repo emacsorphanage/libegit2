@@ -343,6 +343,7 @@ void egit_init(emacs_env *env)
 
     // Commit
     DEFUN("libgit-commit-lookup", commit_lookup, 2, 2);
+    DEFUN("libgit-commit-owner", commit_owner, 1, 1);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);

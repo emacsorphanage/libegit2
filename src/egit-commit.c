@@ -24,3 +24,16 @@ emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
 
     return egit_wrap(env, EGIT_COMMIT, commit);
 }
+
+
+// =============================================================================
+// Getters
+
+EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to.");
+emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    git_repository *repo = git_commit_owner(commit);
+    return egit_wrap_repository(env, repo);
+}
