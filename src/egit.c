@@ -481,6 +481,8 @@ void egit_init(emacs_env *env)
 
     // Signature
     DEFUN("libgit-signature-default", signature_default, 1, 1);
+    DEFUN("libgit-signature-name", signature_name, 1, 1);
+    DEFUN("libgit-signature-email", signature_email, 1, 1);
 
     // Status
     DEFUN("libgit-status-decode", status_decode, 1, 1);
