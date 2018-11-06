@@ -5,10 +5,12 @@
 
 EGIT_DEFUN(config_snapshot, emacs_value _config);
 
+EGIT_DEFUN(config_get_bool, emacs_value _config, emacs_value _name);
 EGIT_DEFUN(config_get_int, emacs_value _config, emacs_value _name);
 EGIT_DEFUN(config_get_string, emacs_value _config, emacs_value _name);
 EGIT_DEFUN(config_lock, emacs_value _config);
 
+EGIT_DEFUN(config_set_bool, emacs_value _config, emacs_value _name, emacs_value _value);
 EGIT_DEFUN(config_set_int, emacs_value _config, emacs_value _name, emacs_value _value);
 EGIT_DEFUN(config_set_string, emacs_value _config, emacs_value _name, emacs_value _value);
 

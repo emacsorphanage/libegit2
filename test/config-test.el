@@ -14,6 +14,10 @@
   money = 1k
   hairs = 1m
   atoms = 1g
+  male = yes
+  intelligent = off
+  handsome = 1
+  rich = false
 ")
     (let* ((repo (libgit-repository-open path))
            (config (libgit-repository-config repo))
@@ -25,7 +29,11 @@
       (should (= 7 (libgit-config-get-int snap "user.age")))
       (should (= 1024 (libgit-config-get-int snap "user.money")))
       (should (= (* 1024 1024) (libgit-config-get-int snap "user.hairs")))
-      (should (= (* 1024 1024 1024) (libgit-config-get-int snap "user.atoms"))))))
+      (should (= (* 1024 1024 1024) (libgit-config-get-int snap "user.atoms")))
+      (should (libgit-config-get-bool snap "user.male"))
+      (should-not (libgit-config-get-bool snap "user.intelligent"))
+      (should (libgit-config-get-bool snap "user.handsome"))
+      (should-not (libgit-config-get-bool snap "user.rich")))))
 
 (ert-deftest config-set ()
   (with-temp-dir path
@@ -51,4 +59,12 @@
 
       (libgit-config-set-int config "user.age" 7)
       (let ((snap (libgit-config-snapshot config)))
-        (should (= 7 (libgit-config-get-int snap "user.age")))))))
+        (should (= 7 (libgit-config-get-int snap "user.age"))))
+
+      (libgit-config-set-bool config "user.male" t)
+      (let ((snap (libgit-config-snapshot config)))
+        (should (libgit-config-get-bool snap "user.male")))
+
+      (libgit-config-set-bool config "user.intelligent" nil)
+      (let ((snap (libgit-config-snapshot config)))
+        (should-not (libgit-config-get-bool snap "user.intelligent"))))))
