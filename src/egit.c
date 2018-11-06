@@ -377,6 +377,8 @@ void egit_init(emacs_env *env)
     // Config
     DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
 
+    DEFUN("libgit-config-get-string", config_get_string, 2, 2);
+
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
     DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
