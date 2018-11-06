@@ -9,6 +9,7 @@
 #include "egit-blame.h"
 #include "egit-clone.h"
 #include "egit-commit.h"
+#include "egit-config.h"
 #include "egit-ignore.h"
 #include "egit-object.h"
 #include "egit-reference.h"
@@ -286,7 +287,7 @@ static emacs_value egit_commit_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_COMMIT ? em_t : em_nil;
 }
 
-EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git config.");
+EGIT_DOC(config_p, "OBJ", "Return non-nil if OBJ is a git config.");
 static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
@@ -373,6 +374,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-parent-id", commit_parent_id, 1, 2);
     DEFUN("libgit-commit-parentcount", commit_parentcount, 1, 1);
 
+    // Config
+    DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
+
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
     DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
@@ -420,6 +424,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-open-bare", repository_open_bare, 1, 1);
 
     DEFUN("libgit-repository-commondir", repository_commondir, 1, 1);
+    DEFUN("libgit-repository-config", repository_config, 1, 1);
     DEFUN("libgit-repository-get-namespace", repository_get_namespace, 1, 1);
     DEFUN("libgit-repository-head", repository_head, 1, 1);
     DEFUN("libgit-repository-head-for-worktree", repository_head_for_worktree, 2, 2);

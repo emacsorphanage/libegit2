@@ -853,7 +853,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 - :x: `git-repository--cleanup` (in `sys`)
 - :heavy_check_mark: `git-repository-commondir`
-- :interrobang: `git-repository-config`
+- :heavy_check_mark: `git-repository-config`
 - :interrobang: `git-repository-config-snapshot`
 - :heavy_check_mark: `git-repository-detach-head`
 - :heavy_check_mark: `git-repository-discover`
