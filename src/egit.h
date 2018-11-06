@@ -37,6 +37,18 @@
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_STRING(val); } while (0)
 
 /**
+ * Assert that VAL is an integer, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_INTEGER(val)                                        \
+    do { if (!em_assert(env, em_integerp, (val))) return em_nil; } while (0)
+
+/**
+ * Assert that VAL is an integer or nil, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_INTEGER_OR_NIL(val) \
+    do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_INTEGER(val); } while (0)
+
+/**
  * Assert that VAL is a git object, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_OBJECT(val)                                         \
@@ -111,6 +123,19 @@
  * Caller is reponsible for ensuring that the emacs_value represents a string.
  */
 #define EGIT_EXTRACT_STRING(val) em_get_string(env, (val));
+
+/**
+ * Extract an integer from an emacs_value.
+ * Caller is reponsible for ensuring that the emacs_value represents an integer.
+ */
+#define EGIT_EXTRACT_INTEGER(val) env->extract_integer(env, (val))
+
+/**
+ * Extract an integer from an emacs_value with a default.
+ * Caller is reponsible for ensuring that the emacs_value represents an integer.
+ */
+#define EGIT_EXTRACT_INTEGER_OR_DEFAULT(val, default)                   \
+    (EGIT_EXTRACT_BOOLEAN(val) ? EGIT_EXTRACT_INTEGER(val) : (default))
 
 /**
  * Extract a string from an emacs_value, or NULL.
