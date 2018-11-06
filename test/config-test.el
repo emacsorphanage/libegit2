@@ -10,6 +10,10 @@
 [user]
   email = someone@somewhere.com
   name = John Doe
+  age = 7
+  money = 1k
+  hairs = 1m
+  atoms = 1g
 ")
     (let* ((repo (libgit-repository-open path))
            (config (libgit-repository-config repo))
@@ -17,7 +21,11 @@
       ;; Can't read from a live config object
       (should-error (libgit-config-get-string config "something") :type 'giterr)
       (should (string= "someone@somewhere.com" (libgit-config-get-string snap "user.email")))
-      (should (string= "John Doe" (libgit-config-get-string snap "user.name"))))))
+      (should (string= "John Doe" (libgit-config-get-string snap "user.name")))
+      (should (= 7 (libgit-config-get-int snap "user.age")))
+      (should (= 1024 (libgit-config-get-int snap "user.money")))
+      (should (= (* 1024 1024) (libgit-config-get-int snap "user.hairs")))
+      (should (= (* 1024 1024 1024) (libgit-config-get-int snap "user.atoms"))))))
 
 (ert-deftest config-set ()
   (with-temp-dir path
@@ -39,4 +47,8 @@
         (should (string= "Captain Spiff" (libgit-config-get-string snap "user.name"))))
       (libgit-transaction-commit trans)
       (let ((snap (libgit-config-snapshot config)))
-        (should (string= "Wolfgang Amadeus" (libgit-config-get-string snap "user.name")))))))
+        (should (string= "Wolfgang Amadeus" (libgit-config-get-string snap "user.name"))))
+
+      (libgit-config-set-int config "user.age" 7)
+      (let ((snap (libgit-config-snapshot config)))
+        (should (= 7 (libgit-config-get-int snap "user.age")))))))

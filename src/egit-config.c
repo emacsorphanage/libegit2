@@ -23,6 +23,22 @@ emacs_value egit_config_snapshot(emacs_env *env, emacs_value _config)
 // =============================================================================
 // Getters
 
+EGIT_DOC(config_get_int, "CONFIG NAME",
+         "Get the value of NAME in CONFIG as an integer.\n"
+         "CONFIG must be a snapshot, see `libgit-config-snapshot'.");
+emacs_value egit_config_get_int(emacs_env *env, emacs_value _config, emacs_value _name)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EGIT_ASSERT_STRING(_name);
+    git_config *config = EGIT_EXTRACT(_config);
+    char *name = EGIT_EXTRACT_STRING(_name);
+    int64_t value;
+    int retval = git_config_get_int64(&value, config, name);
+    free(name);
+    EGIT_CHECK_ERROR(retval);
+    return env->make_integer(env, value);
+}
+
 EGIT_DOC(config_get_string, "CONFIG NAME",
          "Get the value of NAME in CONFIG as a string.\n"
          "CONFIG must be a snapshot, see `libgit-config-snapshot'.");
@@ -53,6 +69,20 @@ emacs_value egit_config_lock(emacs_env *env, emacs_value _config)
 
 // =============================================================================
 // Setters
+
+EGIT_DOC(config_set_int, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG to VALUE.");
+emacs_value egit_config_set_int(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EGIT_ASSERT_STRING(_name);
+    EGIT_ASSERT_INTEGER(_value);
+    git_config *config = EGIT_EXTRACT(_config);
+    const char *name = EGIT_EXTRACT_STRING(_name);
+    int64_t value = EGIT_EXTRACT_INTEGER(_value);
+    int retval = git_config_set_int64(config, name, value);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
 
 EGIT_DOC(config_set_string, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG to VALUE.");
 emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
