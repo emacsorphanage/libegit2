@@ -310,13 +310,13 @@ void egit_init(emacs_env *env)
     // Type checkers
     DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
+    DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
 
     // Blame
-    DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-blame-file", blame_file, 2, 3);
     DEFUN("libgit-blame-get-hunk-byindex", blame_get_hunk_byindex, 2, 2);
     DEFUN("libgit-blame-get-hunk-byline", blame_get_hunk_byline, 2, 2);

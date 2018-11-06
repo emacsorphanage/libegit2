@@ -145,19 +145,21 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 54 (7.0%)
-- Should not implement: 80 (10.4%)
-- To do: 637 (82.6%)
-- Total: 771
+- Implemented: 74 (9.6%)
+- Should not implement: 82 (10.7%)
+- To do: 611 (79.7%)
+- Total: 767
 
 ### extra
 
 These are functions that do not have a `libgit2` equivalent.
 
+- :heavy_check_mark: `git-blame-p`
 - :heavy_check_mark: `git-object-p`
 - :heavy_check_mark: `git-reference-p`
 - :heavy_check_mark: `git-repository-p`
 - :heavy_check_mark: `git-typeof`
+- :heavy_check_mark: `git-signature-p`
 - :heavy_check_mark: `git-reference-direct-p`
 - :heavy_check_mark: `git-reference-symbolic-p`
 - other type-checking predicates as we add more types
