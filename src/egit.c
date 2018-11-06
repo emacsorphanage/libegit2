@@ -7,6 +7,7 @@
 
 #include "interface.h"
 #include "egit-blame.h"
+#include "egit-branch.h"
 #include "egit-clone.h"
 #include "egit-commit.h"
 #include "egit-config.h"
@@ -17,7 +18,7 @@
 #include "egit-revparse.h"
 #include "egit-signature.h"
 #include "egit-status.h"
-#include "egit-branch.h"
+#include "egit-transaction.h"
 #include "egit.h"
 
 // Hash table of stored objects
@@ -378,6 +379,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
 
     DEFUN("libgit-config-get-string", config_get_string, 2, 2);
+    DEFUN("libgit-config-lock", config_lock, 1, 1);
+
+    DEFUN("libgit-config-set-string", config_set_string, 3, 3);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
@@ -465,4 +469,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
+
+    // Transaction
+    DEFUN("libgit-transaction-commit", transaction_commit, 1, 1);
 }
