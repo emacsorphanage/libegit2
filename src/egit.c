@@ -379,8 +379,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-author", commit_author, 1, 1);
     DEFUN("libgit-commit-committer", commit_committer, 1, 1);
     DEFUN("libgit-commit-id", commit_id, 1, 1);
-    DEFUN("libgit-commit-owner", commit_owner, 1, 1);
+    DEFUN("libgit-commit-message", commit_message, 1, 1);
     DEFUN("libgit-commit-nth-gen-ancestor", commit_nth_gen_ancestor, 2, 2);
+    DEFUN("libgit-commit-owner", commit_owner, 1, 1);
     DEFUN("libgit-commit-parent", commit_parent, 1, 2);
     DEFUN("libgit-commit-parent-id", commit_parent_id, 1, 2);
     DEFUN("libgit-commit-parentcount", commit_parentcount, 1, 1);

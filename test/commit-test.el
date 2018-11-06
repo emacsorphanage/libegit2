@@ -69,3 +69,12 @@
       (should (string= "author@example.com" (libgit-signature-email author)))
       (should (string= "A U Thor" (libgit-signature-name committer)))
       (should (string= "author@example.com" (libgit-signature-email committer))))))
+
+(ert-deftest commit-message ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content" "here is a message!")
+    (let* ((repo (libgit-repository-open path))
+           (id (libgit-reference-name-to-id repo "HEAD"))
+           (commit (libgit-commit-lookup repo id)))
+      (should (string= "here is a message!\n" (libgit-commit-message commit))))))

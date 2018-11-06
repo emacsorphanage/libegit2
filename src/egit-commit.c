@@ -69,13 +69,13 @@ emacs_value egit_commit_id(emacs_env *env, emacs_value _commit)
     return env->make_string(env, oid_s, strlen(oid_s));
 }
 
-EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to.");
-emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
+EGIT_DOC(commit_message, "COMMIT", "Get the message of COMMIT.");
+emacs_value egit_commit_message(emacs_env *env, emacs_value _commit)
 {
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
-    git_repository *repo = git_commit_owner(commit);
-    return egit_wrap_repository(env, repo);
+    const char *message = git_commit_message(commit);
+    return env->make_string(env, message, strlen(message));
 }
 
 EGIT_DOC(commit_nth_gen_ancestor, "COMMIT N",
@@ -92,6 +92,15 @@ emacs_value egit_commit_nth_gen_ancestor(emacs_env *env, emacs_value _commit, em
     EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_COMMIT, ret);
+}
+
+EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to.");
+emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    git_repository *repo = git_commit_owner(commit);
+    return egit_wrap_repository(env, repo);
 }
 
 EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT.");
