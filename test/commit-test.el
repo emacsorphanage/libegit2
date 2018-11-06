@@ -34,4 +34,7 @@
              (commit (libgit-commit-lookup repo this-id)))
         (should (string= parent-id (libgit-commit-parent-id commit)))
         (should (string= parent-id (libgit-commit-parent-id commit 0)))
-        (should-error (libgit-commit-parent-id commit 1) :type 'args-out-of-range)))))
+        (should (string= parent-id (libgit-commit-id (libgit-commit-parent commit))))
+        (should (string= parent-id (libgit-commit-id (libgit-commit-parent commit 0))))
+        (should-error (libgit-commit-parent-id commit 1) :type 'args-out-of-range)
+        (should-error (libgit-commit-parent commit 1) :type 'giterr)))))
