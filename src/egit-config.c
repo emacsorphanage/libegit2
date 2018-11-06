@@ -66,14 +66,16 @@ emacs_value egit_config_get_path(emacs_env *env, emacs_value _config, emacs_valu
     EGIT_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
     char *name = EGIT_EXTRACT_STRING(_name);
-    const char *value;
-    int retval = git_config_get_path(&value, config, name);
+
+    git_buf buf = {0};
+    int retval = git_config_get_path(&buf, config, name);
     free(name);
     EGIT_CHECK_ERROR(retval);
 
     // git_config_get_path does some normalization,
     // but I trust Emacs' path normalization to be more thorough.
-    emacs_value ret = env->make_string(env, value, strlen(value));
+    emacs_value ret = env->make_string(env, buf.ptr, buf.size);
+    git_buf_free(&buf);
     EGIT_NORMALIZE_PATH(ret);
     return ret;
 }
