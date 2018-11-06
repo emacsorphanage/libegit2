@@ -55,3 +55,17 @@
           (should (string= id-1 (libgit-commit-id (libgit-commit-nth-gen-ancestor commit 2))))
           (should-error (libgit-commit-nth-gen-ancestor commit 3) :type 'giterr)
           (should-error (libgit-commit-nth-gen-ancestor commit -1) :type 'giterr))))))
+
+(ert-deftest commit-author-committer ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (let* ((repo (libgit-repository-open path))
+           (id (libgit-reference-name-to-id repo "HEAD"))
+           (commit (libgit-commit-lookup repo id))
+           (author (libgit-commit-author commit))
+           (committer (libgit-commit-committer commit)))
+      (should (string= "A U Thor" (libgit-signature-name author)))
+      (should (string= "author@example.com" (libgit-signature-email author)))
+      (should (string= "A U Thor" (libgit-signature-name committer)))
+      (should (string= "author@example.com" (libgit-signature-email committer))))))

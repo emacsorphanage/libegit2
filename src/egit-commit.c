@@ -29,6 +29,36 @@ emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
 // =============================================================================
 // Getters
 
+EGIT_DOC(commit_author, "COMMIT", "Return the author of COMMIT as a signature object.");
+emacs_value egit_commit_author(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const git_signature *sig = git_commit_author(commit);
+
+    // Copy the signature so it can live independently from the commit
+    git_signature *ret;
+    int retval = git_signature_dup(&ret, sig);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_SIGNATURE, ret);
+}
+
+EGIT_DOC(commit_committer, "COMMIT", "Return the committer of COMMIT as a signature object.");
+emacs_value egit_commit_committer(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const git_signature *sig = git_commit_committer(commit);
+
+    // Copy the signature so it can live independently from the commit
+    git_signature *ret;
+    int retval = git_signature_dup(&ret, sig);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_SIGNATURE, ret);
+}
+
 EGIT_DOC(commit_id, "COMMIT", "Return the ID of COMMIT.");
 emacs_value egit_commit_id(emacs_env *env, emacs_value _commit)
 {
