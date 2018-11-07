@@ -39,5 +39,5 @@ emacs_value egit_signature_time(emacs_env *env, emacs_value _sig)
 {
     EGIT_ASSERT_SIGNATURE(_sig);
     git_signature *sig = EGIT_EXTRACT(_sig);
-    return em_decode_time(env, sig->when.time, sig->when.offset);
+    return em_decode_time(env, sig->when.time, sig->when.offset * 60);
 }
