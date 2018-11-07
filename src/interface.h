@@ -56,6 +56,9 @@ extern emacs_value em_flags, em_min_match_characters, em_newest_commit,
 // Blame flags
 extern emacs_value em_first_parent;
 
+// Tree filemodes
+extern emacs_value em_unreadable, em_blob_executable, em_link;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
