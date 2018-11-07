@@ -426,6 +426,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-object-lookup-prefix", object_id, 2, 3);
 
     DEFUN("libgit-object-id", object_id, 1, 1);
+    DEFUN("libgit-object-owner", object_owner, 1, 1);
     DEFUN("libgit-object-short-id", object_short_id, 1, 1);
 
     // Reference

@@ -101,6 +101,15 @@ emacs_value egit_object_id(emacs_env *env, emacs_value _obj)
     return env->make_string(env, oid_s, strlen(oid_s));
 }
 
+EGIT_DOC(object_owner, "OBJECT", "Return the repository that OBJECT belongs to.");
+emacs_value egit_object_owner(emacs_env *env, emacs_value _object)
+{
+    EGIT_ASSERT_OBJECT(_object);
+    git_object *object = EGIT_EXTRACT(_object);
+    git_repository *repo = git_object_owner(object);
+    return egit_wrap_repository(env, repo);
+}
+
 EGIT_DOC(object_short_id, "OBJ", "Return the shortened ID for the given OBJ.");
 emacs_value egit_object_short_id(emacs_env *env, emacs_value _obj)
 {
