@@ -137,6 +137,12 @@ static void egit_finalize(void* _obj)
         repo = git_index_owner(obj->ptr);
         git_index_free(obj->ptr);
         break;
+    case EGIT_INDEX_ENTRY:
+        // The only git_index_entry objects we expose to Emacs are allocated by us,
+        // with data copied from libgit2 internals.
+        free((void*) ((git_index_entry*) obj->ptr)->path);
+        free(obj->ptr);
+        break;
     case EGIT_REFERENCE:
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
@@ -289,6 +295,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_CONFIG: return em_config;
     case EGIT_TRANSACTION: return em_transaction;
     case EGIT_INDEX: return em_index;
+    case EGIT_INDEX_ENTRY: return em_index_entry;
     default: return em_nil;
     }
 }
@@ -315,6 +322,12 @@ EGIT_DOC(index_p, "OBJ", "Return non-nil if OBJ is a git index.");
 static emacs_value egit_index_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_INDEX ? em_t : em_nil;
+}
+
+EGIT_DOC(index_entry_p, "OBJ", "Return non-nil if OBJ is a git index entry.");
+static emacs_value egit_index_entry_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_INDEX_ENTRY ? em_t : em_nil;
 }
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
@@ -372,6 +385,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
     DEFUN("libgit-index-p", index_p, 1, 1);
+    DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
@@ -440,6 +454,7 @@ void egit_init(emacs_env *env)
 
     // Index
     DEFUN("libgit-index-entrycount", index_entrycount, 1, 1);
+    DEFUN("libgit-index-get-byindex", index_get_byindex, 2, 2);
     DEFUN("libgit-index-owner", index_owner, 1, 1);
 
     // Object

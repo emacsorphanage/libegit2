@@ -157,6 +157,8 @@ These are functions that do not have a `libgit2` equivalent.
 - :heavy_check_mark: `git-typeof`
 - :heavy_check_mark: `git-blame-p`
 - :heavy_check_mark: `git-commit-p`
+- :heavy_check_mark: `git-index-p`
+- :heavy_check_mark: `git-index-entry-p`
 - :heavy_check_mark: `git-object-p`
 - :heavy_check_mark: `git-reference-p`
 - :heavy_check_mark: `git-repository-p`
@@ -480,7 +482,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-find`
 - :interrobang: `git-index-find-prefix`
 - :x: `git-index-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-index-get-byindex`
+- :heavy_check_mark: `git-index-get-byindex`
 - :interrobang: `git-index-get-bypath`
 - :interrobang: `git-index-has-conflicts`
 - :interrobang: `git-index-new`
