@@ -422,6 +422,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-ignore-path-ignored-p", path_ignored_p, 2, 2);
 
     // Object
+    DEFUN("libgit-object-lookup", object_id, 2, 3);
+    DEFUN("libgit-object-lookup-prefix", object_id, 2, 3);
+
     DEFUN("libgit-object-id", object_id, 1, 1);
     DEFUN("libgit-object-short-id", object_short_id, 1, 1);
 

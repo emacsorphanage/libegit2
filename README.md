@@ -568,8 +568,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :x: `git-object-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-object-id`
 - :interrobang: `git-object-lookup`
-- :interrobang: `git-object-lookup-bypath`
-- :interrobang: `git-object-lookup-prefix`
+- :heavy_check_mark: `git-object-lookup-bypath`
+- :heavy_check_mark: `git-object-lookup-prefix`
 - :interrobang: `git-object-owner`
 - :interrobang: `git-object-peel`
 - :heavy_check_mark: `git-object-short-id`
