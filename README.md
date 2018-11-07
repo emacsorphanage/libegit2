@@ -570,7 +570,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-object-lookup`
 - :heavy_check_mark: `git-object-lookup-bypath`
 - :heavy_check_mark: `git-object-lookup-prefix`
-- :interrobang: `git-object-owner`
+- :heavy_check_mark: `git-object-owner`
 - :interrobang: `git-object-peel`
 - :heavy_check_mark: `git-object-short-id`
 - :x: `git-object-string2type` (see below)
