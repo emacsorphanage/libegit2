@@ -22,6 +22,26 @@ static git_index_entry *egit_index_entry_dup(const git_index_entry *index)
 // =============================================================================
 // Getters
 
+EGIT_DOC(index_entry_stage, "ENTRY",
+         "Get the stage of ENTRY.\n"
+         "This is either nil (indicating not a conflict), or one of the symbols\n"
+         "`base', `ours', or `theirs'.");
+emacs_value egit_index_entry_stage(emacs_env *env, emacs_value _entry)
+{
+    EGIT_ASSERT_INDEX_ENTRY(_entry);
+    git_index_entry *entry = EGIT_EXTRACT(_entry);
+    int stage = git_index_entry_stage(entry);
+    switch (stage) {
+    case 0: return em_nil;
+    case 1: return em_base;
+    case 2: return em_ours;
+    case 3: return em_theirs;
+    }
+
+    // Should be unreachable
+    return em_nil;
+}
+
 EGIT_DOC(index_entrycount, "INDEX", "Get the number of entries in INDEX.");
 emacs_value egit_index_entrycount(emacs_env *env, emacs_value _index)
 {

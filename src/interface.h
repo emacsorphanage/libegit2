@@ -60,7 +60,10 @@ extern emacs_value em_first_parent;
 extern emacs_value em_unreadable, em_blob_executable, em_link;
 
 // Tree traversal
-emacs_value em_pre, em_post, em_skip;
+extern emacs_value em_pre, em_post, em_skip;
+
+// Conflict markers
+extern emacs_value em_base, em_ours, em_theirs;
 
 /**
  * Initialize the libegit2-emacs interface.

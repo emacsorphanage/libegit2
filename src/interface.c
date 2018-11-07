@@ -68,6 +68,9 @@ emacs_value em_unreadable, em_blob_executable, em_link;
 // Tree traversal
 emacs_value em_pre, em_post, em_skip;
 
+// Conflict markers
+emacs_value em_base, em_ours, em_theirs;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -195,6 +198,10 @@ void em_init(emacs_env *env)
     em_pre = GLOBREF(INTERN("pre"));
     em_post = GLOBREF(INTERN("post"));
     em_skip = GLOBREF(INTERN("skip"));
+
+    em_base = GLOBREF(INTERN("base"));
+    em_ours = GLOBREF(INTERN("ours"));
+    em_theirs = GLOBREF(INTERN("theirs"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
