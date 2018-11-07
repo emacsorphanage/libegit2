@@ -510,6 +510,11 @@ void egit_init(emacs_env *env)
     // Tree
     DEFUN("libgit-tree-lookup", tree_lookup, 2, 2);
 
+    DEFUN("libgit-tree-entry-byid", tree_entry_byid, 2, 2);
+    DEFUN("libgit-tree-entry-byindex", tree_entry_byindex, 2, 2);
+    DEFUN("libgit-tree-entry-byname", tree_entry_byname, 2, 2);
+    DEFUN("libgit-tree-entry-bypath", tree_entry_bypath, 2, 2);
+    DEFUN("libgit-tree-entrycount", tree_entrycount, 1, 1);
     DEFUN("libgit-tree-id", tree_id, 1, 1);
     DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 }

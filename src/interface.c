@@ -62,6 +62,9 @@ emacs_value em_flags, em_min_match_characters, em_newest_commit,
 // Blame flags
 emacs_value em_first_parent;
 
+// Tree filemodes
+emacs_value em_unreadable, em_blob_executable, em_link;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -176,6 +179,10 @@ void em_init(emacs_env *env)
     em_max_line = GLOBREF(INTERN("max-line"));
 
     em_first_parent = GLOBREF(INTERN("first-parent"));
+
+    em_unreadable = GLOBREF(INTERN("unreadable"));
+    em_blob_executable = GLOBREF(INTERN("blob-executable"));
+    em_link = GLOBREF(INTERN("link"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
