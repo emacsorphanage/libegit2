@@ -6,6 +6,89 @@
 
 
 // =============================================================================
+// Constructors
+
+EGIT_DOC(object_lookup, "REPO OID &optional TYPE",
+         "Look up an object in REPO by OID.\n"
+         "If TYPE is given, error if the object has the wrong type:\n"
+         "  - `blob'\n"
+         "  - `commit'\n"
+         "  - `tag'\n"
+         "  - `tree'");
+emacs_value egit_object_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid, emacs_value _type)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_oid);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid oid;
+    EGIT_EXTRACT_OID(_oid, oid);
+
+    git_otype type;
+    if (!EGIT_EXTRACT_BOOLEAN(_type))
+        type = GIT_OBJ_ANY;
+    else if (env->eq(env, _type, em_blob))
+        type = GIT_OBJ_BLOB;
+    else if (env->eq(env, _type, em_commit))
+        type = GIT_OBJ_COMMIT;
+    else if (env->eq(env, _type, em_tag))
+        type = GIT_OBJ_TAG;
+    else if (env->eq(env, _type, em_tree))
+        type = GIT_OBJ_TREE;
+    else {
+        em_signal_wrong_value(env, _type);
+        return em_nil;
+    }
+
+    git_object *object;
+    int retval = git_object_lookup(&object, repo, &oid, type);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_OBJECT, object);
+}
+
+EGIT_DOC(object_lookup_prefix, "REPO OID",
+         "Look up an object in REPO by shortened OID.\n"
+         "If TYPE is given, error if the object has the wrong type:\n"
+         "  - `blob'\n"
+         "  - `commit'\n"
+         "  - `tag'\n"
+         "  - `tree'");
+emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_value _oid, emacs_value _type)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_oid);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid oid;
+    size_t len;
+    EGIT_EXTRACT_OID_PREFIX(_oid, oid, len);
+
+    git_otype type;
+    if (!EGIT_EXTRACT_BOOLEAN(_type))
+        type = GIT_OBJ_ANY;
+    else if (env->eq(env, _type, em_blob))
+        type = GIT_OBJ_BLOB;
+    else if (env->eq(env, _type, em_commit))
+        type = GIT_OBJ_COMMIT;
+    else if (env->eq(env, _type, em_tag))
+        type = GIT_OBJ_TAG;
+    else if (env->eq(env, _type, em_tree))
+        type = GIT_OBJ_TREE;
+    else {
+        em_signal_wrong_value(env, _type);
+        return em_nil;
+    }
+
+    git_object *object;
+    int retval = git_object_lookup_prefix(&object, repo, &oid, len, type);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_OBJECT, object);
+}
+
+
+// =============================================================================
 // Getters
 
 EGIT_DOC(object_id, "OBJ", "Return the ID for the given OBJ.");
