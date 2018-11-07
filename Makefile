@@ -15,4 +15,4 @@ test: EMACS_ARGS += -L build/ -l libegit2
 test: build/libegit2.so test-ert ## run tests
 
 clean:                          ## removes build directories
-	rm -rf build/ libgit2/
+	rm -rf build/
