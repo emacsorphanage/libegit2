@@ -386,6 +386,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-lookup-prefix", commit_lookup_prefix, 2, 2);
 
     DEFUN("libgit-commit-author", commit_author, 1, 1);
+    DEFUN("libgit-commit-body", commit_body, 1, 1);
     DEFUN("libgit-commit-committer", commit_committer, 1, 1);
     DEFUN("libgit-commit-id", commit_id, 1, 1);
     DEFUN("libgit-commit-message", commit_message, 1, 1);

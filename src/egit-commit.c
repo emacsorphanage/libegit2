@@ -62,6 +62,15 @@ emacs_value egit_commit_author(emacs_env *env, emacs_value _commit)
     return egit_wrap(env, EGIT_SIGNATURE, ret);
 }
 
+EGIT_DOC(commit_body, "COMMIT", "Get the message body of COMMIT (everything but the first paragraph).");
+emacs_value egit_commit_body(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    const char *body = git_commit_body(commit);
+    return env->make_string(env, body, strlen(body));
+}
+
 EGIT_DOC(commit_committer, "COMMIT", "Return the committer of COMMIT as a signature object.");
 emacs_value egit_commit_committer(emacs_env *env, emacs_value _commit)
 {
