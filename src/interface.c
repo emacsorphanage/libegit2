@@ -72,7 +72,7 @@ emacs_value em_pre, em_post, em_skip;
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
     _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _symbol_value,
-    _default_directory, _assq, _args_out_of_range;
+    _default_directory, _assq, _args_out_of_range, _decode_time;
 
 
 void em_init(emacs_env *env)
@@ -196,6 +196,7 @@ void em_init(emacs_env *env)
     _consp = GLOBREF(INTERN("consp"));
     _car = GLOBREF(INTERN("car"));
     _cdr = GLOBREF(INTERN("cdr"));
+    _decode_time = GLOBREF(INTERN("decode-time"));
     _default_directory = GLOBREF(INTERN("default-directory"));
     _list = GLOBREF(INTERN("list"));
     _listp = GLOBREF(INTERN("listp"));
@@ -359,4 +360,11 @@ char *em_default_directory(emacs_env *env)
     emacs_value dir = em_funcall(env, _symbol_value, 1, _default_directory);
     dir = em_expand_file_name(env, dir);
     return em_get_string(env, dir);
+}
+
+emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset)
+{
+    return em_funcall(env, _decode_time, 2,
+                      env->make_integer(env, timestamp),
+                      env->make_integer(env, offset));
 }

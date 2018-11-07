@@ -224,4 +224,9 @@ bool em_user_ptrp(emacs_env *env, emacs_value val);
  */
 char *em_default_directory(emacs_env *env);
 
+/**
+ * Run (decode-time TIMESTAMP OFFSET) in Emacs.
+ */
+emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset);
+
 #endif /* INTERFACE_H */
