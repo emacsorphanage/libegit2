@@ -22,6 +22,23 @@ static git_index_entry *egit_index_entry_dup(const git_index_entry *index)
 // =============================================================================
 // Getters
 
+EGIT_DOC(index_entry_id, "ENTRY", "Get the path of the given index ENTRY.");
+emacs_value egit_index_entry_id(emacs_env *env, emacs_value _entry)
+{
+    EGIT_ASSERT_INDEX_ENTRY(_entry);
+    git_index_entry *entry = EGIT_EXTRACT(_entry);
+    const char *oid_s = git_oid_tostr_s(&entry->id);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
+EGIT_DOC(index_entry_path, "ENTRY", "Get the path of the given index ENTRY.");
+emacs_value egit_index_entry_path(emacs_env *env, emacs_value _entry)
+{
+    EGIT_ASSERT_INDEX_ENTRY(_entry);
+    git_index_entry *entry = EGIT_EXTRACT(_entry);
+    return env->make_string(env, entry->path, strlen(entry->path));
+}
+
 EGIT_DOC(index_entry_stage, "ENTRY",
          "Get the stage of ENTRY.\n"
          "This is either nil (indicating not a conflict), or one of the symbols\n"
