@@ -476,8 +476,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-conflict-iterator-new`
 - :interrobang: `git-index-conflict-next`
 - :interrobang: `git-index-conflict-remove`
-- :interrobang: `git-index-entry-is-conflict`
-- :interrobang: `git-index-entry-stage`
+- :heavy_check-mark: `git-index-entry-is-conflict` (use `git-index-entry-stage`)
+- :heavy_check-mark: `git-index-entry-stage`
 - :heavy_check_mark: `git-index-entrycount`
 - :interrobang: `git-index-find`
 - :interrobang: `git-index-find-prefix`
