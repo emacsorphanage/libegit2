@@ -476,7 +476,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-conflict-remove`
 - :interrobang: `git-index-entry-is-conflict`
 - :interrobang: `git-index-entry-stage`
-- :interrobang: `git-index-entrycount`
+- :heavy_check_mark: `git-index-entrycount`
 - :interrobang: `git-index-find`
 - :interrobang: `git-index-find-prefix`
 - :x: `git-index-free` (memory management shouldn't be exposed to Emacs)
@@ -485,7 +485,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-has-conflicts`
 - :interrobang: `git-index-new`
 - :interrobang: `git-index-open`
-- :interrobang: `git-index-owner`
+- :heavy_check_mark: `git-index-owner`
 - :interrobang: `git-index-path`
 - :interrobang: `git-index-read`
 - :interrobang: `git-index-read-tree`
@@ -871,7 +871,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-repository-head-for-worktree`
 - :heavy_check_mark: `git-repository-head-unborn`
 - :heavy_check_mark: `git-repository-ident`
-- :interrobang: `git-repository-index`
+- :heavy_check_mark: `git-repository-index`
 - :heavy_check_mark: `git-repository-init`
 - :interrobang: `git-repository-init-ext`
 - :interrobang: `git-repository-init-init-options`

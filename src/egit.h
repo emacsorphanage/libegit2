@@ -80,6 +80,12 @@
     do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a git index, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_INDEX(val)                                          \
+    do { if (!egit_assert_type(env, (val), EGIT_INDEX, em_libgit_index_p)) return em_nil; } while (0)
+
+/**
  * Assert that VAL is a git object, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_OBJECT(val)                                         \
@@ -237,7 +243,8 @@ typedef enum {
     EGIT_SIGNATURE,
     EGIT_BLAME,
     EGIT_CONFIG,
-    EGIT_TRANSACTION
+    EGIT_TRANSACTION,
+    EGIT_INDEX
 } egit_type;
 
 /**
