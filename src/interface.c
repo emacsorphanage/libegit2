@@ -11,7 +11,7 @@
 // We store some globa references to emacs objects, mostly symbols,
 // so that we don't have to waste time calling intern later on.
 
-emacs_value em_nil, em_cons_p, em_integerp, em_stringp, em_t, em_symbol_value;
+emacs_value em_nil, em_cons_p, em_integerp, em_functionp, em_stringp, em_t, em_symbol_value;
 
 // Git object predicates
 emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
@@ -65,6 +65,9 @@ emacs_value em_first_parent;
 // Tree filemodes
 emacs_value em_unreadable, em_blob_executable, em_link;
 
+// Tree traversal
+emacs_value em_pre, em_post, em_skip;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -77,6 +80,7 @@ void em_init(emacs_env *env)
     em_nil = GLOBREF(INTERN("nil"));
     em_cons_p = GLOBREF(INTERN("consp"));
     em_integerp = GLOBREF(INTERN("integerp"));
+    em_functionp = GLOBREF(INTERN("functionp"));
     em_stringp = GLOBREF(INTERN("stringp"));
     em_t = GLOBREF(INTERN("t"));
 
@@ -183,6 +187,10 @@ void em_init(emacs_env *env)
     em_unreadable = GLOBREF(INTERN("unreadable"));
     em_blob_executable = GLOBREF(INTERN("blob-executable"));
     em_link = GLOBREF(INTERN("link"));
+
+    em_pre = GLOBREF(INTERN("pre"));
+    em_post = GLOBREF(INTERN("post"));
+    em_skip = GLOBREF(INTERN("skip"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));

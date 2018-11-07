@@ -517,4 +517,6 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tree-entrycount", tree_entrycount, 1, 1);
     DEFUN("libgit-tree-id", tree_id, 1, 1);
     DEFUN("libgit-tree-owner", tree_owner, 1, 1);
+
+    DEFUN("libgit-tree-walk", tree_walk, 3, 3);
 }

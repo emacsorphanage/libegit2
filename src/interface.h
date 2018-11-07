@@ -5,7 +5,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-extern emacs_value em_nil, em_cons_p, em_integerp, em_stringp, em_t;
+extern emacs_value em_nil, em_cons_p, em_integerp, em_functionp, em_stringp, em_t;
 
 // Git object predicates and types
 extern emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
@@ -58,6 +58,9 @@ extern emacs_value em_first_parent;
 
 // Tree filemodes
 extern emacs_value em_unreadable, em_blob_executable, em_link;
+
+// Tree traversal
+emacs_value em_pre, em_post, em_skip;
 
 /**
  * Initialize the libegit2-emacs interface.
