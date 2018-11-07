@@ -4,9 +4,11 @@
     (commit-change "test" "content")
     (let* ((repo (libgit-repository-open path))
            (id (libgit-reference-name-to-id repo "HEAD"))
-           (commit (libgit-commit-lookup repo id)))
+           (commit (libgit-commit-lookup repo id))
+           (commit-short (libgit-commit-lookup-prefix repo (substring id 0 7))))
       (should (libgit-commit-p commit))
       (should (string= id (libgit-commit-id commit)))
+      (should (string= id (libgit-commit-id commit-short)))
       (should-error (libgit-commit-lookup repo "test") :type 'giterr))))
 
 (ert-deftest commit-parentcount ()

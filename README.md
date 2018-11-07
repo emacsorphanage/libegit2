@@ -272,7 +272,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-commit-header-field`
 - :heavy_check_mark: `git-commit-id`
 - :heavy_check_mark: `git-commit-lookup`
-- :interrobang: `git-commit-lookup-prefix`
+- :heavy_check_mark: `git-commit-lookup-prefix`
 - :heavy_check_mark: `git-commit-message`
 - :interrobang: `git-commit-message-encoding`
 - :interrobang: `git-commit-message-raw`
@@ -1090,7 +1090,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :x: `git-tree-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-tree-id`
 - :heavy_check_mark: `git-tree-lookup`
-- :interrobang: `git-tree-lookup-prefix`
+- :heavy_check_mark: `git-tree-lookup-prefix`
 - :heavy_check_mark: `git-tree-owner`
 - :heavy_check_mark: `git-tree-walk`
 

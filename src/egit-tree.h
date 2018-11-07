@@ -4,6 +4,7 @@
 #define EGIT_TREE_H
 
 EGIT_DEFUN(tree_lookup, emacs_value _repo, emacs_value _oid);
+EGIT_DEFUN(tree_lookup_prefix, emacs_value _repo, emacs_value _oid);
 
 EGIT_DEFUN(tree_entry_byid, emacs_value _tree, emacs_value _oid);
 EGIT_DEFUN(tree_entry_byindex, emacs_value _tree, emacs_value _index);

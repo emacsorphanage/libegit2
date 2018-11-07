@@ -383,6 +383,7 @@ void egit_init(emacs_env *env)
 
     // Commit
     DEFUN("libgit-commit-lookup", commit_lookup, 2, 2);
+    DEFUN("libgit-commit-lookup-prefix", commit_lookup_prefix, 2, 2);
 
     DEFUN("libgit-commit-author", commit_author, 1, 1);
     DEFUN("libgit-commit-committer", commit_committer, 1, 1);
@@ -509,6 +510,7 @@ void egit_init(emacs_env *env)
 
     // Tree
     DEFUN("libgit-tree-lookup", tree_lookup, 2, 2);
+    DEFUN("libgit-tree-lookup-prefix", tree_lookup_prefix, 2, 2);
 
     DEFUN("libgit-tree-entry-byid", tree_entry_byid, 2, 2);
     DEFUN("libgit-tree-entry-byindex", tree_entry_byindex, 2, 2);
