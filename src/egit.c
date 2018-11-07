@@ -508,5 +508,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-transaction-commit", transaction_commit, 1, 1);
 
     // Tree
+    DEFUN("libgit-tree-lookup", tree_lookup, 2, 2);
+
     DEFUN("libgit-tree-id", tree_id, 1, 1);
+    DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 }
