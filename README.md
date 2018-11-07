@@ -285,8 +285,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-summary`
 - :interrobang: `git-commit-time`
 - :interrobang: `git-commit-time-offset`
-- :interrobang: `git-commit-tree`
-- :interrobang: `git-commit-tree-id`
+- :heavy_check_mark: `git-commit-tree`
+- :heavy_check_mark: `git-commit-tree-id`
 
 ### config
 
@@ -1073,26 +1073,26 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 - :interrobang: `git-tree-create-updated`
 - :interrobang: `git-tree-dup`
-- :interrobang: `git-tree-entry-byid`
-- :interrobang: `git-tree-entry-byindex`
-- :interrobang: `git-tree-entry-byname`
-- :interrobang: `git-tree-entry-bypath`
-- :interrobang: `git-tree-entry-cmp`
-- :interrobang: `git-tree-entry-dup`
-- :interrobang: `git-tree-entry-filemode`
-- :interrobang: `git-tree-entry-filemode-raw`
-- :interrobang: `git-tree-entry-free`
-- :interrobang: `git-tree-entry-id`
-- :interrobang: `git-tree-entry-name`
-- :interrobang: `git-tree-entry-to-object`
-- :interrobang: `git-tree-entry-type`
-- :interrobang: `git-tree-entrycount`
+- :heavy_check_mark: `git-tree-entry-byid`
+- :heavy_check_mark: `git-tree-entry-byindex`
+- :heavy_check_mark: `git-tree-entry-byname`
+- :heavy_check_mark: `git-tree-entry-bypath`
+- :x: `git-tree-entry-cmp` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-dup` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-filemode` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-filemode-raw` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-free` (memory management shouldn't be exposed to Emacs)
+- :x: `git-tree-entry-id` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-name` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-to-object` (tree entries are exposed to emacs as lists)
+- :x: `git-tree-entry-type` (tree entries are exposed to emacs as lists)
+- :heavy_check_mark: `git-tree-entrycount`
 - :x: `git-tree-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-tree-id`
-- :interrobang: `git-tree-lookup`
+- :heavy_check_mark: `git-tree-id`
+- :heavy_check_mark: `git-tree-lookup`
 - :interrobang: `git-tree-lookup-prefix`
-- :interrobang: `git-tree-owner`
-- :interrobang: `git-tree-walk`
+- :heavy_check_mark: `git-tree-owner`
+- :heavy_check_mark: `git-tree-walk`
 
 ### treebuilder
 
