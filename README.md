@@ -485,7 +485,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-find-prefix`
 - :x: `git-index-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-index-get-byindex`
-- :interrobang: `git-index-get-bypath`
+- :heavy_check_mark: `git-index-get-bypath`
 - :interrobang: `git-index-has-conflicts`
 - :interrobang: `git-index-new`
 - :interrobang: `git-index-open`
