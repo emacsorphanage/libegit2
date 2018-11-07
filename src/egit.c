@@ -458,6 +458,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-entry-stage", index_entry_stage, 1, 1);
     DEFUN("libgit-index-entrycount", index_entrycount, 1, 1);
     DEFUN("libgit-index-get-byindex", index_get_byindex, 2, 2);
+    DEFUN("libgit-index-get-bypath", index_get_bypath, 2, 3);
     DEFUN("libgit-index-owner", index_owner, 1, 1);
 
     // Object

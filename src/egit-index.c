@@ -83,6 +83,40 @@ emacs_value egit_index_get_byindex(emacs_env *env, emacs_value _index, emacs_val
     return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry));
 }
 
+EGIT_DOC(index_get_bypath, "INDEX PATH &optional STAGE",
+         "Get an entry from INDEX by PATH.\n"
+         "STAGE may be one of the symbols `base', `ours', `theirs',\n"
+         "in which case look for an entry at the given stage.\n"
+         "If STAGE is nil, look for a conflict-less entry.");
+emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_value _path, emacs_value _stage)
+{
+    EGIT_ASSERT_INDEX(_index);
+    EGIT_ASSERT_STRING(_path);
+
+    int stage;
+    if (!EGIT_EXTRACT_BOOLEAN(_stage))
+        stage = 0;
+    else if (env->eq(env, _stage, em_base))
+        stage = 1;
+    else if (env->eq(env, _stage, em_ours))
+        stage = 2;
+    else if (env->eq(env, _stage, em_theirs))
+        stage = 3;
+    else {
+        em_signal_wrong_value(env, _stage);
+        return em_nil;
+    }
+
+    git_index *index = EGIT_EXTRACT(_index);
+    char *path = EGIT_EXTRACT_STRING(_path);
+    const git_index_entry *entry = git_index_get_bypath(index, path, stage);
+    free(path);
+
+    if (!entry)
+        return em_nil; // TODO: Better to signal an error?
+    return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry));
+}
+
 EGIT_DOC(index_owner, "INDEX", "Return the repository associated with INDEX.");
 emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
 {
