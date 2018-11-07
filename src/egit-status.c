@@ -220,7 +220,7 @@ bool convert_baseline_option(git_tree **out, emacs_env *env, emacs_value arg)
         *out = NULL;
         return true;
     }
-    if (!egit_assert_type(env, arg, EGIT_TREE, env->intern(env, "tree"))) {
+    if (!egit_assert_type(env, arg, EGIT_TREE, em_libgit_tree_p)) {
         return false;
     }
 
