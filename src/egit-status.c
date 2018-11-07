@@ -298,6 +298,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
                                 emacs_value baseline)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_FUNCTION(function);
 
     git_status_options options;
     git_status_init_options(&options, GIT_STATUS_OPTIONS_VERSION);
