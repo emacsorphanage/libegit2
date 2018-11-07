@@ -167,6 +167,8 @@ These are functions that do not have a `libgit2` equivalent.
 - :heavy_check_mark: `git-reference-symbolic-p`
 - :heavy_check_mark: `git-transaction-p`
 - :heavy_check_mark: `git-tree-p`
+- :heavy_check_mark: `git-index-entry-id`
+- :heavy_check_mark: `git-index-entry-path`
 - :heavy_check_mark: `git-signature-name`
 - :heavy_check_mark: `git-signature-email`
 - :heavy_check_mark: `git-signature-time`
