@@ -112,7 +112,7 @@
                 '("dir/f*" "dir/*z"))
                '(("dir/baz" . (wt-new)) ("dir/foo" . (wt-new)))))
 
-      (should-error (libgit-status-foreach repo nil) :type 'void-function)
+      (should-error (libgit-status-foreach repo nil) :type 'wrong-type-argument)
       (let ((i 0))
         (define-error 'foo "Foo")
         ;; Nonlocal exit test
