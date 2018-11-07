@@ -33,3 +33,11 @@ emacs_value egit_signature_email(emacs_env *env, emacs_value _sig)
     git_signature *sig = EGIT_EXTRACT(_sig);
     return env->make_string(env, sig->email, strlen(sig->email));
 }
+
+EGIT_DOC(signature_time, "SIGNATURE", "Get the time from SIGNATURE.");
+emacs_value egit_signature_time(emacs_env *env, emacs_value _sig)
+{
+    EGIT_ASSERT_SIGNATURE(_sig);
+    git_signature *sig = EGIT_EXTRACT(_sig);
+    return em_decode_time(env, sig->when.time, sig->when.offset);
+}
