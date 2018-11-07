@@ -110,8 +110,8 @@ work.
 
 ### Adding a type
 
-Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer. 
-To do this, we use a wrapper structure with a type information tag. 
+Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer.
+To do this, we use a wrapper structure with a type information tag.
 
 Usually, objects that belong to a repository need to keep the repository alive until after they are
 freed. To do this, we use a hash table with reference counting semantics for repositories to ensure
@@ -145,24 +145,29 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 74 (9.6%)
-- Should not implement: 82 (10.7%)
-- To do: 611 (79.7%)
-- Total: 767
+- Implemented: 117 (15.1%)
+- Should not implement: 96 (12.4%)
+- To do: 562 (72.5%)
+- Total: 775
 
 ### extra
 
 These are functions that do not have a `libgit2` equivalent.
 
+- :heavy_check_mark: `git-typeof`
 - :heavy_check_mark: `git-blame-p`
+- :heavy_check_mark: `git-commit-p`
 - :heavy_check_mark: `git-object-p`
 - :heavy_check_mark: `git-reference-p`
 - :heavy_check_mark: `git-repository-p`
-- :heavy_check_mark: `git-typeof`
 - :heavy_check_mark: `git-signature-p`
 - :heavy_check_mark: `git-reference-direct-p`
 - :heavy_check_mark: `git-reference-symbolic-p`
-- other type-checking predicates as we add more types
+- :heavy_check_mark: `git-transaction-p`
+- :heavy_check_mark: `git-tree-p`
+- :heavy_check_mark: `git-signature-name`
+- :heavy_check_mark: `git-signature-email`
+- :heavy_check_mark: `git-signature-time`
 
 ### annotated
 
@@ -1054,6 +1059,17 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 ### trace
 
 - :interrobang: `git-trace-set`
+
+### transaction
+
+- :heavy_check_mark: `git_transaction_commit`
+- :x: `git_transaction_free` (memory management shouldn't be exposed to Emacs)
+- :interrobang: `git_transaction_lock_ref`
+- :interrobang: `git_transaction_new`
+- :interrobang: `git_transaction_remove`
+- :interrobang: `git_transaction_set_reflog`
+- :interrobang: `git_transaction_set_symbolic_target`
+- :interrobang: `git_transaction_set_target`
 
 ### transport
 
