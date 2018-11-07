@@ -1,3 +1,5 @@
+(require 'cl-lib)
+
 (defmacro with-temp-dir (varnames &rest body)
   (declare (indent 1))
   (let* ((cwd (if (listp varnames) temporary-file-directory varnames))
@@ -43,6 +45,9 @@
   (run "git" "config" "user.name" "A U Thor")
   (run "git" "config" "user.email" "author@example.com"))
 
+(defun add (&rest args)
+  (apply 'run "git" "add" args))
+
 (defun commit (&optional msg)
   (run "git" "commit" "--allow-empty-message" "-m" (or msg "nothing")))
 
@@ -62,3 +67,6 @@
 
 (defun path= (a b)
   (string= (file-truename a) (file-truename b)))
+
+(unless (fboundp 'caddr)
+  (defun caddr (x) (car (cdr (cdr x)))))
