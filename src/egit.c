@@ -12,6 +12,7 @@
 #include "egit-commit.h"
 #include "egit-config.h"
 #include "egit-ignore.h"
+#include "egit-index.h"
 #include "egit-object.h"
 #include "egit-reference.h"
 #include "egit-repository.h"
@@ -132,6 +133,10 @@ static void egit_finalize(void* _obj)
     case EGIT_CONFIG:
         git_config_free(obj->ptr);
         break;
+    case EGIT_INDEX:
+        repo = git_index_owner(obj->ptr);
+        git_index_free(obj->ptr);
+        break;
     case EGIT_REFERENCE:
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
@@ -174,6 +179,8 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
     switch (type) {
     case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
         egit_incref_repository(git_object_owner(data)); break;
+    case EGIT_INDEX:
+        egit_incref_repository(git_index_owner(data)); break;
     case EGIT_REFERENCE:
         egit_incref_repository(git_reference_owner(data)); break;
     default: break;
@@ -281,6 +288,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_BLAME: return em_blame;
     case EGIT_CONFIG: return em_config;
     case EGIT_TRANSACTION: return em_transaction;
+    case EGIT_INDEX: return em_index;
     default: return em_nil;
     }
 }
@@ -301,6 +309,12 @@ EGIT_DOC(config_p, "OBJ", "Return non-nil if OBJ is a git config.");
 static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
+}
+
+EGIT_DOC(index_p, "OBJ", "Return non-nil if OBJ is a git index.");
+static emacs_value egit_index_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_INDEX ? em_t : em_nil;
 }
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
@@ -357,6 +371,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
+    DEFUN("libgit-index-p", index_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
@@ -423,6 +438,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
     DEFUN("libgit-ignore-path-ignored-p", path_ignored_p, 2, 2);
 
+    // Index
+    DEFUN("libgit-index-entrycount", index_entrycount, 1, 1);
+    DEFUN("libgit-index-owner", index_owner, 1, 1);
+
     // Object
     DEFUN("libgit-object-lookup", object_id, 2, 3);
     DEFUN("libgit-object-lookup-prefix", object_id, 2, 3);
@@ -474,6 +493,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-head", repository_head, 1, 1);
     DEFUN("libgit-repository-head-for-worktree", repository_head_for_worktree, 2, 2);
     DEFUN("libgit-repository-ident", repository_ident, 1, 1);
+    DEFUN("libgit-repository-index", repository_index, 1, 1);
     DEFUN("libgit-repository-message", repository_message, 1, 1);
     DEFUN("libgit-repository-path", repository_path, 1, 1);
     DEFUN("libgit-repository-state", repository_state, 1, 1);

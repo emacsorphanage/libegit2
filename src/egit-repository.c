@@ -152,6 +152,17 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     return em_cons(env, _name, _email);
 }
 
+EGIT_DOC(repository_index, "REPO", "Return the index for REPO.");
+emacs_value egit_repository_index(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_index *index;
+    int retval = git_repository_index(&index, repo);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_INDEX, index);
+}
+
 EGIT_DOC(repository_message, "REPO",
          "Return the prepared commit message for REPO, or nil.\n"
          "This is the contents of .git/MERGE_MSG.");
