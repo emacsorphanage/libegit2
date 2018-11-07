@@ -25,6 +25,24 @@ emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
     return egit_wrap(env, EGIT_COMMIT, commit);
 }
 
+EGIT_DOC(commit_lookup_prefix, "REPO OID", "Lookup a commit in REPO by shortened OID.");
+emacs_value egit_commit_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_value _oid)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_STRING(_oid);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid oid;
+    size_t len;
+    EGIT_EXTRACT_OID_PREFIX(_oid, oid, len);
+
+    git_commit *commit;
+    int retval = git_commit_lookup_prefix(&commit, repo, &oid, len);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_COMMIT, commit);
+}
+
 
 // =============================================================================
 // Getters

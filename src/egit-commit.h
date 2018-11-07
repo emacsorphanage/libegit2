@@ -4,6 +4,7 @@
 #define EGIT_COMMIT_H
 
 EGIT_DEFUN(commit_lookup, emacs_value _repo, emacs_value _oid);
+EGIT_DEFUN(commit_lookup_prefix, emacs_value _repo, emacs_value _oid);
 
 EGIT_DEFUN(commit_author, emacs_value _commit);
 EGIT_DEFUN(commit_committer, emacs_value _commit);

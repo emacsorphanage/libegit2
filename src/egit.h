@@ -193,6 +193,19 @@
     } while (0)
 
 /**
+ * Extract a partial git_oid from an emacs_value and store its length.
+ * Caller is responsible for ensuring that the emacs_value is a string.
+ */
+#define EGIT_EXTRACT_OID_PREFIX(val, tgt, tgt_len)      \
+    do {                                                \
+        char *__str = em_get_string(env, (val));        \
+        tgt_len = strlen(__str);                        \
+        int __retval = git_oid_fromstrp(&(tgt), __str); \
+        free(__str);                                    \
+        EGIT_CHECK_ERROR(__retval);                     \
+    } while (0)
+
+/**
  * If libgit2 signalled an error, pass the error on to Emacs and return.
  * @param val A libgit2 return value (negative value indicates error).
  */
