@@ -225,7 +225,7 @@ bool convert_baseline_option(git_tree **out, emacs_env *env, emacs_value arg)
     }
 
     *out = EGIT_EXTRACT(arg);
-    return false;
+    return true;
 }
 
 EGIT_DOC(status_foreach, "REPO FUNCTION &optional SHOW FLAGS PATHSPEC BASELINE",
