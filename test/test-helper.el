@@ -25,6 +25,10 @@
     (unless (= 0 (apply 'call-process (car args) nil (cons (current-buffer) t) nil (cdr args)))
       (error "failed to run '%s', output:\n%s" (mapconcat 'identity args " ") (buffer-string)))))
 
+(defun run-fail (&rest args)
+  (with-temp-buffer
+    (apply 'call-process (car args) nil (cons (current-buffer) t) nil (cdr args))))
+
 (defun write (filename content)
   (let ((dir (file-name-directory filename)))
     (when dir
