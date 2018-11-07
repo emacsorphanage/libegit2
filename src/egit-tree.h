@@ -13,4 +13,6 @@ EGIT_DEFUN(tree_entrycount, emacs_value _tree);
 EGIT_DEFUN(tree_id, emacs_value _tree);
 EGIT_DEFUN(tree_owner, emacs_value _tree);
 
+EGIT_DEFUN(tree_walk, emacs_value _tree, emacs_value order, emacs_value function);
+
 #endif /* EGIT_TREE_H */

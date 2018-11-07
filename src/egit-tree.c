@@ -179,3 +179,62 @@ emacs_value egit_tree_owner(emacs_env *env, emacs_value _tree)
     git_repository *repo = git_tree_owner(tree);
     return egit_wrap_repository(env, repo);
 }
+
+
+// =============================================================================
+// Tree walk
+
+typedef struct {
+    emacs_env *env;
+    emacs_value function;
+} walk_ctx;
+
+static int tree_walk_callback(const char *root, const git_tree_entry *entry, void *payload)
+{
+    walk_ctx *ctx = (walk_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = env->make_string(env, root, strlen(root));
+    args[1] = entry_to_emacs(env, entry);
+    emacs_value ret = env->funcall(env, ctx->function, 2, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+
+    return env->eq(env, ret, em_skip) ? 1 : 0;
+}
+
+EGIT_DOC(tree_walk, "TREE ORDER FUNCTION",
+         "Walk TREE and its subtrees and call FUNCTION for each entry.\n"
+         "ORDER may be either `pre' or `post', giving the tree travelsar order.\n\n"
+         "FUNCTION is called with two arguments: PATH and ENTRY.\n"
+         "  - PATH is the path relative to the repository root\n"
+         "  - ENTRY is a tree entry (see `libgit-tree-entry-byindex')\n\n"
+         "If FUNCTION returns the symbol `skip' (in pre-order traversal),\n"
+         "the passed entry will be skipped on the traversal.");
+emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order, emacs_value function)
+{
+    EGIT_ASSERT_TREE(_tree);
+    EGIT_ASSERT_FUNCTION(function);
+
+    git_treewalk_mode mode;
+    if (env->eq(env, order, em_pre))
+        mode = GIT_TREEWALK_PRE;
+    else if (env->eq(env, order, em_post))
+        mode = GIT_TREEWALK_POST;
+    else {
+        em_signal_wrong_value(env, order);
+        return em_nil;
+    }
+
+    git_tree *tree = EGIT_EXTRACT(_tree);
+    walk_ctx ctx = {.env = env, .function = function};
+
+    int retval = git_tree_walk(tree, mode, &tree_walk_callback, (void*)(&ctx));
+
+    if (retval != GIT_EUSER)
+        EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}

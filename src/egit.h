@@ -32,6 +32,12 @@
     emacs_value egit_##name(emacs_env *env)
 
 /**
+ * Assert that VAL is a function, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_FUNCTION(val)                                       \
+    do { if (!em_assert(env, em_functionp, (val))) return em_nil; } while (0)
+
+/**
  * Assert that VAL is a string, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_STRING(val)                                         \
