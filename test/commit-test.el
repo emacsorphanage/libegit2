@@ -88,4 +88,5 @@
     (let* ((repo (libgit-repository-open path))
            (id (libgit-reference-name-to-id repo "HEAD"))
            (commit (libgit-commit-lookup repo id)))
-      (should (string= "here is a message!" (libgit-commit-summary commit))))))
+      (should (string= "here is a message!" (libgit-commit-summary commit)))
+      (should (string= "here is some more info" (libgit-commit-body commit))))))

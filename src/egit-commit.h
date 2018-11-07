@@ -7,6 +7,7 @@ EGIT_DEFUN(commit_lookup, emacs_value _repo, emacs_value _oid);
 EGIT_DEFUN(commit_lookup_prefix, emacs_value _repo, emacs_value _oid);
 
 EGIT_DEFUN(commit_author, emacs_value _commit);
+EGIT_DEFUN(commit_body, emacs_value _body);
 EGIT_DEFUN(commit_committer, emacs_value _commit);
 EGIT_DEFUN(commit_id, emacs_value _commit);
 EGIT_DEFUN(commit_message, emacs_value _commit);

@@ -258,7 +258,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 - :interrobang: `git-commit-amend`
 - :heavy_check_mark: `git-commit-author`
-- :interrobang: `git-commit-body`
+- :heavy_check_mark: `git-commit-body`
 - :heavy_check_mark: `git-commit-committer`
 - :interrobang: `git-commit-create`
 - :interrobang: `git-commit-create-buffer`
