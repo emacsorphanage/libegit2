@@ -4,8 +4,6 @@
 #include "egit.h"
 #include "interface.h"
 
-#define FOREACH_ERROR_EXIT_CODE 491029 /* Should not collide with git error codes. */
-
 static int foreach_callback(const char *, unsigned int, void*);
 
 static bool convert_show_option(git_status_show_t *, emacs_env *, emacs_value);
@@ -325,7 +323,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
         git_status_foreach_ext(repo, &options, &foreach_callback, (void *)(&ctx));
     git_strarray_free(&options.pathspec);
 
-    if (rv != FOREACH_ERROR_EXIT_CODE) {
+    if (rv != GIT_EUSER) {
         EGIT_CHECK_ERROR(rv);
     }
 
@@ -348,7 +346,7 @@ int foreach_callback(const char *path, unsigned int flags, void *payload)
     env->funcall(env, function, 2, args);
 
     if (env->non_local_exit_check(env)) {
-        return FOREACH_ERROR_EXIT_CODE;
+        return GIT_EUSER;
     }
 
     return 0;
