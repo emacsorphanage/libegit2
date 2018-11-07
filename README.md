@@ -283,8 +283,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-parentcount`
 - :interrobang: `git-commit-raw-header`
 - :heavy_check_mark: `git-commit-summary`
-- :interrobang: `git-commit-time`
-- :interrobang: `git-commit-time-offset`
+- :heavy_check_mark: `git-commit-time`
+- :x: `git-commit-time-offset` (included in `git-commit-time`)
 - :heavy_check_mark: `git-commit-tree`
 - :heavy_check_mark: `git-commit-tree-id`
 

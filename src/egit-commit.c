@@ -172,6 +172,14 @@ emacs_value egit_commit_summary(emacs_env *env, emacs_value _commit)
     return env->make_string(env, summary, strlen(summary));
 }
 
+EGIT_DOC(commit_time, "COMMIT", "Get the time COMMIT was authored.");
+emacs_value egit_commit_time(emacs_env *env, emacs_value _commit)
+{
+    EGIT_ASSERT_COMMIT(_commit);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    return em_decode_time(env, git_commit_time(commit), git_commit_time_offset(commit) * 60);
+}
+
 EGIT_DOC(commit_tree, "COMMIT", "Get the tree associated with COMMIT.");
 emacs_value egit_commit_tree(emacs_env *env, emacs_value _commit)
 {
