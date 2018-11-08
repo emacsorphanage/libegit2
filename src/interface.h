@@ -66,6 +66,27 @@ extern emacs_value em_base, em_ours, em_theirs;
 // Index capabilities
 extern emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case;
 
+// Symbols for diff option flags
+extern emacs_value em_reverse, em_include_typechange, em_include_typechange_trees,
+    em_ignore_filemode, em_ignore_submodules, em_include_casechange, em_skip_binary_check,
+    em_enable_fast_untracked_dirs, em_force_text, em_force_binary, em_ignore_whitespace,
+    em_ignore_whitespace_change, em_ignore_whitespace_eol, em_show_untracked_content,
+    em_show_unmodified, em_patience, em_minimal, em_show_binary, em_indent_heuristic;
+
+// Other diff options
+extern emacs_value em_pathspec, em_notify, em_progress, em_context_lines, em_interhunk_lines,
+    em_id_abbrev, em_max_size, em_old_prefix, em_new_prefix;
+
+// Ignore submodules
+extern emacs_value em_none, em_untracked, em_dirty, em_all;
+
+// Diff callback symbols
+extern emacs_value em_abort;
+
+// Assert that VAL is a cons cell, signal an error and return otherwise.
+#define EM_ASSERT_CONS(val)                                             \
+    do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)
+
 // Assert that VAL is a function, signal an error and return otherwise.
 #define EM_ASSERT_FUNCTION(val)                                         \
     do { if (!em_assert(env, em_functionp, (val))) return em_nil; } while (0)
