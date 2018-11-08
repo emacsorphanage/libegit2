@@ -453,6 +453,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-ignore-path-ignored-p", path_ignored_p, 2, 2);
 
     // Index
+    DEFUN("libgit-index-caps", index_caps, 1, 1);
+    DEFUN("libgit-index-checksum", index_checksum, 1, 1);
     DEFUN("libgit-index-conflict-get", index_conflict_get, 2, 2);
     DEFUN("libgit-index-entry-id", index_entry_id, 1, 1);
     DEFUN("libgit-index-entry-path", index_entry_path, 1, 1);
@@ -461,6 +463,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-get-byindex", index_get_byindex, 2, 2);
     DEFUN("libgit-index-get-bypath", index_get_bypath, 2, 3);
     DEFUN("libgit-index-owner", index_owner, 1, 1);
+    DEFUN("libgit-index-path", index_path, 1, 1);
+    DEFUN("libgit-index-version", index_version, 1, 1);
 
     // Object
     DEFUN("libgit-object-lookup", object_id, 2, 3);

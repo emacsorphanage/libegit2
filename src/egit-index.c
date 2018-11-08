@@ -22,6 +22,39 @@ static git_index_entry *egit_index_entry_dup(const git_index_entry *index)
 // =============================================================================
 // Getters
 
+EGIT_DOC(index_caps, "INDEX",
+         "Return a list of the capabilities of INDEX.\n"
+         "This is a list of up to four symbols: `ignore-case',\n"
+         "`no-filemode', `no-symlinks' and `from-owner'.");
+emacs_value egit_index_caps(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    int caps = git_index_caps(index);
+
+    emacs_value ret = em_nil;
+    if (caps & GIT_INDEXCAP_FROM_OWNER)
+        ret = em_cons(env, em_from_owner, ret);
+    if (caps & GIT_INDEXCAP_NO_SYMLINKS)
+        ret = em_cons(env, em_no_symlinks, ret);
+    if (caps & GIT_INDEXCAP_NO_FILEMODE)
+        ret = em_cons(env, em_no_filemode, ret);
+    if (caps & GIT_INDEXCAP_IGNORE_CASE)
+        ret = em_cons(env, em_ignore_case, ret);
+
+    return ret;
+}
+
+EGIT_DOC(index_checksum, "INDEX", "Get the checksum of INDEX.");
+emacs_value egit_index_checksum(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    const git_oid *oid = git_index_checksum(index);
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
 EGIT_DOC(index_conflict_get, "INDEX PATH",
          "Get the INDEX entries associated with a conflict at PATH.\n"
          "Returns a list with three elements: the base entry, our and their side.");
@@ -145,4 +178,24 @@ emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     git_repository *repo = git_index_owner(index);
     return egit_wrap_repository(env, repo);
+}
+
+EGIT_DOC(index_path, "INDEX", "Get the path to the index file on disk.");
+emacs_value egit_index_path(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    const char *path = git_index_path(index);
+    if (!path)
+        return em_nil;
+    return env->make_string(env, path, strlen(path));
+}
+
+EGIT_DOC(index_version, "INDEX", "Return the version of INDEX.");
+emacs_value egit_index_version(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    unsigned int version = git_index_version(index);
+    return env->make_integer(env, version);
 }

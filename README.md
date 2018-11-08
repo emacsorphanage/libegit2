@@ -468,8 +468,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-add-all`
 - :interrobang: `git-index-add-bypath`
 - :interrobang: `git-index-add-frombuffer`
-- :interrobang: `git-index-caps`
-- :interrobang: `git-index-checksum`
+- :heavy_check_mark: `git-index-caps`
+- :heavy_check_mark: `git-index-checksum`
 - :interrobang: `git-index-clear`
 - :interrobang: `git-index-conflict-add`
 - :interrobang: `git-index-conflict-cleanup`
@@ -490,7 +490,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-new`
 - :interrobang: `git-index-open`
 - :heavy_check_mark: `git-index-owner`
-- :interrobang: `git-index-path`
+- :heavy_check_mark: `git-index-path`
 - :interrobang: `git-index-read`
 - :interrobang: `git-index-read-tree`
 - :interrobang: `git-index-remove`
@@ -500,7 +500,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-set-caps`
 - :interrobang: `git-index-set-version`
 - :interrobang: `git-index-update-all`
-- :interrobang: `git-index-version`
+- :heavy_check_mark: `git-index-version`
 - :interrobang: `git-index-write`
 - :interrobang: `git-index-write-tree`
 - :interrobang: `git-index-write-tree-to`

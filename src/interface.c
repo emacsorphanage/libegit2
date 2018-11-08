@@ -71,6 +71,9 @@ emacs_value em_pre, em_post, em_skip;
 // Conflict markers
 emacs_value em_base, em_ours, em_theirs;
 
+// Index capabilities
+emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -202,6 +205,11 @@ void em_init(emacs_env *env)
     em_base = GLOBREF(INTERN("base"));
     em_ours = GLOBREF(INTERN("ours"));
     em_theirs = GLOBREF(INTERN("theirs"));
+
+    em_from_owner = GLOBREF(INTERN("from-owner"));
+    em_no_symlinks = GLOBREF(INTERN("no-symlinks"));
+    em_no_filemode = GLOBREF(INTERN("no-filemode"));
+    em_ignore_case = GLOBREF(INTERN("ignore-case"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
