@@ -154,6 +154,8 @@ Estimates (updated periodically):
 
 These are functions that do not have a `libgit2` equivalent.
 
+Type checkers and predicates:
+
 - :heavy_check_mark: `git-typeof`
 - :heavy_check_mark: `git-blame-p`
 - :heavy_check_mark: `git-commit-p`
@@ -167,6 +169,10 @@ These are functions that do not have a `libgit2` equivalent.
 - :heavy_check_mark: `git-reference-symbolic-p`
 - :heavy_check_mark: `git-transaction-p`
 - :heavy_check_mark: `git-tree-p`
+
+Others:
+
+- :heavy_check_mark: `git-index-conflict-foreach`
 - :heavy_check_mark: `git-index-entry-id`
 - :heavy_check_mark: `git-index-entry-path`
 - :heavy_check_mark: `git-signature-name`
@@ -474,9 +480,9 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-conflict-add`
 - :interrobang: `git-index-conflict-cleanup`
 - :heavy_check_mark: `git-index-conflict-get`
-- :interrobang: `git-index-conflict-iterator-free`
-- :interrobang: `git-index-conflict-iterator-new`
-- :interrobang: `git-index-conflict-next`
+- :heavy_check_mark: `git-index-conflict-iterator-free` (use `git-index-conflict-foreach`)
+- :heavy_check_mark: `git-index-conflict-iterator-new` (use `git-index-conflict-foreach`)
+- :heavy_check_mark: `git-index-conflict-next` (use `git-index-conflict-foreach`)
 - :interrobang: `git-index-conflict-remove`
 - :heavy_check-mark: `git-index-entry-is-conflict` (use `git-index-entry-stage`)
 - :heavy_check-mark: `git-index-entry-stage`

@@ -55,6 +55,45 @@ emacs_value egit_index_checksum(emacs_env *env, emacs_value _index)
     return env->make_string(env, oid_s, strlen(oid_s));
 }
 
+EGIT_DOC(index_conflict_foreach, "INDEX FUNCTION",
+         "Call FUNCTION for each conflict in INDEX.\n"
+         "FUNCTION is called with four arguments: the path to the\n"
+         "file under conflict, and the three index entries associated\n"
+         "with the base version, our version and their version.\n\n"
+         "The return value of FUNCTION is ignored. INDEX must not\n"
+         "be modified as a side-effect.");
+emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emacs_value function)
+{
+    EGIT_ASSERT_INDEX(_index);
+    EGIT_ASSERT_FUNCTION(function);
+    git_index *index = EGIT_EXTRACT(_index);
+    git_index_conflict_iterator *iter;
+    int retval = git_index_conflict_iterator_new(&iter, index);
+    EGIT_CHECK_ERROR(retval);
+
+    const git_index_entry *base, *ours, *theirs;
+    while (true) {
+        int retval = git_index_conflict_next(&base, &ours, &theirs, iter);
+        if (retval != 0) {
+            git_index_conflict_iterator_free(iter);
+            if (retval == GIT_ITEROVER)
+                return em_nil;
+            EGIT_CHECK_ERROR(retval);
+            return em_nil;  // Should be unreachable
+        }
+
+        emacs_value args[4];
+        args[0] = env->make_string(env, base->path, strlen(base->path));
+        args[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base));
+        args[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours));
+        args[3] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs));
+        env->funcall(env, function, 4, args);
+
+        if (env->non_local_exit_check(env))
+            return em_nil;
+    }
+}
+
 EGIT_DOC(index_conflict_get, "INDEX PATH",
          "Get the INDEX entries associated with a conflict at PATH.\n"
          "Returns a list with three elements: the base entry, our and their side.");
