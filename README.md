@@ -394,8 +394,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-diff-init-options`
 - :interrobang: `git-diff-is-sorted-icase`
 - :interrobang: `git-diff-merge`
-- :interrobang: `git-diff-num-deltas`
-- :interrobang: `git-diff-num-deltas-of-type`
+- :heavy_check_mark: `git-diff-num-deltas`
+- :heavy_check_mark: `git-diff-num-deltas-of-type` (use `git-diff-num-deltas`)
 - :interrobang: `git-diff-patchid`
 - :interrobang: `git-diff-patchid-init-options`
 - :interrobang: `git-diff-print`

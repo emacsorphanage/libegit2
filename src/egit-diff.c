@@ -552,7 +552,190 @@ emacs_value egit_diff_foreach(
 
 
 // =============================================================================
-// Getters
+// Getters - delta
+
+EGIT_DOC(diff_delta_file_id, "DELTA SIDE",
+         "Get the file ID of a side in DELTA.\n"
+         "SIDE must be either `old' or `new'.");
+emacs_value egit_diff_delta_file_id(emacs_env *env, emacs_value _delta, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+    const git_oid *oid = env->eq(env, side, em_old) ? &delta->old_file.id : &delta->new_file.id;
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
+EGIT_DOC(diff_delta_file_path, "DELTA SIDE",
+         "Get the file path of a side in DELTA.\n"
+         "SIDE must be either `old' or `new'.");
+emacs_value egit_diff_delta_file_path(emacs_env *env, emacs_value _delta, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+    const char *path = env->eq(env, side, em_old) ? delta->old_file.path : delta->new_file.path;
+    return env->make_string(env, path, strlen(path));
+}
+
+EGIT_DOC(diff_delta_nfiles, "DELTA", "Get the number of files in DELTA.");
+emacs_value egit_diff_delta_nfiles(emacs_env *env, emacs_value _delta)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+    return env->make_integer(env, delta->nfiles);
+}
+
+EGIT_DOC(diff_delta_similarity, "DELTA",
+         "Get similarity score of DELTA.\n"
+         "This only makes sense for status `renamed' and `copied', and will\n"
+         "be unavailable unless a similarity check has been run on the diff.");
+emacs_value egit_diff_delta_similarity(emacs_env *env, emacs_value _delta)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+    return env->make_integer(env, delta->similarity);
+}
+
+EGIT_DOC(diff_delta_status, "DELTA",
+         "Get the status of DELTA.\n"
+         "The available statuses are `unmodified', `added', `deleted', `modified',\n"
+         "`renamed', `copied', `ignored', `untracked', `typechange', `unreadable',\n"
+         "and `conflicted'.");
+emacs_value egit_diff_delta_status(emacs_env *env, emacs_value _delta)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+
+    switch (delta->status) {
+    case GIT_DELTA_UNMODIFIED: return em_unmodified;
+    case GIT_DELTA_ADDED: return em_added;
+    case GIT_DELTA_DELETED: return em_deleted;
+    case GIT_DELTA_MODIFIED: return em_modified;
+    case GIT_DELTA_RENAMED: return em_renamed;
+    case GIT_DELTA_COPIED: return em_copied;
+    case GIT_DELTA_IGNORED: return em_ignored;
+    case GIT_DELTA_UNTRACKED: return em_untracked;
+    case GIT_DELTA_TYPECHANGE: return em_typechange;
+    case GIT_DELTA_UNREADABLE: return em_unreadable;
+    case GIT_DELTA_CONFLICTED: return em_conflicted;
+    }
+
+    return em_nil;  // Should be unreachable
+}
+
+
+// =============================================================================
+// Predicates - delta
+
+EGIT_DOC(diff_delta_file_exists_p, "DELTA SIDE",
+         "Non-nil if the file exists on this side of DELTA.\n"
+         "SIDE must be either `old' or `new'.");
+emacs_value egit_diff_delta_file_exists_p(emacs_env *env, emacs_value _delta, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_DELTA(_delta);
+    git_diff_delta *delta = EGIT_EXTRACT(_delta);
+    int flags = env->eq(env, side, em_old) ? delta->old_file.flags : delta->new_file.flags;
+    return (flags & GIT_DIFF_FLAG_EXISTS) ? em_t : em_nil;
+}
+
+
+// =============================================================================
+// Getters - hunk
+
+EGIT_DOC(diff_hunk_header, "HUNK", "Return the header of HUNK.");
+emacs_value egit_diff_hunk_header(emacs_env *env, emacs_value _hunk)
+{
+    EGIT_ASSERT_DIFF_HUNK(_hunk);
+    git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
+    return env->make_string(env, &hunk->header[0], hunk->header_len);
+}
+
+EGIT_DOC(diff_hunk_lines, "HUNK SIDE",
+         "Return the number of lines of HUNK.\n"
+         "SIDE must be either `old' or `new'.");
+emacs_value egit_diff_hunk_lines(emacs_env *env, emacs_value _hunk, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_HUNK(_hunk);
+    git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
+    int num = env->eq(env, side, em_old) ? hunk->old_lines : hunk->new_lines;
+    return env->make_integer(env, num);
+}
+
+EGIT_DOC(diff_hunk_start, "HUNK SIDE",
+         "Return starting line number of HUNK.\n"
+         "SIDE must be either `old' or `new'.");
+emacs_value egit_diff_hunk_start(emacs_env *env, emacs_value _hunk, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_HUNK(_hunk);
+    git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
+    int num = env->eq(env, side, em_old) ? hunk->old_start : hunk->new_start;
+    return env->make_integer(env, num);
+}
+
+
+// =============================================================================
+// Getters - line
+
+EGIT_DOC(diff_line_origin, "LINE",
+         "Get the origin of LINE.\n"
+         "This is a single character (an integer) among the following:\n"
+         "- ' ' for context lines\n"
+         "- '+' for added lines\n"
+         "- '-' for removed lines\n"
+         "- '=' (context) both files have no LF at end\n"
+         "- '>' old file has no LF at end\n"
+         "- '<' new file has no LF at end\n"
+         "- 'F' file header\n"
+         "- 'H' hunk header\n"
+         "- 'B' binary files differ\n\n"
+         "The last three values are only sent to line callbacks when the content\n"
+         "of a diff is being filtered through `libgit-diff-print'.");
+emacs_value egit_diff_line_origin(emacs_env *env, emacs_value _line)
+{
+    EGIT_ASSERT_DIFF_LINE(_line);
+    git_diff_line *line = EGIT_EXTRACT(_line);
+    return env->make_integer(env, line->origin);
+}
+
+EGIT_DOC(diff_line_lineno, "LINE SIDE",
+         "Line number of LINE on one side of the diff.\n"
+         "SIDE must be either `old' or `new'.\n"
+         "If LINE was added or removed, the return value is nil\n"
+         "if SIDE is `old' or `new', respectively.");
+emacs_value egit_diff_line_lineno(emacs_env *env, emacs_value _line, emacs_value side)
+{
+    EGIT_ASSERT_DIFF_LINE(_line);
+    git_diff_line *line = EGIT_EXTRACT(_line);
+    int lineno = env->eq(env, side, em_old) ? line->old_lineno : line->new_lineno;
+    return env->make_integer(env, lineno);
+}
+
+EGIT_DOC(diff_line_content, "LINE", "Get the content of LINE as a string.");
+emacs_value egit_diff_line_content(emacs_env *env, emacs_value _line)
+{
+    EGIT_ASSERT_DIFF_LINE(_line);
+    git_diff_line *line = EGIT_EXTRACT(_line);
+    return env->make_string(env, line->content, line->content_len);
+}
+
+
+// =============================================================================
+// Other getters
+
+EGIT_DOC(diff_get_delta, "DIFF N", "Get the Nth delta from DIFF.");
+emacs_value egit_diff_get_delta(emacs_env *env, emacs_value _diff, emacs_value _index)
+{
+    EGIT_ASSERT_DIFF(_diff);
+    EM_ASSERT_INTEGER(_index);
+    git_diff *diff = EGIT_EXTRACT(_diff);
+    intmax_t index = EM_EXTRACT_INTEGER(_index);
+    const git_diff_delta *delta = git_diff_get_delta(diff, index);
+    if (!delta) {
+        em_signal_args_out_of_range(env, index);
+        return em_nil;
+    }
+    return egit_wrap(env, EGIT_DIFF_DELTA, delta, EM_EXTRACT_USER_PTR(_diff));
+}
 
 EGIT_DOC(diff_num_deltas, "DIFF &optional TYPE",
          "Get the number of deltas in DIFF.\n"
@@ -566,7 +749,7 @@ emacs_value egit_diff_num_deltas(emacs_env *env, emacs_value _diff, emacs_value 
     git_diff *diff = EGIT_EXTRACT(_diff);
 
     size_t num;
-    if (!EGIT_EXTRACT_BOOLEAN(_type))
+    if (!EM_EXTRACT_BOOLEAN(_type))
         num = git_diff_num_deltas(diff);
     else if (env->eq(env, _type, em_unmodified))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNMODIFIED);

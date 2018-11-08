@@ -83,6 +83,13 @@ extern emacs_value em_none, em_untracked, em_dirty, em_all;
 // Diff callback symbols
 extern emacs_value em_abort;
 
+// Diff delta types
+extern emacs_value em_unmodified, em_added, em_deleted, em_modified, em_renamed, em_copied,
+    em_typechange, em_unreadable, em_conflicted;
+
+// Diff sides
+extern emacs_value em_old, em_new;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)
