@@ -72,6 +72,23 @@ emacs_value em_base, em_ours, em_theirs;
 // Index capabilities
 emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case;
 
+// Symbols for diff option flags
+emacs_value em_reverse, em_include_typechange, em_include_typechange_trees,
+    em_ignore_filemode, em_ignore_submodules, em_include_casechange, em_skip_binary_check,
+    em_enable_fast_untracked_dirs, em_force_text, em_force_binary, em_ignore_whitespace,
+    em_ignore_whitespace_change, em_ignore_whitespace_eol, em_show_untracked_content,
+    em_show_unmodified, em_patience, em_minimal, em_show_binary, em_indent_heuristic;
+
+// Other diff options
+emacs_value em_pathspec, em_notify, em_progress, em_context_lines, em_interhunk_lines,
+    em_id_abbrev, em_max_size, em_old_prefix, em_new_prefix;
+
+// Ignore submodules
+emacs_value em_none, em_untracked, em_dirty, em_all;
+
+// Diff callback symbols
+emacs_value em_abort;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -209,6 +226,43 @@ void em_init(emacs_env *env)
     em_no_symlinks = GLOBREF(INTERN("no-symlinks"));
     em_no_filemode = GLOBREF(INTERN("no-filemode"));
     em_ignore_case = GLOBREF(INTERN("ignore-case"));
+
+    em_reverse = GLOBREF(INTERN("reverse"));
+    em_include_typechange = GLOBREF(INTERN("include-typechange"));
+    em_include_typechange_trees = GLOBREF(INTERN("include-typechange-trees"));
+    em_ignore_filemode = GLOBREF(INTERN("ignore-filemode"));
+    em_ignore_submodules = GLOBREF(INTERN("ignore-submodules"));
+    em_include_casechange = GLOBREF(INTERN("include-casechange"));
+    em_skip_binary_check = GLOBREF(INTERN("skip-binary-check"));
+    em_enable_fast_untracked_dirs = GLOBREF(INTERN("enable-fast-untracked-dirs"));
+    em_force_text = GLOBREF(INTERN("force-text"));
+    em_force_binary = GLOBREF(INTERN("force-binary"));
+    em_ignore_whitespace = GLOBREF(INTERN("ignore-whitespace"));
+    em_ignore_whitespace_change = GLOBREF(INTERN("ignore-whitespace-change"));
+    em_ignore_whitespace_eol = GLOBREF(INTERN("ignore-whitespace-eol"));
+    em_show_untracked_content = GLOBREF(INTERN("show-untracked-content"));
+    em_show_unmodified = GLOBREF(INTERN("show-unmodified"));
+    em_patience = GLOBREF(INTERN("patience"));
+    em_minimal = GLOBREF(INTERN("minimal"));
+    em_show_binary = GLOBREF(INTERN("show-binary"));
+    em_indent_heuristic = GLOBREF(INTERN("indent-heuristic"));
+
+    em_pathspec = GLOBREF(INTERN("pathspec"));
+    em_notify = GLOBREF(INTERN("notify"));
+    em_progress = GLOBREF(INTERN("progress"));
+    em_context_lines = GLOBREF(INTERN("context-lines"));
+    em_interhunk_lines = GLOBREF(INTERN("interhunk-lines"));
+    em_id_abbrev = GLOBREF(INTERN("id-abbrev"));
+    em_max_size = GLOBREF(INTERN("max-size"));
+    em_old_prefix = GLOBREF(INTERN("old-prefix"));
+    em_new_prefix = GLOBREF(INTERN("new-prefix"));
+
+    em_none = GLOBREF(INTERN("none"));
+    em_untracked = GLOBREF(INTERN("untracked"));
+    em_dirty = GLOBREF(INTERN("dirty"));
+    em_all = GLOBREF(INTERN("all"));
+
+    em_abort = GLOBREF(INTERN("abort"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
