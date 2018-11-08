@@ -332,26 +332,6 @@ emacs_value egit_wrap_repository(emacs_env *env, git_repository* ptr);
 emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr);
 
 /**
- * Unwrap an argument list and dispatch to a function with one argument.
- * This function is suitable to use as a callback for functions visible to Emacs.
- * @param env The active Emacs environment.
- * @param nargs Number of arguments (may be zero or one).
- * @param args Arguments passed.
- * @param data Function pointer to dispatch to.
- */
-emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data);
-
-/**
- * Unwrap an argument list and dispatch to a function with two arguments.
- * This function is suitable to use as a callback for functions visible to Emacs.
- * @param env The active Emacs environment.
- * @param nargs Number of arguments (may be less than two).
- * @param args Arguments passed.
- * @param data Function pointer to dispatch to.
- */
-emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data);
-
-/**
  * If libgit2 signaled an error, dispatch that error to Emacs.
  * @param env The active Emacs environment.
  * @param retval A libgit2 return value.

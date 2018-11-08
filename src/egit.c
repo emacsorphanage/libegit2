@@ -214,46 +214,46 @@ typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
 
-emacs_value egit_dispatch_0(emacs_env *env, __attribute__((unused)) ptrdiff_t nargs,
+static emacs_value egit_dispatch_0(emacs_env *env, __attribute__((unused)) ptrdiff_t nargs,
                             __attribute__((unused)) emacs_value *args, void *data)
 {
     func_0 func = (func_0) data;
     return func(env);
 }
 
-emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_1(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_1 func = (func_1) data;
     return func(env, GET_SAFE(args, nargs, 0));
 }
 
-emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_2(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_2 func = (func_2) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1));
 }
 
-emacs_value egit_dispatch_3(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_3(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_3 func = (func_3) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2));
 }
 
-emacs_value egit_dispatch_4(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_4(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_4 func = (func_4) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
                 GET_SAFE(args, nargs, 3));
 }
 
-emacs_value egit_dispatch_5(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_5(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_5 func = (func_5) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
                 GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4));
 }
 
-emacs_value egit_dispatch_6(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+static emacs_value egit_dispatch_6(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
 {
     func_6 func = (func_6) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
