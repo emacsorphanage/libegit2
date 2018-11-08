@@ -238,3 +238,15 @@ emacs_value egit_index_version(emacs_env *env, emacs_value _index)
     unsigned int version = git_index_version(index);
     return env->make_integer(env, version);
 }
+
+
+// =============================================================================
+// Predicates
+
+EGIT_DOC(index_conflicts_p, "INDEX", "Return non-nil if INDEX has conflicts.");
+emacs_value egit_index_conflicts_p(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    return git_index_has_conflicts(index) ? em_t : em_nil;
+}

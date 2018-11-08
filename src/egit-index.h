@@ -15,4 +15,6 @@ EGIT_DEFUN(index_owner, emacs_value _index);
 EGIT_DEFUN(index_path, emacs_value _index);
 EGIT_DEFUN(index_version, emacs_value _index);
 
+EGIT_DEFUN(index_conflicts_p, emacs_value _index);
+
 #endif /* EGIT_INDEX_H */

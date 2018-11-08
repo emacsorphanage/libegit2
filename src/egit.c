@@ -467,6 +467,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-path", index_path, 1, 1);
     DEFUN("libgit-index-version", index_version, 1, 1);
 
+    DEFUN("libgit-index-conflicts-p", index_conflicts_p, 1, 1);
+
     // Object
     DEFUN("libgit-object-lookup", object_id, 2, 3);
     DEFUN("libgit-object-lookup-prefix", object_id, 2, 3);
