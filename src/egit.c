@@ -455,6 +455,7 @@ void egit_init(emacs_env *env)
     // Index
     DEFUN("libgit-index-caps", index_caps, 1, 1);
     DEFUN("libgit-index-checksum", index_checksum, 1, 1);
+    DEFUN("libgit-index-conflict-foreach", index_conflict_foreach, 2, 2);
     DEFUN("libgit-index-conflict-get", index_conflict_get, 2, 2);
     DEFUN("libgit-index-entry-id", index_entry_id, 1, 1);
     DEFUN("libgit-index-entry-path", index_entry_path, 1, 1);
