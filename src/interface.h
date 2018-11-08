@@ -65,6 +65,9 @@ extern emacs_value em_pre, em_post, em_skip;
 // Conflict markers
 extern emacs_value em_base, em_ours, em_theirs;
 
+// Index capabilities
+extern emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case;
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
