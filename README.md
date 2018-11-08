@@ -473,7 +473,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-index-clear`
 - :interrobang: `git-index-conflict-add`
 - :interrobang: `git-index-conflict-cleanup`
-- :interrobang: `git-index-conflict-get`
+- :heavy_check_mark: `git-index-conflict-get`
 - :interrobang: `git-index-conflict-iterator-free`
 - :interrobang: `git-index-conflict-iterator-new`
 - :interrobang: `git-index-conflict-next`

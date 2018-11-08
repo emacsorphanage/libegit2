@@ -453,6 +453,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-ignore-path-ignored-p", path_ignored_p, 2, 2);
 
     // Index
+    DEFUN("libgit-index-conflict-get", index_conflict_get, 2, 2);
     DEFUN("libgit-index-entry-id", index_entry_id, 1, 1);
     DEFUN("libgit-index-entry-path", index_entry_path, 1, 1);
     DEFUN("libgit-index-entry-stage", index_entry_stage, 1, 1);

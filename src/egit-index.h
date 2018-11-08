@@ -1,6 +1,7 @@
 #ifndef EGIT_INDEX_H
 #define EGIT_INDEX_H
 
+EGIT_DEFUN(index_conflict_get, emacs_value _index, emacs_value _path);
 EGIT_DEFUN(index_entry_id, emacs_value _entry);
 EGIT_DEFUN(index_entry_path, emacs_value _entry);
 EGIT_DEFUN(index_entry_stage, emacs_value _entry);

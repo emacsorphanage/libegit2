@@ -22,6 +22,27 @@ static git_index_entry *egit_index_entry_dup(const git_index_entry *index)
 // =============================================================================
 // Getters
 
+EGIT_DOC(index_conflict_get, "INDEX PATH",
+         "Get the INDEX entries associated with a conflict at PATH.\n"
+         "Returns a list with three elements: the base entry, our and their side.");
+emacs_value egit_index_conflict_get(emacs_env *env, emacs_value _index, emacs_value _path)
+{
+    EGIT_ASSERT_INDEX(_index);
+    EGIT_ASSERT_STRING(_path);
+    git_index *index = EGIT_EXTRACT(_index);
+    char *path = EGIT_EXTRACT_STRING(_path);
+    const git_index_entry *base, *ours, *theirs;
+    int retval = git_index_conflict_get(&base, &ours, &theirs, index, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value ret[3];
+    ret[0] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base));
+    ret[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours));
+    ret[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs));
+    return em_list(env, ret, 3);
+}
+
 EGIT_DOC(index_entry_id, "ENTRY", "Get the path of the given index ENTRY.");
 emacs_value egit_index_entry_id(emacs_env *env, emacs_value _entry)
 {
