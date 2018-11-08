@@ -12,7 +12,8 @@ extern emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_referen
     em_libgit_signature_p, em_libgit_blame_p, em_libgit_commit_p, em_libgit_config_p,
     em_libgit_transaction_p, em_libgit_tree_p, em_libgit_index_p, em_libgit_index_entry_p, em_libgit_branch_iter_p;
 extern emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object,
-    em_signature, em_blame, em_transaction, em_config, em_index, em_index_entry, em_branch_iter;
+    em_signature, em_blame, em_transaction, em_config, em_index, em_index_entry, em_branch_iter,
+    em_branch_local, em_branch_remote, em_branch_all;
 
 // Repository states
 extern emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
