@@ -154,3 +154,27 @@ emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
 
     return retval ? em_t : em_nil;
 }
+
+EGIT_DOC(branch_iterator_new, "REPO LIST-FLAGS", "Get a branch iterator for REPO using LIST-FLAGS.");
+emacs_value egit_branch_iterator_new(emacs_env *env, emacs_value _repo, emacs_value _list_flags)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_branch_t list_flags;
+    if (!EGIT_EXTRACT_BOOLEAN(_list_flags))
+        list_flags = GIT_BRANCH_LOCAL;
+    else if (env->eq(env, _list_flags, em_branch_all))
+        list_flags = GIT_BRANCH_ALL;
+    else if (env->eq(env, _list_flags, em_branch_remote))
+        list_flags = GIT_BRANCH_REMOTE;
+    else
+        list_flags = GIT_BRANCH_LOCAL;
+
+    git_branch_iterator *iter;
+    int retval = git_branch_iterator_new(&iter, repo, list_flags);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_BRANCH_ITER, iter);
+}
+

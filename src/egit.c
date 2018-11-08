@@ -417,6 +417,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-delete", branch_delete, 1, 1);
     DEFUN("libgit-branch-checked-out-p", branch_checked_out_p, 1, 1);
     DEFUN("libgit-branch-head-p", branch_head_p, 1, 1);
+    DEFUN("libgit-branch-iterator-new", branch_iterator_new, 1, 2);
 
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);

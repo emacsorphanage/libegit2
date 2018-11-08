@@ -76,3 +76,14 @@
            (secondref (libgit-branch-lookup repo "second")))
       (should (libgit-branch-head-p masterref))
       (should-not (libgit-branch-head-p secondref)))))
+
+(ert-deftest branch-iterator-new ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (run "git" "branch" "second")
+    (let ((repo (libgit-repository-open path)))
+      (should (libgit-branch-iterator-new repo))
+      (should (libgit-branch-iterator-new repo 'local))
+      (should (libgit-branch-iterator-new repo 'remote))
+      (should (libgit-branch-iterator-new repo 'all)))))
