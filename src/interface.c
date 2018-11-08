@@ -89,6 +89,13 @@ emacs_value em_none, em_untracked, em_dirty, em_all;
 // Diff callback symbols
 emacs_value em_abort;
 
+// Diff delta types
+emacs_value em_unmodified, em_added, em_deleted, em_modified, em_renamed, em_copied,
+    em_typechange, em_unreadable, em_conflicted;
+
+// Diff sides
+emacs_value em_old, em_new;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -263,6 +270,19 @@ void em_init(emacs_env *env)
     em_all = GLOBREF(INTERN("all"));
 
     em_abort = GLOBREF(INTERN("abort"));
+
+    em_unmodified = GLOBREF(INTERN("unmodified"));
+    em_added = GLOBREF(INTERN("added"));
+    em_deleted = GLOBREF(INTERN("deleted"));
+    em_modified = GLOBREF(INTERN("modified"));
+    em_renamed = GLOBREF(INTERN("renamed"));
+    em_copied = GLOBREF(INTERN("copied"));
+    em_typechange = GLOBREF(INTERN("typechange"));
+    em_unreadable = GLOBREF(INTERN("unreadable"));
+    em_conflicted = GLOBREF(INTERN("conflicted"));
+
+    em_old = GLOBREF(INTERN("old"));
+    em_new = GLOBREF(INTERN("new"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));

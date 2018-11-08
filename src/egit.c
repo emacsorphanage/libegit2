@@ -512,6 +512,24 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-diff-foreach", diff_foreach, 2, 5);
 
+    DEFUN("libgit-diff-delta-file-id", diff_delta_file_id, 2, 2);
+    DEFUN("libgit-diff-delta-file-path", diff_delta_file_path, 2, 2);
+    DEFUN("libgit-diff-delta-nfiles", diff_delta_nfiles, 1, 1);
+    DEFUN("libgit-diff-delta-similarity", diff_delta_similarity, 1, 1);
+    DEFUN("libgit-diff-delta-status", diff_delta_status, 1, 1);
+    DEFUN("libgit-diff-delta-file-exists-p", diff_delta_file_exists_p, 2, 2);
+
+    DEFUN("libgit-diff-hunk-header", diff_hunk_header, 1, 1);
+    DEFUN("libgit-diff-hunk-lines", diff_hunk_lines, 2, 2);
+    DEFUN("libgit-diff-hunk-start", diff_hunk_start, 2, 2);
+
+    DEFUN("libgit-diff-line-origin", diff_line_origin, 1, 1);
+    DEFUN("libgit-diff-line-lineno", diff_line_lineno, 2, 2);
+    DEFUN("libgit-diff-line-content", diff_line_content, 1, 1);
+
+    DEFUN("libgit-diff-get-delta", diff_get_delta, 2, 2);
+    DEFUN("libgit-diff-num-deltas", diff_num_deltas, 1, 2);
+
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
     DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
