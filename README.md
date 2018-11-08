@@ -389,8 +389,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-diff-get-delta`
 - :interrobang: `git-diff-get-perfdata`
 - :interrobang: `git-diff-get-stats`
-- :interrobang: `git-diff-index-to-index`
-- :interrobang: `git-diff-index-to-workdir`
+- :heavy_check_mark: `git-diff-index-to-index`
+- :heavy_check_mark: `git-diff-index-to-workdir`
 - :interrobang: `git-diff-init-options`
 - :interrobang: `git-diff-is-sorted-icase`
 - :interrobang: `git-diff-merge`
@@ -408,10 +408,10 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-diff-stats-to-buf`
 - :interrobang: `git-diff-status-char`
 - :interrobang: `git-diff-to-buf`
-- :interrobang: `git-diff-tree-to-index`
-- :interrobang: `git-diff-tree-to-tree`
-- :interrobang: `git-diff-tree-to-workdir`
-- :interrobang: `git-diff-tree-to-workdir-with-index`
+- :heavy_check_mark: `git-diff-tree-to-index`
+- :heavy_check_mark: `git-diff-tree-to-tree`
+- :heavy_check_mark: `git-diff-tree-to-workdir`
+- :heavy_check_mark: `git-diff-tree-to-workdir-with-index`
 
 ### fetch
 
@@ -485,8 +485,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :heavy_check_mark: `git-index-conflict-iterator-new` (use `git-index-conflict-foreach`)
 - :heavy_check_mark: `git-index-conflict-next` (use `git-index-conflict-foreach`)
 - :interrobang: `git-index-conflict-remove`
-- :heavy_check-mark: `git-index-entry-is-conflict` (use `git-index-entry-stage`)
-- :heavy_check-mark: `git-index-entry-stage`
+- :heavy_check_mark: `git-index-entry-is-conflict` (use `git-index-entry-stage`)
+- :heavy_check_mark: `git-index-entry-stage`
 - :heavy_check_mark: `git-index-entrycount`
 - :interrobang: `git-index-find`
 - :interrobang: `git-index-find-prefix`
