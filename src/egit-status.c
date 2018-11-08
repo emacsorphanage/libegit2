@@ -31,7 +31,7 @@ emacs_value egit_status_decode(emacs_env *env, emacs_value status)
 #define CHECK(name, symbol)                             \
     do {                                                \
         if (flags & GIT_STATUS_##name) {                \
-            statuses[nstatuses++] = em_fs_##symbol;     \
+            statuses[nstatuses++] = em_##symbol;        \
         }                                               \
     } while (false)
 
@@ -112,13 +112,13 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
 bool convert_show_option(git_status_show_t *out, emacs_env *env,
                          emacs_value arg)
 {
-    if (env->eq(env, arg, em_status_show_index_only)) {
+    if (env->eq(env, arg, em_index_only)) {
         *out = GIT_STATUS_SHOW_INDEX_ONLY;
         return true;
-    } else if (env->eq(env, arg, em_status_show_workdir_only)) {
+    } else if (env->eq(env, arg, em_workdir_only)) {
         *out = GIT_STATUS_SHOW_WORKDIR_ONLY;
         return true;
-    } else if (env->eq(env, arg, em_status_show_index_and_workdir)) {
+    } else if (env->eq(env, arg, em_index_and_workdir)) {
         *out = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
         return true;
     } else if (env->is_not_nil(env, arg)) {
@@ -149,7 +149,7 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
         arg = em_cdr(env, arg);
 
 #define CHECK(symbol, enum)                                     \
-        if (env->eq(env, flag, em_status_opt_##symbol)) {       \
+        if (env->eq(env, flag, em_##symbol)) {                  \
             *out |= GIT_STATUS_OPT_##enum;                      \
             continue;                                           \
         }

@@ -29,25 +29,20 @@ emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
 emacs_value em_direct, em_symbolic;
 
 // File statuses
-emacs_value em_fs_index_new, em_fs_index_modified, em_fs_index_deleted,
-    em_fs_index_renamed, em_fs_index_typechange, em_fs_wt_new,
-    em_fs_wt_modified, em_fs_wt_deleted, em_fs_wt_typechange, em_fs_wt_renamed,
-    em_fs_wt_unreadable, em_fs_ignored, em_fs_conflicted;
+emacs_value em_index_new, em_index_modified, em_index_deleted,
+    em_index_renamed, em_index_typechange, em_wt_new,
+    em_wt_modified, em_wt_deleted, em_wt_typechange, em_wt_renamed,
+    em_wt_unreadable, em_ignored, em_conflicted;
 
 // Symbols for enum git_status_show_t
-emacs_value em_status_show_index_only, em_status_show_workdir_only,
-    em_status_show_index_and_workdir;
+emacs_value em_index_only, em_workdir_only, em_index_and_workdir;
 
 // Symbols for enum git_status_opt_t
-emacs_value em_status_opt_include_untracked, em_status_opt_include_ignored,
-    em_status_opt_include_unmodified, em_status_opt_exclude_submodules,
-    em_status_opt_recurse_untracked_dirs, em_status_opt_disable_pathspec_match,
-    em_status_opt_recurse_ignored_dirs, em_status_opt_renames_head_to_index,
-    em_status_opt_renames_index_to_workdir, em_status_opt_sort_case_sensitively,
-    em_status_opt_sort_case_insensitively, em_status_opt_renames_from_rewrites,
-    em_status_opt_no_refresh, em_status_opt_update_index,
-    em_status_opt_include_unreadable,
-    em_status_opt_include_unreadable_as_untracked;
+emacs_value em_include_untracked, em_include_ignored, em_include_unmodified, em_exclude_submodules,
+    em_recurse_untracked_dirs, em_disable_pathspec_match, em_recurse_ignored_dirs,
+    em_renames_head_to_index, em_renames_index_to_workdir, em_sort_case_sensitively,
+    em_sort_case_insensitively, em_renames_from_rewrites, em_no_refresh, em_update_index,
+    em_include_unreadable, em_include_unreadable_as_untracked;
 
 // Blame hunk properties
 emacs_value em_lines_in_hunk,
@@ -131,49 +126,40 @@ void em_init(emacs_env *env)
     em_direct = GLOBREF(INTERN("direct"));
     em_symbolic = GLOBREF(INTERN("symbolic"));
 
-    em_fs_index_new = GLOBREF(INTERN("index-new"));
-    em_fs_index_modified = GLOBREF(INTERN("index-modified"));
-    em_fs_index_deleted = GLOBREF(INTERN("index-deleted"));
-    em_fs_index_renamed = GLOBREF(INTERN("index-renamed"));
-    em_fs_index_typechange = GLOBREF(INTERN("index-typechange"));
-    em_fs_wt_new = GLOBREF(INTERN("wt-new"));
-    em_fs_wt_modified = GLOBREF(INTERN("wt-modified"));
-    em_fs_wt_deleted = GLOBREF(INTERN("wt-deleted"));
-    em_fs_wt_typechange = GLOBREF(INTERN("wt-typechange"));
-    em_fs_wt_renamed = GLOBREF(INTERN("wt-renamed"));
-    em_fs_wt_unreadable = GLOBREF(INTERN("wt-unreadable"));
-    em_fs_ignored = GLOBREF(INTERN("ignored"));
-    em_fs_conflicted = GLOBREF(INTERN("conflicted"));
+    em_index_new = GLOBREF(INTERN("index-new"));
+    em_index_modified = GLOBREF(INTERN("index-modified"));
+    em_index_deleted = GLOBREF(INTERN("index-deleted"));
+    em_index_renamed = GLOBREF(INTERN("index-renamed"));
+    em_index_typechange = GLOBREF(INTERN("index-typechange"));
+    em_wt_new = GLOBREF(INTERN("wt-new"));
+    em_wt_modified = GLOBREF(INTERN("wt-modified"));
+    em_wt_deleted = GLOBREF(INTERN("wt-deleted"));
+    em_wt_typechange = GLOBREF(INTERN("wt-typechange"));
+    em_wt_renamed = GLOBREF(INTERN("wt-renamed"));
+    em_wt_unreadable = GLOBREF(INTERN("wt-unreadable"));
+    em_ignored = GLOBREF(INTERN("ignored"));
+    em_conflicted = GLOBREF(INTERN("conflicted"));
 
-    em_status_show_index_only = GLOBREF(INTERN("index-only"));
-    em_status_show_workdir_only = GLOBREF(INTERN("workdir-only"));
-    em_status_show_index_and_workdir = GLOBREF(INTERN("index-and-workdir"));
+    em_index_only = GLOBREF(INTERN("index-only"));
+    em_workdir_only = GLOBREF(INTERN("workdir-only"));
+    em_index_and_workdir = GLOBREF(INTERN("index-and-workdir"));
 
-    em_status_opt_include_untracked = GLOBREF(INTERN("include-untracked"));
-    em_status_opt_include_ignored = GLOBREF(INTERN("include-ignored"));
-    em_status_opt_include_unmodified = GLOBREF(INTERN("include-unmodified"));
-    em_status_opt_exclude_submodules = GLOBREF(INTERN("exclude-submodules"));
-    em_status_opt_recurse_untracked_dirs =
-        GLOBREF(INTERN("recurse-untracked-dirs"));
-    em_status_opt_disable_pathspec_match =
-        GLOBREF(INTERN("disable-pathspec-match"));
-    em_status_opt_recurse_ignored_dirs =
-        GLOBREF(INTERN("recurse-ignored-dirs"));
-    em_status_opt_renames_head_to_index =
-        GLOBREF(INTERN("renames-head-to-index"));
-    em_status_opt_renames_index_to_workdir =
-        GLOBREF(INTERN("renames-index-to-workdir"));
-    em_status_opt_sort_case_sensitively =
-        GLOBREF(INTERN("sort-case-sensitively"));
-    em_status_opt_sort_case_insensitively =
-        GLOBREF(INTERN("sort-case-insensitively"));
-    em_status_opt_renames_from_rewrites =
-        GLOBREF(INTERN("renames-from-rewrites"));
-    em_status_opt_no_refresh = GLOBREF(INTERN("no-refresh"));
-    em_status_opt_update_index = GLOBREF(INTERN("update-index"));
-    em_status_opt_include_unreadable = GLOBREF(INTERN("include-unreadable"));
-    em_status_opt_include_unreadable_as_untracked =
-        GLOBREF(INTERN("include-unreadable-as-untracked"));
+    em_include_untracked = GLOBREF(INTERN("include-untracked"));
+    em_include_ignored = GLOBREF(INTERN("include-ignored"));
+    em_include_unmodified = GLOBREF(INTERN("include-unmodified"));
+    em_exclude_submodules = GLOBREF(INTERN("exclude-submodules"));
+    em_recurse_untracked_dirs = GLOBREF(INTERN("recurse-untracked-dirs"));
+    em_disable_pathspec_match = GLOBREF(INTERN("disable-pathspec-match"));
+    em_recurse_ignored_dirs = GLOBREF(INTERN("recurse-ignored-dirs"));
+    em_renames_head_to_index = GLOBREF(INTERN("renames-head-to-index"));
+    em_renames_index_to_workdir = GLOBREF(INTERN("renames-index-to-workdir"));
+    em_sort_case_sensitively = GLOBREF(INTERN("sort-case-sensitively"));
+    em_sort_case_insensitively = GLOBREF(INTERN("sort-case-insensitively"));
+    em_renames_from_rewrites = GLOBREF(INTERN("renames-from-rewrites"));
+    em_no_refresh = GLOBREF(INTERN("no-refresh"));
+    em_update_index = GLOBREF(INTERN("update-index"));
+    em_include_unreadable = GLOBREF(INTERN("include-unreadable"));
+    em_include_unreadable_as_untracked = GLOBREF(INTERN("include-unreadable-as-untracked"));
 
     em_lines_in_hunk = GLOBREF(INTERN("lines-in-hunk"));
     em_final_commit_id = GLOBREF(INTERN("final-commit-id"));
