@@ -11,6 +11,7 @@
 #include "egit-clone.h"
 #include "egit-commit.h"
 #include "egit-config.h"
+#include "egit-diff.h"
 #include "egit-ignore.h"
 #include "egit-index.h"
 #include "egit-object.h"
@@ -500,6 +501,14 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-find-programdata", config_find_programdata, 0, 0);
     DEFUN("libgit-config-find-system", config_find_system, 0, 0);
     DEFUN("libgit-config-find-xdg", config_find_xdg, 0, 0);
+
+    // Diff
+    DEFUN("libgit-diff-index-to-index", diff_index_to_index, 3, 4);
+    DEFUN("libgit-diff-index-to-workdir", diff_index_to_workdir, 1, 3);
+    DEFUN("libgit-diff-tree-to-index", diff_tree_to_index, 1, 4);
+    DEFUN("libgit-diff-tree-to-tree", diff_tree_to_tree, 1, 4);
+    DEFUN("libgit-diff-tree-to-workdir", diff_tree_to_workdir, 1, 3);
+    DEFUN("libgit-diff-tree-to-workdir-with-index", diff_tree_to_workdir_with_index, 1, 3);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);

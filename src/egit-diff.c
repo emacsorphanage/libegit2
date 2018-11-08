@@ -4,6 +4,7 @@
 
 #include "egit.h"
 #include "interface.h"
+#include "egit-diff.h"
 
 
 // =============================================================================
@@ -259,3 +260,168 @@ static void egit_diff_options_release(git_diff_options *opts)
     free((char*) opts->new_prefix);
     free((char*) opts->old_prefix);
 }
+
+
+// =============================================================================
+// Constructors
+
+#define MAYBE_GET(type, to)                     \
+    do {                                        \
+        if (EM_EXTRACT_BOOLEAN(_##to)) {        \
+            EGIT_ASSERT_##type(_##to);          \
+            to = EGIT_EXTRACT(_##to);           \
+        }                                       \
+    } while(0)
+
+#define PARSE_OPTIONS()                                 \
+    do {                                                \
+        egit_diff_options_parse(env, opts, &options);   \
+        if (env->non_local_exit_check(env))             \
+            return em_nil;                              \
+    } while(0)
+
+#define FINALIZE_AND_RETURN()                                \
+    do {                                                     \
+        egit_diff_options_release(&options);                 \
+        if (env->non_local_exit_check(env))                  \
+            return em_nil;                                   \
+        if (retval == GIT_EUSER)                             \
+            return em_nil;                                   \
+        EGIT_CHECK_ERROR(retval);                            \
+        return egit_wrap(env, EGIT_DIFF, diff, NULL);        \
+    } while(0)
+
+EGIT_DOC(diff_index_to_index, "REPO OLD-INDEX NEW-INDEX &optional OPTS",
+         "Create a diff with the difference between two index objects.\n"
+         "OLD-INDEX and NEW-INDEX must both belong to REPO.");
+emacs_value egit_diff_index_to_index(
+    emacs_env *env, emacs_value _repo, emacs_value _old_index,
+    emacs_value _new_index, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_INDEX(_old_index);
+    EGIT_ASSERT_INDEX(_new_index);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_index *old_index = EGIT_EXTRACT(_old_index);
+    git_index *new_index = EGIT_EXTRACT(_new_index);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_index_to_index(&diff, repo, old_index, new_index, &options);
+    FINALIZE_AND_RETURN();
+}
+
+EGIT_DOC(diff_index_to_workdir, "REPO &optional INDEX OPTS",
+         "Create a diff between an index and a workdir belonging to REPO.\n"
+         "If INDEX wis nil, it will default to the repository index.");
+emacs_value egit_diff_index_to_workdir(
+    emacs_env *env, emacs_value _repo, emacs_value _index, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_index *index = NULL;
+    MAYBE_GET(INDEX, index);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_index_to_workdir(&diff, repo, index, &options);
+    FINALIZE_AND_RETURN();
+}
+
+EGIT_DOC(diff_tree_to_index, "REPO &optional OLD-TREE INDEX OPTS",
+         "Create a diff between a tree and an index belonging to REPO.\n"
+         "If OLD-TREE or INDEX are nil, they will default to the empty tree\n"
+         "or the repository index, respectively.");
+emacs_value egit_diff_tree_to_index(
+    emacs_env *env, emacs_value _repo, emacs_value _old_tree,
+    emacs_value _index, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_tree *old_tree = NULL;
+    MAYBE_GET(TREE, old_tree);
+
+    git_index *index = NULL;
+    MAYBE_GET(INDEX, index);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_tree_to_index(&diff, repo, old_tree, index, &options);
+    FINALIZE_AND_RETURN();
+}
+
+EGIT_DOC(diff_tree_to_tree, "REPO &optional OLD-TREE NEW-TREE OPTS",
+         "Create a diff between two trees belonging to REPO.\n"
+         "If OLD-TREE or NEW-TREE are nil, they default to the empty tree.");
+emacs_value egit_diff_tree_to_tree(
+    emacs_env *env, emacs_value _repo, emacs_value _old_tree,
+    emacs_value _new_tree, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_tree *old_tree = NULL, *new_tree = NULL;
+    MAYBE_GET(TREE, old_tree);
+    MAYBE_GET(TREE, new_tree);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_tree_to_tree(&diff, repo, old_tree, new_tree, &options);
+    FINALIZE_AND_RETURN();
+}
+
+EGIT_DOC(diff_tree_to_workdir, "REPO &optional OLD-TREE OPTS",
+         "Create a diff between OLD-TREE and the working directory of REPO.\n"
+         "If OLD-TREE is nil it will default to the empty tree.");
+emacs_value egit_diff_tree_to_workdir(
+    emacs_env *env, emacs_value _repo, emacs_value _old_tree, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_tree *old_tree = NULL;
+    MAYBE_GET(TREE, old_tree);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_tree_to_workdir(&diff, repo, old_tree, &options);
+    FINALIZE_AND_RETURN();
+}
+
+EGIT_DOC(diff_tree_to_workdir_with_index, "REPO &optional OLD-TREE OPTS",
+         "Create a diff between OLD-TREE and the working directory of REPO\n"
+         "using index data to account for staged deletes, tracked files, etc.\n"
+         "If OLD-TREE is nil it will default to the empty tree.");
+emacs_value egit_diff_tree_to_workdir_with_index(
+    emacs_env *env, emacs_value _repo, emacs_value _old_tree, emacs_value opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_tree *old_tree = NULL;
+    MAYBE_GET(TREE, old_tree);
+
+    git_diff_options options;
+    PARSE_OPTIONS();
+
+    git_diff *diff;
+    int retval = git_diff_tree_to_workdir_with_index(&diff, repo, old_tree, &options);
+    FINALIZE_AND_RETURN();
+}
+
+#undef MAYBE_GET
+#undef PARSE_OPTIONS
+#undef FINALIZE_AND_RETURN
