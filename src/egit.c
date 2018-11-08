@@ -68,6 +68,9 @@ static void egit_decref_direct(egit_object *wrapper)
 
     // Free the wrappee and the wrapper
     switch (wrapper->type) {
+    case EGIT_DIFF:
+        git_diff_free(wrapper->ptr);
+        break;
     case EGIT_INDEX:
         git_index_free(wrapper->ptr);
         break;
@@ -121,6 +124,7 @@ static void egit_finalize(void* _obj)
 
     switch (obj->type) {
     // Reference counted types can be freed entirely from egit_decref
+    case EGIT_DIFF:
     case EGIT_INDEX:
     case EGIT_REPOSITORY:
         egit_decref_direct(obj);
@@ -193,7 +197,7 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
 
     egit_object *wrapper;
     switch (type) {
-    case EGIT_INDEX: case EGIT_REPOSITORY:
+    case EGIT_DIFF: case EGIT_INDEX: case EGIT_REPOSITORY:
         wrapper = egit_incref(type, data);
         break;
     default:
@@ -303,6 +307,11 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_TRANSACTION: return em_transaction;
     case EGIT_INDEX: return em_index;
     case EGIT_INDEX_ENTRY: return em_index_entry;
+    case EGIT_DIFF: return em_diff;
+    case EGIT_DIFF_DELTA: return em_diff_delta;
+    case EGIT_DIFF_BINARY: return em_diff_binary;
+    case EGIT_DIFF_HUNK: return em_diff_hunk;
+    case EGIT_DIFF_LINE: return em_diff_line;
     default: return em_nil;
     }
 }
@@ -323,6 +332,36 @@ EGIT_DOC(config_p, "OBJ", "Return non-nil if OBJ is a git config.");
 static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
+}
+
+EGIT_DOC(diff_p, "OBJ", "Return non-nil if OBJ is a git diff.");
+static emacs_value egit_diff_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_DIFF ? em_t : em_nil;
+}
+
+EGIT_DOC(diff_delta_p, "OBJ", "Return non-nil if OBJ is a git diff delta.");
+static emacs_value egit_diff_delta_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_DIFF_DELTA ? em_t : em_nil;
+}
+
+EGIT_DOC(diff_binary_p, "OBJ", "Return non-nil if OBJ is a git diff binary.");
+static emacs_value egit_diff_binary_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_DIFF_BINARY ? em_t : em_nil;
+}
+
+EGIT_DOC(diff_hunk_p, "OBJ", "Return non-nil if OBJ is a git diff hunk.");
+static emacs_value egit_diff_hunk_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_DIFF_HUNK ? em_t : em_nil;
+}
+
+EGIT_DOC(diff_line_p, "OBJ", "Return non-nil if OBJ is a git diff line.");
+static emacs_value egit_diff_line_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_DIFF_LINE ? em_t : em_nil;
 }
 
 EGIT_DOC(index_p, "OBJ", "Return non-nil if OBJ is a git index.");
@@ -391,6 +430,11 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
+    DEFUN("libgit-diff-p", diff_p, 1, 1);
+    DEFUN("libgit-diff-delta-p", diff_delta_p, 1, 1);
+    DEFUN("libgit-diff-binary-p", diff_binary_p, 1, 1);
+    DEFUN("libgit-diff-hunk-p", diff_hunk_p, 1, 1);
+    DEFUN("libgit-diff-line-p", diff_line_p, 1, 1);
     DEFUN("libgit-index-p", index_p, 1, 1);
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);

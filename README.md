@@ -159,6 +159,7 @@ Type checkers and predicates:
 - :heavy_check_mark: `git-typeof`
 - :heavy_check_mark: `git-blame-p`
 - :heavy_check_mark: `git-commit-p`
+- :heavy_check_mark: `git-diff-p`
 - :heavy_check_mark: `git-index-p`
 - :heavy_check_mark: `git-index-entry-p`
 - :heavy_check_mark: `git-object-p`
