@@ -41,6 +41,26 @@
 #define EGIT_ASSERT_CONFIG(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
 
+// Assert that VAL is a git diff, signal an error and return otherwise.
+#define EGIT_ASSERT_DIFF(val)                                           \
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF, em_libgit_diff_p)) return em_nil; } while (0)
+
+// Assert that VAL is a git diff delta, signal an error and return otherwise.
+#define EGIT_ASSERT_DIFF_DELTA(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_DELTA, em_libgit_diff_delta_p)) return em_nil; } while (0)
+
+// Assert that VAL is a git diff binary, signal an error and return otherwise.
+#define EGIT_ASSERT_DIFF_BINARY(val)                                    \
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_BINARY, em_libgit_diff_binary_p)) return em_nil; } while (0)
+
+// Assert that VAL is a git diff hunk, signal an error and return otherwise.
+#define EGIT_ASSERT_DIFF_HUNK(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_HUNK, em_libgit_diff_hunk_p)) return em_nil; } while (0)
+
+// Assert that VAL is a git diff line, signal an error and return otherwise.
+#define EGIT_ASSERT_DIFF_LINE(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_LINE, em_libgit_diff_line_p)) return em_nil; } while (0)
+
 // Assert that VAL is a git index, signal an error and return otherwise.
 #define EGIT_ASSERT_INDEX(val)                                          \
     do { if (!egit_assert_type(env, (val), EGIT_INDEX, em_libgit_index_p)) return em_nil; } while (0)
@@ -66,6 +86,10 @@
     do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
+#define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
+    do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
+
+// Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_TRANSACTION(val)                                    \
     do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, em_libgit_transaction_p)) return em_nil; } while (0)
 
@@ -73,9 +97,14 @@
 #define EGIT_ASSERT_TREE(val)                                           \
     do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
 
-// Assert that VAL is a signature or nil, signal an error and return otherwise.
-#define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
-    do { if (EM_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
+/**
+ * Normalize an emacs_value string path. This macro may return.
+ */
+#define EGIT_NORMALIZE_PATH(val)\
+    do {                                                        \
+        (val) = em_expand_file_name(env, val);                  \
+        if (env->non_local_exit_check(env)) return em_nil;      \
+    } while (0)
 
 /**
  * Extract a libgit git_??? struct from an emacs_value.
@@ -149,7 +178,12 @@ typedef enum {
     EGIT_CONFIG,
     EGIT_TRANSACTION,
     EGIT_INDEX,
-    EGIT_INDEX_ENTRY
+    EGIT_INDEX_ENTRY,
+    EGIT_DIFF,
+    EGIT_DIFF_DELTA,
+    EGIT_DIFF_BINARY,
+    EGIT_DIFF_HUNK,
+    EGIT_DIFF_LINE
 } egit_type;
 
 /**
