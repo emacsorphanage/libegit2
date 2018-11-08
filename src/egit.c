@@ -143,6 +143,9 @@ static void egit_finalize(void* _obj)
         free((void*) ((git_index_entry*) obj->ptr)->path);
         free(obj->ptr);
         break;
+    case EGIT_BRANCH_ITER:
+        git_branch_iterator_free(obj->ptr);
+        break;
     case EGIT_REFERENCE:
         repo = git_reference_owner(obj->ptr);
         git_reference_free(obj->ptr);
@@ -296,6 +299,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_TRANSACTION: return em_transaction;
     case EGIT_INDEX: return em_index;
     case EGIT_INDEX_ENTRY: return em_index_entry;
+    case EGIT_BRANCH_ITER: return em_branch_iter;
     default: return em_nil;
     }
 }
@@ -328,6 +332,12 @@ EGIT_DOC(index_entry_p, "OBJ", "Return non-nil if OBJ is a git index entry.");
 static emacs_value egit_index_entry_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_INDEX_ENTRY ? em_t : em_nil;
+}
+
+EGIT_DOC(branch_iter_p, "OBJ", "Return non-nil if OBJ is a git branch iterator.");
+static emacs_value egit_branch_iter_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_BRANCH_ITER ? em_t : em_nil;
 }
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
@@ -386,6 +396,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-p", config_p, 1, 1);
     DEFUN("libgit-index-p", index_p, 1, 1);
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
+    DEFUN("libgit-branch-iter-p", branch_iter_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);

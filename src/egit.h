@@ -92,6 +92,12 @@
     do { if (!egit_assert_type(env, (val), EGIT_INDEX_ENTRY, em_libgit_index_entry_p)) return em_nil; } while (0)
 
 /**
+ * Assert that VAL is a git branch iterator, signal an error and return otherwise.
+ */
+#define EGIT_ASSERT_BRANCH_ITER(val)                                    \
+    do { if (!egit_assert_type(env, (val), EGIT_BRANCH_ITER, em_libgit_branch_iter_p)) return em_nil; } while (0)
+
+/**
  * Assert that VAL is a git object, signal an error and return otherwise.
  */
 #define EGIT_ASSERT_OBJECT(val)                                         \
@@ -274,7 +280,8 @@ typedef enum {
     EGIT_CONFIG,
     EGIT_TRANSACTION,
     EGIT_INDEX,
-    EGIT_INDEX_ENTRY
+    EGIT_INDEX_ENTRY,
+    EGIT_BRANCH_ITER
 } egit_type;
 
 /**
