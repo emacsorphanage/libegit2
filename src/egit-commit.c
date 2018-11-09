@@ -127,7 +127,7 @@ emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     git_repository *repo = git_commit_owner(commit);
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT.");

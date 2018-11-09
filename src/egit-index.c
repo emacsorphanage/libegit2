@@ -216,7 +216,7 @@ emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     git_repository *repo = git_index_owner(index);
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 EGIT_DOC(index_path, "INDEX", "Get the path to the index file on disk.");
