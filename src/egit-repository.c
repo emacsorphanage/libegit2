@@ -28,7 +28,7 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 EGIT_DOC(repository_open, "PATH", "Open an existing repository at PATH.");
@@ -46,7 +46,7 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 EGIT_DOC(repository_open_bare, "PATH",
@@ -66,7 +66,7 @@ emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 

@@ -183,7 +183,7 @@ emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     git_repository *repo = git_reference_owner(ref);
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 EGIT_DOC(reference_peel, "REF &optional TYPE",

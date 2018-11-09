@@ -52,20 +52,14 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
     return false;
 }
 
-void egit_decref_repository(git_repository *wrapped)
+/**
+ * Decrease the reference count of a wrapper object.
+ * If the reference count reaches zero, the object will be freed.
+ * @param data The wrapper object to decref.
+ */
+static void egit_decref_direct(egit_object *wrapper)
 {
-    // Look up the wrapper struct in the hash table, and call egit_decref_wrapper
-    egit_object *wrapper;
-    HASH_FIND_PTR(object_store, &wrapped, wrapper);
-    egit_decref_repository_wrapper(wrapper);
-}
-
-void egit_decref_repository_wrapper(void *_wrapper)
-{
-    // The argument type must be void* to make this function work as an Emacs finalizer
-    egit_object *wrapper = (egit_object*)_wrapper;
-
-    // This function should never be called on something that doesn't wrap a repository
+    // This function should never be called on something that isn't a reference-counted type
     assert(wrapper->type == EGIT_REPOSITORY);
 
     wrapper->refcount--;
@@ -81,16 +75,31 @@ void egit_decref_repository_wrapper(void *_wrapper)
 }
 
 /**
- * Increase the reference count of the given repository.
- * If the pointer does not exist in the object store, add it with a refcount of one.
- * Otherwise, increase the refcount by one.
- * @param obj The repository to store.
- * @return Pointer to the egit_object wrapper struct.
+ * Decrease the reference count of a reference-counted object.
+ * The pointer must exist in the object store.
+ * If the reference count reaches zero, the object will be freed.
+ * @param data The object to decref.
  */
-static egit_object *egit_incref_repository(git_repository *wrapped)
+static void egit_lookup_and_decref(void *data)
 {
     egit_object *wrapper;
-    HASH_FIND_PTR(object_store, &wrapped, wrapper);
+    HASH_FIND_PTR(object_store, &data, wrapper);
+    assert(wrapper);
+    egit_decref_direct(wrapper);
+}
+
+/**
+ * Increase the reference count of a reference-counted object.
+ * If the pointer does not exist in the object store, add it with a refcount of one.
+ * Otherwise, increase the refcount by one.
+ * @param type The type of the object.
+ * @param data The object to store.
+ * @return Pointer to the egit_object wrapper struct.
+ */
+static egit_object *egit_incref(egit_type type, void *data)
+{
+    egit_object *wrapper;
+    HASH_FIND_PTR(object_store, &data, wrapper);
 
     if (wrapper)
         // Object is already stored, just incref
@@ -99,9 +108,9 @@ static egit_object *egit_incref_repository(git_repository *wrapped)
     else {
         // Object must be added
         wrapper = (egit_object*)malloc(sizeof(egit_object));
-        wrapper->type = EGIT_REPOSITORY;
+        wrapper->type = type;
         wrapper->refcount = 1;
-        wrapper->ptr = wrapped;
+        wrapper->ptr = data;
         HASH_ADD_PTR(object_store, ptr, wrapper);
     }
 
@@ -109,43 +118,45 @@ static egit_object *egit_incref_repository(git_repository *wrapped)
 }
 
 /**
- * Finalizer for user pointers with no children objects.
- * This frees the wrapper struct, its wrapped object and decreses the reference count on parent
- * objetcs, if any, potentially causing them to be freed.
- * This function is suitable to use as a finalizer for Emacs user pointers.
+ * Finalizer for user pointers.
  */
 static void egit_finalize(void* _obj)
 {
     // The argument type must be void* to make this function work as an Emacs finalizer
     egit_object *obj = (egit_object*)_obj;
+    void *parent = NULL;
 
-    // Decref any owner objects if applicable, and free the libgit2 struct.
-    // Note that this object must be freed before potentially freeing owners.
-    git_repository *repo = NULL;
     switch (obj->type) {
+
+    // Reference counted types can be freed entirely from egit_decref.
+    case EGIT_REPOSITORY:
+        egit_decref_direct(obj);
+        return;
+
+    // These types keep a reference alive to some other object (usually a repository)
+    // We grab the pointer to the other object first, then free the child, and only then
+    // decref the parent.
     case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
-        repo = git_object_owner(obj->ptr);
+        parent = git_object_owner(obj->ptr);
         git_object_free(obj->ptr);
         break;
+
+    case EGIT_REFERENCE:
+        parent = git_reference_owner(obj->ptr);
+        git_reference_free(obj->ptr);
+        break;
+
+    case EGIT_INDEX:
+        parent = git_index_owner(obj->ptr);
+        git_index_free(obj->ptr);
+        break;
+
+    // Types that have no reference to a parent.
     case EGIT_BLAME:
         git_blame_free(obj->ptr);
         break;
     case EGIT_CONFIG:
         git_config_free(obj->ptr);
-        break;
-    case EGIT_INDEX:
-        repo = git_index_owner(obj->ptr);
-        git_index_free(obj->ptr);
-        break;
-    case EGIT_INDEX_ENTRY:
-        // The only git_index_entry objects we expose to Emacs are allocated by us,
-        // with data copied from libgit2 internals.
-        free((void*) ((git_index_entry*) obj->ptr)->path);
-        free(obj->ptr);
-        break;
-    case EGIT_REFERENCE:
-        repo = git_reference_owner(obj->ptr);
-        git_reference_free(obj->ptr);
         break;
     case EGIT_SIGNATURE:
         git_signature_free(obj->ptr);
@@ -153,19 +164,20 @@ static void egit_finalize(void* _obj)
     case EGIT_TRANSACTION:
         git_transaction_free(obj->ptr);
         break;
+
+    // Types that are allocated by us
+    case EGIT_INDEX_ENTRY:
+        free((void*) ((git_index_entry*) obj->ptr)->path);
+        free(obj->ptr);
+        break;
+
     default: break;
     }
 
     // Free the wrapper, then release the reference to the repository, if applicable
     free(obj);
-    if (repo)
-        egit_decref_repository(repo);
-}
-
-emacs_value egit_wrap_repository(emacs_env *env, git_repository *data)
-{
-    egit_object *wrapper = egit_incref_repository(data);
-    return env->make_user_ptr(env, egit_decref_repository_wrapper, wrapper);
+    if (parent)
+        egit_lookup_and_decref(parent);
 }
 
 emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
@@ -184,18 +196,22 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data)
     // Increase refcounts of owner object(s), if applicable
     switch (type) {
     case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
-        egit_incref_repository(git_object_owner(data)); break;
+        egit_incref(EGIT_REPOSITORY, git_object_owner(data)); break;
     case EGIT_INDEX:
-        egit_incref_repository(git_index_owner(data)); break;
+        egit_incref(EGIT_REPOSITORY, git_index_owner(data)); break;
     case EGIT_REFERENCE:
-        egit_incref_repository(git_reference_owner(data)); break;
+        egit_incref(EGIT_REPOSITORY, git_reference_owner(data)); break;
     default: break;
     }
 
-    // No need to worry about the refcount on these objects
-    egit_object *wrapper = (egit_object*)malloc(sizeof(egit_object));
-    wrapper->type = type;
-    wrapper->ptr = data;
+    egit_object *wrapper;
+    if (type == EGIT_REPOSITORY)
+        wrapper = egit_incref(EGIT_REPOSITORY, data);
+    else {
+        wrapper = (egit_object*) malloc(sizeof(egit_object));
+        wrapper->type = type;
+        wrapper->ptr = data;
+    }
 
     return env->make_user_ptr(env, egit_finalize, wrapper);
 }

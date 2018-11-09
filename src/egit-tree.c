@@ -195,7 +195,7 @@ emacs_value egit_tree_owner(emacs_env *env, emacs_value _tree)
     EGIT_ASSERT_TREE(_tree);
     git_tree *tree = EGIT_EXTRACT(_tree);
     git_repository *repo = git_tree_owner(tree);
-    return egit_wrap_repository(env, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo);
 }
 
 
