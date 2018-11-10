@@ -81,7 +81,7 @@ static void egit_decref_direct(egit_object *wrapper)
  * @param data The object to store.
  * @return Pointer to the egit_object wrapper struct.
  */
-static egit_object *egit_incref(egit_type type, void *data)
+static egit_object *egit_incref(egit_type type, const void *data)
 {
     egit_object *wrapper;
     HASH_FIND_PTR(object_store, &data, wrapper);
@@ -95,7 +95,7 @@ static egit_object *egit_incref(egit_type type, void *data)
         wrapper = (egit_object*)malloc(sizeof(egit_object));
         wrapper->type = type;
         wrapper->refcount = 1;
-        wrapper->ptr = data;
+        wrapper->ptr = (void*) data;
         HASH_ADD_PTR(object_store, ptr, wrapper);
     }
 
@@ -162,7 +162,7 @@ static void egit_finalize(void* _obj)
         egit_finalize(parent);
 }
 
-emacs_value egit_wrap(emacs_env *env, egit_type type, void* data, egit_object *parent)
+emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_object *parent)
 {
     // If it's a git_object, try to be more specific
     if (type == EGIT_OBJECT) {
@@ -199,7 +199,7 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, void* data, egit_object *p
     else {
         wrapper = (egit_object*) malloc(sizeof(egit_object));
         wrapper->type = type;
-        wrapper->ptr = data;
+        wrapper->ptr = (void*) data;
     }
     wrapper->parent = parent;
 
