@@ -510,6 +510,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-diff-tree-to-workdir", diff_tree_to_workdir, 1, 3);
     DEFUN("libgit-diff-tree-to-workdir-with-index", diff_tree_to_workdir_with_index, 1, 3);
 
+    DEFUN("libgit-diff-foreach", diff_foreach, 2, 5);
+
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
     DEFUN("libgit-ignore-clear-internal-rules", clear_internal_rules, 1, 1);
