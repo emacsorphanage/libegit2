@@ -12,7 +12,7 @@ EGIT_DOC(commit_lookup, "REPO OID", "Look up a commit in REPO by OID.");
 emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
@@ -29,7 +29,7 @@ EGIT_DOC(commit_lookup_prefix, "REPO OID", "Lookup a commit in REPO by shortened
 emacs_value egit_commit_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
@@ -110,9 +110,9 @@ EGIT_DOC(commit_nth_gen_ancestor, "COMMIT N",
 emacs_value egit_commit_nth_gen_ancestor(emacs_env *env, emacs_value _commit, emacs_value _n)
 {
     EGIT_ASSERT_COMMIT(_commit);
-    EGIT_ASSERT_INTEGER(_n);
+    EM_ASSERT_INTEGER(_n);
     git_commit *commit = EGIT_EXTRACT(_commit);
-    intmax_t n = EGIT_EXTRACT_INTEGER(_n);
+    intmax_t n = EM_EXTRACT_INTEGER(_n);
 
     git_commit *ret;
     int retval = git_commit_nth_gen_ancestor(&ret, commit, n);
@@ -134,9 +134,9 @@ EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT."
 emacs_value egit_commit_parent(emacs_env *env, emacs_value _commit, emacs_value _n)
 {
     EGIT_ASSERT_COMMIT(_commit);
-    EGIT_ASSERT_INTEGER_OR_NIL(_n);
+    EM_ASSERT_INTEGER_OR_NIL(_n);
     git_commit *commit = EGIT_EXTRACT(_commit);
-    intmax_t n = EGIT_EXTRACT_INTEGER_OR_DEFAULT(_n, 0);
+    intmax_t n = EM_EXTRACT_INTEGER_OR_DEFAULT(_n, 0);
 
     git_commit *ret;
     int retval = git_commit_parent(&ret, commit, n);
@@ -149,9 +149,9 @@ EGIT_DOC(commit_parent_id, "COMMIT &optional N", "Return the ID of the Nth paren
 emacs_value egit_commit_parent_id(emacs_env *env, emacs_value _commit, emacs_value _n)
 {
     EGIT_ASSERT_COMMIT(_commit);
-    EGIT_ASSERT_INTEGER_OR_NIL(_n);
+    EM_ASSERT_INTEGER_OR_NIL(_n);
     git_commit *commit = EGIT_EXTRACT(_commit);
-    intmax_t n = EGIT_EXTRACT_INTEGER_OR_DEFAULT(_n, 0);
+    intmax_t n = EM_EXTRACT_INTEGER_OR_DEFAULT(_n, 0);
 
     const git_oid *oid = git_commit_parent_id(commit, n);
     if (!oid) {

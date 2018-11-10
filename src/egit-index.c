@@ -65,7 +65,7 @@ EGIT_DOC(index_conflict_foreach, "INDEX FUNCTION",
 emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emacs_value function)
 {
     EGIT_ASSERT_INDEX(_index);
-    EGIT_ASSERT_FUNCTION(function);
+    EM_ASSERT_FUNCTION(function);
     git_index *index = EGIT_EXTRACT(_index);
     git_index_conflict_iterator *iter;
     int retval = git_index_conflict_iterator_new(&iter, index);
@@ -100,9 +100,9 @@ EGIT_DOC(index_conflict_get, "INDEX PATH",
 emacs_value egit_index_conflict_get(emacs_env *env, emacs_value _index, emacs_value _path)
 {
     EGIT_ASSERT_INDEX(_index);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
     git_index *index = EGIT_EXTRACT(_index);
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
     const git_index_entry *base, *ours, *theirs;
     int retval = git_index_conflict_get(&base, &ours, &theirs, index, path);
     free(path);
@@ -165,9 +165,9 @@ EGIT_DOC(index_get_byindex, "INDEX N", "Get the Nth entry in INDEX.");
 emacs_value egit_index_get_byindex(emacs_env *env, emacs_value _index, emacs_value _n)
 {
     EGIT_ASSERT_INDEX(_index);
-    EGIT_ASSERT_INTEGER(_n);
+    EM_ASSERT_INTEGER(_n);
     git_index *index = EGIT_EXTRACT(_index);
-    intmax_t n = EGIT_EXTRACT_INTEGER(_n);
+    intmax_t n = EM_EXTRACT_INTEGER(_n);
     const git_index_entry *entry = git_index_get_byindex(index, n);
     if (!entry) {
         em_signal_args_out_of_range(env, n);
@@ -184,10 +184,10 @@ EGIT_DOC(index_get_bypath, "INDEX PATH &optional STAGE",
 emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_value _path, emacs_value _stage)
 {
     EGIT_ASSERT_INDEX(_index);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
 
     int stage;
-    if (!EGIT_EXTRACT_BOOLEAN(_stage))
+    if (!EM_EXTRACT_BOOLEAN(_stage))
         stage = 0;
     else if (env->eq(env, _stage, em_base))
         stage = 1;
@@ -201,7 +201,7 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
     }
 
     git_index *index = EGIT_EXTRACT(_index);
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
     const git_index_entry *entry = git_index_get_bypath(index, path, stage);
     free(path);
 

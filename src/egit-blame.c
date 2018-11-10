@@ -58,7 +58,7 @@ EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
 emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path, emacs_value _options)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
 
@@ -72,7 +72,7 @@ emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path
         }
     }
 
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
 
     git_blame *blame = NULL;
     retval = git_blame_file(&blame, repo, path, &opts);

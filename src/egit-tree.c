@@ -54,7 +54,7 @@ EGIT_DOC(tree_lookup, "REPO OID", "Look up a tree in REPO by OID.");
 emacs_value egit_tree_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
@@ -71,7 +71,7 @@ EGIT_DOC(tree_lookup_prefix, "REPO OID", "Lookup a tree in REPO by shortened OID
 emacs_value egit_tree_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
@@ -95,7 +95,7 @@ EGIT_DOC(tree_entry_byid, "TREE ID",
 emacs_value egit_tree_entry_byid(emacs_env *env, emacs_value _tree, emacs_value _oid)
 {
     EGIT_ASSERT_TREE(_tree);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
     git_tree *tree = EGIT_EXTRACT(_tree);
     git_oid oid;
     EGIT_EXTRACT_OID(_oid, oid);
@@ -125,9 +125,9 @@ EGIT_DOC(tree_entry_byindex, "TREE N",
 emacs_value egit_tree_entry_byindex(emacs_env *env, emacs_value _tree, emacs_value _index)
 {
     EGIT_ASSERT_TREE(_tree);
-    EGIT_ASSERT_INTEGER(_index);
+    EM_ASSERT_INTEGER(_index);
     git_tree *tree = EGIT_EXTRACT(_tree);
-    intmax_t index = EGIT_EXTRACT_INTEGER(_index);
+    intmax_t index = EM_EXTRACT_INTEGER(_index);
     const git_tree_entry *entry = git_tree_entry_byindex(tree, index);
     if (!entry) {
         em_signal_args_out_of_range(env, index);
@@ -142,9 +142,9 @@ EGIT_DOC(tree_entry_byname, "TREE FILENAME",
 emacs_value egit_tree_entry_byname(emacs_env *env, emacs_value _tree, emacs_value _name)
 {
     EGIT_ASSERT_TREE(_tree);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_tree *tree = EGIT_EXTRACT(_tree);
-    char *name = EGIT_EXTRACT_STRING(_name);
+    char *name = EM_EXTRACT_STRING(_name);
     const git_tree_entry *entry = git_tree_entry_byname(tree, name);
     free(name);
     if (!entry)
@@ -158,9 +158,9 @@ EGIT_DOC(tree_entry_bypath, "TREE PATH",
 emacs_value egit_tree_entry_bypath(emacs_env *env, emacs_value _tree, emacs_value _path)
 {
     EGIT_ASSERT_TREE(_tree);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
     git_tree *tree = EGIT_EXTRACT(_tree);
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
     git_tree_entry *entry;
     int retval = git_tree_entry_bypath(&entry, tree, path);
     free(path);
@@ -234,7 +234,7 @@ EGIT_DOC(tree_walk, "TREE ORDER FUNCTION",
 emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order, emacs_value function)
 {
     EGIT_ASSERT_TREE(_tree);
-    EGIT_ASSERT_FUNCTION(function);
+    EM_ASSERT_FUNCTION(function);
 
     git_treewalk_mode mode;
     if (env->eq(env, order, em_pre))

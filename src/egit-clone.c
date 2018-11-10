@@ -8,15 +8,15 @@
 EGIT_DOC(clone, "URL PATH", "Clone the repository at URL to PATH and return it.");
 emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
 {
-    EGIT_ASSERT_STRING(_url);
-    EGIT_ASSERT_STRING(_path);
-    EGIT_NORMALIZE_PATH(_path);
+    EM_ASSERT_STRING(_url);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;
     {
-        char *url = EGIT_EXTRACT_STRING(_url);
-        char *path = EGIT_EXTRACT_STRING(_path);
+        char *url = EM_EXTRACT_STRING(_url);
+        char *path = EM_EXTRACT_STRING(_path);
         retval = git_clone(&repo, url, path, NULL);
         free(url);
         free(path);
