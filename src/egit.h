@@ -207,7 +207,7 @@ bool egit_assert_object(emacs_env *env, emacs_value obj);
  * @param ptr The pointer to store.
  * @return The Emacs value.
  */
-emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr, egit_object *parent);
+emacs_value egit_wrap(emacs_env *env, egit_type type, const void* ptr, egit_object *parent);
 
 /**
  * If libgit2 signaled an error, dispatch that error to Emacs.
