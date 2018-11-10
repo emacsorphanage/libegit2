@@ -17,22 +17,22 @@ emacs_value egit_reference_create(
     emacs_value _force, emacs_value _log_message)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_name);
-    EGIT_ASSERT_STRING(_id);
-    EGIT_ASSERT_STRING_OR_NIL(_log_message);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_id);
+    EM_ASSERT_STRING_OR_NIL(_log_message);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid id;
     EGIT_EXTRACT_OID(_id, id);
-    int force = EGIT_EXTRACT_BOOLEAN(_force);
+    int force = EM_EXTRACT_BOOLEAN(_force);
     git_reference *ref;
     int retval;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
-        char *log_message = EGIT_EXTRACT_STRING_OR_NULL(_log_message);
+        char *name = EM_EXTRACT_STRING(_name);
+        char *log_message = EM_EXTRACT_STRING_OR_NULL(_log_message);
         retval = git_reference_create(&ref, repo, name, &id, force, log_message);
         free(name);
-        EGIT_FREE(log_message);
+        free(log_message);
     }
     EGIT_CHECK_ERROR(retval);
 
@@ -46,29 +46,29 @@ emacs_value egit_reference_create_matching(
     emacs_value _force, emacs_value _current_id, emacs_value _log_message)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_name);
-    EGIT_ASSERT_STRING(_id);
-    EGIT_ASSERT_STRING_OR_NIL(_current_id);
-    EGIT_ASSERT_STRING_OR_NIL(_log_message);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_id);
+    EM_ASSERT_STRING_OR_NIL(_current_id);
+    EM_ASSERT_STRING_OR_NIL(_log_message);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid id, current_id;
     EGIT_EXTRACT_OID(_id, id);
-    if (EGIT_EXTRACT_BOOLEAN(_current_id))
+    if (EM_EXTRACT_BOOLEAN(_current_id))
         EGIT_EXTRACT_OID(_current_id, current_id);
-    int force = EGIT_EXTRACT_BOOLEAN(_force);
+    int force = EM_EXTRACT_BOOLEAN(_force);
     git_reference *ref;
     int retval;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
-        char *log_message = EGIT_EXTRACT_STRING_OR_NULL(_log_message);
+        char *name = EM_EXTRACT_STRING(_name);
+        char *log_message = EM_EXTRACT_STRING_OR_NULL(_log_message);
         retval = git_reference_create_matching(
             &ref, repo, name, &id, force,
-            EGIT_EXTRACT_BOOLEAN(_current_id) ? &current_id : NULL,
+            EM_EXTRACT_BOOLEAN(_current_id) ? &current_id : NULL,
             log_message
         );
         free(name);
-        EGIT_FREE(log_message);
+        free(log_message);
     }
     EGIT_CHECK_ERROR(retval);
 
@@ -90,13 +90,13 @@ EGIT_DOC(reference_dwim, "REPO SHORTHAND", "Lookup a reference by DWIMing its sh
 emacs_value egit_reference_dwim(emacs_env *env, emacs_value _repo, emacs_value _shorthand)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_shorthand);
+    EM_ASSERT_STRING(_shorthand);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_reference *ref;
     int retval;
     {
-        char *shorthand = EGIT_EXTRACT_STRING(_shorthand);
+        char *shorthand = EM_EXTRACT_STRING(_shorthand);
         retval = git_reference_dwim(&ref, repo, shorthand);
         free(shorthand);
     }
@@ -109,13 +109,13 @@ EGIT_DOC(reference_lookup, "REPO NAME", "Lookup a reference by NAME in REPO.");
 emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value _name)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_reference *ref;
     int retval;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
+        char *name = EM_EXTRACT_STRING(_name);
         retval = git_reference_lookup(&ref, repo, name);
         free(name);
     }
@@ -161,13 +161,13 @@ EGIT_DOC(reference_name_to_id, "REPO REFNAME",
 emacs_value egit_reference_name_to_id(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_reference_name_to_id(&oid, repo, refname);
         free(refname);
     }
@@ -195,7 +195,7 @@ emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _t
     EGIT_ASSERT_REFERENCE(_ref);
 
     git_otype type;
-    if (!EGIT_EXTRACT_BOOLEAN(_type))
+    if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
     else if (env->eq(env, _type, em_commit))
         type = GIT_OBJ_COMMIT;
@@ -301,12 +301,12 @@ EGIT_DOC(reference_ensure_log, "REPO REFNAME",
 emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_reference_ensure_log(repo, refname);
         free(refname);
     }
@@ -319,12 +319,12 @@ EGIT_DOC(reference_remove, "REF", "Remove an existing reference by name.");
 emacs_value egit_reference_remove(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_reference_remove(repo, refname);
         free(refname);
     }
@@ -360,12 +360,12 @@ EGIT_DOC(reference_has_log_p, "REPO REFNAME",
 emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_reference_has_log(repo, refname);
         free(refname);
     }
@@ -413,11 +413,11 @@ emacs_value egit_reference_tag_p(emacs_env *env, emacs_value _ref)
 EGIT_DOC(reference_valid_name_p, "REFNAME", "Check if a reference name is well-formed.");
 emacs_value egit_reference_valid_name_p(emacs_env *env, emacs_value _refname)
 {
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_reference_is_valid_name(refname);
         free(refname);
     }

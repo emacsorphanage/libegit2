@@ -29,9 +29,9 @@ EGIT_DOC(config_get_bool, "CONFIG NAME",
 emacs_value egit_config_get_bool(emacs_env *env, emacs_value _config, emacs_value _name)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
-    char *name = EGIT_EXTRACT_STRING(_name);
+    char *name = EM_EXTRACT_STRING(_name);
     int value;
     int retval = git_config_get_bool(&value, config, name);
     free(name);
@@ -45,9 +45,9 @@ EGIT_DOC(config_get_int, "CONFIG NAME",
 emacs_value egit_config_get_int(emacs_env *env, emacs_value _config, emacs_value _name)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
-    char *name = EGIT_EXTRACT_STRING(_name);
+    char *name = EM_EXTRACT_STRING(_name);
     int64_t value;
     int retval = git_config_get_int64(&value, config, name);
     free(name);
@@ -63,9 +63,9 @@ EGIT_DOC(config_get_path, "CONFIG NAME",
 emacs_value egit_config_get_path(emacs_env *env, emacs_value _config, emacs_value _name)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
-    char *name = EGIT_EXTRACT_STRING(_name);
+    char *name = EM_EXTRACT_STRING(_name);
 
     git_buf buf = {0};
     int retval = git_config_get_path(&buf, config, name);
@@ -76,7 +76,7 @@ emacs_value egit_config_get_path(emacs_env *env, emacs_value _config, emacs_valu
     // but I trust Emacs' path normalization to be more thorough.
     emacs_value ret = env->make_string(env, buf.ptr, buf.size);
     git_buf_free(&buf);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
     return ret;
 }
 
@@ -86,9 +86,9 @@ EGIT_DOC(config_get_string, "CONFIG NAME",
 emacs_value egit_config_get_string(emacs_env *env, emacs_value _config, emacs_value _name)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
-    char *name = EGIT_EXTRACT_STRING(_name);
+    char *name = EM_EXTRACT_STRING(_name);
     const char *value;
     int retval = git_config_get_string(&value, config, name);
     free(name);
@@ -115,10 +115,10 @@ EGIT_DOC(config_set_bool, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG 
 emacs_value egit_config_set_bool(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
     git_config *config = EGIT_EXTRACT(_config);
-    const char *name = EGIT_EXTRACT_STRING(_name);
-    int value = EGIT_EXTRACT_BOOLEAN(_value);
+    const char *name = EM_EXTRACT_STRING(_name);
+    int value = EM_EXTRACT_BOOLEAN(_value);
     int retval = git_config_set_bool(config, name, value);
     EGIT_CHECK_ERROR(retval);
     return em_nil;
@@ -128,11 +128,11 @@ EGIT_DOC(config_set_int, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG t
 emacs_value egit_config_set_int(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
-    EGIT_ASSERT_INTEGER(_value);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_INTEGER(_value);
     git_config *config = EGIT_EXTRACT(_config);
-    const char *name = EGIT_EXTRACT_STRING(_name);
-    int64_t value = EGIT_EXTRACT_INTEGER(_value);
+    const char *name = EM_EXTRACT_STRING(_name);
+    int64_t value = EM_EXTRACT_INTEGER(_value);
     int retval = git_config_set_int64(config, name, value);
     EGIT_CHECK_ERROR(retval);
     return em_nil;
@@ -142,11 +142,11 @@ EGIT_DOC(config_set_string, "CONFIG NAME VALUE", "Set the value of NAME in CONFI
 emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _value)
 {
     EGIT_ASSERT_CONFIG(_config);
-    EGIT_ASSERT_STRING(_name);
-    EGIT_ASSERT_STRING(_value);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_value);
     git_config *config = EGIT_EXTRACT(_config);
-    const char *name = EGIT_EXTRACT_STRING(_name);
-    const char *value = EGIT_EXTRACT_STRING(_value);
+    const char *name = EM_EXTRACT_STRING(_name);
+    const char *value = EM_EXTRACT_STRING(_value);
     int retval = git_config_set_string(config, name, value);
     EGIT_CHECK_ERROR(retval);
     return em_nil;
@@ -163,7 +163,7 @@ emacs_value egit_config_find_global(emacs_env *env)
     int retval = git_config_find_global(&out);
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
     git_buf_free(&out);
     return ret;
 }
@@ -175,7 +175,7 @@ emacs_value egit_config_find_programdata(emacs_env *env)
     int retval = git_config_find_programdata(&out);
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
     git_buf_free(&out);
     return ret;
 }
@@ -187,7 +187,7 @@ emacs_value egit_config_find_system(emacs_env *env)
     int retval = git_config_find_system(&out);
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
     git_buf_free(&out);
     return ret;
 }
@@ -199,7 +199,7 @@ emacs_value egit_config_find_xdg(emacs_env *env)
     int retval = git_config_find_xdg(&out);
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
     git_buf_free(&out);
     return ret;
 }

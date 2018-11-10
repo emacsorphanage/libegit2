@@ -9,13 +9,13 @@ EGIT_DOC(revparse_single, "REPO SPEC", "Return the object referred to by SPEC in
 emacs_value egit_revparse_single(emacs_env *env, emacs_value _repo, emacs_value _spec)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_spec);
+    EM_ASSERT_STRING(_spec);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_object *obj;
     int retval;
     {
-        char *spec = EGIT_EXTRACT_STRING(_spec);
+        char *spec = EM_EXTRACT_STRING(_spec);
         retval = git_revparse_single(&obj, repo, spec);
         free(spec);
     }

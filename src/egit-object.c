@@ -18,14 +18,14 @@ EGIT_DOC(object_lookup, "REPO OID &optional TYPE",
 emacs_value egit_object_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid, emacs_value _type)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
     EGIT_EXTRACT_OID(_oid, oid);
 
     git_otype type;
-    if (!EGIT_EXTRACT_BOOLEAN(_type))
+    if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
     else if (env->eq(env, _type, em_blob))
         type = GIT_OBJ_BLOB;
@@ -57,7 +57,7 @@ EGIT_DOC(object_lookup_prefix, "REPO OID",
 emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_value _oid, emacs_value _type)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_oid);
+    EM_ASSERT_STRING(_oid);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid oid;
@@ -65,7 +65,7 @@ emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_v
     EGIT_EXTRACT_OID_PREFIX(_oid, oid, len);
 
     git_otype type;
-    if (!EGIT_EXTRACT_BOOLEAN(_type))
+    if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
     else if (env->eq(env, _type, em_blob))
         type = GIT_OBJ_BLOB;

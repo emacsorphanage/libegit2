@@ -8,15 +8,15 @@ EGIT_DOC(branch_create, "REPO NAME COMMITISH FORCE",
 emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_commitish);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_commitish);
+    EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     
     git_reference *target_ref;
     int retval;
     {
-        char *commitish = EGIT_EXTRACT_STRING(_commitish);
+        char *commitish = EM_EXTRACT_STRING(_commitish);
         retval = git_reference_dwim(&target_ref, repo, commitish);
         free(commitish);
     }
@@ -38,8 +38,8 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
 
     git_reference *ref;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
-        bool force = EGIT_EXTRACT_BOOLEAN(_force);
+        char *name = EM_EXTRACT_STRING(_name);
+        bool force = EM_EXTRACT_BOOLEAN(_force);
         retval = git_branch_create(&ref, repo, name, commit, force);
         free(name);
     }
@@ -56,15 +56,15 @@ emacs_value egit_branch_create_from_annotated(
     emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_commitish);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_commitish);
+    EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     
     git_reference *target_ref;
     int retval;
     {
-        char *commitish = EGIT_EXTRACT_STRING(_commitish);
+        char *commitish = EM_EXTRACT_STRING(_commitish);
         retval = git_reference_dwim(&target_ref, repo, commitish);
         free(commitish);
     }
@@ -86,8 +86,8 @@ emacs_value egit_branch_create_from_annotated(
 
     git_reference *ref;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
-        bool force = EGIT_EXTRACT_BOOLEAN(_force);
+        char *name = EM_EXTRACT_STRING(_name);
+        bool force = EM_EXTRACT_BOOLEAN(_force);
         retval = git_branch_create_from_annotated(&ref, repo, name, commit, force);
         free(name);
     }
@@ -102,15 +102,15 @@ EGIT_DOC(branch_lookup, "REPO NAME &optional REMOTE",
 emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _remote)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
 
     git_reference *target_ref;
     int retval;
     {
-        char *branch = EGIT_EXTRACT_STRING(_name);
-        int remote = EGIT_EXTRACT_BOOLEAN(_remote);
+        char *branch = EM_EXTRACT_STRING(_name);
+        int remote = EM_EXTRACT_BOOLEAN(_remote);
         retval = git_branch_lookup(&target_ref, repo, branch, remote ? GIT_BRANCH_REMOTE : GIT_BRANCH_LOCAL);
         free(branch);
     }

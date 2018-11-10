@@ -15,14 +15,14 @@ EGIT_DOC(repository_init, "PATH &optional IS-BARE",
          "If IS-BARE then create a bare repository.");
 emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value _is_bare)
 {
-    EGIT_ASSERT_STRING(_path);
-    EGIT_NORMALIZE_PATH(_path);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
 
     git_repository *repo;
-    unsigned int is_bare = EGIT_EXTRACT_BOOLEAN(_is_bare);
+    unsigned int is_bare = EM_EXTRACT_BOOLEAN(_is_bare);
     int retval;
     {
-        char *path = EGIT_EXTRACT_STRING(_path);
+        char *path = EM_EXTRACT_STRING(_path);
         retval = git_repository_init(&repo, path, is_bare);
         free(path);
     }
@@ -34,13 +34,13 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
 EGIT_DOC(repository_open, "PATH", "Open an existing repository at PATH.");
 emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
 {
-    EGIT_ASSERT_STRING(_path);
-    EGIT_NORMALIZE_PATH(_path);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;
     {
-        char *path = EGIT_EXTRACT_STRING(_path);
+        char *path = EM_EXTRACT_STRING(_path);
         retval = git_repository_open(&repo, path);
         free(path);
     }
@@ -54,13 +54,13 @@ EGIT_DOC(repository_open_bare, "PATH",
          "This is faster than `git-repository-open'.");
 emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
 {
-    EGIT_ASSERT_STRING(_path);
-    EGIT_NORMALIZE_PATH(_path);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
 
     git_repository *repo;
     int retval;
     {
-        char *path = EGIT_EXTRACT_STRING(_path);
+        char *path = EM_EXTRACT_STRING(_path);
         retval = git_repository_open_bare(&repo, path);
         free(path);
     }
@@ -80,7 +80,7 @@ emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_commondir(repo);
     emacs_value retval = env->make_string(env, path, strlen(path));
-    EGIT_NORMALIZE_PATH(retval);
+    EM_NORMALIZE_PATH(retval);
     return retval;
 }
 
@@ -122,13 +122,13 @@ EGIT_DOC(repository_head_for_worktree, "REPO NAME",
 emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo, emacs_value _name)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_reference *ref;
     int retval;
     {
-        char *name = EGIT_EXTRACT_STRING(_name);
+        char *name = EM_EXTRACT_STRING(_name);
         retval = git_repository_head_for_worktree(&ref, repo, name);
         free(name);
     }
@@ -186,7 +186,7 @@ emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_path(repo);
     emacs_value retval = env->make_string(env, path, strlen(path));
-    EGIT_NORMALIZE_PATH(retval);
+    EM_NORMALIZE_PATH(retval);
     return retval;
 }
 
@@ -235,7 +235,7 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
     if (!path)
         return em_nil;
     emacs_value retval = env->make_string(env, path, strlen(path));
-    EGIT_NORMALIZE_PATH(retval);
+    EM_NORMALIZE_PATH(retval);
     return retval;
 }
 
@@ -274,12 +274,12 @@ EGIT_DOC(repository_set_head, "REPO REFNAME",
 emacs_value egit_repository_set_head(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *refname = EGIT_EXTRACT_STRING(_refname);
+        char *refname = EM_EXTRACT_STRING(_refname);
         retval = git_repository_set_head(repo, refname);
         free(refname);
     }
@@ -293,7 +293,7 @@ EGIT_DOC(repository_set_head_detached, "REPO COMMITISH",
 emacs_value egit_repository_set_head_detached(emacs_env *env, emacs_value _repo, emacs_value _commitish)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_commitish);
+    EM_ASSERT_STRING(_commitish);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_oid commitish;
@@ -311,17 +311,17 @@ emacs_value egit_repository_set_ident(
     emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _email)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING_OR_NIL(_name);
-    EGIT_ASSERT_STRING_OR_NIL(_email);
+    EM_ASSERT_STRING_OR_NIL(_name);
+    EM_ASSERT_STRING_OR_NIL(_email);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *name = EGIT_EXTRACT_STRING_OR_NULL(_name);
-        char *email = EGIT_EXTRACT_STRING_OR_NULL(_email);
+        char *name = EM_EXTRACT_STRING_OR_NULL(_name);
+        char *email = EM_EXTRACT_STRING_OR_NULL(_email);
         retval = git_repository_set_ident(repo, name, email);
-        EGIT_FREE(name);
-        EGIT_FREE(email);
+        free(name);
+        free(email);
     }
     EGIT_CHECK_ERROR(retval);
 
@@ -334,12 +334,12 @@ emacs_value egit_repository_set_namespace(
     emacs_env *env, emacs_value _repo, emacs_value _nmspace)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_nmspace);
+    EM_ASSERT_STRING(_nmspace);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval;
     {
-        char *nmspace = EGIT_EXTRACT_STRING(_nmspace);
+        char *nmspace = EM_EXTRACT_STRING(_nmspace);
         retval = git_repository_set_namespace(repo, nmspace);
         free(nmspace);
     }
@@ -354,14 +354,14 @@ emacs_value egit_repository_set_workdir(
     emacs_env *env, emacs_value _repo, emacs_value _workdir, emacs_value _update_gitlink)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_workdir);
-    EGIT_NORMALIZE_PATH(_workdir);
+    EM_ASSERT_STRING(_workdir);
+    EM_NORMALIZE_PATH(_workdir);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    int update_gitlink = EGIT_EXTRACT_BOOLEAN(_update_gitlink);
+    int update_gitlink = EM_EXTRACT_BOOLEAN(_update_gitlink);
     int retval;
     {
-        char *workdir = EGIT_EXTRACT_STRING(_workdir);
+        char *workdir = EM_EXTRACT_STRING(_workdir);
         retval = git_repository_set_workdir(repo, workdir, update_gitlink);
         free(workdir);
     }
@@ -450,43 +450,43 @@ EGIT_DOC(repository_discover, "&optional PATH ACROSS-FS CEILING-DIRS",
          "CEILING-DIRS is a list of paths where lookup will stop.");
 emacs_value egit_repository_discover(emacs_env *env, emacs_value _path, emacs_value _across_fs, emacs_value _ceiling_dirs)
 {
-    EGIT_ASSERT_STRING_OR_NIL(_path);
+    EM_ASSERT_STRING_OR_NIL(_path);
 
     // Check that _ceiling_dirs is a list of strings, and get the total length
     // of the buffer we need, including separators
     ptrdiff_t totsize = 0, size;
     {
-        EGIT_DOLIST(car, _ceiling_dirs, count);
-        EGIT_ASSERT_STRING(car);
+        EM_DOLIST(car, _ceiling_dirs, count);
+        EM_ASSERT_STRING(car);
         if (totsize > 0) totsize++;          // Space for the separator
         env->copy_string_contents(env, car, NULL, &size);
         totsize += size - 1;                 // Ignore the terminating null character
-        EGIT_DOLIST_END(count);
+        EM_DOLIST_END(count);
     }
 
     // Allocate a buffer with the right size, and copy the string contents
     char *ceiling_dirs = (char*) malloc((totsize + 1) * sizeof(char));
     char *next = ceiling_dirs;
     {
-        EGIT_DOLIST(car, _ceiling_dirs, copy);
+        EM_DOLIST(car, _ceiling_dirs, copy);
         if (next != ceiling_dirs)
             *(next++) = GIT_PATH_LIST_SEPARATOR;
         env->copy_string_contents(env, car, NULL, &size);
         env->copy_string_contents(env, car, next, &size);
         next += size - 1;
-        EGIT_DOLIST_END(copy);
+        EM_DOLIST_END(copy);
     }
     *next = '\0';
 
     char *path;
-    if (EGIT_EXTRACT_BOOLEAN(_path)) {
-        EGIT_NORMALIZE_PATH(_path);
-        path = EGIT_EXTRACT_STRING(_path);
+    if (EM_EXTRACT_BOOLEAN(_path)) {
+        EM_NORMALIZE_PATH(_path);
+        path = EM_EXTRACT_STRING(_path);
     }
     else
         path = em_default_directory(env);
 
-    int across_fs = EGIT_EXTRACT_BOOLEAN(_across_fs);
+    int across_fs = EM_EXTRACT_BOOLEAN(_across_fs);
 
     git_buf out = {0};
     int retval = git_repository_discover(&out, path, across_fs, ceiling_dirs);
@@ -495,7 +495,7 @@ emacs_value egit_repository_discover(emacs_env *env, emacs_value _path, emacs_va
     EGIT_CHECK_ERROR(retval);
 
     emacs_value ret = env->make_string(env, out.ptr, out.size);
-    EGIT_NORMALIZE_PATH(ret);
+    EM_NORMALIZE_PATH(ret);
 
     // NOTE: Renamed to git_buf_dispose in newer libgit2
     git_buf_free(&out);

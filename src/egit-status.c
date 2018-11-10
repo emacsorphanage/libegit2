@@ -25,8 +25,8 @@ emacs_value egit_status_decode(emacs_env *env, emacs_value status)
     emacs_value statuses[16];
     int nstatuses;
 
-    EGIT_ASSERT_INTEGER(status);
-    flags = EGIT_EXTRACT_INTEGER(status);
+    EM_ASSERT_INTEGER(status);
+    flags = EM_EXTRACT_INTEGER(status);
 
 #define CHECK(name, symbol)                             \
     do {                                                \
@@ -74,10 +74,10 @@ emacs_value egit_status_file(emacs_env *env, emacs_value _repo,
                              emacs_value _path)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
 
     unsigned int flags;
     int rv = git_status_file(&flags, repo, path);
@@ -95,9 +95,9 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
                                         emacs_value _path)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_path);
 
-    char *path = EGIT_EXTRACT_STRING(_path);
+    char *path = EM_EXTRACT_STRING(_path);
     git_repository *repo = EGIT_EXTRACT(_repo);
 
     int ignored;
@@ -207,7 +207,7 @@ bool convert_pathspec_option(git_strarray *out, emacs_env *env,
             return false;
         }
 
-        out->strings[nspecs++] = EGIT_EXTRACT_STRING(elt);
+        out->strings[nspecs++] = EM_EXTRACT_STRING(elt);
         arg = em_cdr(env, arg);
     }
 
@@ -298,7 +298,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
                                 emacs_value baseline)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EGIT_ASSERT_FUNCTION(function);
+    EM_ASSERT_FUNCTION(function);
 
     git_status_options options;
     git_status_init_options(&options, GIT_STATUS_OPTIONS_VERSION);

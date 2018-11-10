@@ -63,6 +63,77 @@ extern emacs_value em_base, em_ours, em_theirs;
 // Index capabilities
 extern emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case;
 
+// Assert that VAL is a function, signal an error and return otherwise.
+#define EM_ASSERT_FUNCTION(val)                                         \
+    do { if (!em_assert(env, em_functionp, (val))) return em_nil; } while (0)
+
+// Assert that VAL is a string, signal an error and return otherwise.
+#define EM_ASSERT_STRING(val)                                           \
+    do { if (!em_assert(env, em_stringp, (val))) return em_nil; } while (0)
+
+// Assert that VAL is a string or nil, signal an error and return otherwise.
+#define EM_ASSERT_STRING_OR_NIL(val)                                    \
+    do { if (EM_EXTRACT_BOOLEAN(val)) EM_ASSERT_STRING(val); } while (0)
+
+// Assert that VAL is an integer, signal an error and return otherwise.
+#define EM_ASSERT_INTEGER(val)                                          \
+    do { if (!em_assert(env, em_integerp, (val))) return em_nil; } while (0)
+
+// Assert that VAL is an integer or nil, signal an error and return otherwise.
+#define EM_ASSERT_INTEGER_OR_NIL(val)                                   \
+    do { if (EM_EXTRACT_BOOLEAN(val)) EM_ASSERT_INTEGER(val); } while (0)
+
+// Normalize an emacs_value string path. This macro may return.
+#define EM_NORMALIZE_PATH(val)                                  \
+    do {                                                        \
+        (val) = em_expand_file_name(env, val);                  \
+        if (env->non_local_exit_check(env)) return em_nil;      \
+    } while (0)
+
+// Extract a boolean from an emacs_value.
+#define EM_EXTRACT_BOOLEAN(val) (env->is_not_nil(env, (val)) ? 1 : 0)
+
+// Extract a string from an emacs_value.
+// Caller is reponsible for ensuring that the emacs_value represents a string.
+#define EM_EXTRACT_STRING(val) em_get_string(env, (val));
+
+// Extract an integer from an emacs_value.
+// Caller is reponsible for ensuring that the emacs_value represents an integer.
+#define EM_EXTRACT_INTEGER(val) env->extract_integer(env, (val))
+
+// Extract an integer from an emacs_value with a default.
+// Caller is reponsible for ensuring that the emacs_value represents an integer or nil.
+#define EM_EXTRACT_INTEGER_OR_DEFAULT(val, default)                     \
+    (EM_EXTRACT_BOOLEAN(val) ? EM_EXTRACT_INTEGER(val) : (default))
+
+// Extract a string from an emacs_value, or NULL.
+// Caller is reponsible for ensuring that the emacs_value represents a string or nil.
+#define EM_EXTRACT_STRING_OR_NULL(val)                                  \
+    (EM_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL);
+
+/**
+ * Initiate a loop over an Emacs list.
+ * If any element is not a cons cell or nil, it WILL signal an error and return nil.
+ * @param var Variable bound to each car.
+ * @param listvar List to loop over.
+ * @param name Unique name identifying the loop.
+ */
+#define EM_DOLIST(var, listvar, name)                               \
+    emacs_value __cell##name = (listvar);                           \
+    __loop##name:                                                   \
+    if (!EM_EXTRACT_BOOLEAN(__cell##name)) goto __end##name;        \
+    if (!em_assert(env, em_cons_p, __cell##name)) return em_nil;    \
+    emacs_value (var) = em_car(env, __cell##name)
+
+/**
+ * Close a loop over an Emacs lisp.
+ * @param name: Unique name identifying the loop.
+ */
+#define EM_DOLIST_END(name)                     \
+    __cell##name = em_cdr(env, __cell##name);   \
+    goto __loop##name;                          \
+    __end##name:
+
 /**
  * Initialize the libegit2-emacs interface.
  * This function should only be called once.
