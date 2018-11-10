@@ -425,3 +425,175 @@ emacs_value egit_diff_tree_to_workdir_with_index(
 #undef MAYBE_GET
 #undef PARSE_OPTIONS
 #undef FINALIZE_AND_RETURN
+
+
+// =============================================================================
+// Foreach
+
+typedef struct {
+    emacs_env *env;
+    egit_object *diff_wrapper;
+    emacs_value file_callback;
+    emacs_value binary_callback;
+    emacs_value hunk_callback;
+    emacs_value line_callback;
+} diff_foreach_ctx;
+
+static int egit_diff_foreach_file_callback(const git_diff_delta *delta, float progress, void *payload)
+{
+    diff_foreach_ctx *ctx = (diff_foreach_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = egit_wrap(env, EGIT_DIFF_DELTA, delta, ctx->diff_wrapper);
+    args[1] = env->make_float(env, progress);
+    emacs_value retval = env->funcall(env, ctx->file_callback, 2, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+    if (env->eq(env, retval, em_abort))
+        return GIT_EUSER;
+    return 0;
+}
+
+static int egit_diff_foreach_binary_callback(
+    const git_diff_delta *delta, const git_diff_binary *binary, void *payload)
+{
+    diff_foreach_ctx *ctx = (diff_foreach_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = egit_wrap(env, EGIT_DIFF_DELTA, delta, ctx->diff_wrapper);
+    args[1] = egit_wrap(env, EGIT_DIFF_BINARY, binary, ctx->diff_wrapper);
+    emacs_value retval = env->funcall(env, ctx->binary_callback, 2, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+    if (env->eq(env, retval, em_abort))
+        return GIT_EUSER;
+    return 0;
+}
+
+static int egit_diff_foreach_hunk_callback(
+    const git_diff_delta *delta, const git_diff_hunk *hunk, void *payload)
+{
+    diff_foreach_ctx *ctx = (diff_foreach_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = egit_wrap(env, EGIT_DIFF_DELTA, delta, ctx->diff_wrapper);
+    args[1] = egit_wrap(env, EGIT_DIFF_HUNK, hunk, ctx->diff_wrapper);
+    emacs_value retval = env->funcall(env, ctx->hunk_callback, 2, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+    if (env->eq(env, retval, em_abort))
+        return GIT_EUSER;
+    return 0;
+}
+
+static int egit_diff_foreach_line_callback(
+    const git_diff_delta *delta, const git_diff_hunk *hunk,
+    const git_diff_line *line, void *payload)
+{
+    diff_foreach_ctx *ctx = (diff_foreach_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[3];
+    args[0] = egit_wrap(env, EGIT_DIFF_DELTA, delta, ctx->diff_wrapper);
+    args[1] = egit_wrap(env, EGIT_DIFF_HUNK, hunk, ctx->diff_wrapper);
+    args[2] = egit_wrap(env, EGIT_DIFF_LINE, line, ctx->diff_wrapper);
+    emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+    if (env->eq(env, retval, em_abort))
+        return GIT_EUSER;
+    return 0;
+}
+
+EGIT_DOC(diff_foreach, "DIFF FILE-FUNC &optional BINARY-FUNC HUNK-FUNC LINE-FUNC",
+         "Loop over all deltas in a diff while issuing callbacks.\n"
+         "- FILE-FUNC will be called for each file in the diff.\n"
+         "- BINARY-FUNC will be called for binary files.\n"
+         "- HUNK-FUNC will be called for ranges of lines in a diff.\n"
+         "- LINE-FUNC will be called per line of diff text.");
+emacs_value egit_diff_foreach(
+    emacs_env *env, emacs_value _diff, emacs_value file_cb,
+    emacs_value binary_cb, emacs_value hunk_cb, emacs_value line_cb)
+{
+    EGIT_ASSERT_DIFF(_diff);
+    EM_ASSERT_FUNCTION(file_cb);
+    if (EM_EXTRACT_BOOLEAN(binary_cb)) EM_ASSERT_FUNCTION(binary_cb);
+    if (EM_EXTRACT_BOOLEAN(hunk_cb)) EM_ASSERT_FUNCTION(hunk_cb);
+    if (EM_EXTRACT_BOOLEAN(line_cb)) EM_ASSERT_FUNCTION(line_cb);
+
+    git_diff *diff = EGIT_EXTRACT(_diff);
+    diff_foreach_ctx *ctx = (diff_foreach_ctx*) malloc(sizeof(diff_foreach_ctx));
+    *ctx = (diff_foreach_ctx) {env, EM_EXTRACT_USER_PTR(_diff), file_cb, binary_cb, hunk_cb, line_cb};
+
+    int retval = git_diff_foreach(
+        diff,
+        &egit_diff_foreach_file_callback,
+        EM_EXTRACT_BOOLEAN(binary_cb) ? &egit_diff_foreach_binary_callback : NULL,
+        EM_EXTRACT_BOOLEAN(hunk_cb) ? &egit_diff_foreach_hunk_callback : NULL,
+        EM_EXTRACT_BOOLEAN(line_cb) ? &egit_diff_foreach_line_callback : NULL,
+        ctx
+    );
+    free(ctx);
+
+    if (env->non_local_exit_check(env))
+        return em_nil;
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+
+// =============================================================================
+// Getters
+
+EGIT_DOC(diff_num_deltas, "DIFF &optional TYPE",
+         "Get the number of deltas in DIFF.\n"
+         "If TYPE is given, get only the number of deltas with that type.\n"
+         "The available types are `unmodified', `added', `deleted', `modified',\n"
+         "`renamed', `copied', `ignored', `untracked', `typechange', `unreadable',\n"
+         "and `conflicted'.");
+emacs_value egit_diff_num_deltas(emacs_env *env, emacs_value _diff, emacs_value _type)
+{
+    EGIT_ASSERT_DIFF(_diff);
+    git_diff *diff = EGIT_EXTRACT(_diff);
+
+    size_t num;
+    if (!EGIT_EXTRACT_BOOLEAN(_type))
+        num = git_diff_num_deltas(diff);
+    else if (env->eq(env, _type, em_unmodified))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNMODIFIED);
+    else if (env->eq(env, _type, em_added))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_ADDED);
+    else if (env->eq(env, _type, em_deleted))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_DELETED);
+    else if (env->eq(env, _type, em_modified))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_MODIFIED);
+    else if (env->eq(env, _type, em_renamed))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_RENAMED);
+    else if (env->eq(env, _type, em_copied))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_COPIED);
+    else if (env->eq(env, _type, em_ignored))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_IGNORED);
+    else if (env->eq(env, _type, em_untracked))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNTRACKED);
+    else if (env->eq(env, _type, em_typechange))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_TYPECHANGE);
+    else if (env->eq(env, _type, em_unreadable))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNREADABLE);
+    else if (env->eq(env, _type, em_conflicted))
+        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_CONFLICTED);
+    else {
+        em_signal_wrong_value(env, _type);
+        return em_nil;
+    }
+
+    return env->make_integer(env, num);
+}
