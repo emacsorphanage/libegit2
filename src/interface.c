@@ -96,11 +96,14 @@ emacs_value em_unmodified, em_added, em_deleted, em_modified, em_renamed, em_cop
 // Diff sides
 emacs_value em_old, em_new;
 
+// Diff formats
+emacs_value em_patch, em_patch_header, em_raw, em_name_only, em_name_status;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
     _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _symbol_value,
-    _default_directory, _assq, _args_out_of_range, _decode_time;
+    _default_directory, _assq, _args_out_of_range, _decode_time, _insert;
 
 
 void em_init(emacs_env *env)
@@ -284,6 +287,12 @@ void em_init(emacs_env *env)
     em_old = GLOBREF(INTERN("old"));
     em_new = GLOBREF(INTERN("new"));
 
+    em_patch = GLOBREF(INTERN("patch"));
+    em_patch_header = GLOBREF(INTERN("patch-header"));
+    em_raw = GLOBREF(INTERN("raw"));
+    em_name_only = GLOBREF(INTERN("name-only"));
+    em_name_status = GLOBREF(INTERN("name-status"));
+
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
     _car = GLOBREF(INTERN("car"));
@@ -303,6 +312,7 @@ void em_init(emacs_env *env)
     _symbol_value = GLOBREF(INTERN("symbol-value"));
     _user_ptrp = GLOBREF(INTERN("user-ptrp"));
     _vector = GLOBREF(INTERN("vector"));
+    _insert = GLOBREF(INTERN("insert"));
 
     _args_out_of_range = GLOBREF(INTERN("args-out-of-range"));
     _wrong_type_argument = GLOBREF(INTERN("wrong-type-argument"));
@@ -459,4 +469,9 @@ emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset)
     return em_funcall(env, _decode_time, 2,
                       env->make_integer(env, timestamp),
                       env->make_integer(env, offset));
+}
+
+void em_insert(emacs_env *env, const char *ptr, size_t length)
+{
+    em_funcall(env, _insert, 1, env->make_string(env, ptr, length));
 }
