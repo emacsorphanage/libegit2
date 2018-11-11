@@ -59,9 +59,6 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
  */
 static void egit_decref_direct(egit_object *wrapper)
 {
-    // This function should never be called on something that isn't a reference-counted type
-    assert(wrapper->type == EGIT_REPOSITORY);
-
     wrapper->refcount--;
     if (wrapper->refcount != 0)
         return;
@@ -69,8 +66,19 @@ static void egit_decref_direct(egit_object *wrapper)
     // First, delete the wrapper from the object store
     HASH_DEL(object_store, wrapper);
 
-    // Free the wrappee, but not the wrapper
-    git_repository_free(wrapper->ptr);
+    // Free the wrappee and the wrapper
+    switch (wrapper->type) {
+    case EGIT_INDEX:
+        git_index_free(wrapper->ptr);
+        break;
+    case EGIT_REPOSITORY:
+        git_repository_free(wrapper->ptr);
+        break;
+    default:
+        // This function should never be called on something that isn't a reference-counted type
+        assert(0);
+    }
+    free(wrapper);
 }
 
 /**
@@ -112,8 +120,8 @@ static void egit_finalize(void* _obj)
     egit_object *parent = obj->parent;
 
     switch (obj->type) {
-
     // Reference counted types can be freed entirely from egit_decref
+    case EGIT_INDEX:
     case EGIT_REPOSITORY:
         egit_decref_direct(obj);
         return;
@@ -125,10 +133,6 @@ static void egit_finalize(void* _obj)
 
     case EGIT_REFERENCE:
         git_reference_free(obj->ptr);
-        break;
-
-    case EGIT_INDEX:
-        git_index_free(obj->ptr);
         break;
 
     case EGIT_BLAME:
@@ -194,12 +198,15 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
     }
 
     egit_object *wrapper;
-    if (type == EGIT_REPOSITORY)
-        wrapper = egit_incref(EGIT_REPOSITORY, data);
-    else {
+    switch (type) {
+    case EGIT_INDEX: case EGIT_REPOSITORY:
+        wrapper = egit_incref(type, data);
+        break;
+    default:
         wrapper = (egit_object*) malloc(sizeof(egit_object));
         wrapper->type = type;
         wrapper->ptr = (void*) data;
+        break;
     }
     wrapper->parent = parent;
 
