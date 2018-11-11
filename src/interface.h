@@ -111,6 +111,10 @@ extern emacs_value em_from_owner, em_no_symlinks, em_no_filemode, em_ignore_case
 #define EM_EXTRACT_STRING_OR_NULL(val)                                  \
     (EM_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL);
 
+// Extract a user pointer from an emacs_value.
+// Caller is responsible for ensuring that the emacs_value represents a user pointer.
+#define EM_EXTRACT_USER_PTR(val) env->get_user_ptr(env, (val))
+
 /**
  * Initiate a loop over an Emacs list.
  * If any element is not a cons cell or nil, it WILL signal an error and return nil.

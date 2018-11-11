@@ -30,7 +30,7 @@ egit_type egit_get_type(emacs_env *env, emacs_value _obj)
 {
     if (!em_user_ptrp(env, _obj))
         return EGIT_UNKNOWN;
-    egit_object *obj = (egit_object*)env->get_user_ptr(env, _obj);
+    egit_object *obj = (egit_object*) EM_EXTRACT_USER_PTR(_obj);
     return obj->type;
 }
 
@@ -292,7 +292,7 @@ static emacs_value egit_refcount(emacs_env *env, emacs_value val)
 {
     if (egit_get_type(env, val) != EGIT_REPOSITORY)
         return em_nil;
-    egit_object *wrapper = (egit_object*)env->get_user_ptr(env, val);
+    egit_object *wrapper = (egit_object*) EM_EXTRACT_USER_PTR(val);
     return env->make_integer(env, wrapper->refcount);
 }
 
