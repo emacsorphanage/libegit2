@@ -151,12 +151,6 @@ static void egit_finalize(void* _obj)
         git_transaction_free(obj->ptr);
         break;
 
-    // Types that are allocated by us
-    case EGIT_INDEX_ENTRY:
-        free((void*) ((git_index_entry*) obj->ptr)->path);
-        free(obj->ptr);
-        break;
-
     default: break;
     }
 
