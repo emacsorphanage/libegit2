@@ -46,7 +46,7 @@ emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _n
     git_commit_free(commit);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(branch_create_from_annotated, "REPO NAME COMMITISH FORCE",
@@ -94,7 +94,7 @@ emacs_value egit_branch_create_from_annotated(
     git_annotated_commit_free(commit);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(branch_lookup, "REPO NAME &optional REMOTE",
@@ -116,7 +116,7 @@ emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _n
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, target_ref);
+    return egit_wrap(env, EGIT_REFERENCE, target_ref, NULL);
 }
 
 EGIT_DOC(branch_delete, "REF", "Delete branch at REF.");

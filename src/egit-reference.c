@@ -36,7 +36,7 @@ emacs_value egit_reference_create(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(reference_create_matching, "REPO NAME ID &optional FORCE CURRENT-ID LOG-MESSAGE",
@@ -72,7 +72,7 @@ emacs_value egit_reference_create_matching(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(reference_dup, "REF", "Duplicate an existing reference.");
@@ -83,7 +83,7 @@ emacs_value egit_reference_dup(emacs_env *env, emacs_value _ref)
     git_reference *new_ref;
     int retval = git_reference_dup(&new_ref, ref);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, new_ref);
+    return egit_wrap(env, EGIT_REFERENCE, new_ref, NULL);
 }
 
 EGIT_DOC(reference_dwim, "REPO SHORTHAND", "Lookup a reference by DWIMing its short name.");
@@ -102,7 +102,7 @@ emacs_value egit_reference_dwim(emacs_env *env, emacs_value _repo, emacs_value _
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(reference_lookup, "REPO NAME", "Lookup a reference by NAME in REPO.");
@@ -121,7 +121,7 @@ emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 
@@ -183,7 +183,7 @@ emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     git_repository *repo = git_reference_owner(ref);
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(reference_peel, "REF &optional TYPE",
@@ -215,7 +215,7 @@ emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _t
     int retval = git_reference_peel(&obj, ref, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, obj);
+    return egit_wrap(env, EGIT_OBJECT, obj, NULL);
 }
 
 EGIT_DOC(reference_resolve, "REF",
@@ -227,7 +227,7 @@ emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
     git_reference *newref;
     int retval = git_reference_resolve(&newref, ref);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, newref);
+    return egit_wrap(env, EGIT_REFERENCE, newref, NULL);
 }
 
 EGIT_DOC(reference_shorthand, "REF", "Get the short name of REF.");

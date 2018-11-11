@@ -79,7 +79,7 @@ emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path
     free(path);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_BLAME, blame);
+    return egit_wrap(env, EGIT_BLAME, blame, NULL);
 }
 
 static

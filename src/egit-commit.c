@@ -22,7 +22,7 @@ emacs_value egit_commit_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
     int retval = git_commit_lookup(&commit, repo, &oid);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_COMMIT, commit);
+    return egit_wrap(env, EGIT_COMMIT, commit, NULL);
 }
 
 EGIT_DOC(commit_lookup_prefix, "REPO OID", "Lookup a commit in REPO by shortened OID.");
@@ -40,7 +40,7 @@ emacs_value egit_commit_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_v
     int retval = git_commit_lookup_prefix(&commit, repo, &oid, len);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_COMMIT, commit);
+    return egit_wrap(env, EGIT_COMMIT, commit, NULL);
 }
 
 
@@ -59,7 +59,7 @@ emacs_value egit_commit_author(emacs_env *env, emacs_value _commit)
     int retval = git_signature_dup(&ret, sig);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_SIGNATURE, ret);
+    return egit_wrap(env, EGIT_SIGNATURE, ret, NULL);
 }
 
 EGIT_DOC(commit_body, "COMMIT", "Get the message body of COMMIT (everything but the first paragraph).");
@@ -83,7 +83,7 @@ emacs_value egit_commit_committer(emacs_env *env, emacs_value _commit)
     int retval = git_signature_dup(&ret, sig);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_SIGNATURE, ret);
+    return egit_wrap(env, EGIT_SIGNATURE, ret, NULL);
 }
 
 EGIT_DOC(commit_id, "COMMIT", "Return the ID of COMMIT.");
@@ -118,7 +118,7 @@ emacs_value egit_commit_nth_gen_ancestor(emacs_env *env, emacs_value _commit, em
     int retval = git_commit_nth_gen_ancestor(&ret, commit, n);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_COMMIT, ret);
+    return egit_wrap(env, EGIT_COMMIT, ret, NULL);
 }
 
 EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to.");
@@ -127,7 +127,7 @@ emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     git_repository *repo = git_commit_owner(commit);
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT.");
@@ -142,7 +142,7 @@ emacs_value egit_commit_parent(emacs_env *env, emacs_value _commit, emacs_value 
     int retval = git_commit_parent(&ret, commit, n);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_COMMIT, ret);
+    return egit_wrap(env, EGIT_COMMIT, ret, NULL);
 }
 
 EGIT_DOC(commit_parent_id, "COMMIT &optional N", "Return the ID of the Nth parent of COMMIT.");
@@ -197,7 +197,7 @@ emacs_value egit_commit_tree(emacs_env *env, emacs_value _commit)
     git_tree *tree;
     int retval = git_commit_tree(&tree, commit);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_TREE, tree);
+    return egit_wrap(env, EGIT_TREE, tree, NULL);
 }
 
 EGIT_DOC(commit_tree_id, "COMMIT", "Get the ID of the tree associated with COMMIT.");

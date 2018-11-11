@@ -44,7 +44,7 @@ emacs_value egit_object_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
     int retval = git_object_lookup(&object, repo, &oid, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, object);
+    return egit_wrap(env, EGIT_OBJECT, object, NULL);
 }
 
 EGIT_DOC(object_lookup_prefix, "REPO OID",
@@ -84,7 +84,7 @@ emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_v
     int retval = git_object_lookup_prefix(&object, repo, &oid, len, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, object);
+    return egit_wrap(env, EGIT_OBJECT, object, NULL);
 }
 
 
@@ -107,7 +107,7 @@ emacs_value egit_object_owner(emacs_env *env, emacs_value _object)
     EGIT_ASSERT_OBJECT(_object);
     git_object *object = EGIT_EXTRACT(_object);
     git_repository *repo = git_object_owner(object);
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(object_short_id, "OBJ", "Return the shortened ID for the given OBJ.");

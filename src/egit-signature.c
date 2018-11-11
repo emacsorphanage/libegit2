@@ -15,7 +15,7 @@ emacs_value egit_signature_default(emacs_env *env, emacs_value _repo)
     int retval = git_signature_default(&signature, repo);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_SIGNATURE, signature);
+    return egit_wrap(env, EGIT_SIGNATURE, signature, NULL);
 }
 
 EGIT_DOC(signature_name, "SIGNATURE", "Get the name from SIGNATURE.");

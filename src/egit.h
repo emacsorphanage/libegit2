@@ -163,12 +163,15 @@ typedef enum {
  *
  * User-pointers returned to Emacs should always wrap a struct of type egit_object.
  */
-typedef struct {
-    UT_hash_handle hh;                 /**< For internal use by the hash table. */
-    egit_type type;                    /**< Type of object stored. */
-    ptrdiff_t refcount;                /**< Reference count. */
-    void *ptr;                         /**< Pointer to git_??? structure. */
-} egit_object;
+typedef struct egit_object_s egit_object;
+
+struct egit_object_s {
+    UT_hash_handle hh;          /**< For internal use by the hash table. */
+    egit_type type;             /**< Type of object stored. */
+    ptrdiff_t refcount;         /**< Reference count. */
+    void *ptr;                  /**< Pointer to git_??? structure. */
+    egit_object *parent;        /**< Optional pointer to parent wrapper. */
+};
 
 /**
  * Return the git object type stored by en Emacs value.
@@ -204,7 +207,7 @@ bool egit_assert_object(emacs_env *env, emacs_value obj);
  * @param ptr The pointer to store.
  * @return The Emacs value.
  */
-emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr);
+emacs_value egit_wrap(emacs_env *env, egit_type type, void* ptr, egit_object *parent);
 
 /**
  * If libgit2 signaled an error, dispatch that error to Emacs.
