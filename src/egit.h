@@ -81,7 +81,7 @@
  * Extract a libgit git_??? struct from an emacs_value.
  * Caller is responsible for ensuring that this is a valid operation.
  */
-#define EGIT_EXTRACT(val) (((egit_object*)env->get_user_ptr(env, (val)))->ptr)
+#define EGIT_EXTRACT(val) (((egit_object*) EM_EXTRACT_USER_PTR(val))->ptr)
 
 /**
  * Extract a libgit git_??? struct from an emacs_value, or NULL.
