@@ -76,3 +76,13 @@
            (secondref (libgit-branch-lookup repo "second")))
       (should (libgit-branch-head-p masterref))
       (should-not (libgit-branch-head-p secondref)))))
+
+(ert-deftest branch-name ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (run "git" "branch" "second")
+    (let* ((repo (libgit-repository-open path))
+           (ref (libgit-branch-lookup repo "second")))
+      (should-error (libgit-branch-name nil))
+      (should (string= "second" (libgit-branch-name ref))))))

@@ -154,3 +154,17 @@ emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
 
     return retval ? em_t : em_nil;
 }
+
+EGIT_DOC(branch_name, "REF", "Return the name of the branch at REF.");
+emacs_value egit_branch_name(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+
+    const git_reference *ref = EGIT_EXTRACT(_ref);
+    const char *name;
+
+    const int retval = git_branch_name(&name, ref);
+    EGIT_CHECK_ERROR(retval);
+
+    return env->make_string(env, name, strlen(name));
+}
