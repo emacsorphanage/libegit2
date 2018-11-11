@@ -23,5 +23,5 @@ emacs_value egit_clone(emacs_env *env, emacs_value _url, emacs_value _path)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }

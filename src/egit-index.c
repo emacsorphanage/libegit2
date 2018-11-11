@@ -84,9 +84,9 @@ emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emac
 
         emacs_value args[4];
         args[0] = env->make_string(env, base->path, strlen(base->path));
-        args[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base));
-        args[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours));
-        args[3] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs));
+        args[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base), NULL);
+        args[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours), NULL);
+        args[3] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs), NULL);
         env->funcall(env, function, 4, args);
 
         if (env->non_local_exit_check(env))
@@ -109,9 +109,9 @@ emacs_value egit_index_conflict_get(emacs_env *env, emacs_value _index, emacs_va
     EGIT_CHECK_ERROR(retval);
 
     emacs_value ret[3];
-    ret[0] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base));
-    ret[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours));
-    ret[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs));
+    ret[0] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(base), NULL);
+    ret[1] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(ours), NULL);
+    ret[2] = egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(theirs), NULL);
     return em_list(env, ret, 3);
 }
 
@@ -173,7 +173,7 @@ emacs_value egit_index_get_byindex(emacs_env *env, emacs_value _index, emacs_val
         em_signal_args_out_of_range(env, n);
         return em_nil;
     }
-    return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry));
+    return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry), NULL);
 }
 
 EGIT_DOC(index_get_bypath, "INDEX PATH &optional STAGE",
@@ -207,7 +207,7 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
 
     if (!entry)
         return em_nil; // TODO: Better to signal an error?
-    return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry));
+    return egit_wrap(env, EGIT_INDEX_ENTRY, egit_index_entry_dup(entry), NULL);
 }
 
 EGIT_DOC(index_owner, "INDEX", "Return the repository associated with INDEX.");
@@ -216,7 +216,7 @@ emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     git_repository *repo = git_index_owner(index);
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(index_path, "INDEX", "Get the path to the index file on disk.");

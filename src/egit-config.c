@@ -16,7 +16,7 @@ emacs_value egit_config_snapshot(emacs_env *env, emacs_value _config)
     git_config *snapshot;
     int retval = git_config_snapshot(&snapshot, config);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_CONFIG, snapshot);
+    return egit_wrap(env, EGIT_CONFIG, snapshot, NULL);
 }
 
 
@@ -104,7 +104,7 @@ emacs_value egit_config_lock(emacs_env *env, emacs_value _config)
     git_transaction *trans;
     int retval = git_config_lock(&trans, config);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_TRANSACTION, trans);
+    return egit_wrap(env, EGIT_TRANSACTION, trans, NULL);
 }
 
 

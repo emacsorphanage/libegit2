@@ -28,7 +28,7 @@ emacs_value egit_repository_init(emacs_env *env, emacs_value _path, emacs_value 
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(repository_open, "PATH", "Open an existing repository at PATH.");
@@ -46,7 +46,7 @@ emacs_value egit_repository_open(emacs_env *env, emacs_value _path)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 EGIT_DOC(repository_open_bare, "PATH",
@@ -66,7 +66,7 @@ emacs_value egit_repository_open_bare(emacs_env *env, emacs_value _path)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REPOSITORY, repo);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
 
 
@@ -92,7 +92,7 @@ emacs_value egit_repository_config(emacs_env *env, emacs_value _repo)
     git_config *config;
     int retval = git_repository_config(&config, repo);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_CONFIG, config);
+    return egit_wrap(env, EGIT_CONFIG, config, NULL);
 }
 
 EGIT_DOC(repository_get_namespace, "REPO",
@@ -114,7 +114,7 @@ emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
     git_reference *ref;
     int retval = git_repository_head(&ref, repo);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(repository_head_for_worktree, "REPO NAME",
@@ -134,7 +134,7 @@ emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo,
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref);
+    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
 }
 
 EGIT_DOC(repository_ident, "REPO",
@@ -160,7 +160,7 @@ emacs_value egit_repository_index(emacs_env *env, emacs_value _repo)
     git_index *index;
     int retval = git_repository_index(&index, repo);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_INDEX, index);
+    return egit_wrap(env, EGIT_INDEX, index, NULL);
 }
 
 EGIT_DOC(repository_message, "REPO",
