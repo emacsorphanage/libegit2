@@ -18,6 +18,7 @@ EGIT_DEFUN(diff_tree_to_workdir_with_index, emacs_value _repo,
 
 EGIT_DEFUN(diff_foreach, emacs_value _diff, emacs_value file_cb,
            emacs_value binary_cb, emacs_value hunk_cb, emacs_value line_cb);
+EGIT_DEFUN(diff_print, emacs_value _diff, emacs_value _format, emacs_value _func);
 
 EGIT_DEFUN(diff_delta_file_id, emacs_value _delta, emacs_value side);
 EGIT_DEFUN(diff_delta_file_path, emacs_value _delta, emacs_value side);

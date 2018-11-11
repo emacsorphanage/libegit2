@@ -552,6 +552,91 @@ emacs_value egit_diff_foreach(
 
 
 // =============================================================================
+// Print
+
+typedef struct {
+    emacs_env *env;
+    egit_object *diff_wrapper;
+    emacs_value line_callback;
+} diff_print_ctx;
+
+int egit_diff_print_line_callback(
+    const git_diff_delta *delta, const git_diff_hunk *hunk,
+    const git_diff_line *line, void *payload)
+{
+    diff_print_ctx *ctx = (diff_print_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    if (!EM_EXTRACT_BOOLEAN(ctx->line_callback)) {
+        // Default choice: write to buffer
+        if (line->origin == ' ' || line->origin == '+' || line->origin == '-')
+            em_insert(env, &line->origin, 1);
+        em_insert(env, line->content, line->content_len);
+
+        if (env->non_local_exit_check(env))
+            return GIT_EUSER;
+        return 0;
+    }
+
+    emacs_value args[3];
+    args[0] = egit_wrap(env, EGIT_DIFF_DELTA, delta, ctx->diff_wrapper);
+    args[1] = egit_wrap(env, EGIT_DIFF_HUNK, hunk, ctx->diff_wrapper);
+    args[2] = egit_wrap(env, EGIT_DIFF_LINE, line, ctx->diff_wrapper);
+    emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
+
+    if (env->non_local_exit_check(env))
+        return GIT_EUSER;
+    if (env->eq(env, retval, em_abort))
+        return GIT_EUSER;
+    return 0;
+}
+
+EGIT_DOC(diff_print, "DIFF &optional FORMAT LINE-FUNC",
+         "Iterate through DIFF calling LINE-FUNC on each line.\n"
+         "FORMAT is one of the symbols `patch' (default), `patch-header',\n"
+         "`raw', `name-only' and `name-status'.\n"
+         "LINE-FUNC is called with three arguments: a delta, hunk and a line\n"
+         "object. The default will issue a call to `insert'.");
+emacs_value egit_diff_print(
+    emacs_env *env, emacs_value _diff, emacs_value _format, emacs_value func)
+{
+    EGIT_ASSERT_DIFF(_diff);
+    if (EM_EXTRACT_BOOLEAN(func)) EM_ASSERT_FUNCTION(func);
+
+    git_diff_format_t format;
+    if (!EM_EXTRACT_BOOLEAN(_format) || env->eq(env, _format, em_patch))
+        format = GIT_DIFF_FORMAT_PATCH;
+    else if (env->eq(env, _format, em_patch_header))
+        format = GIT_DIFF_FORMAT_PATCH_HEADER;
+    else if (env->eq(env, _format, em_raw))
+        format = GIT_DIFF_FORMAT_RAW;
+    else if (env->eq(env, _format, em_name_only))
+        format = GIT_DIFF_FORMAT_NAME_ONLY;
+    else if (env->eq(env, _format, em_name_status))
+        format = GIT_DIFF_FORMAT_NAME_STATUS;
+    else {
+        em_signal_wrong_value(env, _format);
+        return em_nil;
+    }
+
+    git_diff *diff = EGIT_EXTRACT(_diff);
+    diff_print_ctx *ctx = (diff_print_ctx*) malloc(sizeof(diff_print_ctx));
+    *ctx = (diff_print_ctx) {env, EM_EXTRACT_USER_PTR(_diff), func};
+
+    int retval = git_diff_print(diff, format, &egit_diff_print_line_callback, ctx);
+    free(ctx);
+
+    if (env->non_local_exit_check(env))
+        return em_nil;
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+
+
+// =============================================================================
 // Getters - delta
 
 EGIT_DOC(diff_delta_file_id, "DELTA SIDE",

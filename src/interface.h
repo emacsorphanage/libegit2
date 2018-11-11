@@ -90,6 +90,9 @@ extern emacs_value em_unmodified, em_added, em_deleted, em_modified, em_renamed,
 // Diff sides
 extern emacs_value em_old, em_new;
 
+// Diff formats
+extern emacs_value em_patch, em_patch_header, em_raw, em_name_only, em_name_status;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)
@@ -335,5 +338,10 @@ char *em_default_directory(emacs_env *env);
  * Run (decode-time TIMESTAMP OFFSET) in Emacs.
  */
 emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset);
+
+/**
+ * Run (insert ...) in Emacs.
+ */
+void em_insert(emacs_env *env, const char *ptr, size_t length);
 
 #endif /* INTERFACE_H */
