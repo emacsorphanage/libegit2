@@ -1068,21 +1068,21 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :interrobang: `git-tag-create-lightweight`
 - :interrobang: `git-tag-delete`
 - :interrobang: `git-tag-dup`
-- :interrobang: `git-tag-foreach`
+- :heavy_check_mark: `git-tag-foreach`
 - :x: `git-tag-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-tag-id`
-- :interrobang: `git-tag-list`
-- :interrobang: `git-tag-list-match`
-- :interrobang: `git-tag-lookup`
-- :interrobang: `git-tag-lookup-prefix`
-- :interrobang: `git-tag-message`
-- :interrobang: `git-tag-name`
-- :interrobang: `git-tag-owner`
-- :interrobang: `git-tag-peel`
-- :interrobang: `git-tag-tagger`
-- :interrobang: `git-tag-target`
-- :interrobang: `git-tag-target-id`
-- :interrobang: `git-tag-target-type`
+- :heavy_check_mark: `git-tag-id`
+- :heavy_check_mark: `git-tag-list`
+- :heavy_check_mark: `git-tag-list-match`
+- :heavy_check_mark: `git-tag-lookup`
+- :heavy_check_mark: `git-tag-lookup-prefix`
+- :heavy_check_mark: `git-tag-message`
+- :heavy_check_mark: `git-tag-name`
+- :heavy_check_mark: `git-tag-owner`
+- :heavy_check_mark: `git-tag-peel`
+- :heavy_check_mark: `git-tag-tagger`
+- :heavy_check_mark: `git-tag-target`
+- :heavy_check_mark: `git-tag-target-id`
+- :heavy_check_mark: `git-tag-target-type`
 
 ### time
 
