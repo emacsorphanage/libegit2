@@ -138,13 +138,7 @@ emacs_value egit_reference_list(emacs_env *env, emacs_value _repo)
     int retval = git_reference_list(&out, repo);
     EGIT_CHECK_ERROR(retval);
 
-    emacs_value list = em_nil;
-    for (ptrdiff_t c = out.count-1; c >= 0; c--) {
-        emacs_value str = env->make_string(env, out.strings[c], strlen(out.strings[c]));
-        list = em_cons(env, str, list);
-    }
-    git_strarray_free(&out);
-    return list;
+    EGIT_RET_STRARRAY(out);
 }
 
 EGIT_DOC(reference_name, "REF", "Return the full name for the REF.");

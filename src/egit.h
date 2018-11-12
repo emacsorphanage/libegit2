@@ -86,8 +86,12 @@
     do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
-#define EGIT_ASSERT_SIGNATURE_OR_NIL(val) \
+#define EGIT_ASSERT_SIGNATURE_OR_NIL(val)                               \
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
+
+// Assert that VAL is a transaction, signal an error and return otherwise.
+#define EGIT_ASSERT_TAG(val)                                            \
+    do { if (!egit_assert_type(env, (val), EGIT_TAG, em_libgit_tag_p)) return em_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_TRANSACTION(val)                                    \
@@ -159,6 +163,24 @@
         emacs_value ret = env->make_string(env, (buf).ptr, (buf).size); \
         git_buf_free(&(buf));                                           \
         return ret;                                                     \
+    } while (0)
+
+/**
+ * Convert a git_strarray to an Emacs list and return it, freeing the git_strarray in the process.
+ */
+#define EGIT_RET_STRARRAY(arr)                                  \
+    do {                                                        \
+        emacs_value list = em_nil;                              \
+        for (ptrdiff_t c = (arr).count-1; c >= 0; c--) {        \
+            emacs_value str = env->make_string(                 \
+                env,                                            \
+                (arr).strings[c],                               \
+                strlen((arr).strings[c])                        \
+            );                                                  \
+            list = em_cons(env, str, list);                     \
+        }                                                       \
+        git_strarray_free(&(arr));                              \
+        return list;                                            \
     } while (0)
 
 /**

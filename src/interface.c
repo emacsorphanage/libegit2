@@ -18,7 +18,7 @@ emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
     em_libgit_signature_p, em_libgit_blame_p, em_libgit_commit_p, em_libgit_config_p,
     em_libgit_transaction_p, em_libgit_tree_p, em_libgit_index_p, em_libgit_index_entry_p,
     em_libgit_diff_p, em_libgit_diff_delta_p, em_libgit_diff_binary_p,
-    em_libgit_diff_hunk_p, em_libgit_diff_line_p;
+    em_libgit_diff_hunk_p, em_libgit_diff_line_p, em_libgit_tag_p;
 emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object,
     em_signature, em_blame, em_config, em_transaction, em_index, em_index_entry, em_diff,
     em_diff_delta, em_diff_binary, em_diff_hunk, em_diff_line;
@@ -136,6 +136,7 @@ void em_init(emacs_env *env)
     em_libgit_diff_binary_p = GLOBREF(INTERN("libgit-diff-binary-p"));
     em_libgit_diff_hunk_p = GLOBREF(INTERN("libgit-diff-hunk-p"));
     em_libgit_diff_line_p = GLOBREF(INTERN("libgit-diff-line-p"));
+    em_libgit_tag_p = GLOBREF(INTERN("libgit-tag-p"));
 
     em_repository = GLOBREF(INTERN("repository"));
     em_reference = GLOBREF(INTERN("reference"));

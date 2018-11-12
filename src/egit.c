@@ -21,6 +21,7 @@
 #include "egit-revparse.h"
 #include "egit-signature.h"
 #include "egit-status.h"
+#include "egit-tag.h"
 #include "egit-transaction.h"
 #include "egit-tree.h"
 #include "egit.h"
@@ -404,6 +405,12 @@ static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
 }
 
+EGIT_DOC(tag_p, "OBJ", "Return non-nil if OBJ is a git tag.");
+static emacs_value egit_tag_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_TAG ? em_t : em_nil;
+}
+
 EGIT_DOC(transaction_p, "OBJ", "Return non-nil if OBJ is a git transaction.");
 static emacs_value egit_transaction_p(emacs_env *env, emacs_value obj)
 {
@@ -443,6 +450,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
+    DEFUN("libgit-tag-p", tag_p, 1, 1);
     DEFUN("libgit-transaction-p", transaction_p, 1, 1);
     DEFUN("libgit-tree-p", tree_p, 1, 1);
 
@@ -561,7 +569,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-conflicts-p", index_conflicts_p, 1, 1);
 
     // Object
-    DEFUN("libgit-object-lookup", object_id, 2, 3);
+    DEFUN("libgit-object-lookup", object_lookup, 2, 3);
     DEFUN("libgit-object-lookup-prefix", object_id, 2, 3);
 
     DEFUN("libgit-object-id", object_id, 1, 1);
@@ -650,12 +658,29 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
 
+    // Tag
+    DEFUN("libgit-tag-lookup", tag_lookup, 2, 2);
+    DEFUN("libgit-tag-lookup-prefix", tag_lookup_prefix, 2, 2);
+    DEFUN("libgit-tag-foreach", tag_foreach, 2, 2);
+    DEFUN("libgit-tag-id", tag_id, 1, 1);
+    DEFUN("libgit-tag-owner", tag_owner, 1, 1);
+    DEFUN("libgit-tag-message", tag_message, 1, 1);
+    DEFUN("libgit-tag-name", tag_name, 1, 1);
+    DEFUN("libgit-tag-peel", tag_peel, 1, 1);
+    DEFUN("libgit-tag-target", tag_target, 1, 1);
+    DEFUN("libgit-tag-target-id", tag_target_id, 1, 1);
+    DEFUN("libgit-tag-target-type", tag_target_type, 1, 1);
+    DEFUN("libgit-tag-list", tag_list, 1, 2);
+
     // Transaction
     DEFUN("libgit-transaction-commit", transaction_commit, 1, 1);
 
     // Tree
     DEFUN("libgit-tree-lookup", tree_lookup, 2, 2);
     DEFUN("libgit-tree-lookup-prefix", tree_lookup_prefix, 2, 2);
+
+    DEFUN("libgit-tree-id", tree_id, 1, 1);
+    DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 
     DEFUN("libgit-tree-entry-byid", tree_entry_byid, 2, 2);
     DEFUN("libgit-tree-entry-byindex", tree_entry_byindex, 2, 2);

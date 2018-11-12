@@ -2,7 +2,7 @@
 
 #include "egit.h"
 #include "interface.h"
-#include "egit-repository.h"
+#include "egit-object.h"
 
 
 // =============================================================================
