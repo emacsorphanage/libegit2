@@ -11,5 +11,6 @@ EGIT_DEFUN(branch_checked_out_p, emacs_value _ref);
 EGIT_DEFUN(branch_head_p, emacs_value _ref);
 EGIT_DEFUN(branch_name, emacs_value _ref);
 EGIT_DEFUN(branch_remote_name, emacs_value _repo, emacs_value _branch);
+EGIT_DEFUN(branch_upstream_name, emacs_value _repo, emacs_value _refname);
 
 #endif /* EGIT_BRANCH_H */
