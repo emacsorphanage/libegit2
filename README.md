@@ -160,6 +160,10 @@ Type checkers and predicates:
 - :heavy_check_mark: `git-blame-p`
 - :heavy_check_mark: `git-commit-p`
 - :heavy_check_mark: `git-diff-p`
+- :heavy_check_mark: `git-diff-delta-p`
+- :heavy_check_mark: `git-diff-binary-p`
+- :heavy_check_mark: `git-diff-hunk-p`
+- :heavy_check_mark: `git-diff-line-p`
 - :heavy_check_mark: `git-index-p`
 - :heavy_check_mark: `git-index-entry-p`
 - :heavy_check_mark: `git-object-p`
@@ -171,14 +175,28 @@ Type checkers and predicates:
 - :heavy_check_mark: `git-transaction-p`
 - :heavy_check_mark: `git-tree-p`
 
-Others:
+Getters for public structs:
 
-- :heavy_check_mark: `git-index-conflict-foreach`
-- :heavy_check_mark: `git-index-entry-id`
+- :heavy_check_mark: `git-diff-delta-file-id`
+- :heavy_check_mark: `git-diff-delta-file-path`
+- :heavy_check_mark: `git-diff-delta-nfiles`
+- :heavy_check_mark: `git-diff-delta-similarity`
+- :heavy_check_mark: `git-diff-delta-status`
+- :heavy_check_mark: `git-diff-delta-file-exists-p`
+- :heavy_check_mark: `git-diff-hunk-header`
+- :heavy_check_mark: `git-diff-hunk-lines`
+- :heavy_check_mark: `git-diff-hunk-start`
+- :heavy_check_mark: `git-diff-line-origin`
+- :heavy_check_mark: `git-diff-line-lineno`
+- :heavy_check_mark: `git-diff-line-content`
 - :heavy_check_mark: `git-index-entry-path`
 - :heavy_check_mark: `git-signature-name`
 - :heavy_check_mark: `git-signature-email`
 - :heavy_check_mark: `git-signature-time`
+
+Iterators converted to map functions:
+
+- :heavy_check_mark: `git-index-conflict-foreach`
 
 ### annotated
 
@@ -381,12 +399,12 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-diff-commit-as-email`
 - :interrobang: `git-diff-find-init-options`
 - :interrobang: `git-diff-find-similar`
-- :interrobang: `git-diff-foreach`
+- :heavy_check_mark: `git-diff-foreach`
 - :interrobang: `git-diff-format-email`
 - :interrobang: `git-diff-format-email-init-options`
 - :x: `git-diff-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-diff-from-buffer`
-- :interrobang: `git-diff-get-delta`
+- :heavy_check_mark: `git-diff-get-delta`
 - :interrobang: `git-diff-get-perfdata`
 - :interrobang: `git-diff-get-stats`
 - :heavy_check_mark: `git-diff-index-to-index`
@@ -398,7 +416,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-diff-num-deltas-of-type` (use `git-diff-num-deltas`)
 - :interrobang: `git-diff-patchid`
 - :interrobang: `git-diff-patchid-init-options`
-- :interrobang: `git-diff-print`
+- :heavy_check_mark: `git-diff-print`
 - :interrobang: `git-diff-print-callback--to-buf`
 - :interrobang: `git-diff-print-callback--to-file-handle`
 - :interrobang: `git-diff-stats-deletions`
