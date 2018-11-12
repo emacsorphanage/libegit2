@@ -146,8 +146,8 @@ they are more specialized.
 
 Estimates (updated periodically):
 - Implemented: 165 (21.2%)
-- Should not implement: 98 (12.6%)
-- To do: 515 (66.2%)
+- Should not implement: 145 (18.6%)
+- To do: 468 (60.1%)
 - Total: 778
 
 ### extra
@@ -299,8 +299,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-committer`
 - :interrobang: `git-commit-create`
 - :interrobang: `git-commit-create-buffer`
-- :interrobang: `git-commit-create-from-callback`
-- :interrobang: `git-commit-create-from-ids`
+- :x: `git-commit-create-from-callback` (in `sys`)
+- :x: `git-commit-create-from-ids` (in `sys`)
 - :interrobang: `git-commit-create-v`
 - :interrobang: `git-commit-create-with-signature`
 - :interrobang: `git-commit-dup`
@@ -327,7 +327,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### config
 
-- :interrobang: `git-config-add-backend`
+- :x: `git-config-add-backend` (in `sys`)
 - :interrobang: `git-config-add-file-ondisk`
 - :interrobang: `git-config-backend-foreach-match`
 - :interrobang: `git-config-delete-entry`
@@ -349,7 +349,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-config-get-path`
 - :heavy_check_mark: `git-config-get-string`
 - :x: `git-config-get-string-buf` (probably fine with just `-get-string`)
-- :interrobang: `git-config-init-backend`
+- :x: `git-config-init-backend` (in `sys`)
 - :x: `git-config-iterator-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-config-iterator-glob-new`
 - :interrobang: `git-config-iterator-new`
@@ -408,7 +408,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :x: `git-diff-free` (memory management shouldn't be exposed to Emacs)
 - :interrobang: `git-diff-from-buffer`
 - :heavy_check_mark: `git-diff-get-delta`
-- :interrobang: `git-diff-get-perfdata`
+- :x: `git-diff-get-perfdata` (in `sys`)
 - :interrobang: `git-diff-get-stats`
 - :heavy_check_mark: `git-diff-index-to-index`
 - :heavy_check_mark: `git-diff-index-to-workdir`
@@ -420,7 +420,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :interrobang: `git-diff-patchid`
 - :interrobang: `git-diff-patchid-init-options`
 - :heavy_check_mark: `git-diff-print`
-- :interrobang: `git-diff-print-callback--to-buf`
+- :x: `git-diff-print-callback--to-buf` (in `sys`)
 - :interrobang: `git-diff-print-callback--to-file-handle`
 - :interrobang: `git-diff-stats-deletions`
 - :interrobang: `git-diff-stats-files-changed`
@@ -440,28 +440,28 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### filter
 
-- :interrobang: `git-filter-init`
+- :x: `git-filter-init` (in `sys`)
 - :interrobang: `git-filter-list-apply-to-blob`
 - :interrobang: `git-filter-list-apply-to-data`
 - :interrobang: `git-filter-list-apply-to-file`
 - :interrobang: `git-filter-list-contains`
 - :x: `git-filter-list-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-filter-list-length`
+- :x: `git-filter-list-length` (in `sys`)
 - :interrobang: `git-filter-list-load`
-- :interrobang: `git-filter-list-new`
-- :interrobang: `git-filter-list-push`
+- :x: `git-filter-list-new` (in `sys`)
+- :x: `git-filter-list-push` (in `sys`)
 - :interrobang: `git-filter-list-stream-blob`
 - :interrobang: `git-filter-list-stream-data`
 - :interrobang: `git-filter-list-stream-file`
-- :interrobang: `git-filter-lookup`
-- :interrobang: `git-filter-register`
-- :interrobang: `git-filter-source-filemode`
-- :interrobang: `git-filter-source-flags`
-- :interrobang: `git-filter-source-id`
-- :interrobang: `git-filter-source-mode`
-- :interrobang: `git-filter-source-path`
-- :interrobang: `git-filter-source-repo`
-- :interrobang: `git-filter-unregister`
+- :x: `git-filter-lookup` (in `sys`)
+- :x: `git-filter-register` (in `sys`)
+- :x: `git-filter-source-filemode` (in `sys`)
+- :x: `git-filter-source-flags` (in `sys`)
+- :x: `git-filter-source-id` (in `sys`)
+- :x: `git-filter-source-mode` (in `sys`)
+- :x: `git-filter-source-path` (in `sys`)
+- :x: `git-filter-source-repo` (in `sys`)
+- :x: `git-filter-unregister` (in `sys`)
 
 ### giterr
 
@@ -479,9 +479,9 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### hashsig
 
-- :interrobang: `git-hashsig-compare`
-- :interrobang: `git-hashsig-create`
-- :interrobang: `git-hashsig-create-fromfile`
+- :x: `git-hashsig-compare` (in `sys`)
+- :x: `git-hashsig-create` (in `sys`)
+- :x: `git-hashsig-create-fromfile` (in `sys`)
 - :x: `git-hashsig-free` (memory management shouldn't be exposed to Emacs)
 
 ### ignore
@@ -551,9 +551,9 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### mempack
 
-- :interrobang: `git-mempack-dump`
-- :interrobang: `git-mempack-new`
-- :interrobang: `git-mempack-reset`
+- :x: `git-mempack-dump` (in `sys`)
+- :x: `git-mempack-new` (in `sys`)
+- :x: `git-mempack-reset` (in `sys`)
 
 ### merge
 
@@ -631,7 +631,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :interrobang: `git-odb-get-backend`
 - :interrobang: `git-odb-hash`
 - :interrobang: `git-odb-hashfile`
-- :interrobang: `git-odb-init-backend`
+- :x: `git-odb-init-backend` (in `sys`)
 - :interrobang: `git-odb-new`
 - :interrobang: `git-odb-num-backends`
 - :interrobang: `git-odb-object-data`
@@ -684,7 +684,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### openssl
 
-- :interrobang: `git-openssl-set-locking`
+- :x: `git-openssl-set-locking` (in `sys`)
 
 ### packbuilder
 
@@ -761,13 +761,13 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### refdb
 
-- :interrobang: `git-refdb-backend-fs`
+- :x: `git-refdb-backend-fs` (in `sys`)
 - :interrobang: `git-refdb-compress`
 - :x: `git-refdb-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-refdb-init-backend`
+- :x: `git-refdb-init-backend` (in `sys`)
 - :interrobang: `git-refdb-new`
 - :interrobang: `git-refdb-open`
-- :interrobang: `git-refdb-set-backend`
+- :x: `git-refdb-set-backend` (in `sys`)
 
 ### reference
 
@@ -930,10 +930,10 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-repository-set-head-detached`
 - :interrobang: `git-repository-set-head-detached-from-annotated`
 - :heavy_check_mark: `git-repository-set-ident`
-- :interrobang: `git-repository-set-index`
+- :x: `git-repository-set-index` (in `sys`)
 - :heavy_check_mark: `git-repository-set-namespace`
-- :interrobang: `git-repository-set-odb`
-- :interrobang: `git-repository-set-refdb`
+- :x: `git-repository-set-odb` (in `sys`)
+- :x: `git-repository-set-refdb` (in `sys`)
 - :heavy_check_mark: `git-repository-set-workdir`
 - :heavy_check_mark: `git-repository-state`
 - :heavy_check_mark: `git-repository-state-cleanup`
@@ -1012,7 +1012,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :x: `git-status-init-options`
 - :interrobang: `git-status-list-entrycount`
 - :interrobang: `git-status-list-free`
-- :interrobang: `git-status-list-get-perfdata`
+- :x: `git-status-list-get-perfdata` (in `sys`)
 - :interrobang: `git-status-list-new`
 - :heavy_check_mark: `git-status-should-ignore`
 
@@ -1023,7 +1023,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### stream
 
-- :interrobang: `git-stream-register-tls`
+- :x: `git-stream-register-tls` (in `sys`)
 
 ### submodule
 
@@ -1086,7 +1086,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### time
 
-- :interrobang: `git-time-monotonic`
+- :x: `git-time-monotonic` (in `sys`)
 
 ### trace
 
@@ -1105,17 +1105,17 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### transport
 
-- :interrobang: `git-transport-dummy`
-- :interrobang: `git-transport-init`
-- :interrobang: `git-transport-local`
-- :interrobang: `git-transport-new`
-- :interrobang: `git-transport-register`
-- :interrobang: `git-transport-smart`
-- :interrobang: `git-transport-smart-certificate-check`
-- :interrobang: `git-transport-smart-credentials`
-- :interrobang: `git-transport-smart-proxy-options`
-- :interrobang: `git-transport-ssh-with-paths`
-- :interrobang: `git-transport-unregister`
+- :x: `git-transport-dummy` (in `sys`)
+- :x: `git-transport-init` (in `sys`)
+- :x: `git-transport-local` (in `sys`)
+- :x: `git-transport-new` (in `sys`)
+- :x: `git-transport-register` (in `sys`)
+- :x: `git-transport-smart` (in `sys`)
+- :x: `git-transport-smart-certificate-check` (in `sys`)
+- :x: `git-transport-smart-credentials` (in `sys`)
+- :x: `git-transport-smart-proxy-options` (in `sys`)
+- :x: `git-transport-ssh-with-paths` (in `sys`)
+- :x: `git-transport-unregister` (in `sys`)
 
 ### tree
 
