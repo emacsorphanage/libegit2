@@ -168,3 +168,21 @@ emacs_value egit_branch_name(emacs_env *env, emacs_value _ref)
 
     return env->make_string(env, name, strlen(name));
 }
+
+EGIT_DOC(branch_remote_name, "REPO BRANCH", "Return the name of remote that the remote tracking branch BRANCH belongs to in the repository REPO.");
+emacs_value egit_branch_remote_name(emacs_env *env, emacs_value _repo, emacs_value _branch)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_branch);
+
+    git_repository *const repo = EGIT_EXTRACT(_repo);
+    char *const branch = EM_EXTRACT_STRING(_branch);
+    git_buf remote_name = {NULL, 0, 0};
+
+    const int retval = git_branch_remote_name(&remote_name, repo, branch);
+
+    free(branch);
+    EGIT_CHECK_ERROR(retval);
+
+    EGIT_RET_BUF_AS_STRING(remote_name);
+}
