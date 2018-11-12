@@ -11,4 +11,8 @@ EGIT_DEFUN(annotated_commit_from_fetchhead,
            emacs_value remote_url,
            emacs_value id);
 
+EGIT_DEFUN(annotated_commit_from_revspec,
+           emacs_value repo,
+           emacs_value revspec);
+
 #endif /* EGIT_ANNOTATED_COMMIT_H */
