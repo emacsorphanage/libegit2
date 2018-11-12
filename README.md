@@ -145,10 +145,10 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 144 (18.5%)
-- Should not implement: 96 (12.4%)
-- To do: 535 (69.0%)
-- Total: 775
+- Implemented: 147 (18.9%)
+- Should not implement: 96 (12.3%)
+- To do: 536 (68.9%)
+- Total: 779
 
 ### extra
 
@@ -255,10 +255,13 @@ Iterators converted to map functions:
 - :interrobang: `git-branch-iterator-new`
 - :heavy_check_mark: `git-branch-lookup`
 - :interrobang: `git-branch-move`
-- :interrobang: `git-branch-name`
+- :heavy_check_mark: `git-branch-name`
 - :interrobang: `git-branch-next`
+- :heavy_check_mark: `git-branch-remote-name`
 - :interrobang: `git-branch-set-upstream`
 - :interrobang: `git-branch-upstream`
+- :heavy_check_mark: `git-branch-upstream-name`
+- :interrobang: `git-branch-upstream-remote`
 
 ### buf
 
@@ -386,10 +389,10 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### describe
 
-- :heavy_check-mark: `git-describe-commit`
+- :heavy_check_mark: `git-describe-commit`
 - :x: `git-describe-format` (we return strings immediately)
 - :x: `git-describe-result-free` (memory management shouldn't be exposed to Emacs)
-- :heavy_check-mark: `git-describe-workdir`
+- :heavy_check_mark: `git-describe-workdir`
 
 ### diff
 
