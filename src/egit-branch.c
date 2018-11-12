@@ -169,7 +169,8 @@ emacs_value egit_branch_name(emacs_env *env, emacs_value _ref)
     return env->make_string(env, name, strlen(name));
 }
 
-EGIT_DOC(branch_remote_name, "REPO BRANCH", "Return the name of remote that the remote tracking branch BRANCH belongs to in the repository REPO.");
+EGIT_DOC(branch_remote_name, "REPO BRANCH",
+         "Return the name of the remote of a remote-tracking BRANCH.\n");
 emacs_value egit_branch_remote_name(emacs_env *env, emacs_value _repo, emacs_value _branch)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -187,7 +188,9 @@ emacs_value egit_branch_remote_name(emacs_env *env, emacs_value _repo, emacs_val
     EGIT_RET_BUF_AS_STRING(remote_name);
 }
 
-EGIT_DOC(branch_upstream_name, "REPO REFNAME", "Return the name of the reference supporting the remote tracking branch, given REFNAME, the name of a local branch reference in the repository REPO.");
+EGIT_DOC(branch_upstream_name, "REPO REFNAME",
+         "Return the name of the reference of a remote-tracking branch.\n"
+         "REFNAME is a local branch reference in REPO.");
 emacs_value egit_branch_upstream_name(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
