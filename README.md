@@ -259,9 +259,9 @@ Iterators converted to map functions:
 - :interrobang: `git-branch-next`
 - :heavy_check_mark: `git-branch-remote-name`
 - :interrobang: `git-branch-set-upstream`
-- :interrobang: `git-branch-upstream`
+- :heavy_check_mark: `git-branch-upstream`
 - :heavy_check_mark: `git-branch-upstream-name`
-- :interrobang: `git-branch-upstream-remote`
+- :heavy_check_mark: `git-branch-upstream-remote`
 
 ### buf
 

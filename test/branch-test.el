@@ -102,7 +102,7 @@
       (should-error (libgit-branch-remote-name repo "master"))
       (should (string= "upstream" (libgit-branch-remote-name repo "refs/remotes/upstream/master"))))))
 
-(ert-deftest branch-upstream-name ()
+(ert-deftest branch-upstream ()
   (with-temp-dir (path path-upstream)
     (in-dir path-upstream
       (init)
@@ -112,8 +112,11 @@
       (commit-change "test" "content")
       (run "git" "remote" "add" "-f" "upstream" (concat "file://" path-upstream))
       (run "git" "branch" "second" "upstream/master"))
-    (let ((repo (libgit-repository-open path)))
+    (let* ((repo (libgit-repository-open path))
+           (ref (libgit-reference-lookup repo "refs/heads/second")))
       (should-error (libgit-branch-upstream-name nil "refs/heads/second"))
       (should-error (libgit-branch-upstream-name repo nil))
       (should-error (libgit-branch-upstream-name repo "refs/heads/master"))
-      (should (string= "refs/remotes/upstream/master" (libgit-branch-upstream-name repo "refs/heads/second"))))))
+      (should (string= "refs/remotes/upstream/master" (libgit-branch-upstream-name repo "refs/heads/second")))
+      (should (string= "refs/remotes/upstream/master" (libgit-reference-name (libgit-branch-upstream ref))))
+      (should (string= "upstream" (libgit-branch-upstream-remote repo "refs/heads/second"))))))

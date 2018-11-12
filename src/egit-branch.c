@@ -188,9 +188,24 @@ emacs_value egit_branch_remote_name(emacs_env *env, emacs_value _repo, emacs_val
     EGIT_RET_BUF_AS_STRING(remote_name);
 }
 
+EGIT_DOC(branch_upstream, "REF",
+         "Return the reference of a remote-tracking branch.\n"
+         "REF is a local branch reference in REPO.");
+emacs_value egit_branch_upstream(emacs_env *env, emacs_value _ref)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    git_reference *ref = EGIT_EXTRACT(_ref);
+
+    git_reference *ret;
+    int retval = git_branch_upstream(&ret, ref);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, ret, NULL);
+}
+
 EGIT_DOC(branch_upstream_name, "REPO REFNAME",
          "Return the name of the reference of a remote-tracking branch.\n"
-         "REFNAME is a local branch reference in REPO.");
+         "REFNAME is a local branch reference name in REPO.");
 emacs_value egit_branch_upstream_name(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -206,4 +221,22 @@ emacs_value egit_branch_upstream_name(emacs_env *env, emacs_value _repo, emacs_v
     EGIT_CHECK_ERROR(retval);
 
     EGIT_RET_BUF_AS_STRING(upstream_name);
+}
+
+EGIT_DOC(branch_upstream_remote, "REPO REFNAME",
+         "Return the name of the upstream remote of local branch REFNAME in REPO.");
+emacs_value egit_branch_upstream_remote(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *refname = EM_EXTRACT_STRING(_refname);
+
+    git_buf buf = {0};
+    int retval = git_branch_upstream_remote(&buf, repo, refname);
+    free(refname);
+    EGIT_CHECK_ERROR(retval);
+
+    EGIT_RET_BUF_AS_STRING(buf);
 }
