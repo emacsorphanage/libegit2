@@ -86,3 +86,18 @@
            (ref (libgit-branch-lookup repo "second")))
       (should-error (libgit-branch-name nil))
       (should (string= "second" (libgit-branch-name ref))))))
+
+(ert-deftest branch-remote-name ()
+  (with-temp-dir (path path-upstream)
+    (in-dir path-upstream
+      (init)
+      (commit-change "test" "content"))
+    (in-dir path
+      (init)
+      (commit-change "test" "content")
+      (run "git" "remote" "add" "-f" "upstream" (concat "file://" path-upstream)))
+    (let ((repo (libgit-repository-open path)))
+      (should-error (libgit-branch-remote-name nil "refs/remotes/upstream/master"))
+      (should-error (libgit-branch-remote-name repo nil))
+      (should-error (libgit-branch-remote-name repo "master"))
+      (should (string= "upstream" (libgit-branch-remote-name repo "refs/remotes/upstream/master"))))))
