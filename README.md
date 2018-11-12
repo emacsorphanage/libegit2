@@ -386,10 +386,10 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### describe
 
-- :interrobang: `git-describe-commit`
-- :interrobang: `git-describe-format`
-- :interrobang: `git-describe-result-free`
-- :interrobang: `git-describe-workdir`
+- :heavy_check-mark: `git-describe-commit`
+- :x: `git-describe-format` (we return strings immediately)
+- :x: `git-describe-result-free` (memory management shouldn't be exposed to Emacs)
+- :heavy_check-mark: `git-describe-workdir`
 
 ### diff
 
