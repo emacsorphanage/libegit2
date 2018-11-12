@@ -99,6 +99,11 @@ emacs_value em_old, em_new;
 // Diff formats
 emacs_value em_patch, em_patch_header, em_raw, em_name_only, em_name_status;
 
+// Describe options
+emacs_value em_max_candidates_tags, em_strategy, em_pattern,
+    em_only_follow_first_parent, em_show_commit_oid_as_fallback, em_tags,
+    em_abbreviated_size, em_always_use_long_format, em_dirty_suffix;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -292,6 +297,16 @@ void em_init(emacs_env *env)
     em_raw = GLOBREF(INTERN("raw"));
     em_name_only = GLOBREF(INTERN("name-only"));
     em_name_status = GLOBREF(INTERN("name-status"));
+
+    em_max_candidates_tags = GLOBREF(INTERN("max-candidates-tags"));
+    em_strategy = GLOBREF(INTERN("strategy"));
+    em_pattern = GLOBREF(INTERN("pattern"));
+    em_only_follow_first_parent = GLOBREF(INTERN("only-follow-first-parent"));
+    em_show_commit_oid_as_fallback = GLOBREF(INTERN("show-commit-oid-as-fallback"));
+    em_tags = GLOBREF(INTERN("tags"));
+    em_abbreviated_size = GLOBREF(INTERN("abbreviated-size"));
+    em_always_use_long_format = GLOBREF(INTERN("always-use-long-format"));
+    em_dirty_suffix = GLOBREF(INTERN("dirty-suffix"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));

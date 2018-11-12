@@ -16,7 +16,7 @@ enable_testing()
 # NOTE: These test names must be replicated in .appveyor-script.ps1
 # for the Windows CI. Fixing this is still TODO.
 set(EGIT_TESTS
-  blame branch commit config diff ignore index
+  blame branch commit config describe diff ignore index
   refcount reference repository signature status tree)
 
 foreach(test ${EGIT_TESTS})
