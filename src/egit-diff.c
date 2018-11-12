@@ -293,7 +293,67 @@ static void egit_diff_options_release(git_diff_options *opts)
 
 EGIT_DOC(diff_index_to_index, "REPO OLD-INDEX NEW-INDEX &optional OPTS",
          "Create a diff with the difference between two index objects.\n"
-         "OLD-INDEX and NEW-INDEX must both belong to REPO.");
+         "OLD-INDEX and NEW-INDEX must both belong to REPO.\n\n"
+         "OPTS is an alist of options, with the following allowed keys:\n"
+         "- `reverse': if non-nil, swap new and old\n"
+         "- `include-ignored': if non-nil, include ignored files\n"
+         "- `recurse-ignored-dirs': if non-nil, recurse through ignored dirs\n"
+         "- `include-untracked': f non-nil, include untracked files in the diff\n"
+         "- `recurse-untracked-dirs': if non-nil, recurse through untracked dirs\n"
+         "- `include-unmodified': if non-nil, include unmodified files\n"
+         "- `include-typechange': if non-nil, enable the generation of\n"
+         "      `typechange' deltas, instead of an `added' and a `deleted'\n"
+         "- `include-typechange-trees': if non-nil, try to correctly label\n"
+         "      blob -> tree transitions as `typechange' records\n"
+         "- `ignore-filemode': if non-nil, ignore filemode changes\n"
+         "- `ignore-submodules': if non-nil, treat all submodules as unmodified\n"
+         "- `ignore-case': if non-nil, use case insensitive filenames\n"
+         "- `include-casechange': if non-nil, combined with `ignore-case',\n"
+         "      specifies that a file with changed case is returned as an\n"
+         "      add/delete pair.\n"
+         "- `disable-pathspec-match': if non-nil, and if the options include\n"
+         "      a pathspec, this indicates that the paths are treated as literal\n"
+         "      instead of as match patterns.\n"
+         "- `skip-binary-check': if non-nil, disable updating of the binary flag\n"
+         "- `enable-fast-untracked-dirs': if non-nil, disables the extra check in\n"
+         "      untracked directories for untracked or ignored files\n"
+         "- `diff-update-index': if non-nil, update the index if a file is\n"
+         "      found with the same OID as in the index, but with different\n"
+         "      stat information.\n"
+         "- `include-unreadable': if non-nil, include unreadable files\n"
+         "- `include-unreadable-as-untracked': if non-nil, include unreadable\n"
+         "      files as untracked ones.\n"
+         "- `indent-heuristic': if non-nil, use a heuristic that takes indentation\n"
+         "      and whitespace into account.\n"
+         "- `force-text': if non-nil, treat all files as text\n"
+         "- `force-binary': if non-nil, treat all files as binary\n"
+         "- `ignore-whitespace': if non-nil, ignore all whitespace\n"
+         "- `ignore-whitespace-change': if non-nil, ignore changes in amount of\n"
+         "      whitespace\n"
+         "- `ignore-whitespace-eol': if non-nil, ignore whitespace at end of line\n"
+         "- `show-untracked-content': if non-nil, include content of untracked files;\n"
+         "      this enables `include-untracked' but not `include-untracked-dirs'"
+         "- `show-unmodified': if non-nil, names of unmodified files\n"
+         "- `patience': if non-nil, use the 'patience diff' algorithm\n"
+         "- `minimal': if non-nil, take extra time to find a minimal diff\n"
+         "- `show-binary': if non-nil, include deflate/delta information\n"
+         "- `ignore-submodules': can take any of the values `nil', `none',\n"
+         "      `untracked', `dirty', and `all'.\n"
+         "- `pathspec': a list of path patterns or literal paths to constrain the diff\n"
+         "- `context-lines': number of context lines to generate (default 3)\n"
+         "- `interhunk-lines': maximum number of unchanged lines between hunks before\n"
+         "      hunks are merged into one (default 0)\n"
+         "- `id-abbrev': abbreviation length when formatting object IDs (default 7)\n"
+         "- `max-size': size (in bytes) above which a blob is automatically marked as\n"
+         "      binary (default 512MB)\n"
+         "- `old-prefix': virtual directory for old file names (default 'a')\n"
+         "- `new-prefix': virtual directory for new file names (default 'b')\n"
+         "- `notify': callback function for notification of new deltas;\n"
+         "      will be called with three arguments: the diff so far, the new delta\n"
+         "      and the matched path\n"
+         "- `progress': callback function for progress tracking;\n"
+         "      will be called with three arguments: the diff so far, the path to the\n"
+         "      old file being checked, and the path to the new file.");
 emacs_value egit_diff_index_to_index(
     emacs_env *env, emacs_value _repo, emacs_value _old_index,
     emacs_value _new_index, emacs_value opts)
@@ -316,7 +376,8 @@ emacs_value egit_diff_index_to_index(
 
 EGIT_DOC(diff_index_to_workdir, "REPO &optional INDEX OPTS",
          "Create a diff between an index and a workdir belonging to REPO.\n"
-         "If INDEX wis nil, it will default to the repository index.");
+         "If INDEX wis nil, it will default to the repository index.\n"
+         "See `libgit-diff-index-to-index' for explanation of OPTS.");
 emacs_value egit_diff_index_to_workdir(
     emacs_env *env, emacs_value _repo, emacs_value _index, emacs_value opts)
 {
@@ -337,7 +398,8 @@ emacs_value egit_diff_index_to_workdir(
 EGIT_DOC(diff_tree_to_index, "REPO &optional OLD-TREE INDEX OPTS",
          "Create a diff between a tree and an index belonging to REPO.\n"
          "If OLD-TREE or INDEX are nil, they will default to the empty tree\n"
-         "or the repository index, respectively.");
+         "or the repository index, respectively.\n"
+         "See `libgit-diff-index-to-index' for explanation of OPTS.");
 emacs_value egit_diff_tree_to_index(
     emacs_env *env, emacs_value _repo, emacs_value _old_tree,
     emacs_value _index, emacs_value opts)
@@ -361,7 +423,8 @@ emacs_value egit_diff_tree_to_index(
 
 EGIT_DOC(diff_tree_to_tree, "REPO &optional OLD-TREE NEW-TREE OPTS",
          "Create a diff between two trees belonging to REPO.\n"
-         "If OLD-TREE or NEW-TREE are nil, they default to the empty tree.");
+         "If OLD-TREE or NEW-TREE are nil, they default to the empty tree.\n"
+         "See `libgit-diff-index-to-index' for explanation of OPTS.");
 emacs_value egit_diff_tree_to_tree(
     emacs_env *env, emacs_value _repo, emacs_value _old_tree,
     emacs_value _new_tree, emacs_value opts)
@@ -383,7 +446,8 @@ emacs_value egit_diff_tree_to_tree(
 
 EGIT_DOC(diff_tree_to_workdir, "REPO &optional OLD-TREE OPTS",
          "Create a diff between OLD-TREE and the working directory of REPO.\n"
-         "If OLD-TREE is nil it will default to the empty tree.");
+         "If OLD-TREE is nil it will default to the empty tree.\n"
+         "See `libgit-diff-index-to-index' for explanation of OPTS.");
 emacs_value egit_diff_tree_to_workdir(
     emacs_env *env, emacs_value _repo, emacs_value _old_tree, emacs_value opts)
 {
@@ -404,7 +468,8 @@ emacs_value egit_diff_tree_to_workdir(
 EGIT_DOC(diff_tree_to_workdir_with_index, "REPO &optional OLD-TREE OPTS",
          "Create a diff between OLD-TREE and the working directory of REPO\n"
          "using index data to account for staged deletes, tracked files, etc.\n"
-         "If OLD-TREE is nil it will default to the empty tree.");
+         "If OLD-TREE is nil it will default to the empty tree.\n"
+         "See `libgit-diff-index-to-index' for explanation of OPTS.");
 emacs_value egit_diff_tree_to_workdir_with_index(
     emacs_env *env, emacs_value _repo, emacs_value _old_tree, emacs_value opts)
 {
@@ -517,7 +582,14 @@ EGIT_DOC(diff_foreach, "DIFF FILE-FUNC &optional BINARY-FUNC HUNK-FUNC LINE-FUNC
          "- FILE-FUNC will be called for each file in the diff.\n"
          "- BINARY-FUNC will be called for binary files.\n"
          "- HUNK-FUNC will be called for ranges of lines in a diff.\n"
-         "- LINE-FUNC will be called per line of diff text.");
+         "- LINE-FUNC will be called per line of diff text.\n\n"
+         "FILE-FUNC receives two arguments: a delta object and a progress\n"
+         "floating point number that goes from 0 to 1 over the diff.\n\n"
+         "BINARY-FUNC and HUNK-FUNC receives a delta object and a binary\n"
+         "or a hunk object, respectively.\n\n"
+         "LINE-FUNC receives a delta object, a hunk object and a line object.\n\n"
+         "NOTE: Binary, hunk and line objects have lifetimes that are limited to\n"
+         "a single function call!");
 emacs_value egit_diff_foreach(
     emacs_env *env, emacs_value _diff, emacs_value file_cb,
     emacs_value binary_cb, emacs_value hunk_cb, emacs_value line_cb)
@@ -596,7 +668,10 @@ EGIT_DOC(diff_print, "DIFF &optional FORMAT LINE-FUNC",
          "FORMAT is one of the symbols `patch' (default), `patch-header',\n"
          "`raw', `name-only' and `name-status'.\n"
          "LINE-FUNC is called with three arguments: a delta, hunk and a line\n"
-         "object. The default will issue a call to `insert'.");
+         "object. The default will issue a call to `insert' that is suitable\n"
+         "for printing a diff to the current buffer.\n\n"
+         "NOTE: Hunk and line objects have lifetimes that are limited to\n"
+         "a single function call!");
 emacs_value egit_diff_print(
     emacs_env *env, emacs_value _diff, emacs_value _format, emacs_value func)
 {
