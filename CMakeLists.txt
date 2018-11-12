@@ -17,7 +17,7 @@ enable_testing()
 # for the Windows CI. Fixing this is still TODO.
 set(EGIT_TESTS
   blame branch commit config describe diff ignore index
-  refcount reference repository signature status tree)
+  refcount reference repository signature status tag tree)
 
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test} COMMAND
