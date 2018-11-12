@@ -8,6 +8,11 @@ environment:
     - EMACS_VERSION: "26.1"
     - EMACS_VERSION: "snapshot"
 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - EMACS_VERSION: "snapshot"
+
 install:
   - git submodule update --init --recursive
   - set MSYSTEM=MINGW64
