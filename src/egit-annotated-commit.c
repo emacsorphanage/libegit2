@@ -51,3 +51,26 @@ emacs_value egit_annotated_commit_from_fetchhead(emacs_env *env,
 
     return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
 }
+
+EGIT_DOC(annotated_commit_from_revspec, "REPO REVSPEC",
+         "Return an annotated commit for the given revision string REVSPEC.");
+emacs_value egit_annotated_commit_from_revspec(emacs_env *env,
+                                               emacs_value _repo,
+                                               emacs_value _spec)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_spec);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_annotated_commit *ann = NULL;
+    int retval;
+    {
+        char *spec = EM_EXTRACT_STRING(_spec);
+        retval = git_annotated_commit_from_revspec(&ann, repo, spec);
+        free(spec);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
+}
+

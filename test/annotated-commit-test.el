@@ -27,3 +27,11 @@
 		      remote-id)))
 	  (should (libgit-annotated-commit-p ann)))))))
 
+(ert-deftest annotated-commit-from-revspec ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test1" "foo")
+    (commit-change "test2" "bar")
+    (let* ((repo (libgit-repository-open path))
+           (ann  (libgit-annotated-commit-from-revspec repo "HEAD^")))
+      (should (libgit-annotated-commit-p ann)))))
