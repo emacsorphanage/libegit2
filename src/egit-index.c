@@ -79,8 +79,7 @@ emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emac
         args[3] = egit_wrap(env, EGIT_INDEX_ENTRY, theirs, index_wrp);
         env->funcall(env, function, 4, args);
 
-        if (env->non_local_exit_check(env))
-            return em_nil;
+        EM_RETURN_NIL_IF_NLE();
     }
 }
 

@@ -346,9 +346,7 @@ int foreach_callback(const char *path, unsigned int flags, void *payload)
     args[1] = EM_INTEGER(flags);
     env->funcall(env, function, 2, args);
 
-    if (env->non_local_exit_check(env)) {
-        return GIT_EUSER;
-    }
+    EM_RETURN_IF_NLE(GIT_EUSER);
 
     return 0;
 }

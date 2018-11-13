@@ -78,8 +78,7 @@ emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path
 
     git_blame_options opts;
     extract_options(env, options, &opts);
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
 
     char *path = EM_EXTRACT_STRING(_path);
 

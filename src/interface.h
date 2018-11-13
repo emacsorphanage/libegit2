@@ -134,7 +134,7 @@ extern emacs_value em_fetch, em_push;
 #define EM_NORMALIZE_PATH(val)                                  \
     do {                                                        \
         (val) = em_expand_file_name(env, val);                  \
-        if (env->non_local_exit_check(env)) return em_nil;      \
+        EM_RETURN_NIL_IF_NLE();                                 \
     } while (0)
 
 // Extract a boolean from an emacs_value.
@@ -156,7 +156,7 @@ extern emacs_value em_fetch, em_push;
 // Extract a string from an emacs_value, or NULL.
 // Caller is reponsible for ensuring that the emacs_value represents a string or nil.
 #define EM_EXTRACT_STRING_OR_NULL(val)                                  \
-    (EM_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL);
+    (EM_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL)
 
 // Extract a user pointer from an emacs_value.
 // Caller is responsible for ensuring that the emacs_value represents a user pointer.
@@ -170,6 +170,15 @@ extern emacs_value em_fetch, em_push;
 
 // Create an Emacs string from a null-terminated char*
 #define EM_STRING(val) (env->make_string(env, (val), strlen(val)))
+
+// Return if a non-local exit is set
+#define EM_RETURN_IF_NLE(val)                    \
+    do {                                         \
+        if (env->non_local_exit_check(env))      \
+            return (val);                        \
+    } while (0)
+
+#define EM_RETURN_NIL_IF_NLE() EM_RETURN_IF_NLE(em_nil)
 
 /**
  * Initiate a loop over an Emacs list.
