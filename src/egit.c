@@ -73,6 +73,9 @@ static void egit_decref_direct(egit_object *wrapper)
 
     // Free the wrappee and the wrapper
     switch (wrapper->type) {
+    case EGIT_BLAME:
+        git_blame_free(wrapper->ptr);
+        break;
     case EGIT_DIFF:
         git_diff_free(wrapper->ptr);
         break;
@@ -132,6 +135,7 @@ static void egit_finalize(void* _obj)
 
     switch (obj->type) {
     // Reference counted types can be freed entirely from egit_decref
+    case EGIT_BLAME:
     case EGIT_DIFF:
     case EGIT_INDEX:
     case EGIT_REMOTE:
@@ -146,10 +150,6 @@ static void egit_finalize(void* _obj)
 
     case EGIT_REFERENCE:
         git_reference_free(obj->ptr);
-        break;
-
-    case EGIT_BLAME:
-        git_blame_free(obj->ptr);
         break;
 
     case EGIT_CONFIG:
@@ -209,7 +209,11 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
 
     egit_object *wrapper;
     switch (type) {
-    case EGIT_DIFF: case EGIT_INDEX: case EGIT_REMOTE: case EGIT_REPOSITORY:
+    case EGIT_BLAME:
+    case EGIT_DIFF:
+    case EGIT_INDEX:
+    case EGIT_REMOTE:
+    case EGIT_REPOSITORY:
         wrapper = egit_incref(type, data);
         break;
     default:
