@@ -98,7 +98,7 @@ emacs_value egit_object_id(emacs_env *env, emacs_value _obj)
     git_object *obj = EGIT_EXTRACT(_obj);
     const git_oid *oid = git_object_id(obj);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(object_owner, "OBJECT", "Return the repository that OBJECT belongs to.");

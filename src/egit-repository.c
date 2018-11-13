@@ -79,7 +79,7 @@ emacs_value egit_repository_commondir(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_commondir(repo);
-    emacs_value retval = env->make_string(env, path, strlen(path));
+    emacs_value retval = EM_STRING(path);
     EM_NORMALIZE_PATH(retval);
     return retval;
 }
@@ -102,7 +102,7 @@ emacs_value egit_repository_get_namespace(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *namespace = git_repository_get_namespace(repo);
-    return namespace ? env->make_string(env, namespace, strlen(namespace)) : em_nil;
+    return namespace ? EM_STRING(namespace) : em_nil;
 }
 
 EGIT_DOC(repository_head, "REPO",
@@ -147,8 +147,8 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     const char *name, *email;
     int retval = git_repository_ident(&name, &email, repo);
     EGIT_CHECK_ERROR(retval);
-    emacs_value _name = name ? env->make_string(env, name, strlen(name)) : em_nil;
-    emacs_value _email = email ? env->make_string(env, email, strlen(email)) : em_nil;
+    emacs_value _name = name ? EM_STRING(name) : em_nil;
+    emacs_value _email = email ? EM_STRING(email) : em_nil;
     return em_cons(env, _name, _email);
 }
 
@@ -185,7 +185,7 @@ emacs_value egit_repository_path(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_path(repo);
-    emacs_value retval = env->make_string(env, path, strlen(path));
+    emacs_value retval = EM_STRING(path);
     EM_NORMALIZE_PATH(retval);
     return retval;
 }
@@ -234,7 +234,7 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
     const char *path = git_repository_workdir(repo);
     if (!path)
         return em_nil;
-    emacs_value retval = env->make_string(env, path, strlen(path));
+    emacs_value retval = EM_STRING(path);
     EM_NORMALIZE_PATH(retval);
     return retval;
 }

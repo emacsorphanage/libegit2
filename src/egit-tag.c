@@ -60,9 +60,9 @@ int egit_tag_foreach_callback(const char *name, git_oid *oid, void *payload)
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
-    args[0] = env->make_string(env, name, strlen(name));
+    args[0] = EM_STRING(name);
     const char *oid_s = git_oid_tostr_s(oid);
-    args[1] = env->make_string(env, oid_s, strlen(oid_s));
+    args[1] = EM_STRING(oid_s);
 
     env->funcall(env, ctx->callback, 2, args);
 
@@ -106,7 +106,7 @@ emacs_value egit_tag_id(emacs_env *env, emacs_value _tag)
     git_tag *tag = EGIT_EXTRACT(_tag);
     const git_oid *oid = git_tag_id(tag);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(tag_owner, "TAG", "Return the repository that TAG belongs to.");
@@ -126,7 +126,7 @@ emacs_value egit_tag_message(emacs_env *env, emacs_value _tag)
     const char *message = git_tag_message(tag);
     if (!message)
         return em_nil;
-    return env->make_string(env, message, strlen(message));
+    return EM_STRING(message);
 }
 
 EGIT_DOC(tag_name, "TAG", "Get the name of TAG.");
@@ -135,7 +135,7 @@ emacs_value egit_tag_name(emacs_env *env, emacs_value _tag)
     EGIT_ASSERT_TAG(_tag);
     git_tag *tag = EGIT_EXTRACT(_tag);
     const char *name = git_tag_name(tag);
-    return env->make_string(env, name, strlen(name));
+    return EM_STRING(name);
 }
 
 EGIT_DOC(tag_peel, "TAG", "Recursively peel TAG until a non-tag object is found.");
@@ -182,7 +182,7 @@ emacs_value egit_tag_target_id(emacs_env *env, emacs_value _tag)
     git_tag *tag = EGIT_EXTRACT(_tag);
     const git_oid *oid = git_tag_target_id(tag);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(tag_target_type, "TAG", "Get the type of the object pointed to by TAG.");

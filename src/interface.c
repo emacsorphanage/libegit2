@@ -388,8 +388,8 @@ bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
 
 void em_signal_giterr(emacs_env *env, int _klass, const char* _msg)
 {
-    emacs_value klass = env->make_integer(env, _klass);
-    emacs_value msg = env->make_string(env, _msg, strlen(_msg));
+    emacs_value klass = EM_INTEGER(_klass);
+    emacs_value msg = EM_STRING(_msg);
     env->non_local_exit_signal(env, _giterr, em_cons(env, klass, em_cons(env, msg, em_nil)));
 }
 
@@ -408,7 +408,7 @@ void em_signal_wrong_value(emacs_env *env, emacs_value actual)
 
 void em_signal_args_out_of_range(emacs_env *env, intmax_t index)
 {
-    env->non_local_exit_signal(env, _args_out_of_range, env->make_integer(env, index));
+    env->non_local_exit_signal(env, _args_out_of_range, EM_INTEGER(index));
 }
 
 char *em_get_string(emacs_env *env, emacs_value arg)
@@ -469,7 +469,7 @@ emacs_value em_assq(emacs_env *env, emacs_value key, emacs_value list)
 
 void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
 {
-    em_funcall(env, _define_error, 2, symbol, env->make_string(env, msg, strlen(msg)));
+    em_funcall(env, _define_error, 2, symbol, EM_STRING(msg));
 }
 
 void em_defun(emacs_env *env, const char *name, emacs_value func)
@@ -502,8 +502,8 @@ char *em_default_directory(emacs_env *env)
 emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset)
 {
     return em_funcall(env, _decode_time, 2,
-                      env->make_integer(env, timestamp),
-                      env->make_integer(env, offset));
+                      EM_INTEGER(timestamp),
+                      EM_INTEGER(offset));
 }
 
 void em_insert(emacs_env *env, const char *ptr, size_t length)

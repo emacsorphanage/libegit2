@@ -68,7 +68,7 @@ emacs_value egit_commit_body(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     const char *body = git_commit_body(commit);
-    return env->make_string(env, body, strlen(body));
+    return EM_STRING(body);
 }
 
 EGIT_DOC(commit_committer, "COMMIT", "Return the committer of COMMIT as a signature object.");
@@ -93,7 +93,7 @@ emacs_value egit_commit_id(emacs_env *env, emacs_value _commit)
     git_commit *commit = EGIT_EXTRACT(_commit);
     const git_oid *oid = git_commit_id(commit);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(commit_message, "COMMIT", "Get the message of COMMIT.");
@@ -102,7 +102,7 @@ emacs_value egit_commit_message(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     const char *message = git_commit_message(commit);
-    return env->make_string(env, message, strlen(message));
+    return EM_STRING(message);
 }
 
 EGIT_DOC(commit_nth_gen_ancestor, "COMMIT N",
@@ -160,7 +160,7 @@ emacs_value egit_commit_parent_id(emacs_env *env, emacs_value _commit, emacs_val
     }
 
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(commit_parentcount, "COMMIT", "Return the number of parents of COMMIT.");
@@ -169,7 +169,7 @@ emacs_value egit_commit_parentcount(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     unsigned int count = git_commit_parentcount(commit);
-    return env->make_integer(env, count);
+    return EM_INTEGER(count);
 }
 
 EGIT_DOC(commit_summary, "COMMIT", "Get the summary of COMMIT (the first paragraph of the message).");
@@ -178,7 +178,7 @@ emacs_value egit_commit_summary(emacs_env *env, emacs_value _commit)
     EGIT_ASSERT_COMMIT(_commit);
     git_commit *commit = EGIT_EXTRACT(_commit);
     const char *summary = git_commit_summary(commit);
-    return env->make_string(env, summary, strlen(summary));
+    return EM_STRING(summary);
 }
 
 EGIT_DOC(commit_time, "COMMIT", "Get the time COMMIT was authored.");
@@ -207,5 +207,5 @@ emacs_value egit_commit_tree_id(emacs_env *env, emacs_value _commit)
     git_commit *commit = EGIT_EXTRACT(_commit);
     const git_oid *oid = git_commit_tree_id(commit);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }

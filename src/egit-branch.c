@@ -143,7 +143,7 @@ emacs_value egit_branch_name(emacs_env *env, emacs_value _ref)
     const int retval = git_branch_name(&name, ref);
     EGIT_CHECK_ERROR(retval);
 
-    return env->make_string(env, name, strlen(name));
+    return EM_STRING(name);
 }
 
 EGIT_DOC(branch_remote_name, "REPO BRANCH",

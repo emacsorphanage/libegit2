@@ -29,7 +29,7 @@ emacs_value egit_refspec_dst(emacs_env *env, emacs_value _refspec)
     EGIT_ASSERT_REFSPEC(_refspec);
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
     const char *dst = git_refspec_dst(refspec);
-    return env->make_string(env, dst, strlen(dst));
+    return EM_STRING(dst);
 }
 
 EGIT_DOC(refspec_src, "REFSPEC", "Get the source specifier of REFSPEC.");
@@ -38,7 +38,7 @@ emacs_value egit_refspec_src(emacs_env *env, emacs_value _refspec)
     EGIT_ASSERT_REFSPEC(_refspec);
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
     const char *src = git_refspec_src(refspec);
-    return env->make_string(env, src, strlen(src));
+    return EM_STRING(src);
 }
 
 EGIT_DOC(refspec_string, "REFSPEC", "Get the string representation of REFSPEC.");
@@ -47,7 +47,7 @@ emacs_value egit_refspec_string(emacs_env *env, emacs_value _refspec)
     EGIT_ASSERT_REFSPEC(_refspec);
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
     const char *str = git_refspec_string(refspec);
-    return env->make_string(env, str, strlen(str));
+    return EM_STRING(str);
 }
 
 

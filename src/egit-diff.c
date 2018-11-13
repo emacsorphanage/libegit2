@@ -28,7 +28,7 @@ static int egit_diff_notify_callback(
     emacs_value args[3];
     args[0] = egit_wrap(env, EGIT_DIFF, diff, NULL);
     args[1] = egit_wrap(env, EGIT_DIFF_DELTA, delta, EM_EXTRACT_USER_PTR(args[0]));
-    args[2] = env->make_string(env, pathspec, strlen(pathspec));
+    args[2] = EM_STRING(pathspec);
     emacs_value retval = env->funcall(env, ctx->notify_callback, 3, args);
 
     if (env->non_local_exit_check(env))
@@ -51,8 +51,8 @@ static int egit_diff_progress_callback(
 
     emacs_value args[3];
     args[0] = egit_wrap(env, EGIT_DIFF, diff, NULL);
-    args[1] = env->make_string(env, old_path, strlen(old_path));
-    args[2] = env->make_string(env, new_path, strlen(new_path));
+    args[1] = EM_STRING(old_path);
+    args[2] = EM_STRING(new_path);
     emacs_value retval = env->funcall(env, ctx->progress_callback, 3, args);
 
     if (env->non_local_exit_check(env))
@@ -721,7 +721,7 @@ emacs_value egit_diff_delta_file_id(emacs_env *env, emacs_value _delta, emacs_va
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
     const git_oid *oid = EM_EQ(side, em_old) ? &delta->old_file.id : &delta->new_file.id;
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(diff_delta_file_path, "DELTA SIDE",
@@ -732,7 +732,7 @@ emacs_value egit_diff_delta_file_path(emacs_env *env, emacs_value _delta, emacs_
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
     const char *path = EM_EQ(side, em_old) ? delta->old_file.path : delta->new_file.path;
-    return env->make_string(env, path, strlen(path));
+    return EM_STRING(path);
 }
 
 EGIT_DOC(diff_delta_nfiles, "DELTA", "Get the number of files in DELTA.");
@@ -740,7 +740,7 @@ emacs_value egit_diff_delta_nfiles(emacs_env *env, emacs_value _delta)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    return env->make_integer(env, delta->nfiles);
+    return EM_INTEGER(delta->nfiles);
 }
 
 EGIT_DOC(diff_delta_similarity, "DELTA",
@@ -751,7 +751,7 @@ emacs_value egit_diff_delta_similarity(emacs_env *env, emacs_value _delta)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    return env->make_integer(env, delta->similarity);
+    return EM_INTEGER(delta->similarity);
 }
 
 EGIT_DOC(diff_delta_status, "DELTA",
@@ -816,7 +816,7 @@ emacs_value egit_diff_hunk_lines(emacs_env *env, emacs_value _hunk, emacs_value 
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
     int num = EM_EQ(side, em_old) ? hunk->old_lines : hunk->new_lines;
-    return env->make_integer(env, num);
+    return EM_INTEGER(num);
 }
 
 EGIT_DOC(diff_hunk_start, "HUNK SIDE",
@@ -827,7 +827,7 @@ emacs_value egit_diff_hunk_start(emacs_env *env, emacs_value _hunk, emacs_value 
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
     int num = EM_EQ(side, em_old) ? hunk->old_start : hunk->new_start;
-    return env->make_integer(env, num);
+    return EM_INTEGER(num);
 }
 
 
@@ -852,7 +852,7 @@ emacs_value egit_diff_line_origin(emacs_env *env, emacs_value _line)
 {
     EGIT_ASSERT_DIFF_LINE(_line);
     git_diff_line *line = EGIT_EXTRACT(_line);
-    return env->make_integer(env, line->origin);
+    return EM_INTEGER(line->origin);
 }
 
 EGIT_DOC(diff_line_lineno, "LINE SIDE",
@@ -865,7 +865,7 @@ emacs_value egit_diff_line_lineno(emacs_env *env, emacs_value _line, emacs_value
     EGIT_ASSERT_DIFF_LINE(_line);
     git_diff_line *line = EGIT_EXTRACT(_line);
     int lineno = EM_EQ(side, em_old) ? line->old_lineno : line->new_lineno;
-    return env->make_integer(env, lineno);
+    return EM_INTEGER(lineno);
 }
 
 EGIT_DOC(diff_line_content, "LINE", "Get the content of LINE as a string.");
@@ -936,5 +936,5 @@ emacs_value egit_diff_num_deltas(emacs_env *env, emacs_value _diff, emacs_value 
         return em_nil;
     }
 
-    return env->make_integer(env, num);
+    return EM_INTEGER(num);
 }

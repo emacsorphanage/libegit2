@@ -144,7 +144,7 @@ emacs_value egit_blame_get_hunk_count(emacs_env *env, emacs_value _blame)
     git_blame *blame = EGIT_EXTRACT(_blame);
 
     uint32_t count = git_blame_get_hunk_count(blame);
-    return env->make_integer(env, count);
+    return EM_INTEGER(count);
 }
 
 
@@ -162,7 +162,7 @@ emacs_value egit_blame_hunk_commit_id(emacs_env *env, emacs_value _hunk, emacs_v
     const char *oid_s = git_oid_tostr_s(
         EM_EXTRACT_BOOLEAN(orig) ? &hunk->final_commit_id : &hunk->orig_commit_id
     );
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(blame_hunk_lines, "BLAME-HUNK", "Get the total number of lines in BLAME-HUNK.");
@@ -170,7 +170,7 @@ emacs_value egit_blame_hunk_lines(emacs_env *env, emacs_value _hunk)
 {
     EGIT_ASSERT_BLAME_HUNK(_hunk);
     git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
-    return env->make_integer(env, hunk->lines_in_hunk);
+    return EM_INTEGER(hunk->lines_in_hunk);
 }
 
 EGIT_DOC(blame_hunk_orig_path, "BLAME-HUNK",
@@ -180,7 +180,7 @@ emacs_value egit_blame_hunk_orig_path(emacs_env *env, emacs_value _hunk)
 {
     EGIT_ASSERT_BLAME_HUNK(_hunk);
     git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
-    return env->make_string(env, hunk->orig_path, strlen(hunk->orig_path));
+    return EM_STRING(hunk->orig_path);
 }
 
 EGIT_DOC(blame_hunk_signature, "BLAME-HUNK &optional ORIG",
@@ -207,7 +207,7 @@ emacs_value egit_blame_hunk_start_line_number(emacs_env *env, emacs_value _hunk,
 {
     EGIT_ASSERT_BLAME_HUNK(_hunk);
     git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
-    return env->make_integer(
-        env, EM_EXTRACT_BOOLEAN(orig) ? hunk->final_start_line_number : hunk->orig_start_line_number
+    return EM_INTEGER(
+        EM_EXTRACT_BOOLEAN(orig) ? hunk->final_start_line_number : hunk->orig_start_line_number
     );
 }

@@ -40,7 +40,7 @@ emacs_value egit_index_checksum(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     const git_oid *oid = git_index_checksum(index);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(index_conflict_foreach, "INDEX FUNCTION",
@@ -73,7 +73,7 @@ emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emac
         }
 
         emacs_value args[4];
-        args[0] = env->make_string(env, base->path, strlen(base->path));
+        args[0] = EM_STRING(base->path);
         args[1] = egit_wrap(env, EGIT_INDEX_ENTRY, base, index_wrp);
         args[2] = egit_wrap(env, EGIT_INDEX_ENTRY, ours, index_wrp);
         args[3] = egit_wrap(env, EGIT_INDEX_ENTRY, theirs, index_wrp);
@@ -112,7 +112,7 @@ emacs_value egit_index_entry_id(emacs_env *env, emacs_value _entry)
     EGIT_ASSERT_INDEX_ENTRY(_entry);
     git_index_entry *entry = EGIT_EXTRACT(_entry);
     const char *oid_s = git_oid_tostr_s(&entry->id);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(index_entry_path, "ENTRY", "Get the path of the given index ENTRY.");
@@ -120,7 +120,7 @@ emacs_value egit_index_entry_path(emacs_env *env, emacs_value _entry)
 {
     EGIT_ASSERT_INDEX_ENTRY(_entry);
     git_index_entry *entry = EGIT_EXTRACT(_entry);
-    return env->make_string(env, entry->path, strlen(entry->path));
+    return EM_STRING(entry->path);
 }
 
 EGIT_DOC(index_entry_stage, "ENTRY",
@@ -149,7 +149,7 @@ emacs_value egit_index_entrycount(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     size_t count = git_index_entrycount(index);
-    return env->make_integer(env, count);
+    return EM_INTEGER(count);
 }
 
 EGIT_DOC(index_get_byindex, "INDEX N", "Get the Nth entry in INDEX.");
@@ -218,7 +218,7 @@ emacs_value egit_index_path(emacs_env *env, emacs_value _index)
     const char *path = git_index_path(index);
     if (!path)
         return em_nil;
-    return env->make_string(env, path, strlen(path));
+    return EM_STRING(path);
 }
 
 EGIT_DOC(index_version, "INDEX", "Return the version of INDEX.");
@@ -227,7 +227,7 @@ emacs_value egit_index_version(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     unsigned int version = git_index_version(index);
-    return env->make_integer(env, version);
+    return EM_INTEGER(version);
 }
 
 

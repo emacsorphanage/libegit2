@@ -85,7 +85,7 @@ emacs_value egit_status_file(emacs_env *env, emacs_value _repo,
     free(path);
     EGIT_CHECK_ERROR(rv);
 
-    return egit_status_decode(env, env->make_integer(env, flags));
+    return egit_status_decode(env, EM_INTEGER(flags));
 }
 
 EGIT_DOC(status_should_ignore_p, "REPO PATH",
@@ -342,8 +342,8 @@ int foreach_callback(const char *path, unsigned int flags, void *payload)
     env = ctx->env;
     function = ctx->function;
 
-    args[0] = env->make_string(env, path, strlen(path));
-    args[1] = env->make_integer(env, flags);
+    args[0] = EM_STRING(path);
+    args[1] = EM_INTEGER(flags);
     env->funcall(env, function, 2, args);
 
     if (env->non_local_exit_check(env)) {
