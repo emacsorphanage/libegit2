@@ -62,14 +62,6 @@ static int egit_diff_progress_callback(
     return 0;
 }
 
-#define SET_BIT(tgt, bit, opt)                           \
-    do {                                                 \
-        if (EM_EXTRACT_BOOLEAN(opt))                     \
-            (tgt) |= (bit);                              \
-        else                                             \
-            (tgt) &= ~(bit);                             \
-    } while (0)
-
 static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, git_diff_options *opts)
 {
     int retval = git_diff_init_options(opts, GIT_DIFF_OPTIONS_VERSION);
@@ -91,63 +83,63 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
         cdr = em_cdr(env, option);
 
         if (EM_EQ(car, em_reverse))
-            SET_BIT(opts->flags, GIT_DIFF_REVERSE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_REVERSE, cdr);
         else if (EM_EQ(car, em_include_ignored))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_IGNORED, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_IGNORED, cdr);
         else if (EM_EQ(car, em_recurse_ignored_dirs))
-            SET_BIT(opts->flags, GIT_DIFF_RECURSE_IGNORED_DIRS, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_RECURSE_IGNORED_DIRS, cdr);
         else if (EM_EQ(car, em_include_untracked))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNTRACKED, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNTRACKED, cdr);
         else if (EM_EQ(car, em_recurse_untracked_dirs))
-            SET_BIT(opts->flags, GIT_DIFF_RECURSE_UNTRACKED_DIRS, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_RECURSE_UNTRACKED_DIRS, cdr);
         else if (EM_EQ(car, em_include_unmodified))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNMODIFIED, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNMODIFIED, cdr);
         else if (EM_EQ(car, em_include_typechange))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE, cdr);
         else if (EM_EQ(car, em_include_typechange_trees))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE_TREES, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE_TREES, cdr);
         else if (EM_EQ(car, em_ignore_filemode))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_FILEMODE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_FILEMODE, cdr);
         else if (EM_EQ(car, em_ignore_submodules))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_SUBMODULES, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_SUBMODULES, cdr);
         else if (EM_EQ(car, em_ignore_case))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_CASE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_CASE, cdr);
         else if (EM_EQ(car, em_include_casechange))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_CASECHANGE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_CASECHANGE, cdr);
         else if (EM_EQ(car, em_disable_pathspec_match))
-            SET_BIT(opts->flags, GIT_DIFF_DISABLE_PATHSPEC_MATCH, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_DISABLE_PATHSPEC_MATCH, cdr);
         else if (EM_EQ(car, em_skip_binary_check))
-            SET_BIT(opts->flags, GIT_DIFF_SKIP_BINARY_CHECK, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_SKIP_BINARY_CHECK, cdr);
         else if (EM_EQ(car, em_enable_fast_untracked_dirs))
-            SET_BIT(opts->flags, GIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS, cdr);
         else if (EM_EQ(car, em_update_index))
-            SET_BIT(opts->flags, GIT_DIFF_UPDATE_INDEX, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_UPDATE_INDEX, cdr);
         else if (EM_EQ(car, em_include_unreadable))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE, cdr);
         else if (EM_EQ(car, em_include_unreadable_as_untracked))
-            SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE_AS_UNTRACKED, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE_AS_UNTRACKED, cdr);
         else if (EM_EQ(car, em_force_text))
-            SET_BIT(opts->flags, GIT_DIFF_FORCE_TEXT, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_FORCE_TEXT, cdr);
         else if (EM_EQ(car, em_force_binary))
-            SET_BIT(opts->flags, GIT_DIFF_FORCE_BINARY, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_FORCE_BINARY, cdr);
         else if (EM_EQ(car, em_ignore_whitespace))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE, cdr);
         else if (EM_EQ(car, em_ignore_whitespace_change))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_CHANGE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_CHANGE, cdr);
         else if (EM_EQ(car, em_ignore_whitespace_eol))
-            SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_EOL, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_EOL, cdr);
         else if (EM_EQ(car, em_show_untracked_content))
-            SET_BIT(opts->flags, GIT_DIFF_SHOW_UNTRACKED_CONTENT, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_UNTRACKED_CONTENT, cdr);
         else if (EM_EQ(car, em_show_unmodified))
-            SET_BIT(opts->flags, GIT_DIFF_SHOW_UNMODIFIED, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_UNMODIFIED, cdr);
         else if (EM_EQ(car, em_patience))
-            SET_BIT(opts->flags, GIT_DIFF_PATIENCE, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_PATIENCE, cdr);
         else if (EM_EQ(car, em_minimal))
-            SET_BIT(opts->flags, GIT_DIFF_MINIMAL, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_MINIMAL, cdr);
         else if (EM_EQ(car, em_show_binary))
-            SET_BIT(opts->flags, GIT_DIFF_SHOW_BINARY, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_BINARY, cdr);
         else if (EM_EQ(car, em_indent_heuristic))
-            SET_BIT(opts->flags, GIT_DIFF_INDENT_HEURISTIC, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_DIFF_INDENT_HEURISTIC, cdr);
         else if (EM_EQ(car, em_ignore_submodules)) {
             if (!EM_EXTRACT_BOOLEAN(cdr))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_UNSPECIFIED;
@@ -246,8 +238,6 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
 
     return em_nil;
 }
-
-#undef SET_BIT
 
 static void egit_diff_options_release(git_diff_options *opts)
 {

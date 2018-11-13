@@ -6,14 +6,6 @@
 #include "interface.h"
 
 
-#define SET_BIT(tgt, bit, opt)                           \
-    do {                                                 \
-        if (EM_EXTRACT_BOOLEAN(opt))                     \
-            (tgt) |= (bit);                              \
-        else                                             \
-            (tgt) &= ~(bit);                             \
-    } while (0)
-
 static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_options *opts)
 {
     int retval = git_blame_init_options(opts, GIT_BLAME_OPTIONS_VERSION);
@@ -28,7 +20,7 @@ static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_
         cdr = em_cdr(env, option);
 
         if (EM_EQ(car, em_first_parent))
-            SET_BIT(opts->flags, GIT_BLAME_FIRST_PARENT, cdr);
+            EGIT_SET_BIT(opts->flags, GIT_BLAME_FIRST_PARENT, cdr);
 
         /* According to libgit2 documentation, the min_match_characters
          * setting only takes effect if GIT_BLAME_TRACK_COPIES_* flags
@@ -66,8 +58,6 @@ static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_
 
     return em_t;
 }
-
-#undef SET_BIT
 
 EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
          "Return the BLAME object for the given file PATH.\n"

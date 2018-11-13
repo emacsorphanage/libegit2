@@ -192,6 +192,20 @@
     } while (0)
 
 /**
+ * Set or unset a bit according to the truth value of an emacs value.
+ * @param tgt The value to change
+ * @param bit The bit to flip
+ * @param opt The determining emacs value
+ */
+#define EGIT_SET_BIT(tgt, bit, opt)                      \
+    do {                                                 \
+        if (EM_EXTRACT_BOOLEAN(opt))                     \
+            (tgt) |= (bit);                              \
+        else                                             \
+            (tgt) &= ~(bit);                             \
+    } while (0)
+
+/**
  * Enum used to distinguish between various types of git_??? structs.
  */
 typedef enum {
