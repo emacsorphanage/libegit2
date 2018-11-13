@@ -98,6 +98,12 @@ extern emacs_value em_max_candidates_tags, em_strategy, em_pattern,
     em_only_follow_first_parent, em_show_commit_oid_as_fallback, em_tags,
     em_abbreviated_size, em_always_use_long_format, em_dirty_suffix;
 
+// Remote autotag
+extern emacs_value em_auto;
+
+// Remote directions
+extern emacs_value em_fetch, em_push;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)

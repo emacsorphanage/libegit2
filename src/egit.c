@@ -17,6 +17,7 @@
 #include "egit-index.h"
 #include "egit-object.h"
 #include "egit-reference.h"
+#include "egit-remote.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
 #include "egit-signature.h"
@@ -622,6 +623,17 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-symbolic-p", reference_symbolic_p, 1, 1);
     DEFUN("libgit-reference-tag-p", reference_tag_p, 1, 1);
     DEFUN("libgit-reference-valid-name-p", reference_valid_name_p, 1, 1);
+
+    // Remote
+    DEFUN("libgit-remote-lookup", remote_lookup, 2, 2);
+    DEFUN("libgit-remote-autotag", remote_autotag, 1, 1);
+    DEFUN("libgit-remote-get-refspecs", remote_get_refspecs, 2, 2);
+    DEFUN("libgit-remote-name", remote_name, 1, 1);
+    DEFUN("libgit-remote-owner", remote_owner, 1, 1);
+    DEFUN("libgit-remote-pushurl", remote_pushurl, 1, 1);
+    DEFUN("libgit-remote-refspec-count", remote_refspec_count, 1, 1);
+    DEFUN("libgit-remote-url", remote_url, 1, 1);
+    DEFUN("libgit-remote-valid-name-p", remote_valid_name_p, 1, 1);
 
     // Repository
     DEFUN("libgit-repository-init", repository_init, 1, 2);

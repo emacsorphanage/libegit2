@@ -847,7 +847,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 - :grey_question: `git-remote-add-fetch`
 - :grey_question: `git-remote-add-push`
-- :grey_question: `git-remote-autotag`
+- :heavy_check_mark: `git-remote-autotag`
 - :grey_question: `git-remote-connect`
 - :grey_question: `git-remote-connected`
 - :grey_question: `git-remote-create`
@@ -861,21 +861,21 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-remote-dup`
 - :grey_question: `git-remote-fetch`
 - :x: `git-remote-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-remote-get-fetch-refspecs`
-- :grey_question: `git-remote-get-push-refspecs`
+- :heavy_check_mark: `git-remote-get-fetch-refspecs` (use `git-remote-get-refspecs`)
+- :heavy_check_mark: `git-remote-get-push-refspecs` (use `git-remote-get-refspecs`)
 - :grey_question: `git-remote-get-refspec`
 - :grey_question: `git-remote-init-callbacks`
-- :grey_question: `git-remote-is-valid-name`
+- :heavy_check_mark: `git-remote-is-valid-name`
 - :grey_question: `git-remote-list`
-- :grey_question: `git-remote-lookup`
+- :heavy_check_mark: `git-remote-lookup`
 - :grey_question: `git-remote-ls`
-- :grey_question: `git-remote-name`
-- :grey_question: `git-remote-owner`
+- :heavy_check_mark: `git-remote-name`
+- :heavy_check_mark: `git-remote-owner`
 - :grey_question: `git-remote-prune`
 - :grey_question: `git-remote-prune-refs`
 - :grey_question: `git-remote-push`
-- :grey_question: `git-remote-pushurl`
-- :grey_question: `git-remote-refspec-count`
+- :heavy_check_mark: `git-remote-pushurl`
+- :heavy_check_mark: `git-remote-refspec-count`
 - :grey_question: `git-remote-rename`
 - :grey_question: `git-remote-set-autotag`
 - :grey_question: `git-remote-set-pushurl`
@@ -884,7 +884,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-remote-stop`
 - :grey_question: `git-remote-update-tips`
 - :grey_question: `git-remote-upload`
-- :grey_question: `git-remote-url`
+- :heavy_check_mark: `git-remote-url`
 
 ### repository
 

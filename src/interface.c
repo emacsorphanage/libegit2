@@ -104,6 +104,12 @@ emacs_value em_max_candidates_tags, em_strategy, em_pattern,
     em_only_follow_first_parent, em_show_commit_oid_as_fallback, em_tags,
     em_abbreviated_size, em_always_use_long_format, em_dirty_suffix;
 
+// Remote autotag
+emacs_value em_auto;
+
+// Remote directions
+emacs_value em_fetch, em_push;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -310,6 +316,11 @@ void em_init(emacs_env *env)
     em_abbreviated_size = GLOBREF(INTERN("abbreviated-size"));
     em_always_use_long_format = GLOBREF(INTERN("always-use-long-format"));
     em_dirty_suffix = GLOBREF(INTERN("dirty-suffix"));
+
+    em_auto = GLOBREF(INTERN("auto"));
+
+    em_fetch = GLOBREF(INTERN("fetch"));
+    em_push = GLOBREF(INTERN("push"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
