@@ -14,6 +14,7 @@ EGIT_DEFUN(remote_pushurl, emacs_value _remote);
 EGIT_DEFUN(remote_refspec_count, emacs_value _remote);
 EGIT_DEFUN(remote_url, emacs_value _remote);
 
+EGIT_DEFUN(remote_list, emacs_value _repo);
 EGIT_DEFUN(remote_valid_name_p, emacs_value _name);
 
 #endif /* EGIT_REMOTE_H */

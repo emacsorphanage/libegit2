@@ -136,7 +136,20 @@ emacs_value egit_remote_url(emacs_env *env, emacs_value _remote)
 
 
 // =============================================================================
-// Predicates
+// Miscellaneous
+
+EGIT_DOC(remote_list, "REPO", "Get a list of remote names in REPO.");
+emacs_value egit_remote_list(emacs_env *env, emacs_value _repo)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    git_strarray out = {NULL, 0};
+    int retval = git_remote_list(&out, repo);
+    EGIT_CHECK_ERROR(retval);
+
+    EGIT_RET_STRARRAY(out);
+}
 
 EGIT_DOC(remote_valid_name_p, "NAME", "Return non-nil if NAME is a valid name for a remote.");
 emacs_value egit_remote_valid_name_p(emacs_env *env, emacs_value _name)
