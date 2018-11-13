@@ -33,37 +33,37 @@ static emacs_value egit_describe_options_parse(
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (env->eq(env, car, em_max_candidates_tags)) {
+        if (EM_EQ(car, em_max_candidates_tags)) {
             EM_ASSERT_INTEGER(cdr);
             dopts->max_candidates_tags = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (env->eq(env, car, em_strategy)) {
+        else if (EM_EQ(car, em_strategy)) {
             if (!EM_EXTRACT_BOOLEAN(cdr))
                 dopts->describe_strategy = GIT_DESCRIBE_DEFAULT;
-            else if (env->eq(env, cdr, em_tags))
+            else if (EM_EQ(cdr, em_tags))
                 dopts->describe_strategy = GIT_DESCRIBE_TAGS;
-            else if (env->eq(env, cdr, em_all))
+            else if (EM_EQ(cdr, em_all))
                 dopts->describe_strategy = GIT_DESCRIBE_ALL;
             else {
                 em_signal_wrong_value(env, cdr);
                 return em_nil;
             }
         }
-        else if (env->eq(env, car, em_pattern)) {
+        else if (EM_EQ(car, em_pattern)) {
             EM_ASSERT_STRING(cdr);
             pattern = cdr;
         }
-        else if (env->eq(env, car, em_only_follow_first_parent))
+        else if (EM_EQ(car, em_only_follow_first_parent))
             dopts->only_follow_first_parent = EM_EXTRACT_BOOLEAN(cdr);
-        else if (env->eq(env, car, em_show_commit_oid_as_fallback))
+        else if (EM_EQ(car, em_show_commit_oid_as_fallback))
             dopts->show_commit_oid_as_fallback = EM_EXTRACT_BOOLEAN(cdr);
-        else if (env->eq(env, car, em_abbreviated_size)) {
+        else if (EM_EQ(car, em_abbreviated_size)) {
             EM_ASSERT_INTEGER(cdr);
             fopts->abbreviated_size = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (env->eq(env, car, em_always_use_long_format))
+        else if (EM_EQ(car, em_always_use_long_format))
             fopts->always_use_long_format = EM_EXTRACT_BOOLEAN(cdr);
-        else if (env->eq(env, car, em_dirty_suffix)) {
+        else if (EM_EQ(car, em_dirty_suffix)) {
             EM_ASSERT_STRING(cdr);
             dirty_suffix = cdr;
         }

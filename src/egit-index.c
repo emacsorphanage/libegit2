@@ -180,11 +180,11 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
     int stage;
     if (!EM_EXTRACT_BOOLEAN(_stage))
         stage = 0;
-    else if (env->eq(env, _stage, em_base))
+    else if (EM_EQ(_stage, em_base))
         stage = 1;
-    else if (env->eq(env, _stage, em_ours))
+    else if (EM_EQ(_stage, em_ours))
         stage = 2;
-    else if (env->eq(env, _stage, em_theirs))
+    else if (EM_EQ(_stage, em_theirs))
         stage = 3;
     else {
         em_signal_wrong_value(env, _stage);

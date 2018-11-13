@@ -162,6 +162,9 @@ extern emacs_value em_fetch, em_push;
 // Caller is responsible for ensuring that the emacs_value represents a user pointer.
 #define EM_EXTRACT_USER_PTR(val) env->get_user_ptr(env, (val))
 
+// Call (eq a b) in Emacs
+#define EM_EQ(a,b) (env->eq(env, (a), (b)))
+
 /**
  * Initiate a loop over an Emacs list.
  * If any element is not a cons cell or nil, it WILL signal an error and return nil.

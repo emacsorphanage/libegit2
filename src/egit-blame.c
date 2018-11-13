@@ -27,32 +27,32 @@ static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (env->eq(env, car, em_first_parent))
+        if (EM_EQ(car, em_first_parent))
             SET_BIT(opts->flags, GIT_BLAME_FIRST_PARENT, cdr);
 
         /* According to libgit2 documentation, the min_match_characters
          * setting only takes effect if GIT_BLAME_TRACK_COPIES_* flags
          * are set, but all of those are marked as not implemented in
          * the source code.
-        else if (env->eq(env, car, em_min_match_characters)) {
+        else if (EM_EQ(car, em_min_match_characters)) {
             EM_ASSERT_INTEGER(cdr);
             opts->min_match_characters = EM_EXTRACT_INTEGER(cdr);
         }
         */
 
-        else if (env->eq(env, car, em_newest_commit)) {
+        else if (EM_EQ(car, em_newest_commit)) {
             EM_ASSERT_STRING(cdr);
             EGIT_EXTRACT_OID(cdr, opts->newest_commit);
         }
-        else if (env->eq(env, car, em_oldest_commit)) {
+        else if (EM_EQ(car, em_oldest_commit)) {
             EM_ASSERT_STRING(cdr);
             EGIT_EXTRACT_OID(cdr, opts->oldest_commit);
         }
-        else if (env->eq(env, car, em_min_line)) {
+        else if (EM_EQ(car, em_min_line)) {
             EM_ASSERT_INTEGER(cdr);
             opts->min_line = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (env->eq(env, car, em_max_line)) {
+        else if (EM_EQ(car, em_max_line)) {
             EM_ASSERT_INTEGER(cdr);
             opts->max_line = EM_EXTRACT_INTEGER(cdr);
         }
