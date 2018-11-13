@@ -33,6 +33,10 @@
 #define EGIT_ASSERT_BLAME(val)                                          \
     do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
 
+// Assert that VAL is a git blame hunk, signal an error and return otherwise.
+#define EGIT_ASSERT_BLAME_HUNK(val)                                     \
+    do { if (!egit_assert_type(env, (val), EGIT_BLAME_HUNK, em_libgit_blame_hunk_p)) return em_nil; } while (0)
+
 // Assert that VAL is a git commit, signal an error and return otherwise.
 #define EGIT_ASSERT_COMMIT(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_COMMIT, em_libgit_commit_p)) return em_nil; } while (0)
@@ -205,6 +209,7 @@ typedef enum {
     EGIT_OBJECT,
     EGIT_SIGNATURE,
     EGIT_BLAME,
+    EGIT_BLAME_HUNK,
     EGIT_CONFIG,
     EGIT_TRANSACTION,
     EGIT_INDEX,

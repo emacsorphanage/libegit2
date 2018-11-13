@@ -19,10 +19,11 @@ emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
     em_libgit_transaction_p, em_libgit_tree_p, em_libgit_index_p, em_libgit_index_entry_p,
     em_libgit_diff_p, em_libgit_diff_delta_p, em_libgit_diff_binary_p,
     em_libgit_diff_hunk_p, em_libgit_diff_line_p, em_libgit_tag_p, em_libgit_remote_p,
-    em_libgit_refspec_p;
+    em_libgit_refspec_p, em_libgit_blame_hunk_p;
 emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object,
     em_signature, em_blame, em_config, em_transaction, em_index, em_index_entry, em_diff,
-    em_diff_delta, em_diff_binary, em_diff_hunk, em_diff_line, em_remote, em_refspec;
+    em_diff_delta, em_diff_binary, em_diff_hunk, em_diff_line, em_remote, em_refspec,
+    em_blame_hunk;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -132,6 +133,7 @@ void em_init(emacs_env *env)
     em_libgit_reference_p = GLOBREF(INTERN("libgit-reference-p"));
     em_libgit_signature_p = GLOBREF(INTERN("libgit-signature-p"));
     em_libgit_blame_p = GLOBREF(INTERN("libgit-blame-p"));
+    em_libgit_blame_hunk_p = GLOBREF(INTERN("libgit-blame-hunk-p"));
     em_libgit_commit_p = GLOBREF(INTERN("libgit-commit-p"));
     em_libgit_config_p = GLOBREF(INTERN("libgit-config-p"));
     em_libgit_transaction_p = GLOBREF(INTERN("libgit-transaction-p"));
@@ -156,6 +158,7 @@ void em_init(emacs_env *env)
     em_object = GLOBREF(INTERN("object"));
     em_signature = GLOBREF(INTERN("signature"));
     em_blame = GLOBREF(INTERN("blame"));
+    em_blame_hunk = GLOBREF(INTERN("blame-hunk"));
     em_config = GLOBREF(INTERN("config"));
     em_transaction = GLOBREF(INTERN("transaction"));
     em_index = GLOBREF(INTERN("index"));

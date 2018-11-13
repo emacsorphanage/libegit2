@@ -319,6 +319,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_TAG: return em_tag;
     case EGIT_OBJECT: return em_object;
     case EGIT_BLAME: return em_blame;
+    case EGIT_BLAME_HUNK: return em_blame_hunk;
     case EGIT_CONFIG: return em_config;
     case EGIT_TRANSACTION: return em_transaction;
     case EGIT_INDEX: return em_index;
@@ -338,6 +339,12 @@ EGIT_DOC(blame_p, "OBJ", "Return non-nil if OBJ is a git blame.");
 static emacs_value egit_blame_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_BLAME ? em_t : em_nil;
+}
+
+EGIT_DOC(blame_hunk_p, "OBJ", "Return non-nil if OBJ is a git blame hunk.");
+static emacs_value egit_blame_hunk_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_BLAME_HUNK ? em_t : em_nil;
 }
 
 EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git commit.");
@@ -464,6 +471,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);
+    DEFUN("libgit-blame-hunk-p", blame_hunk_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
     DEFUN("libgit-diff-p", diff_p, 1, 1);
