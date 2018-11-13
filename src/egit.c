@@ -324,6 +324,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_DIFF_HUNK: return em_diff_hunk;
     case EGIT_DIFF_LINE: return em_diff_line;
     case EGIT_REMOTE: return em_remote;
+    case EGIT_REFSPEC: return em_refspec;
     default: return em_nil;
     }
 }
@@ -402,6 +403,12 @@ static emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;
 }
 
+EGIT_DOC(refspec_p, "OBJ", "Return non-nil if OBJ is a git refspec.");
+static emacs_value egit_refspec_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_REFSPEC ? em_t : em_nil;
+}
+
 EGIT_DOC(remote_p, "OBJ", "Return non-nil if OBJ is a git remote.");
 static emacs_value egit_remote_p(emacs_env *env, emacs_value obj)
 {
@@ -463,6 +470,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
+    DEFUN("libgit-refspec-p", refspec_p, 1, 1);
     DEFUN("libgit-remote-p", remote_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);

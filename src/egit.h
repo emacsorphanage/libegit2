@@ -77,6 +77,10 @@
 #define EGIT_ASSERT_REFERENCE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
 
+// Assert that VAL is a git refspec, signal an error and return otherwise.
+#define EGIT_ASSERT_REFSPEC(val)                                        \
+    do { if (!egit_assert_type(env, (val), EGIT_REFSPEC, em_libgit_refspec_p)) return em_nil; } while (0)
+
 // Assert that VAL is a git remote, signal an error and return otherwise.
 #define EGIT_ASSERT_REMOTE(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_REMOTE, em_libgit_remote_p)) return em_nil; } while (0)
@@ -210,7 +214,8 @@ typedef enum {
     EGIT_DIFF_BINARY,
     EGIT_DIFF_HUNK,
     EGIT_DIFF_LINE,
-    EGIT_REMOTE
+    EGIT_REMOTE,
+    EGIT_REFSPEC
 } egit_type;
 
 /**
