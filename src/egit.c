@@ -150,6 +150,10 @@ static void egit_finalize(void* _obj)
         git_config_free(obj->ptr);
         break;
 
+    case EGIT_REMOTE:
+        git_remote_free(obj->ptr);
+        break;
+
     case EGIT_SIGNATURE:
         git_signature_free(obj->ptr);
         break;
@@ -193,6 +197,9 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
             break;
         case EGIT_REFERENCE:
             parent = egit_incref(EGIT_REPOSITORY, git_reference_owner(data));
+            break;
+        case EGIT_REMOTE:
+            parent = egit_incref(EGIT_REPOSITORY, git_remote_owner(data));
             break;
         default: break;
         }
@@ -315,6 +322,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_DIFF_BINARY: return em_diff_binary;
     case EGIT_DIFF_HUNK: return em_diff_hunk;
     case EGIT_DIFF_LINE: return em_diff_line;
+    case EGIT_REMOTE: return em_remote;
     default: return em_nil;
     }
 }
@@ -393,6 +401,12 @@ static emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;
 }
 
+EGIT_DOC(remote_p, "OBJ", "Return non-nil if OBJ is a git remote.");
+static emacs_value egit_remote_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_REMOTE ? em_t : em_nil;
+}
+
 EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
 static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
 {
@@ -448,6 +462,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
+    DEFUN("libgit-remote-p", remote_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
     DEFUN("libgit-tag-p", tag_p, 1, 1);
