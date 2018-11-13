@@ -73,9 +73,9 @@ emacs_value egit_remote_get_refspecs(emacs_env *env, emacs_value _remote, emacs_
 
     git_strarray out = {NULL, 0};
     int retval;
-    if (env->eq(env, dir, em_fetch))
+    if (EM_EQ(dir, em_fetch))
         retval = git_remote_get_fetch_refspecs(&out, remote);
-    else if (env->eq(env, dir, em_push))
+    else if (EM_EQ(dir, em_push))
         retval = git_remote_get_push_refspecs(&out, remote);
     else {
         em_signal_wrong_value(env, dir);

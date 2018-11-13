@@ -191,13 +191,13 @@ emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _t
     git_otype type;
     if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
-    else if (env->eq(env, _type, em_commit))
+    else if (EM_EQ(_type, em_commit))
         type = GIT_OBJ_COMMIT;
-    else if (env->eq(env, _type, em_tree))
+    else if (EM_EQ(_type, em_tree))
         type = GIT_OBJ_TREE;
-    else if (env->eq(env, _type, em_blob))
+    else if (EM_EQ(_type, em_blob))
         type = GIT_OBJ_BLOB;
-    else if (env->eq(env, _type, em_tag))
+    else if (EM_EQ(_type, em_tag))
         type = GIT_OBJ_TAG;
     else {
         em_signal_wrong_value(env, _type);

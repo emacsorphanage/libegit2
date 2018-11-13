@@ -220,7 +220,7 @@ static int tree_walk_callback(const char *root, const git_tree_entry *entry, voi
     if (env->non_local_exit_check(env))
         return GIT_EUSER;
 
-    return env->eq(env, ret, em_skip) ? 1 : 0;
+    return EM_EQ(ret, em_skip) ? 1 : 0;
 }
 
 EGIT_DOC(tree_walk, "TREE ORDER FUNCTION",
@@ -237,9 +237,9 @@ emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order,
     EM_ASSERT_FUNCTION(function);
 
     git_treewalk_mode mode;
-    if (env->eq(env, order, em_pre))
+    if (EM_EQ(order, em_pre))
         mode = GIT_TREEWALK_PRE;
-    else if (env->eq(env, order, em_post))
+    else if (EM_EQ(order, em_post))
         mode = GIT_TREEWALK_POST;
     else {
         em_signal_wrong_value(env, order);
