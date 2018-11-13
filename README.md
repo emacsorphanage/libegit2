@@ -138,7 +138,7 @@ on the amount of work needed.
 Legend:
 - :heavy_check_mark: Function is implemented
 - :x: Function should probably not be implemented (reason given)
-- :interrobang: Undecided
+- :grey_question: Undecided
 
 Some functions are defined in libgit2 headers in the `sys` subdirectory, and are not reachable from
 a standard include (i.e. `#include "git2.h"`). For now, we will skip those on the assumption that
@@ -201,24 +201,24 @@ Iterators converted to map functions:
 ### annotated
 
 - :x: `git-annotated-commit-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-annotated-commit-from-fetchhead`
-- :interrobang: `git-annotated-commit-from-ref`
-- :interrobang: `git-annotated-commit-from-revspec`
-- :interrobang: `git-annotated-commit-id`
-- :interrobang: `git-annotated-commit-lookup`
+- :grey_question: `git-annotated-commit-from-fetchhead`
+- :grey_question: `git-annotated-commit-from-ref`
+- :grey_question: `git-annotated-commit-from-revspec`
+- :grey_question: `git-annotated-commit-id`
+- :grey_question: `git-annotated-commit-lookup`
 
 ### attr
 
-- :interrobang: `git-attr-add-macro`
-- :interrobang: `git-attr-cache-flush`
-- :interrobang: `git-attr-foreach`
-- :interrobang: `git-attr-get`
-- :interrobang: `git-attr-get-many`
-- :interrobang: `git-attr-value`
+- :grey_question: `git-attr-add-macro`
+- :grey_question: `git-attr-cache-flush`
+- :grey_question: `git-attr-foreach`
+- :grey_question: `git-attr-get`
+- :grey_question: `git-attr-get-many`
+- :grey_question: `git-attr-value`
 
 ### blame
 
-- :interrobang: `git-blame-buffer`
+- :grey_question: `git-blame-buffer`
 - :heavy_check_mark: `git-blame-file`
 - :x: `git-blame-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-blame-get-hunk-byindex`
@@ -228,21 +228,21 @@ Iterators converted to map functions:
 
 ### blob
 
-- :interrobang: `git-blob-create-frombuffer`
-- :interrobang: `git-blob-create-fromdisk`
-- :interrobang: `git-blob-create-fromstream`
-- :interrobang: `git-blob-create-fromstream-commit`
-- :interrobang: `git-blob-create-fromworkdir`
-- :interrobang: `git-blob-dup`
-- :interrobang: `git-blob-filtered-content`
+- :grey_question: `git-blob-create-frombuffer`
+- :grey_question: `git-blob-create-fromdisk`
+- :grey_question: `git-blob-create-fromstream`
+- :grey_question: `git-blob-create-fromstream-commit`
+- :grey_question: `git-blob-create-fromworkdir`
+- :grey_question: `git-blob-dup`
+- :grey_question: `git-blob-filtered-content`
 - :x: `git-blob-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-blob-id`
-- :interrobang: `git-blob-is-binary`
-- :interrobang: `git-blob-lookup`
-- :interrobang: `git-blob-lookup-prefix`
-- :interrobang: `git-blob-owner`
-- :interrobang: `git-blob-rawcontent`
-- :interrobang: `git-blob-rawsize`
+- :grey_question: `git-blob-id`
+- :grey_question: `git-blob-is-binary`
+- :grey_question: `git-blob-lookup`
+- :grey_question: `git-blob-lookup-prefix`
+- :grey_question: `git-blob-owner`
+- :grey_question: `git-blob-rawcontent`
+- :grey_question: `git-blob-rawsize`
 
 ### branch
 
@@ -251,14 +251,14 @@ Iterators converted to map functions:
 - :heavy_check_mark: `git-branch-delete`
 - :heavy_check_mark: `git-branch-is-checked-out`
 - :heavy_check_mark: `git-branch-is-head`
-- :interrobang: `git-branch-iterator-free`
-- :interrobang: `git-branch-iterator-new`
+- :grey_question: `git-branch-iterator-free`
+- :grey_question: `git-branch-iterator-new`
 - :heavy_check_mark: `git-branch-lookup`
-- :interrobang: `git-branch-move`
+- :grey_question: `git-branch-move`
 - :heavy_check_mark: `git-branch-name`
-- :interrobang: `git-branch-next`
+- :grey_question: `git-branch-next`
 - :heavy_check_mark: `git-branch-remote-name`
-- :interrobang: `git-branch-set-upstream`
+- :grey_question: `git-branch-set-upstream`
 - :heavy_check_mark: `git-branch-upstream`
 - :heavy_check_mark: `git-branch-upstream-name`
 - :heavy_check_mark: `git-branch-upstream-remote`
@@ -275,50 +275,50 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### checkout
 
-- :interrobang: `git-checkout-head`
-- :interrobang: `git-checkout-index`
-- :interrobang: `git-checkout-init-options`
-- :interrobang: `git-checkout-tree`
+- :grey_question: `git-checkout-head`
+- :grey_question: `git-checkout-index`
+- :grey_question: `git-checkout-init-options`
+- :grey_question: `git-checkout-tree`
 
 ### cherrypick
 
-- :interrobang: `git-cherrypick`
-- :interrobang: `git-cherrypick-commit`
-- :interrobang: `git-cherrypick-init-options`
+- :grey_question: `git-cherrypick`
+- :grey_question: `git-cherrypick-commit`
+- :grey_question: `git-cherrypick-init-options`
 
 ### clone
 
 - :heavy_check_mark: `git-clone`
-- :interrobang: `git-clone-init-options`
+- :grey_question: `git-clone-init-options`
 
 ### commit
 
-- :interrobang: `git-commit-amend`
+- :grey_question: `git-commit-amend`
 - :heavy_check_mark: `git-commit-author`
 - :heavy_check_mark: `git-commit-body`
 - :heavy_check_mark: `git-commit-committer`
-- :interrobang: `git-commit-create`
-- :interrobang: `git-commit-create-buffer`
+- :grey_question: `git-commit-create`
+- :grey_question: `git-commit-create-buffer`
 - :x: `git-commit-create-from-callback` (in `sys`)
 - :x: `git-commit-create-from-ids` (in `sys`)
-- :interrobang: `git-commit-create-v`
-- :interrobang: `git-commit-create-with-signature`
-- :interrobang: `git-commit-dup`
-- :interrobang: `git-commit-extract-signature`
+- :grey_question: `git-commit-create-v`
+- :grey_question: `git-commit-create-with-signature`
+- :grey_question: `git-commit-dup`
+- :grey_question: `git-commit-extract-signature`
 - :x: `git-commit-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-commit-header-field`
+- :grey_question: `git-commit-header-field`
 - :heavy_check_mark: `git-commit-id`
 - :heavy_check_mark: `git-commit-lookup`
 - :heavy_check_mark: `git-commit-lookup-prefix`
 - :heavy_check_mark: `git-commit-message`
-- :interrobang: `git-commit-message-encoding`
-- :interrobang: `git-commit-message-raw`
+- :grey_question: `git-commit-message-encoding`
+- :grey_question: `git-commit-message-raw`
 - :heavy_check_mark: `git-commit-nth-gen-ancestor`
 - :heavy_check_mark: `git-commit-owner`
 - :heavy_check_mark: `git-commit-parent`
 - :heavy_check_mark: `git-commit-parent-id`
 - :heavy_check_mark: `git-commit-parentcount`
-- :interrobang: `git-commit-raw-header`
+- :grey_question: `git-commit-raw-header`
 - :heavy_check_mark: `git-commit-summary`
 - :heavy_check_mark: `git-commit-time`
 - :x: `git-commit-time-offset` (included in `git-commit-time`)
@@ -328,64 +328,64 @@ Probably none of these functions are necessary, since we can expose buffers to E
 ### config
 
 - :x: `git-config-add-backend` (in `sys`)
-- :interrobang: `git-config-add-file-ondisk`
-- :interrobang: `git-config-backend-foreach-match`
-- :interrobang: `git-config-delete-entry`
-- :interrobang: `git-config-delete-multivar`
+- :grey_question: `git-config-add-file-ondisk`
+- :grey_question: `git-config-backend-foreach-match`
+- :grey_question: `git-config-delete-entry`
+- :grey_question: `git-config-delete-multivar`
 - :x: `git-config-entry-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-config-find-global`
 - :heavy_check_mark: `git-config-find-programdata`
 - :heavy_check_mark: `git-config-find-system`
 - :heavy_check_mark: `git-config-find-xdg`
-- :interrobang: `git-config-foreach`
-- :interrobang: `git-config-foreach-match`
+- :grey_question: `git-config-foreach`
+- :grey_question: `git-config-foreach-match`
 - :x: `git-config-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-config-get-bool`
-- :interrobang: `git-config-get-entry`
+- :grey_question: `git-config-get-entry`
 - :x: `git-config-get-int32` (don't need different integer types)
 - :heavy_check_mark: `git-config-get-int64` (as `-int`)
-- :interrobang: `git-config-get-mapped`
-- :interrobang: `git-config-get-multivar-foreach`
+- :grey_question: `git-config-get-mapped`
+- :grey_question: `git-config-get-multivar-foreach`
 - :heavy_check_mark: `git-config-get-path`
 - :heavy_check_mark: `git-config-get-string`
 - :x: `git-config-get-string-buf` (probably fine with just `-get-string`)
 - :x: `git-config-init-backend` (in `sys`)
 - :x: `git-config-iterator-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-config-iterator-glob-new`
-- :interrobang: `git-config-iterator-new`
+- :grey_question: `git-config-iterator-glob-new`
+- :grey_question: `git-config-iterator-new`
 - :heavy_check_mark: `git-config-lock`
-- :interrobang: `git-config-lookup-map-value`
-- :interrobang: `git-config-multivar-iterator-new`
-- :interrobang: `git-config-new`
-- :interrobang: `git-config-next`
-- :interrobang: `git-config-open-default`
-- :interrobang: `git-config-open-global`
-- :interrobang: `git-config-open-level`
-- :interrobang: `git-config-open-ondisk`
-- :interrobang: `git-config-parse-bool`
-- :interrobang: `git-config-parse-int32`
-- :interrobang: `git-config-parse-int64`
-- :interrobang: `git-config-parse-path`
+- :grey_question: `git-config-lookup-map-value`
+- :grey_question: `git-config-multivar-iterator-new`
+- :grey_question: `git-config-new`
+- :grey_question: `git-config-next`
+- :grey_question: `git-config-open-default`
+- :grey_question: `git-config-open-global`
+- :grey_question: `git-config-open-level`
+- :grey_question: `git-config-open-ondisk`
+- :grey_question: `git-config-parse-bool`
+- :grey_question: `git-config-parse-int32`
+- :grey_question: `git-config-parse-int64`
+- :grey_question: `git-config-parse-path`
 - :heavy_check_mark: `git-config-set-bool`
 - :x: `git-config-set-int32` (don't need different integer types)
 - :heavy_check_mark: `git-config-set-int64` (as `-int`)
-- :interrobang: `git-config-set-multivar`
+- :grey_question: `git-config-set-multivar`
 - :heavy_check_mark: `git-config-set-string`
-- :interrobang: `git-config-snapshot`
+- :grey_question: `git-config-snapshot`
 
 ### cred
 
-- :interrobang: `git-cred-default-new`
+- :grey_question: `git-cred-default-new`
 - :x: `git-cred-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-cred-has-username`
-- :interrobang: `git-cred-ssh-custom-new`
-- :interrobang: `git-cred-ssh-interactive-new`
-- :interrobang: `git-cred-ssh-key-from-agent`
-- :interrobang: `git-cred-ssh-key-memory-new`
-- :interrobang: `git-cred-ssh-key-new`
-- :interrobang: `git-cred-username-new`
-- :interrobang: `git-cred-userpass`
-- :interrobang: `git-cred-userpass-plaintext-new`
+- :grey_question: `git-cred-has-username`
+- :grey_question: `git-cred-ssh-custom-new`
+- :grey_question: `git-cred-ssh-interactive-new`
+- :grey_question: `git-cred-ssh-key-from-agent`
+- :grey_question: `git-cred-ssh-key-memory-new`
+- :grey_question: `git-cred-ssh-key-new`
+- :grey_question: `git-cred-username-new`
+- :grey_question: `git-cred-userpass`
+- :grey_question: `git-cred-userpass-plaintext-new`
 
 ### describe
 
@@ -396,39 +396,39 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### diff
 
-- :interrobang: `git-diff-blob-to-buffer`
-- :interrobang: `git-diff-blobs`
-- :interrobang: `git-diff-buffers`
-- :interrobang: `git-diff-commit-as-email`
-- :interrobang: `git-diff-find-init-options`
-- :interrobang: `git-diff-find-similar`
+- :grey_question: `git-diff-blob-to-buffer`
+- :grey_question: `git-diff-blobs`
+- :grey_question: `git-diff-buffers`
+- :grey_question: `git-diff-commit-as-email`
+- :grey_question: `git-diff-find-init-options`
+- :grey_question: `git-diff-find-similar`
 - :heavy_check_mark: `git-diff-foreach`
-- :interrobang: `git-diff-format-email`
-- :interrobang: `git-diff-format-email-init-options`
+- :grey_question: `git-diff-format-email`
+- :grey_question: `git-diff-format-email-init-options`
 - :x: `git-diff-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-diff-from-buffer`
+- :grey_question: `git-diff-from-buffer`
 - :heavy_check_mark: `git-diff-get-delta`
 - :x: `git-diff-get-perfdata` (in `sys`)
-- :interrobang: `git-diff-get-stats`
+- :grey_question: `git-diff-get-stats`
 - :heavy_check_mark: `git-diff-index-to-index`
 - :heavy_check_mark: `git-diff-index-to-workdir`
-- :interrobang: `git-diff-init-options`
-- :interrobang: `git-diff-is-sorted-icase`
-- :interrobang: `git-diff-merge`
+- :grey_question: `git-diff-init-options`
+- :grey_question: `git-diff-is-sorted-icase`
+- :grey_question: `git-diff-merge`
 - :heavy_check_mark: `git-diff-num-deltas`
 - :heavy_check_mark: `git-diff-num-deltas-of-type` (use `git-diff-num-deltas`)
-- :interrobang: `git-diff-patchid`
-- :interrobang: `git-diff-patchid-init-options`
+- :grey_question: `git-diff-patchid`
+- :grey_question: `git-diff-patchid-init-options`
 - :heavy_check_mark: `git-diff-print`
 - :x: `git-diff-print-callback--to-buf` (in `sys`)
-- :interrobang: `git-diff-print-callback--to-file-handle`
-- :interrobang: `git-diff-stats-deletions`
-- :interrobang: `git-diff-stats-files-changed`
+- :grey_question: `git-diff-print-callback--to-file-handle`
+- :grey_question: `git-diff-stats-deletions`
+- :grey_question: `git-diff-stats-files-changed`
 - :x: `git-diff-stats-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-diff-stats-insertions`
-- :interrobang: `git-diff-stats-to-buf`
-- :interrobang: `git-diff-status-char`
-- :interrobang: `git-diff-to-buf`
+- :grey_question: `git-diff-stats-insertions`
+- :grey_question: `git-diff-stats-to-buf`
+- :grey_question: `git-diff-status-char`
+- :grey_question: `git-diff-to-buf`
 - :heavy_check_mark: `git-diff-tree-to-index`
 - :heavy_check_mark: `git-diff-tree-to-tree`
 - :heavy_check_mark: `git-diff-tree-to-workdir`
@@ -436,23 +436,23 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### fetch
 
-- :interrobang: `git-fetch-init-options`
+- :grey_question: `git-fetch-init-options`
 
 ### filter
 
 - :x: `git-filter-init` (in `sys`)
-- :interrobang: `git-filter-list-apply-to-blob`
-- :interrobang: `git-filter-list-apply-to-data`
-- :interrobang: `git-filter-list-apply-to-file`
-- :interrobang: `git-filter-list-contains`
+- :grey_question: `git-filter-list-apply-to-blob`
+- :grey_question: `git-filter-list-apply-to-data`
+- :grey_question: `git-filter-list-apply-to-file`
+- :grey_question: `git-filter-list-contains`
 - :x: `git-filter-list-free` (memory management shouldn't be exposed to Emacs)
 - :x: `git-filter-list-length` (in `sys`)
-- :interrobang: `git-filter-list-load`
+- :grey_question: `git-filter-list-load`
 - :x: `git-filter-list-new` (in `sys`)
 - :x: `git-filter-list-push` (in `sys`)
-- :interrobang: `git-filter-list-stream-blob`
-- :interrobang: `git-filter-list-stream-data`
-- :interrobang: `git-filter-list-stream-file`
+- :grey_question: `git-filter-list-stream-blob`
+- :grey_question: `git-filter-list-stream-data`
+- :grey_question: `git-filter-list-stream-file`
 - :x: `git-filter-lookup` (in `sys`)
 - :x: `git-filter-register` (in `sys`)
 - :x: `git-filter-source-filemode` (in `sys`)
@@ -474,8 +474,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### graph
 
-- :interrobang: `git-graph-ahead-behind`
-- :interrobang: `git-graph-descendant-of`
+- :grey_question: `git-graph-ahead-behind`
+- :grey_question: `git-graph-descendant-of`
 
 ### hashsig
 
@@ -492,62 +492,62 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### index
 
-- :interrobang: `git-index-add`
-- :interrobang: `git-index-add-all`
-- :interrobang: `git-index-add-bypath`
-- :interrobang: `git-index-add-frombuffer`
+- :grey_question: `git-index-add`
+- :grey_question: `git-index-add-all`
+- :grey_question: `git-index-add-bypath`
+- :grey_question: `git-index-add-frombuffer`
 - :heavy_check_mark: `git-index-caps`
 - :heavy_check_mark: `git-index-checksum`
-- :interrobang: `git-index-clear`
-- :interrobang: `git-index-conflict-add`
-- :interrobang: `git-index-conflict-cleanup`
+- :grey_question: `git-index-clear`
+- :grey_question: `git-index-conflict-add`
+- :grey_question: `git-index-conflict-cleanup`
 - :heavy_check_mark: `git-index-conflict-get`
 - :heavy_check_mark: `git-index-conflict-iterator-free` (use `git-index-conflict-foreach`)
 - :heavy_check_mark: `git-index-conflict-iterator-new` (use `git-index-conflict-foreach`)
 - :heavy_check_mark: `git-index-conflict-next` (use `git-index-conflict-foreach`)
-- :interrobang: `git-index-conflict-remove`
+- :grey_question: `git-index-conflict-remove`
 - :heavy_check_mark: `git-index-entry-is-conflict` (use `git-index-entry-stage`)
 - :heavy_check_mark: `git-index-entry-stage`
 - :heavy_check_mark: `git-index-entrycount`
-- :interrobang: `git-index-find`
-- :interrobang: `git-index-find-prefix`
+- :grey_question: `git-index-find`
+- :grey_question: `git-index-find-prefix`
 - :x: `git-index-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-index-get-byindex`
 - :heavy_check_mark: `git-index-get-bypath`
 - :heavy_check_mark: `git-index-has-conflicts` (as `git-index-conflicts-p`)
-- :interrobang: `git-index-new`
-- :interrobang: `git-index-open`
+- :grey_question: `git-index-new`
+- :grey_question: `git-index-open`
 - :heavy_check_mark: `git-index-owner`
 - :heavy_check_mark: `git-index-path`
-- :interrobang: `git-index-read`
-- :interrobang: `git-index-read-tree`
-- :interrobang: `git-index-remove`
-- :interrobang: `git-index-remove-all`
-- :interrobang: `git-index-remove-bypath`
-- :interrobang: `git-index-remove-directory`
-- :interrobang: `git-index-set-caps`
-- :interrobang: `git-index-set-version`
-- :interrobang: `git-index-update-all`
+- :grey_question: `git-index-read`
+- :grey_question: `git-index-read-tree`
+- :grey_question: `git-index-remove`
+- :grey_question: `git-index-remove-all`
+- :grey_question: `git-index-remove-bypath`
+- :grey_question: `git-index-remove-directory`
+- :grey_question: `git-index-set-caps`
+- :grey_question: `git-index-set-version`
+- :grey_question: `git-index-update-all`
 - :heavy_check_mark: `git-index-version`
-- :interrobang: `git-index-write`
-- :interrobang: `git-index-write-tree`
-- :interrobang: `git-index-write-tree-to`
+- :grey_question: `git-index-write`
+- :grey_question: `git-index-write-tree`
+- :grey_question: `git-index-write-tree-to`
 
 ### indexer
 
-- :interrobang: `git-indexer-append`
-- :interrobang: `git-indexer-commit`
+- :grey_question: `git-indexer-append`
+- :grey_question: `git-indexer-commit`
 - :x: `git-indexer-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-indexer-hash`
-- :interrobang: `git-indexer-new`
+- :grey_question: `git-indexer-hash`
+- :grey_question: `git-indexer-new`
 
 ### libgit2
 
-- :interrobang: `git-libgit2-features`
-- :interrobang: `git-libgit2-init`
-- :interrobang: `git-libgit2-opts`
-- :interrobang: `git-libgit2-shutdown`
-- :interrobang: `git-libgit2-version`
+- :grey_question: `git-libgit2-features`
+- :grey_question: `git-libgit2-init`
+- :grey_question: `git-libgit2-opts`
+- :grey_question: `git-libgit2-shutdown`
+- :grey_question: `git-libgit2-version`
 
 ### mempack
 
@@ -557,102 +557,102 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### merge
 
-- :interrobang: `git-merge`
-- :interrobang: `git-merge-analysis`
-- :interrobang: `git-merge-base`
-- :interrobang: `git-merge-base-many`
-- :interrobang: `git-merge-base-octopus`
-- :interrobang: `git-merge-bases`
-- :interrobang: `git-merge-bases-many`
-- :interrobang: `git-merge-commits`
-- :interrobang: `git-merge-file`
-- :interrobang: `git-merge-file-from-index`
-- :interrobang: `git-merge-file-init-input`
-- :interrobang: `git-merge-file-init-options`
-- :interrobang: `git-merge-file-result-free`
-- :interrobang: `git-merge-init-options`
-- :interrobang: `git-merge-trees`
+- :grey_question: `git-merge`
+- :grey_question: `git-merge-analysis`
+- :grey_question: `git-merge-base`
+- :grey_question: `git-merge-base-many`
+- :grey_question: `git-merge-base-octopus`
+- :grey_question: `git-merge-bases`
+- :grey_question: `git-merge-bases-many`
+- :grey_question: `git-merge-commits`
+- :grey_question: `git-merge-file`
+- :grey_question: `git-merge-file-from-index`
+- :grey_question: `git-merge-file-init-input`
+- :grey_question: `git-merge-file-init-options`
+- :grey_question: `git-merge-file-result-free`
+- :grey_question: `git-merge-init-options`
+- :grey_question: `git-merge-trees`
 
 ### message
 
-- :interrobang: `git-message-prettify`
-- :interrobang: `git-message-trailer-array-free`
-- :interrobang: `git-message-trailers`
+- :grey_question: `git-message-prettify`
+- :grey_question: `git-message-trailer-array-free`
+- :grey_question: `git-message-trailers`
 
 ### note
 
-- :interrobang: `git-note-author`
-- :interrobang: `git-note-commit-create`
-- :interrobang: `git-note-commit-iterator-new`
-- :interrobang: `git-note-commit-read`
-- :interrobang: `git-note-commit-remove`
-- :interrobang: `git-note-committer`
-- :interrobang: `git-note-create`
-- :interrobang: `git-note-foreach`
+- :grey_question: `git-note-author`
+- :grey_question: `git-note-commit-create`
+- :grey_question: `git-note-commit-iterator-new`
+- :grey_question: `git-note-commit-read`
+- :grey_question: `git-note-commit-remove`
+- :grey_question: `git-note-committer`
+- :grey_question: `git-note-create`
+- :grey_question: `git-note-foreach`
 - :x: `git-note-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-note-id`
-- :interrobang: `git-note-iterator-free`
-- :interrobang: `git-note-iterator-new`
-- :interrobang: `git-note-message`
-- :interrobang: `git-note-next`
-- :interrobang: `git-note-read`
-- :interrobang: `git-note-remove`
+- :grey_question: `git-note-id`
+- :grey_question: `git-note-iterator-free`
+- :grey_question: `git-note-iterator-new`
+- :grey_question: `git-note-message`
+- :grey_question: `git-note-next`
+- :grey_question: `git-note-read`
+- :grey_question: `git-note-remove`
 
 ### object
 
 - :x: `git-object--size` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-object-dup`
+- :grey_question: `git-object-dup`
 - :x: `git-object-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-object-id`
-- :interrobang: `git-object-lookup`
+- :grey_question: `git-object-lookup`
 - :heavy_check_mark: `git-object-lookup-bypath`
 - :heavy_check_mark: `git-object-lookup-prefix`
 - :heavy_check_mark: `git-object-owner`
-- :interrobang: `git-object-peel`
+- :grey_question: `git-object-peel`
 - :heavy_check_mark: `git-object-short-id`
 - :x: `git-object-string2type` (see below)
 - :x: `git-object-type` (can be covered by a more general `git-typeof` for all opaque user pointers)
 - :x: `git-object-type2string` (see above)
-- :interrobang: `git-object-typeisloose`
+- :grey_question: `git-object-typeisloose`
 
 ### odb
 
-- :interrobang: `git-odb-add-alternate`
-- :interrobang: `git-odb-add-backend`
-- :interrobang: `git-odb-add-disk-alternate`
-- :interrobang: `git-odb-backend-loose`
-- :interrobang: `git-odb-backend-one-pack`
-- :interrobang: `git-odb-backend-pack`
-- :interrobang: `git-odb-exists`
-- :interrobang: `git-odb-exists-prefix`
-- :interrobang: `git-odb-expand-ids`
-- :interrobang: `git-odb-foreach`
+- :grey_question: `git-odb-add-alternate`
+- :grey_question: `git-odb-add-backend`
+- :grey_question: `git-odb-add-disk-alternate`
+- :grey_question: `git-odb-backend-loose`
+- :grey_question: `git-odb-backend-one-pack`
+- :grey_question: `git-odb-backend-pack`
+- :grey_question: `git-odb-exists`
+- :grey_question: `git-odb-exists-prefix`
+- :grey_question: `git-odb-expand-ids`
+- :grey_question: `git-odb-foreach`
 - :x: `git-odb-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-odb-get-backend`
-- :interrobang: `git-odb-hash`
-- :interrobang: `git-odb-hashfile`
+- :grey_question: `git-odb-get-backend`
+- :grey_question: `git-odb-hash`
+- :grey_question: `git-odb-hashfile`
 - :x: `git-odb-init-backend` (in `sys`)
-- :interrobang: `git-odb-new`
-- :interrobang: `git-odb-num-backends`
-- :interrobang: `git-odb-object-data`
-- :interrobang: `git-odb-object-dup`
+- :grey_question: `git-odb-new`
+- :grey_question: `git-odb-num-backends`
+- :grey_question: `git-odb-object-data`
+- :grey_question: `git-odb-object-dup`
 - :x: `git-odb-object-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-odb-object-id`
-- :interrobang: `git-odb-object-size`
-- :interrobang: `git-odb-object-type`
-- :interrobang: `git-odb-open`
-- :interrobang: `git-odb-open-rstream`
-- :interrobang: `git-odb-open-wstream`
-- :interrobang: `git-odb-read`
-- :interrobang: `git-odb-read-header`
-- :interrobang: `git-odb-read-prefix`
-- :interrobang: `git-odb-refresh`
-- :interrobang: `git-odb-stream-finalize-write`
+- :grey_question: `git-odb-object-id`
+- :grey_question: `git-odb-object-size`
+- :grey_question: `git-odb-object-type`
+- :grey_question: `git-odb-open`
+- :grey_question: `git-odb-open-rstream`
+- :grey_question: `git-odb-open-wstream`
+- :grey_question: `git-odb-read`
+- :grey_question: `git-odb-read-header`
+- :grey_question: `git-odb-read-prefix`
+- :grey_question: `git-odb-refresh`
+- :grey_question: `git-odb-stream-finalize-write`
 - :x: `git-odb-stream-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-odb-stream-read`
-- :interrobang: `git-odb-stream-write`
-- :interrobang: `git-odb-write`
-- :interrobang: `git-odb-write-pack`
+- :grey_question: `git-odb-stream-read`
+- :grey_question: `git-odb-stream-write`
+- :grey_question: `git-odb-write`
+- :grey_question: `git-odb-write-pack`
 
 ### oid
 
@@ -688,101 +688,101 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### packbuilder
 
-- :interrobang: `git-packbuilder-foreach`
+- :grey_question: `git-packbuilder-foreach`
 - :x: `git-packbuilder-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-packbuilder-hash`
-- :interrobang: `git-packbuilder-insert`
-- :interrobang: `git-packbuilder-insert-commit`
-- :interrobang: `git-packbuilder-insert-recur`
-- :interrobang: `git-packbuilder-insert-tree`
-- :interrobang: `git-packbuilder-insert-walk`
-- :interrobang: `git-packbuilder-new`
-- :interrobang: `git-packbuilder-object-count`
-- :interrobang: `git-packbuilder-set-callbacks`
-- :interrobang: `git-packbuilder-set-threads`
-- :interrobang: `git-packbuilder-write`
-- :interrobang: `git-packbuilder-written`
+- :grey_question: `git-packbuilder-hash`
+- :grey_question: `git-packbuilder-insert`
+- :grey_question: `git-packbuilder-insert-commit`
+- :grey_question: `git-packbuilder-insert-recur`
+- :grey_question: `git-packbuilder-insert-tree`
+- :grey_question: `git-packbuilder-insert-walk`
+- :grey_question: `git-packbuilder-new`
+- :grey_question: `git-packbuilder-object-count`
+- :grey_question: `git-packbuilder-set-callbacks`
+- :grey_question: `git-packbuilder-set-threads`
+- :grey_question: `git-packbuilder-write`
+- :grey_question: `git-packbuilder-written`
 
 ### patch
 
 - :x: `git-patch-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-patch-from-blob-and-buffer`
-- :interrobang: `git-patch-from-blobs`
-- :interrobang: `git-patch-from-buffers`
-- :interrobang: `git-patch-from-diff`
-- :interrobang: `git-patch-get-delta`
-- :interrobang: `git-patch-get-hunk`
-- :interrobang: `git-patch-get-line-in-hunk`
-- :interrobang: `git-patch-line-stats`
-- :interrobang: `git-patch-num-hunks`
-- :interrobang: `git-patch-num-lines-in-hunk`
-- :interrobang: `git-patch-print`
-- :interrobang: `git-patch-size`
-- :interrobang: `git-patch-to-buf`
+- :grey_question: `git-patch-from-blob-and-buffer`
+- :grey_question: `git-patch-from-blobs`
+- :grey_question: `git-patch-from-buffers`
+- :grey_question: `git-patch-from-diff`
+- :grey_question: `git-patch-get-delta`
+- :grey_question: `git-patch-get-hunk`
+- :grey_question: `git-patch-get-line-in-hunk`
+- :grey_question: `git-patch-line-stats`
+- :grey_question: `git-patch-num-hunks`
+- :grey_question: `git-patch-num-lines-in-hunk`
+- :grey_question: `git-patch-print`
+- :grey_question: `git-patch-size`
+- :grey_question: `git-patch-to-buf`
 
 ### pathspec
 
 - :x: `git-pathspec-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-pathspec-match-diff`
-- :interrobang: `git-pathspec-match-index`
-- :interrobang: `git-pathspec-match-list-diff-entry`
-- :interrobang: `git-pathspec-match-list-entry`
-- :interrobang: `git-pathspec-match-list-entrycount`
-- :interrobang: `git-pathspec-match-list-failed-entry`
-- :interrobang: `git-pathspec-match-list-failed-entrycount`
+- :grey_question: `git-pathspec-match-diff`
+- :grey_question: `git-pathspec-match-index`
+- :grey_question: `git-pathspec-match-list-diff-entry`
+- :grey_question: `git-pathspec-match-list-entry`
+- :grey_question: `git-pathspec-match-list-entrycount`
+- :grey_question: `git-pathspec-match-list-failed-entry`
+- :grey_question: `git-pathspec-match-list-failed-entrycount`
 - :x: `git-pathspec-match-list-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-pathspec-match-tree`
-- :interrobang: `git-pathspec-match-workdir`
-- :interrobang: `git-pathspec-matches-path`
-- :interrobang: `git-pathspec-new`
+- :grey_question: `git-pathspec-match-tree`
+- :grey_question: `git-pathspec-match-workdir`
+- :grey_question: `git-pathspec-matches-path`
+- :grey_question: `git-pathspec-new`
 
 ### proxy
 
-- :interrobang: `git-proxy-init-options`
+- :grey_question: `git-proxy-init-options`
 
 ### push
 
-- :interrobang: `git-push-init-options`
+- :grey_question: `git-push-init-options`
 
 ### rebase
 
-- :interrobang: `git-rebase-abort`
-- :interrobang: `git-rebase-commit`
-- :interrobang: `git-rebase-finish`
+- :grey_question: `git-rebase-abort`
+- :grey_question: `git-rebase-commit`
+- :grey_question: `git-rebase-finish`
 - :x: `git-rebase-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-rebase-init`
-- :interrobang: `git-rebase-init-options`
-- :interrobang: `git-rebase-inmemory-index`
-- :interrobang: `git-rebase-next`
-- :interrobang: `git-rebase-open`
-- :interrobang: `git-rebase-operation-byindex`
-- :interrobang: `git-rebase-operation-current`
-- :interrobang: `git-rebase-operation-entrycount`
+- :grey_question: `git-rebase-init`
+- :grey_question: `git-rebase-init-options`
+- :grey_question: `git-rebase-inmemory-index`
+- :grey_question: `git-rebase-next`
+- :grey_question: `git-rebase-open`
+- :grey_question: `git-rebase-operation-byindex`
+- :grey_question: `git-rebase-operation-current`
+- :grey_question: `git-rebase-operation-entrycount`
 
 ### refdb
 
 - :x: `git-refdb-backend-fs` (in `sys`)
-- :interrobang: `git-refdb-compress`
+- :grey_question: `git-refdb-compress`
 - :x: `git-refdb-free` (memory management shouldn't be exposed to Emacs)
 - :x: `git-refdb-init-backend` (in `sys`)
-- :interrobang: `git-refdb-new`
-- :interrobang: `git-refdb-open`
+- :grey_question: `git-refdb-new`
+- :grey_question: `git-refdb-open`
 - :x: `git-refdb-set-backend` (in `sys`)
 
 ### reference
 
 - :x: `git-reference--alloc` (in `sys`)
 - :x: `git-reference--alloc-symbolic` (in `sys`)
-- :interrobang: `git-reference-cmp`
+- :grey_question: `git-reference-cmp`
 - :heavy_check_mark: `git-reference-create`
 - :heavy_check_mark: `git-reference-create-matching`
 - :heavy_check_mark: `git-reference-delete`
 - :heavy_check_mark: `git-reference-dup`
 - :heavy_check_mark: `git-reference-dwim`
 - :heavy_check_mark: `git-reference-ensure-log`
-- :interrobang: `git-reference-foreach`
-- :interrobang: `git-reference-foreach-glob`
-- :interrobang: `git-reference-foreach-name`
+- :grey_question: `git-reference-foreach`
+- :grey_question: `git-reference-foreach-glob`
+- :grey_question: `git-reference-foreach-name`
 - :x: `git-reference-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-reference-has-log`
 - :heavy_check_mark: `git-reference-is-branch`
@@ -790,26 +790,26 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-is-remote`
 - :heavy_check_mark: `git-reference-is-tag`
 - :heavy_check_mark: `git-reference-is-valid-name`
-- :interrobang: `git-reference-iterator-free`
-- :interrobang: `git-reference-iterator-glob-new`
-- :interrobang: `git-reference-iterator-new`
+- :grey_question: `git-reference-iterator-free`
+- :grey_question: `git-reference-iterator-glob-new`
+- :grey_question: `git-reference-iterator-new`
 - :heavy_check_mark: `git-reference-list`
 - :heavy_check_mark: `git-reference-lookup`
 - :heavy_check_mark: `git-reference-name`
 - :heavy_check_mark: `git-reference-name-to-id`
-- :interrobang: `git-reference-next`
-- :interrobang: `git-reference-next-name`
-- :interrobang: `git-reference-normalize-name`
+- :grey_question: `git-reference-next`
+- :grey_question: `git-reference-next-name`
+- :grey_question: `git-reference-normalize-name`
 - :heavy_check_mark: `git-reference-owner`
 - :heavy_check_mark: `git-reference-peel`
 - :heavy_check_mark: `git-reference-remove`
-- :interrobang: `git-reference-rename`
+- :grey_question: `git-reference-rename`
 - :heavy_check_mark: `git-reference-resolve`
-- :interrobang: `git-reference-set-target`
+- :grey_question: `git-reference-set-target`
 - :heavy_check_mark: `git-reference-shorthand`
-- :interrobang: `git-reference-symbolic-create`
-- :interrobang: `git-reference-symbolic-create-matching`
-- :interrobang: `git-reference-symbolic-set-target`
+- :grey_question: `git-reference-symbolic-create`
+- :grey_question: `git-reference-symbolic-create-matching`
+- :grey_question: `git-reference-symbolic-set-target`
 - :heavy_check_mark: `git-reference-symbolic-target`
 - :heavy_check_mark: `git-reference-target`
 - :heavy_check_mark: `git-reference-target-peel`
@@ -817,87 +817,87 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### reflog
 
-- :interrobang: `git-reflog-append`
-- :interrobang: `git-reflog-delete`
-- :interrobang: `git-reflog-drop`
-- :interrobang: `git-reflog-entry-byindex`
-- :interrobang: `git-reflog-entry-committer`
-- :interrobang: `git-reflog-entry-id-new`
-- :interrobang: `git-reflog-entry-id-old`
-- :interrobang: `git-reflog-entry-message`
-- :interrobang: `git-reflog-entrycount`
+- :grey_question: `git-reflog-append`
+- :grey_question: `git-reflog-delete`
+- :grey_question: `git-reflog-drop`
+- :grey_question: `git-reflog-entry-byindex`
+- :grey_question: `git-reflog-entry-committer`
+- :grey_question: `git-reflog-entry-id-new`
+- :grey_question: `git-reflog-entry-id-old`
+- :grey_question: `git-reflog-entry-message`
+- :grey_question: `git-reflog-entrycount`
 - :x: `git-reflog-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-reflog-read`
-- :interrobang: `git-reflog-rename`
-- :interrobang: `git-reflog-write`
+- :grey_question: `git-reflog-read`
+- :grey_question: `git-reflog-rename`
+- :grey_question: `git-reflog-write`
 
 ### refspec
 
-- :interrobang: `git-refspec-direction`
-- :interrobang: `git-refspec-dst`
-- :interrobang: `git-refspec-dst-matches`
-- :interrobang: `git-refspec-force`
-- :interrobang: `git-refspec-rtransform`
-- :interrobang: `git-refspec-src`
-- :interrobang: `git-refspec-src-matches`
-- :interrobang: `git-refspec-string`
-- :interrobang: `git-refspec-transform`
+- :grey_question: `git-refspec-direction`
+- :grey_question: `git-refspec-dst`
+- :grey_question: `git-refspec-dst-matches`
+- :grey_question: `git-refspec-force`
+- :grey_question: `git-refspec-rtransform`
+- :grey_question: `git-refspec-src`
+- :grey_question: `git-refspec-src-matches`
+- :grey_question: `git-refspec-string`
+- :grey_question: `git-refspec-transform`
 
 ### remote
 
-- :interrobang: `git-remote-add-fetch`
-- :interrobang: `git-remote-add-push`
-- :interrobang: `git-remote-autotag`
-- :interrobang: `git-remote-connect`
-- :interrobang: `git-remote-connected`
-- :interrobang: `git-remote-create`
-- :interrobang: `git-remote-create-anonymous`
-- :interrobang: `git-remote-create-detached`
-- :interrobang: `git-remote-create-with-fetchspec`
-- :interrobang: `git-remote-default-branch`
-- :interrobang: `git-remote-delete`
-- :interrobang: `git-remote-disconnect`
-- :interrobang: `git-remote-download`
-- :interrobang: `git-remote-dup`
-- :interrobang: `git-remote-fetch`
+- :grey_question: `git-remote-add-fetch`
+- :grey_question: `git-remote-add-push`
+- :grey_question: `git-remote-autotag`
+- :grey_question: `git-remote-connect`
+- :grey_question: `git-remote-connected`
+- :grey_question: `git-remote-create`
+- :grey_question: `git-remote-create-anonymous`
+- :grey_question: `git-remote-create-detached`
+- :grey_question: `git-remote-create-with-fetchspec`
+- :grey_question: `git-remote-default-branch`
+- :grey_question: `git-remote-delete`
+- :grey_question: `git-remote-disconnect`
+- :grey_question: `git-remote-download`
+- :grey_question: `git-remote-dup`
+- :grey_question: `git-remote-fetch`
 - :x: `git-remote-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-remote-get-fetch-refspecs`
-- :interrobang: `git-remote-get-push-refspecs`
-- :interrobang: `git-remote-get-refspec`
-- :interrobang: `git-remote-init-callbacks`
-- :interrobang: `git-remote-is-valid-name`
-- :interrobang: `git-remote-list`
-- :interrobang: `git-remote-lookup`
-- :interrobang: `git-remote-ls`
-- :interrobang: `git-remote-name`
-- :interrobang: `git-remote-owner`
-- :interrobang: `git-remote-prune`
-- :interrobang: `git-remote-prune-refs`
-- :interrobang: `git-remote-push`
-- :interrobang: `git-remote-pushurl`
-- :interrobang: `git-remote-refspec-count`
-- :interrobang: `git-remote-rename`
-- :interrobang: `git-remote-set-autotag`
-- :interrobang: `git-remote-set-pushurl`
-- :interrobang: `git-remote-set-url`
-- :interrobang: `git-remote-stats`
-- :interrobang: `git-remote-stop`
-- :interrobang: `git-remote-update-tips`
-- :interrobang: `git-remote-upload`
-- :interrobang: `git-remote-url`
+- :grey_question: `git-remote-get-fetch-refspecs`
+- :grey_question: `git-remote-get-push-refspecs`
+- :grey_question: `git-remote-get-refspec`
+- :grey_question: `git-remote-init-callbacks`
+- :grey_question: `git-remote-is-valid-name`
+- :grey_question: `git-remote-list`
+- :grey_question: `git-remote-lookup`
+- :grey_question: `git-remote-ls`
+- :grey_question: `git-remote-name`
+- :grey_question: `git-remote-owner`
+- :grey_question: `git-remote-prune`
+- :grey_question: `git-remote-prune-refs`
+- :grey_question: `git-remote-push`
+- :grey_question: `git-remote-pushurl`
+- :grey_question: `git-remote-refspec-count`
+- :grey_question: `git-remote-rename`
+- :grey_question: `git-remote-set-autotag`
+- :grey_question: `git-remote-set-pushurl`
+- :grey_question: `git-remote-set-url`
+- :grey_question: `git-remote-stats`
+- :grey_question: `git-remote-stop`
+- :grey_question: `git-remote-update-tips`
+- :grey_question: `git-remote-upload`
+- :grey_question: `git-remote-url`
 
 ### repository
 
 - :x: `git-repository--cleanup` (in `sys`)
 - :heavy_check_mark: `git-repository-commondir`
 - :heavy_check_mark: `git-repository-config`
-- :interrobang: `git-repository-config-snapshot`
+- :grey_question: `git-repository-config-snapshot`
 - :heavy_check_mark: `git-repository-detach-head`
 - :heavy_check_mark: `git-repository-discover`
-- :interrobang: `git-repository-fetchhead-foreach`
+- :grey_question: `git-repository-fetchhead-foreach`
 - :x: `git-repository-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-repository-get-namespace`
-- :interrobang: `git-repository-hashfile`
+- :grey_question: `git-repository-hashfile`
 - :heavy_check_mark: `git-repository-head`
 - :heavy_check_mark: `git-repository-head-detached`
 - :heavy_check_mark: `git-repository-head-for-worktree`
@@ -905,30 +905,30 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-repository-ident`
 - :heavy_check_mark: `git-repository-index`
 - :heavy_check_mark: `git-repository-init`
-- :interrobang: `git-repository-init-ext`
-- :interrobang: `git-repository-init-init-options`
+- :grey_question: `git-repository-init-ext`
+- :grey_question: `git-repository-init-init-options`
 - :heavy_check_mark: `git-repository-is-bare`
 - :heavy_check_mark: `git-repository-is-empty`
 - :heavy_check_mark: `git-repository-is-shallow`
 - :heavy_check_mark: `git-repository-is-worktree`
-- :interrobang: `git-repository-item-path`
-- :interrobang: `git-repository-mergehead-foreach`
+- :grey_question: `git-repository-item-path`
+- :grey_question: `git-repository-mergehead-foreach`
 - :heavy_check_mark: `git-repository-message`
 - :heavy_check_mark: `git-repository-message-remove`
 - :x: `git-repository-new` (in `sys`)
-- :interrobang: `git-repository-odb`
+- :grey_question: `git-repository-odb`
 - :heavy_check_mark: `git-repository-open`
 - :heavy_check_mark: `git-repository-open-bare`
-- :interrobang: `git-repository-open-ext`
-- :interrobang: `git-repository-open-from-worktree`
+- :grey_question: `git-repository-open-ext`
+- :grey_question: `git-repository-open-from-worktree`
 - :heavy_check_mark: `git-repository-path`
-- :interrobang: `git-repository-refdb`
+- :grey_question: `git-repository-refdb`
 - :x: `git-repository-reinit-filesystem` (in `sys`)
 - :x: `git-repository-set-bare` (in `sys`)
 - :x: `git-repository-set-config` (in `sys`)
 - :heavy_check_mark: `git-repository-set-head`
 - :heavy_check_mark: `git-repository-set-head-detached`
-- :interrobang: `git-repository-set-head-detached-from-annotated`
+- :grey_question: `git-repository-set-head-detached-from-annotated`
 - :heavy_check_mark: `git-repository-set-ident`
 - :x: `git-repository-set-index` (in `sys`)
 - :heavy_check_mark: `git-repository-set-namespace`
@@ -940,80 +940,80 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :x: `git-repository-submodule-cache-all` (in `sys`)
 - :x: `git-repository-submodule-cache-clear` (in `sys`)
 - :heavy_check_mark: `git-repository-workdir`
-- :interrobang: `git-repository-wrap-odb`
+- :grey_question: `git-repository-wrap-odb`
 
 ### reset
 
-- :interrobang: `git-reset`
-- :interrobang: `git-reset-default`
-- :interrobang: `git-reset-from-annotated`
+- :grey_question: `git-reset`
+- :grey_question: `git-reset-default`
+- :grey_question: `git-reset-from-annotated`
 
 ### revert
 
-- :interrobang: `git-revert`
-- :interrobang: `git-revert-commit`
-- :interrobang: `git-revert-init-options`
+- :grey_question: `git-revert`
+- :grey_question: `git-revert-commit`
+- :grey_question: `git-revert-init-options`
 
 ### revparse
 
-- :interrobang: `git-revparse`
-- :interrobang: `git-revparse-ext`
+- :grey_question: `git-revparse`
+- :grey_question: `git-revparse-ext`
 - :heavy_check_mark: `git-revparse-single`
 
 ### revwalk
 
-- :interrobang: `git-revwalk-add-hide-cb`
+- :grey_question: `git-revwalk-add-hide-cb`
 - :x: `git-revwalk-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-revwalk-hide`
-- :interrobang: `git-revwalk-hide-glob`
-- :interrobang: `git-revwalk-hide-head`
-- :interrobang: `git-revwalk-hide-ref`
-- :interrobang: `git-revwalk-new`
-- :interrobang: `git-revwalk-next`
-- :interrobang: `git-revwalk-push`
-- :interrobang: `git-revwalk-push-glob`
-- :interrobang: `git-revwalk-push-head`
-- :interrobang: `git-revwalk-push-range`
-- :interrobang: `git-revwalk-push-ref`
-- :interrobang: `git-revwalk-repository`
-- :interrobang: `git-revwalk-reset`
-- :interrobang: `git-revwalk-simplify-first-parent`
-- :interrobang: `git-revwalk-sorting`
+- :grey_question: `git-revwalk-hide`
+- :grey_question: `git-revwalk-hide-glob`
+- :grey_question: `git-revwalk-hide-head`
+- :grey_question: `git-revwalk-hide-ref`
+- :grey_question: `git-revwalk-new`
+- :grey_question: `git-revwalk-next`
+- :grey_question: `git-revwalk-push`
+- :grey_question: `git-revwalk-push-glob`
+- :grey_question: `git-revwalk-push-head`
+- :grey_question: `git-revwalk-push-range`
+- :grey_question: `git-revwalk-push-ref`
+- :grey_question: `git-revwalk-repository`
+- :grey_question: `git-revwalk-reset`
+- :grey_question: `git-revwalk-simplify-first-parent`
+- :grey_question: `git-revwalk-sorting`
 
 ### signature
 
 - :heavy_check_mark: `git-signature-default`
-- :interrobang: `git-signature-dup`
+- :grey_question: `git-signature-dup`
 - :x: `git-signature-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-signature-from-buffer`
-- :interrobang: `git-signature-new`
-- :interrobang: `git-signature-now`
+- :grey_question: `git-signature-from-buffer`
+- :grey_question: `git-signature-new`
+- :grey_question: `git-signature-now`
 
 ### smart
 
-- :interrobang: `git-smart-subtransport-git`
-- :interrobang: `git-smart-subtransport-http`
-- :interrobang: `git-smart-subtransport-ssh`
+- :grey_question: `git-smart-subtransport-git`
+- :grey_question: `git-smart-subtransport-http`
+- :grey_question: `git-smart-subtransport-ssh`
 
 ### stash
 
-- :interrobang: `git-stash-apply`
-- :interrobang: `git-stash-apply-init-options`
-- :interrobang: `git-stash-drop`
-- :interrobang: `git-stash-foreach`
-- :interrobang: `git-stash-pop`
+- :grey_question: `git-stash-apply`
+- :grey_question: `git-stash-apply-init-options`
+- :grey_question: `git-stash-drop`
+- :grey_question: `git-stash-foreach`
+- :grey_question: `git-stash-pop`
 
 ### status
 
-- :interrobang: `git-status-byindex`
+- :grey_question: `git-status-byindex`
 - :heavy_check_mark: `git-status-file`
 - :heavy_check_mark: `git-status-foreach`
 - :heavy_check_mark: `git-status-foreach-ext`
 - :x: `git-status-init-options`
-- :interrobang: `git-status-list-entrycount`
-- :interrobang: `git-status-list-free`
+- :grey_question: `git-status-list-entrycount`
+- :grey_question: `git-status-list-free`
 - :x: `git-status-list-get-perfdata` (in `sys`)
-- :interrobang: `git-status-list-new`
+- :grey_question: `git-status-list-new`
 - :heavy_check_mark: `git-status-should-ignore`
 
 ### strarray
@@ -1027,47 +1027,47 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### submodule
 
-- :interrobang: `git-submodule-add-finalize`
-- :interrobang: `git-submodule-add-setup`
-- :interrobang: `git-submodule-add-to-index`
-- :interrobang: `git-submodule-branch`
-- :interrobang: `git-submodule-fetch-recurse-submodules`
-- :interrobang: `git-submodule-foreach`
+- :grey_question: `git-submodule-add-finalize`
+- :grey_question: `git-submodule-add-setup`
+- :grey_question: `git-submodule-add-to-index`
+- :grey_question: `git-submodule-branch`
+- :grey_question: `git-submodule-fetch-recurse-submodules`
+- :grey_question: `git-submodule-foreach`
 - :x: `git-submodule-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-submodule-head-id`
-- :interrobang: `git-submodule-ignore`
-- :interrobang: `git-submodule-index-id`
-- :interrobang: `git-submodule-init`
-- :interrobang: `git-submodule-location`
-- :interrobang: `git-submodule-lookup`
-- :interrobang: `git-submodule-name`
-- :interrobang: `git-submodule-open`
-- :interrobang: `git-submodule-owner`
-- :interrobang: `git-submodule-path`
-- :interrobang: `git-submodule-reload`
-- :interrobang: `git-submodule-repo-init`
-- :interrobang: `git-submodule-resolve-url`
-- :interrobang: `git-submodule-set-branch`
-- :interrobang: `git-submodule-set-fetch-recurse-submodules`
-- :interrobang: `git-submodule-set-ignore`
-- :interrobang: `git-submodule-set-update`
-- :interrobang: `git-submodule-set-url`
-- :interrobang: `git-submodule-status`
-- :interrobang: `git-submodule-sync`
-- :interrobang: `git-submodule-update`
-- :interrobang: `git-submodule-update-init-options`
-- :interrobang: `git-submodule-update-strategy`
-- :interrobang: `git-submodule-url`
-- :interrobang: `git-submodule-wd-id`
+- :grey_question: `git-submodule-head-id`
+- :grey_question: `git-submodule-ignore`
+- :grey_question: `git-submodule-index-id`
+- :grey_question: `git-submodule-init`
+- :grey_question: `git-submodule-location`
+- :grey_question: `git-submodule-lookup`
+- :grey_question: `git-submodule-name`
+- :grey_question: `git-submodule-open`
+- :grey_question: `git-submodule-owner`
+- :grey_question: `git-submodule-path`
+- :grey_question: `git-submodule-reload`
+- :grey_question: `git-submodule-repo-init`
+- :grey_question: `git-submodule-resolve-url`
+- :grey_question: `git-submodule-set-branch`
+- :grey_question: `git-submodule-set-fetch-recurse-submodules`
+- :grey_question: `git-submodule-set-ignore`
+- :grey_question: `git-submodule-set-update`
+- :grey_question: `git-submodule-set-url`
+- :grey_question: `git-submodule-status`
+- :grey_question: `git-submodule-sync`
+- :grey_question: `git-submodule-update`
+- :grey_question: `git-submodule-update-init-options`
+- :grey_question: `git-submodule-update-strategy`
+- :grey_question: `git-submodule-url`
+- :grey_question: `git-submodule-wd-id`
 
 ### tag
 
-- :interrobang: `git-tag-annotation-create`
-- :interrobang: `git-tag-create`
-- :interrobang: `git-tag-create-frombuffer`
-- :interrobang: `git-tag-create-lightweight`
-- :interrobang: `git-tag-delete`
-- :interrobang: `git-tag-dup`
+- :grey_question: `git-tag-annotation-create`
+- :grey_question: `git-tag-create`
+- :grey_question: `git-tag-create-frombuffer`
+- :grey_question: `git-tag-create-lightweight`
+- :grey_question: `git-tag-delete`
+- :grey_question: `git-tag-dup`
 - :heavy_check_mark: `git-tag-foreach`
 - :x: `git-tag-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-tag-id`
@@ -1090,18 +1090,18 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### trace
 
-- :interrobang: `git-trace-set`
+- :grey_question: `git-trace-set`
 
 ### transaction
 
 - :heavy_check_mark: `git_transaction_commit`
 - :x: `git_transaction_free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git_transaction_lock_ref`
-- :interrobang: `git_transaction_new`
-- :interrobang: `git_transaction_remove`
-- :interrobang: `git_transaction_set_reflog`
-- :interrobang: `git_transaction_set_symbolic_target`
-- :interrobang: `git_transaction_set_target`
+- :grey_question: `git_transaction_lock_ref`
+- :grey_question: `git_transaction_new`
+- :grey_question: `git_transaction_remove`
+- :grey_question: `git_transaction_set_reflog`
+- :grey_question: `git_transaction_set_symbolic_target`
+- :grey_question: `git_transaction_set_target`
 
 ### transport
 
@@ -1119,8 +1119,8 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### tree
 
-- :interrobang: `git-tree-create-updated`
-- :interrobang: `git-tree-dup`
+- :grey_question: `git-tree-create-updated`
+- :grey_question: `git-tree-dup`
 - :heavy_check_mark: `git-tree-entry-byid`
 - :heavy_check_mark: `git-tree-entry-byindex`
 - :heavy_check_mark: `git-tree-entry-byname`
@@ -1144,29 +1144,29 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### treebuilder
 
-- :interrobang: `git-treebuilder-clear`
-- :interrobang: `git-treebuilder-entrycount`
-- :interrobang: `git-treebuilder-filter`
+- :grey_question: `git-treebuilder-clear`
+- :grey_question: `git-treebuilder-entrycount`
+- :grey_question: `git-treebuilder-filter`
 - :x: `git-treebuilder-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-treebuilder-get`
-- :interrobang: `git-treebuilder-insert`
-- :interrobang: `git-treebuilder-new`
-- :interrobang: `git-treebuilder-remove`
-- :interrobang: `git-treebuilder-write`
-- :interrobang: `git-treebuilder-write-with-buffer`
+- :grey_question: `git-treebuilder-get`
+- :grey_question: `git-treebuilder-insert`
+- :grey_question: `git-treebuilder-new`
+- :grey_question: `git-treebuilder-remove`
+- :grey_question: `git-treebuilder-write`
+- :grey_question: `git-treebuilder-write-with-buffer`
 
 ### worktree
 
-- :interrobang: `git-worktree-add`
-- :interrobang: `git-worktree-add-init-options`
+- :grey_question: `git-worktree-add`
+- :grey_question: `git-worktree-add-init-options`
 - :x: `git-worktree-free` (memory management shouldn't be exposed to Emacs)
-- :interrobang: `git-worktree-is-locked`
-- :interrobang: `git-worktree-is-prunable`
-- :interrobang: `git-worktree-list`
-- :interrobang: `git-worktree-lock`
-- :interrobang: `git-worktree-lookup`
-- :interrobang: `git-worktree-open-from-repository`
-- :interrobang: `git-worktree-prune`
-- :interrobang: `git-worktree-prune-init-options`
-- :interrobang: `git-worktree-unlock`
-- :interrobang: `git-worktree-validate`
+- :grey_question: `git-worktree-is-locked`
+- :grey_question: `git-worktree-is-prunable`
+- :grey_question: `git-worktree-list`
+- :grey_question: `git-worktree-lock`
+- :grey_question: `git-worktree-lookup`
+- :grey_question: `git-worktree-open-from-repository`
+- :grey_question: `git-worktree-prune`
+- :grey_question: `git-worktree-prune-init-options`
+- :grey_question: `git-worktree-unlock`
+- :grey_question: `git-worktree-validate`
