@@ -3,8 +3,8 @@
     (init)
     (commit-change "test" "content")
     (let ((repo (libgit-repository-open path)))
-      (should (libgit-branch-create repo "new-branch" "HEAD"))
-      (should-error (libgit-branch-create repo "new-branch" "HEAD"))))
+      (should (libgit-branch-create repo "new-branch" (libgit-revparse-single repo "HEAD")))
+      (should-error (libgit-branch-create repo "new-branch" (libgit-revparse-single repo "HEAD")))))
   (with-temp-dir path
     (init)
     (commit-change "test" "content")
@@ -12,8 +12,8 @@
     (run "git" "checkout" "second")
     (commit-change "test2" "content2")
     (let ((repo (libgit-repository-open path)))
-      (should-error (libgit-branch-create repo "master" "second"))
-      (should (libgit-branch-create repo "master" "second" t)))))
+      (should-error (libgit-branch-create repo "master" (libgit-revparse-single repo "second")))
+      (should (libgit-branch-create repo "master" (libgit-revparse-single repo "second") t)))))
 
 (ert-deftest branch-create-from-annotated ()
   (with-temp-dir path
