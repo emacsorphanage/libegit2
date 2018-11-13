@@ -635,6 +635,7 @@ void egit_init(emacs_env *env)
     // Remote
     DEFUN("libgit-remote-lookup", remote_lookup, 2, 2);
     DEFUN("libgit-remote-autotag", remote_autotag, 1, 1);
+    DEFUN("libgit-remote-get-refspec", remote_get_refspec, 2, 2);
     DEFUN("libgit-remote-get-refspecs", remote_get_refspecs, 2, 2);
     DEFUN("libgit-remote-name", remote_name, 1, 1);
     DEFUN("libgit-remote-owner", remote_owner, 1, 1);

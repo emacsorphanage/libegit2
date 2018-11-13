@@ -863,7 +863,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :x: `git-remote-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-remote-get-fetch-refspecs` (use `git-remote-get-refspecs`)
 - :heavy_check_mark: `git-remote-get-push-refspecs` (use `git-remote-get-refspecs`)
-- :grey_question: `git-remote-get-refspec`
+- :heavy_check_mark: `git-remote-get-refspec`
 - :grey_question: `git-remote-init-callbacks`
 - :heavy_check_mark: `git-remote-is-valid-name`
 - :grey_question: `git-remote-list`
