@@ -866,7 +866,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-remote-get-refspec`
 - :grey_question: `git-remote-init-callbacks`
 - :heavy_check_mark: `git-remote-is-valid-name`
-- :grey_question: `git-remote-list`
+- :heavy_check_mark: `git-remote-list`
 - :heavy_check_mark: `git-remote-lookup`
 - :grey_question: `git-remote-ls`
 - :heavy_check_mark: `git-remote-name`

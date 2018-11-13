@@ -642,6 +642,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-remote-pushurl", remote_pushurl, 1, 1);
     DEFUN("libgit-remote-refspec-count", remote_refspec_count, 1, 1);
     DEFUN("libgit-remote-url", remote_url, 1, 1);
+    DEFUN("libgit-remote-list", remote_list, 1, 1);
     DEFUN("libgit-remote-valid-name-p", remote_valid_name_p, 1, 1);
 
     // Repository
