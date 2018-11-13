@@ -46,6 +46,23 @@ emacs_value egit_remote_autotag(emacs_env *env, emacs_value _remote)
     }
 }
 
+EGIT_DOC(remote_get_refspec, "REMOTE N", "Get the Nth refspec of REMOTE.");
+emacs_value egit_remote_get_refspec(emacs_env *env, emacs_value _remote, emacs_value _index)
+{
+    EGIT_ASSERT_REMOTE(_remote);
+    EM_ASSERT_INTEGER(_index);
+    git_remote *remote = EGIT_EXTRACT(_remote);
+    intmax_t index = EM_EXTRACT_INTEGER(_index);
+
+    const git_refspec *refspec = git_remote_get_refspec(remote, index);
+    if (!refspec) {
+        em_signal_args_out_of_range(env, index);
+        return em_nil;
+    }
+
+    return egit_wrap(env, EGIT_REFSPEC, refspec, EM_EXTRACT_USER_PTR(_remote));
+}
+
 EGIT_DOC(remote_get_refspecs, "REMOTE DIRECTION",
          "Get the list of the refspecs of REMOTE.\n"
          "DIRECTION is either `push' or `fetch'.");
