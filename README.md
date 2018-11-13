@@ -833,14 +833,14 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### refspec
 
-- :grey_question: `git-refspec-direction`
-- :grey_question: `git-refspec-dst`
-- :grey_question: `git-refspec-dst-matches`
-- :grey_question: `git-refspec-force`
+- :heavy_check_mark: `git-refspec-direction`
+- :heavy_check_mark: `git-refspec-dst`
+- :heavy_check_mark: `git-refspec-dst-matches`
+- :heavy_check_mark: `git-refspec-force`
 - :grey_question: `git-refspec-rtransform`
-- :grey_question: `git-refspec-src`
-- :grey_question: `git-refspec-src-matches`
-- :grey_question: `git-refspec-string`
+- :heavy_check_mark: `git-refspec-src`
+- :heavy_check_mark: `git-refspec-src-matches`
+- :heavy_check_mark: `git-refspec-string`
 - :grey_question: `git-refspec-transform`
 
 ### remote
