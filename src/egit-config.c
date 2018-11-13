@@ -52,7 +52,7 @@ emacs_value egit_config_get_int(emacs_env *env, emacs_value _config, emacs_value
     int retval = git_config_get_int64(&value, config, name);
     free(name);
     EGIT_CHECK_ERROR(retval);
-    return env->make_integer(env, value);
+    return EM_INTEGER(value);
 }
 
 EGIT_DOC(config_get_path, "CONFIG NAME",
@@ -93,7 +93,7 @@ emacs_value egit_config_get_string(emacs_env *env, emacs_value _config, emacs_va
     int retval = git_config_get_string(&value, config, name);
     free(name);
     EGIT_CHECK_ERROR(retval);
-    return env->make_string(env, value, strlen(value));
+    return EM_STRING(value);
 }
 
 EGIT_DOC(config_lock, "CONFIG", "Lock the highest priority backend in CONFIG.");

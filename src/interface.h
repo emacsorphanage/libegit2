@@ -165,6 +165,12 @@ extern emacs_value em_fetch, em_push;
 // Call (eq a b) in Emacs
 #define EM_EQ(a,b) (env->eq(env, (a), (b)))
 
+// Create an Emacs integer
+#define EM_INTEGER(val) (env->make_integer(env, (val)))
+
+// Create an Emacs string from a null-terminated char*
+#define EM_STRING(val) (env->make_string(env, (val), strlen(val)))
+
 /**
  * Initiate a loop over an Emacs list.
  * If any element is not a cons cell or nil, it WILL signal an error and return nil.

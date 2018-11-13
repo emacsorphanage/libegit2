@@ -304,7 +304,7 @@ static emacs_value egit_refcount(emacs_env *env, emacs_value val)
     if (egit_get_type(env, val) != EGIT_REPOSITORY)
         return em_nil;
     egit_object *wrapper = (egit_object*) EM_EXTRACT_USER_PTR(val);
-    return env->make_integer(env, wrapper->refcount);
+    return EM_INTEGER(wrapper->refcount);
 }
 
 EGIT_DOC(typeof, "OBJ", "Return the type of the git pointer OBJ, or nil.");

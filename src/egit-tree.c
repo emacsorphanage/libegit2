@@ -40,8 +40,8 @@ static emacs_value entry_to_emacs(emacs_env *env, const git_tree_entry *entry)
     default: break;
     }
 
-    list_args[2] = env->make_string(env, oid_s, strlen(oid_s));
-    list_args[3] = env->make_string(env, name, strlen(name));
+    list_args[2] = EM_STRING(oid_s);
+    list_args[3] = EM_STRING(name);
 
     return em_list(env, list_args, 4);
 }
@@ -176,7 +176,7 @@ emacs_value egit_tree_entrycount(emacs_env *env, emacs_value _tree)
     EGIT_ASSERT_TREE(_tree);
     git_tree *tree = EGIT_EXTRACT(_tree);
     size_t entries = git_tree_entrycount(tree);
-    return env->make_integer(env, entries);
+    return EM_INTEGER(entries);
 }
 
 EGIT_DOC(tree_id, "TREE", "Return the ID of TREE.");
@@ -186,7 +186,7 @@ emacs_value egit_tree_id(emacs_env *env, emacs_value _tree)
     git_tree *tree = EGIT_EXTRACT(_tree);
     const git_oid *oid = git_tree_id(tree);
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(tree_owner, "TREE", "Return the repository that TREE belongs to.");
@@ -213,7 +213,7 @@ static int tree_walk_callback(const char *root, const git_tree_entry *entry, voi
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
-    args[0] = env->make_string(env, root, strlen(root));
+    args[0] = EM_STRING(root);
     args[1] = entry_to_emacs(env, entry);
     emacs_value ret = env->funcall(env, ctx->function, 2, args);
 

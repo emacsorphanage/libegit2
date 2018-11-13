@@ -184,11 +184,7 @@
     do {                                                        \
         emacs_value list = em_nil;                              \
         for (ptrdiff_t c = (arr).count-1; c >= 0; c--) {        \
-            emacs_value str = env->make_string(                 \
-                env,                                            \
-                (arr).strings[c],                               \
-                strlen((arr).strings[c])                        \
-            );                                                  \
+            emacs_value str = EM_STRING((arr).strings[c]);      \
             list = em_cons(env, str, list);                     \
         }                                                       \
         git_strarray_free(&(arr));                              \

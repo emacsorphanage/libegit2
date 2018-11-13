@@ -93,7 +93,7 @@ emacs_value egit_remote_name(emacs_env *env, emacs_value _remote)
     git_remote *remote = EGIT_EXTRACT(_remote);
     const char *name = git_remote_name(remote);
     if (name)
-        return env->make_string(env, name, strlen(name));
+        return EM_STRING(name);
     return em_nil;
 }
 
@@ -113,7 +113,7 @@ emacs_value egit_remote_pushurl(emacs_env *env, emacs_value _remote)
     git_remote *remote = EGIT_EXTRACT(_remote);
     const char *url = git_remote_pushurl(remote);
     if (url)
-        return env->make_string(env, url, strlen(url));
+        return EM_STRING(url);
     return em_nil;
 }
 
@@ -122,7 +122,7 @@ emacs_value egit_remote_refspec_count(emacs_env *env, emacs_value _remote)
 {
     EGIT_ASSERT_REMOTE(_remote);
     git_remote *remote = EGIT_EXTRACT(_remote);
-    return env->make_integer(env, git_remote_refspec_count(remote));
+    return EM_INTEGER(git_remote_refspec_count(remote));
 }
 
 EGIT_DOC(remote_url, "REMOTE", "Get the URL of REMOTE.");
@@ -131,7 +131,7 @@ emacs_value egit_remote_url(emacs_env *env, emacs_value _remote)
     EGIT_ASSERT_REMOTE(_remote);
     git_remote *remote = EGIT_EXTRACT(_remote);
     const char *url = git_remote_url(remote);
-    return env->make_string(env, url, strlen(url));
+    return EM_STRING(url);
 }
 
 

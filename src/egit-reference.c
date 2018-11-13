@@ -147,7 +147,7 @@ emacs_value egit_reference_name(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     const char *name = git_reference_name(ref);
-    return env->make_string(env, name, strlen(name));
+    return EM_STRING(name);
 }
 
 EGIT_DOC(reference_name_to_id, "REPO REFNAME",
@@ -168,7 +168,7 @@ emacs_value egit_reference_name_to_id(emacs_env *env, emacs_value _repo, emacs_v
     EGIT_CHECK_ERROR(retval);
 
     const char *oid_s = git_oid_tostr_s(&oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
@@ -230,7 +230,7 @@ emacs_value egit_reference_shorthand(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     const char *shortname = git_reference_shorthand(ref);
-    return env->make_string(env, shortname, strlen(shortname));
+    return EM_STRING(shortname);
 }
 
 EGIT_DOC(reference_symbolic_target, "REF",
@@ -240,7 +240,7 @@ emacs_value egit_reference_symbolic_target(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     const char *name = git_reference_symbolic_target(ref);
-    return env->make_string(env, name, strlen(name));
+    return EM_STRING(name);
 }
 
 EGIT_DOC(reference_target, "REF",
@@ -252,7 +252,7 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
     const git_oid *oid = git_reference_target(ref);
     if (!oid) return em_nil;
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(reference_target_peel, "REF",
@@ -264,7 +264,7 @@ emacs_value egit_reference_target_peel(emacs_env *env, emacs_value _ref)
     const git_oid *oid = git_reference_target_peel(ref);
     if (!oid) return em_nil;
     const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
+    return EM_STRING(oid_s);
 }
 
 EGIT_DOC(reference_type, "REF", "Get the type of REF, either `direct' or `symbolic'.");
