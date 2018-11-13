@@ -456,9 +456,7 @@ ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
 {
     emacs_value result = em_funcall(env, _length, 1, sequence);
     ptrdiff_t length = env->extract_integer(env, result);
-    if (env->non_local_exit_check(env)) {
-        return -1;
-    }
+    EM_RETURN_IF_NLE(-1);
     return length;
 }
 

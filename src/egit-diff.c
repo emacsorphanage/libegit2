@@ -31,8 +31,7 @@ static int egit_diff_notify_callback(
     args[2] = EM_STRING(pathspec);
     emacs_value retval = env->funcall(env, ctx->notify_callback, 3, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     if (EM_EQ(retval, em_skip))
@@ -55,8 +54,7 @@ static int egit_diff_progress_callback(
     args[2] = EM_STRING(new_path);
     emacs_value retval = env->funcall(env, ctx->progress_callback, 3, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -264,15 +262,13 @@ static void egit_diff_options_release(git_diff_options *opts)
 #define PARSE_OPTIONS()                                 \
     do {                                                \
         egit_diff_options_parse(env, opts, &options);   \
-        if (env->non_local_exit_check(env))             \
-            return em_nil;                              \
+        EM_RETURN_NIL_IF_NLE();                         \
     } while(0)
 
 #define FINALIZE_AND_RETURN()                                \
     do {                                                     \
         egit_diff_options_release(&options);                 \
-        if (env->non_local_exit_check(env))                  \
-            return em_nil;                                   \
+        EM_RETURN_NIL_IF_NLE();                              \
         if (retval == GIT_EUSER)                             \
             return em_nil;                                   \
         EGIT_CHECK_ERROR(retval);                            \
@@ -502,8 +498,7 @@ static int egit_diff_foreach_file_callback(const git_diff_delta *delta, float pr
     args[1] = env->make_float(env, progress);
     emacs_value retval = env->funcall(env, ctx->file_callback, 2, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -520,8 +515,7 @@ static int egit_diff_foreach_binary_callback(
     args[1] = egit_wrap(env, EGIT_DIFF_BINARY, binary, ctx->diff_wrapper);
     emacs_value retval = env->funcall(env, ctx->binary_callback, 2, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -538,8 +532,7 @@ static int egit_diff_foreach_hunk_callback(
     args[1] = egit_wrap(env, EGIT_DIFF_HUNK, hunk, ctx->diff_wrapper);
     emacs_value retval = env->funcall(env, ctx->hunk_callback, 2, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -558,8 +551,7 @@ static int egit_diff_foreach_line_callback(
     args[2] = egit_wrap(env, EGIT_DIFF_LINE, line, ctx->diff_wrapper);
     emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -602,8 +594,7 @@ emacs_value egit_diff_foreach(
     );
     free(ctx);
 
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
         return em_nil;
     EGIT_CHECK_ERROR(retval);
@@ -633,8 +624,7 @@ int egit_diff_print_line_callback(
             em_insert(env, &line->origin, 1);
         em_insert(env, line->content, line->content_len);
 
-        if (env->non_local_exit_check(env))
-            return GIT_EUSER;
+        EM_RETURN_IF_NLE(GIT_EUSER);
         return 0;
     }
 
@@ -644,8 +634,7 @@ int egit_diff_print_line_callback(
     args[2] = egit_wrap(env, EGIT_DIFF_LINE, line, ctx->diff_wrapper);
     emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     if (EM_EQ(retval, em_abort))
         return GIT_EUSER;
     return 0;
@@ -689,8 +678,7 @@ emacs_value egit_diff_print(
     int retval = git_diff_print(diff, format, &egit_diff_print_line_callback, ctx);
     free(ctx);
 
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
         return em_nil;
     EGIT_CHECK_ERROR(retval);

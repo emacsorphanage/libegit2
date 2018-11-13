@@ -114,15 +114,6 @@
     do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
 
 /**
- * Normalize an emacs_value string path. This macro may return.
- */
-#define EGIT_NORMALIZE_PATH(val)\
-    do {                                                        \
-        (val) = em_expand_file_name(env, val);                  \
-        if (env->non_local_exit_check(env)) return em_nil;      \
-    } while (0)
-
-/**
  * Extract a libgit git_??? struct from an emacs_value.
  * Caller is responsible for ensuring that this is a valid operation.
  */

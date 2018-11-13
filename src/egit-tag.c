@@ -66,8 +66,7 @@ int egit_tag_foreach_callback(const char *name, git_oid *oid, void *payload)
 
     env->funcall(env, ctx->callback, 2, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
+    EM_RETURN_IF_NLE(GIT_EUSER);
     return 0;
 }
 
@@ -87,8 +86,7 @@ emacs_value egit_tag_foreach(emacs_env *env, emacs_value _repo, emacs_value func
     int retval = git_tag_foreach(repo, &egit_tag_foreach_callback, ctx);
     free(ctx);
 
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
         return em_nil;
     EGIT_CHECK_ERROR(retval);

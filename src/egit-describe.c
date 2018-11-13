@@ -116,8 +116,7 @@ emacs_value egit_describe_commit(emacs_env *env, emacs_value _committish, emacs_
     git_describe_options dopts;
     git_describe_format_options fopts;
     egit_describe_options_parse(env, opts, &dopts, &fopts);
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
 
     git_describe_result *result;
     int retval = git_describe_commit(&result, committish, &dopts);
@@ -144,8 +143,7 @@ emacs_value egit_describe_workdir(emacs_env *env, emacs_value _repo, emacs_value
     git_describe_options dopts;
     git_describe_format_options fopts;
     egit_describe_options_parse(env, opts, &dopts, &fopts);
-    if (env->non_local_exit_check(env))
-        return em_nil;
+    EM_RETURN_NIL_IF_NLE();
 
     git_describe_result *result;
     int retval = git_describe_workdir(&result, repo, &dopts);

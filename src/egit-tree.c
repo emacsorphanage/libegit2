@@ -217,9 +217,7 @@ static int tree_walk_callback(const char *root, const git_tree_entry *entry, voi
     args[1] = entry_to_emacs(env, entry);
     emacs_value ret = env->funcall(env, ctx->function, 2, args);
 
-    if (env->non_local_exit_check(env))
-        return GIT_EUSER;
-
+    EM_RETURN_IF_NLE(GIT_EUSER);
     return EM_EQ(ret, em_skip) ? 1 : 0;
 }
 
