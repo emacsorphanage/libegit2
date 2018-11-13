@@ -5,59 +5,81 @@
 #include "egit.h"
 #include "interface.h"
 
-static void extract_options_flags(emacs_env *env, emacs_value eflags, uint32_t *flags)
-{
-    *flags = 0;
-    while (env->is_not_nil(env, eflags)) {
-        emacs_value head = em_car(env, eflags);
-        if (env->eq(env, head, em_first_parent)) {
-            *flags |= GIT_BLAME_FIRST_PARENT;
-        }
-        eflags = em_cdr(env, eflags);
-    }
-}
+
+#define SET_BIT(tgt, bit, opt)                           \
+    do {                                                 \
+        if (EM_EXTRACT_BOOLEAN(opt))                     \
+            (tgt) |= (bit);                              \
+        else                                             \
+            (tgt) &= ~(bit);                             \
+    } while (0)
 
 static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_options *opts)
 {
-    emacs_value flags =
-        em_cdr(env, em_assq(env, em_flags, eopts));
-    emacs_value min_match_characters =
-        em_cdr(env, em_assq(env, em_min_match_characters, eopts));
-    emacs_value newest_commit =
-        em_cdr(env, em_assq(env, em_newest_commit, eopts));
-    emacs_value oldest_commit =
-        em_cdr(env, em_assq(env, em_oldest_commit, eopts));
-    emacs_value min_line =
-        em_cdr(env, em_assq(env, em_min_line, eopts));
-    emacs_value max_line =
-        em_cdr(env, em_assq(env, em_max_line, eopts));
+    int retval = git_blame_init_options(opts, GIT_BLAME_OPTIONS_VERSION);
+    EGIT_CHECK_ERROR(retval);
 
-    if (env->is_not_nil(env, flags)) {
-        extract_options_flags(env, flags, &opts->flags);
-    }
-    if (env->is_not_nil(env, min_match_characters)) {
-        opts->min_match_characters =
-            (uint16_t) env->extract_integer(env, min_match_characters);
-    }
-    if (env->is_not_nil(env, newest_commit)) {
-        EGIT_EXTRACT_OID(newest_commit, opts->newest_commit);
-    }
-    if (env->is_not_nil(env, oldest_commit)) {
-        EGIT_EXTRACT_OID(oldest_commit, opts->oldest_commit);
-    }
-    if (env->is_not_nil(env, min_line)) {
-        opts->min_line = (size_t) env->extract_integer(env, min_line);
-    }
-    if (env->is_not_nil(env, max_line)) {
-        opts->max_line = (size_t) env->extract_integer(env, max_line);
+    {
+        emacs_value car, cdr;
+        EM_DOLIST(option, eopts, loop);
+        EM_ASSERT_CONS(option);
+
+        car = em_car(env, option);
+        cdr = em_cdr(env, option);
+
+        if (env->eq(env, car, em_first_parent))
+            SET_BIT(opts->flags, GIT_BLAME_FIRST_PARENT, cdr);
+
+        /* According to libgit2 documentation, the min_match_characters
+         * setting only takes effect if GIT_BLAME_TRACK_COPIES_* flags
+         * are set, but all of those are marked as not implemented in
+         * the source code.
+        else if (env->eq(env, car, em_min_match_characters)) {
+            EM_ASSERT_INTEGER(cdr);
+            opts->min_match_characters = EM_EXTRACT_INTEGER(cdr);
+        }
+        */
+
+        else if (env->eq(env, car, em_newest_commit)) {
+            EM_ASSERT_STRING(cdr);
+            EGIT_EXTRACT_OID(cdr, opts->newest_commit);
+        }
+        else if (env->eq(env, car, em_oldest_commit)) {
+            EM_ASSERT_STRING(cdr);
+            EGIT_EXTRACT_OID(cdr, opts->oldest_commit);
+        }
+        else if (env->eq(env, car, em_min_line)) {
+            EM_ASSERT_INTEGER(cdr);
+            opts->min_line = EM_EXTRACT_INTEGER(cdr);
+        }
+        else if (env->eq(env, car, em_max_line)) {
+            EM_ASSERT_INTEGER(cdr);
+            opts->max_line = EM_EXTRACT_INTEGER(cdr);
+        }
+        else {
+            em_signal_wrong_value(env, car);
+            return em_nil;
+        }
+
+        EM_DOLIST_END(loop);
     }
 
     return em_t;
 }
 
+#undef SET_BIT
+
 EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
-         "Return the BLAME object for the given file PATH.");
-emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path, emacs_value _options)
+         "Return the BLAME object for the given file PATH.\n"
+         "OPTIONS is an alist with the following allowed keys:\n"
+         "- `first-parent': if non-nil, restrict the search of commits to\n"
+         "     those reachable by first parents\n"
+         "- `newest-commit': the ID of the newest commit to consider (default HEAD)\n"
+         "- `oldest-commit': the ID of the oldest commit to consider, by default\n"
+         "     the search stops on the first commit without a parent\n"
+         "- `min-line': the first line in the file to blame (default 1)\n"
+         "- `max-line': the last line in the file to blame (default last line)");
+emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path, emacs_value options)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_STRING(_path);
@@ -65,19 +87,14 @@ emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path
     git_repository *repo = EGIT_EXTRACT(_repo);
 
     git_blame_options opts;
-    int retval = git_blame_init_options(&opts, GIT_BLAME_OPTIONS_VERSION);
-    EGIT_CHECK_ERROR(retval);
-    if (env->is_not_nil(env, _options)) {
-        if (!env->is_not_nil(env, extract_options(env, _options, &opts))) {
-            // We can fail if an invalid OID is specified in options.
-            return em_nil;
-        }
-    }
+    extract_options(env, options, &opts);
+    if (env->non_local_exit_check(env))
+        return em_nil;
 
     char *path = EM_EXTRACT_STRING(_path);
 
     git_blame *blame = NULL;
-    retval = git_blame_file(&blame, repo, path, &opts);
+    int retval = git_blame_file(&blame, repo, path, &opts);
     free(path);
     EGIT_CHECK_ERROR(retval);
 

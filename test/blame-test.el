@@ -109,7 +109,7 @@
     ;; In this case, instead of 3 distinct hunk, we should see only 2:
     ;; one for the original commit and another for the merge commit.
     (let* ((repo (libgit-repository-open path))
-           (options '((flags . (first-parent))))
+           (options '((first-parent . t)))
            (blame (libgit-blame-file repo "test" options)))
       (should (= 2 (libgit-blame-get-hunk-count blame))))
 
