@@ -121,7 +121,7 @@ bool convert_show_option(git_status_show_t *out, emacs_env *env,
     } else if (EM_EQ(arg, em_index_and_workdir)) {
         *out = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
         return true;
-    } else if (env->is_not_nil(env, arg)) {
+    } else if (EM_EXTRACT_BOOLEAN(arg)) {
         em_signal_wrong_value(env, arg);
         return false;
     }
@@ -132,7 +132,7 @@ bool convert_show_option(git_status_show_t *out, emacs_env *env,
 bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
                           emacs_value arg)
 {
-    if (!env->is_not_nil(env, arg)) {
+    if (!EM_EXTRACT_BOOLEAN(arg)) {
         *out = GIT_STATUS_OPT_DEFAULTS;
         return true;
     }
@@ -144,7 +144,7 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
 
     *out = 0;
     emacs_value flag;
-    while (env->is_not_nil(env, arg)) {
+    while (EM_EXTRACT_BOOLEAN(arg)) {
         flag = em_car(env, arg);
         arg = em_cdr(env, arg);
 
@@ -196,7 +196,7 @@ bool convert_pathspec_option(git_strarray *out, emacs_env *env,
     out->strings = malloc(length * sizeof(const char *));
     int nspecs = 0;
 
-    while (env->is_not_nil(env, arg)) {
+    while (EM_EXTRACT_BOOLEAN(arg)) {
         emacs_value elt = em_car(env, arg);
 
         if (!em_assert(env, em_stringp, elt)) {
@@ -216,7 +216,7 @@ bool convert_pathspec_option(git_strarray *out, emacs_env *env,
 
 bool convert_baseline_option(git_tree **out, emacs_env *env, emacs_value arg)
 {
-    if (!env->is_not_nil(env, arg)) {
+    if (!EM_EXTRACT_BOOLEAN(arg)) {
         *out = NULL;
         return true;
     }

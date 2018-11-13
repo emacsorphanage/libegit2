@@ -380,7 +380,7 @@ static emacs_value em_funcall(emacs_env *env, emacs_value func, ptrdiff_t nargs,
 
 bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
 {
-    bool cond = env->is_not_nil(env, em_funcall(env, predicate, 1, arg));
+    bool cond = EM_EXTRACT_BOOLEAN(em_funcall(env, predicate, 1, arg));
     if (!cond)
         em_signal_wrong_type(env, predicate, arg);
     return cond;
@@ -429,7 +429,7 @@ emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
 
 bool em_consp(emacs_env *env, emacs_value cell)
 {
-    return env->is_not_nil(env, em_funcall(env, _consp, 1, cell));
+    return EM_EXTRACT_BOOLEAN(em_funcall(env, _consp, 1, cell));
 }
 
 emacs_value em_car(emacs_env *env, emacs_value cell)
@@ -449,7 +449,7 @@ emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects)
 
 bool em_listp(emacs_env *env, emacs_value object)
 {
-    return env->is_not_nil(env, em_funcall(env, _listp, 1, object));
+    return EM_EXTRACT_BOOLEAN(em_funcall(env, _listp, 1, object));
 }
 
 ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
@@ -489,7 +489,7 @@ void em_provide(emacs_env *env, const char *feature)
 
 bool em_user_ptrp(emacs_env *env, emacs_value val)
 {
-    return env->is_not_nil(env, em_funcall(env, _user_ptrp, 1, val));
+    return EM_EXTRACT_BOOLEAN(em_funcall(env, _user_ptrp, 1, val));
 }
 
 char *em_default_directory(emacs_env *env)
