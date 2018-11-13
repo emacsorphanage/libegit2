@@ -2,48 +2,25 @@
 #include "egit-branch.h"
 
 
-EGIT_DOC(branch_create, "REPO NAME COMMITISH FORCE",
-         "Create a new branch in REPO named NAME at COMMITISH and return the reference to it.\n\n"
+EGIT_DOC(branch_create, "REPO NAME COMMIT &optional FORCE",
+         "Create a new branch in REPO named NAME at COMMIT and return the reference to it.\n\n"
          "If FORCE is non-nil, force creation of the branch.");
-emacs_value egit_branch_create(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _commitish, emacs_value _force)
+emacs_value egit_branch_create(
+    emacs_env *env, emacs_value _repo, emacs_value _name,
+    emacs_value _commit, emacs_value _force)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EM_ASSERT_STRING(_commitish);
+    EGIT_ASSERT_COMMIT(_commit);
     EM_ASSERT_STRING(_name);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    
-    git_reference *target_ref;
-    int retval;
-    {
-        char *commitish = EM_EXTRACT_STRING(_commitish);
-        retval = git_reference_dwim(&target_ref, repo, commitish);
-        free(commitish);
-    }
-    EGIT_CHECK_ERROR(retval);
-    
-    const git_oid *oid = git_reference_target(target_ref);
-
-    // TODO: Deal with this more robustly
-    if (!oid) {
-        em_signal_giterr(env, 1, "Reference is not direct");
-        git_reference_free(target_ref);
-        return em_nil;
-    }
-
-    git_commit *commit;
-    retval = git_commit_lookup(&commit, repo, oid);
-    git_reference_free(target_ref);
-    EGIT_CHECK_ERROR(retval);
+    git_commit *commit = EGIT_EXTRACT(_commit);
+    char *name = EM_EXTRACT_STRING(_name);
+    bool force = EM_EXTRACT_BOOLEAN(_force);
 
     git_reference *ref;
-    {
-        char *name = EM_EXTRACT_STRING(_name);
-        bool force = EM_EXTRACT_BOOLEAN(_force);
-        retval = git_branch_create(&ref, repo, name, commit, force);
-        free(name);
-    }
-    git_commit_free(commit);
+    int retval = git_branch_create(&ref, repo, name, commit, force);
+    free(name);
     EGIT_CHECK_ERROR(retval);
 
     return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
