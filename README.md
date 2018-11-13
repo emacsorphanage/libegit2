@@ -177,6 +177,11 @@ Type checkers and predicates:
 
 Getters for public structs:
 
+- :heavy_check_mark: `git-blame-hunk-commit-id`
+- :heavy_check_mark: `git-blame-hunk-lines`
+- :heavy_check_mark: `git-blame-hunk-orig-path`
+- :heavy_check_mark: `git-blame-hunk-signature`
+- :heavy_check_mark: `git-blame-hunk-start-line-number`
 - :heavy_check_mark: `git-diff-delta-file-id`
 - :heavy_check_mark: `git-diff-delta-file-path`
 - :heavy_check_mark: `git-diff-delta-nfiles`
