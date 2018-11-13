@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "git2.h"
 
 #include "egit.h"
@@ -82,100 +84,43 @@ emacs_value egit_blame_file(emacs_env *env, emacs_value _repo, emacs_value _path
     return egit_wrap(env, EGIT_BLAME, blame, NULL);
 }
 
-static
-emacs_value make_object_id(emacs_env *env, const git_oid *oid)
-{
-    const char *oid_s = git_oid_tostr_s(oid);
-    return env->make_string(env, oid_s, strlen(oid_s));
-}
-
-static
-emacs_value make_blame_hunk(emacs_env *env, const git_blame_hunk *hunk)
-{
-    emacs_value lines_in_hunk =
-        em_cons(env, em_lines_in_hunk,
-                env->make_integer(env, hunk->lines_in_hunk));
-
-    emacs_value final_commit_id =
-        em_cons(env, em_final_commit_id,
-                make_object_id(env, &hunk->final_commit_id));
-
-    emacs_value final_start_line_number =
-        em_cons(env, em_final_start_line_number,
-                env->make_integer(env, hunk->final_start_line_number));
-
-    // TODO: handle signature
-    // git_signature *final_signature;
-
-    emacs_value orig_commit_id =
-        em_cons(env, em_orig_commit_id,
-                make_object_id(env, &hunk->orig_commit_id));
-
-    emacs_value orig_path =
-        em_cons(env, em_orig_path,
-                env->make_string(env, hunk->orig_path,
-                                 strlen(hunk->orig_path)));
-
-    emacs_value orig_start_line_number =
-        em_cons(env, em_orig_start_line_number,
-                env->make_integer(env, hunk->orig_start_line_number));
-
-    // TODO: handle signature
-    // git_signature *orig_signature;
-
-    emacs_value boundary =
-        em_cons(env, em_boundary,
-                (hunk->boundary == 1) ? em_t : em_nil);
-
-    emacs_value args[] = {
-        lines_in_hunk,
-        final_commit_id,
-        final_start_line_number,
-        orig_commit_id,
-        orig_path,
-        orig_start_line_number,
-        boundary
-    };
-
-    return em_list(env, args, sizeof(args)/sizeof(*args));
-}
-
-EGIT_DOC(blame_get_hunk_byindex, "BLAME INDEX",
-         "Return the HUNK alist with the given INDEX.");
+EGIT_DOC(blame_get_hunk_byindex, "BLAME N", "Return the Nth hunk of BLAME.");
 emacs_value egit_blame_get_hunk_byindex(emacs_env *env, emacs_value _blame, emacs_value _index)
 {
     EGIT_ASSERT_BLAME(_blame);
+    EM_ASSERT_INTEGER(_index);
 
     git_blame *blame = EGIT_EXTRACT(_blame);
     uint32_t index = (uint32_t) env->extract_integer(env, _index);
 
     const git_blame_hunk *hunk = git_blame_get_hunk_byindex(blame, index);
     if (!hunk) {
+        em_signal_args_out_of_range(env, index);
         return em_nil;
     }
 
-    return make_blame_hunk(env, hunk);
+    return egit_wrap(env, EGIT_BLAME_HUNK, hunk, EM_EXTRACT_USER_PTR(_blame));
 }
 
-EGIT_DOC(blame_get_hunk_byline, "BLAME LINE",
-         "Return the HUNK alist for the given LINE.");
+EGIT_DOC(blame_get_hunk_byline, "BLAME LINE", "Return the hunk from BLAME at the given LINE.");
 emacs_value egit_blame_get_hunk_byline(emacs_env *env, emacs_value _blame, emacs_value _line)
 {
     EGIT_ASSERT_BLAME(_blame);
+    EM_ASSERT_INTEGER(_line);
 
     git_blame *blame = EGIT_EXTRACT(_blame);
     size_t line = (size_t) env->extract_integer(env, _line);
 
     const git_blame_hunk *hunk = git_blame_get_hunk_byline(blame, line);
     if (!hunk) {
+        em_signal_args_out_of_range(env, line);
         return em_nil;
     }
 
-    return make_blame_hunk(env, hunk);
+    return egit_wrap(env, EGIT_BLAME_HUNK, hunk, EM_EXTRACT_USER_PTR(_blame));
 }
 
-EGIT_DOC(blame_get_hunk_count, "BLAME",
-         "Return the number of HUNKS in the given BLAME.");
+EGIT_DOC(blame_get_hunk_count, "BLAME", "Return the number of HUNKS in the given BLAME.");
 emacs_value egit_blame_get_hunk_count(emacs_env *env, emacs_value _blame)
 {
     EGIT_ASSERT_BLAME(_blame);
@@ -183,4 +128,69 @@ emacs_value egit_blame_get_hunk_count(emacs_env *env, emacs_value _blame)
 
     uint32_t count = git_blame_get_hunk_count(blame);
     return env->make_integer(env, count);
+}
+
+
+// =============================================================================
+// Getters - blame hunk
+
+EGIT_DOC(blame_hunk_commit_id, "BLAME-HUNK &optional ORIG",
+         "Get the OID of the commit where the last change was made.\n"
+         "If ORIG is non-nil, get instead the OID of the commit where the hunk was found.\n"
+         "This will usually be the same commit.");
+emacs_value egit_blame_hunk_commit_id(emacs_env *env, emacs_value _hunk, emacs_value orig)
+{
+    EGIT_ASSERT_BLAME_HUNK(_hunk);
+    git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
+    const char *oid_s = git_oid_tostr_s(
+        EM_EXTRACT_BOOLEAN(orig) ? &hunk->final_commit_id : &hunk->orig_commit_id
+    );
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+
+EGIT_DOC(blame_hunk_lines, "BLAME-HUNK", "Get the total number of lines in BLAME-HUNK.");
+emacs_value egit_blame_hunk_lines(emacs_env *env, emacs_value _hunk)
+{
+    EGIT_ASSERT_BLAME_HUNK(_hunk);
+    git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
+    return env->make_integer(env, hunk->lines_in_hunk);
+}
+
+EGIT_DOC(blame_hunk_orig_path, "BLAME-HUNK",
+         "Get the path of the file associated with BLAME-HUNK in the commit named by\n"
+         "(libgit-blame-hunk-commit-id BLAME-HUNK t).");
+emacs_value egit_blame_hunk_orig_path(emacs_env *env, emacs_value _hunk)
+{
+    EGIT_ASSERT_BLAME_HUNK(_hunk);
+    git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
+    return env->make_string(env, hunk->orig_path, strlen(hunk->orig_path));
+}
+
+EGIT_DOC(blame_hunk_signature, "BLAME-HUNK &optional ORIG",
+         "Get the author of the change represented by BLAME-HUNK.\n"
+         "If ORIG is non-nil, instead get the author of the commit named by\n"
+         "(libgit-blame-hunk-commit-id BLAME-HUNK t).");
+emacs_value egit_blame_hunk_signature(emacs_env *env, emacs_value _hunk, emacs_value orig)
+{
+    EGIT_ASSERT_BLAME_HUNK(_hunk);
+    git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
+    git_signature *sig = EM_EXTRACT_BOOLEAN(orig) ? hunk->final_signature : hunk->orig_signature;
+    git_signature *ret;
+    int retval = git_signature_dup(&ret, sig);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_SIGNATURE, ret, NULL);
+}
+
+EGIT_DOC(blame_hunk_start_line_number, "BLAME-HUNK &optional ORIG",
+         "Get the line number where this hunk begins in the final version of the file.\n"
+         "If ORIG is non-nil, instead get the line number from the file named by\n"
+         "(libgit-blame-hunk-orig-path BLAME-HUNK) in the commit named by\n"
+         "(libgit-blame-hunk-commit-id BLAME-HUNK t).");
+emacs_value egit_blame_hunk_start_line_number(emacs_env *env, emacs_value _hunk, emacs_value orig)
+{
+    EGIT_ASSERT_BLAME_HUNK(_hunk);
+    git_blame_hunk *hunk = EGIT_EXTRACT(_hunk);
+    return env->make_integer(
+        env, EM_EXTRACT_BOOLEAN(orig) ? hunk->final_start_line_number : hunk->orig_start_line_number
+    );
 }

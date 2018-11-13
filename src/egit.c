@@ -497,6 +497,12 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-get-hunk-byline", blame_get_hunk_byline, 2, 2);
     DEFUN("libgit-blame-get-hunk-count", blame_get_hunk_count, 1, 1);
 
+    DEFUN("libgit-blame-hunk-commit-id", blame_hunk_commit_id, 1, 2);
+    DEFUN("libgit-blame-hunk-lines", blame_hunk_lines, 1, 1);
+    DEFUN("libgit-blame-hunk-orig-path", blame_hunk_orig_path, 1, 1);
+    DEFUN("libgit-blame-hunk-signature", blame_hunk_signature, 1, 2);
+    DEFUN("libgit-blame-hunk-start-line-number", blame_hunk_start_line_number, 1, 2);
+
     // Branch
     DEFUN("libgit-branch-create", branch_create, 3, 4);
     DEFUN("libgit-branch-create-from-annotated", branch_create_from_annotated, 3, 4);
