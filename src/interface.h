@@ -145,6 +145,9 @@ extern emacs_value em_find_renames, em_fail_on_conflict, em_skip_reuc,
 extern emacs_value em_up_to_date, em_fastforward, em_unborn, em_no_fastforward,
     em_fastforward_only;
 
+// Revwalk sorts
+extern emacs_value em_topological, em_time;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 
