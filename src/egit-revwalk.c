@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 
 #include "git2.h"
@@ -270,6 +271,8 @@ emacs_value egit_revwalk_foreach(
         // This function can only error if a callback is already set,
         // however we don't expose git_revwalk_add_hide_cb to Emacs,
         // so we have full control over it.
+
+        // TODO: Get resolution from libgit2 on #4887
         git_revwalk_add_hide_cb(revwalk, &revwalk_hide_callback, ctx);
     }
 
@@ -290,6 +293,7 @@ emacs_value egit_revwalk_foreach(
 
   cleanup:
     free(ctx);
+    // TODO: Get resolution from libgit2 on #4887
     git_revwalk_add_hide_cb(revwalk, NULL, NULL);
     git_revwalk_reset(revwalk);
     return em_nil;
