@@ -497,8 +497,6 @@ emacs_value egit_repository_discover(emacs_env *env, emacs_value _path, emacs_va
     emacs_value ret = env->make_string(env, out.ptr, out.size);
     EM_NORMALIZE_PATH(ret);
 
-    // NOTE: Renamed to git_buf_dispose in newer libgit2
-    git_buf_free(&out);
-
+    git_buf_dispose(&out);
     return ret;
 }

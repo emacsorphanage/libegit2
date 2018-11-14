@@ -164,7 +164,7 @@
 #define EGIT_RET_BUF_AS_STRING(buf)                                     \
     do {                                                                \
         emacs_value ret = env->make_string(env, (buf).ptr, (buf).size); \
-        git_buf_free(&(buf));                                           \
+        git_buf_dispose(&(buf));                                        \
         return ret;                                                     \
     } while (0)
 
