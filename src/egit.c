@@ -745,6 +745,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-revwalk-simplifiy-first-parent", revwalk_simplify_first_parent, 1, 1);
     DEFUN("libgit-revwalk-sorting", revwalk_sorting, 1, 2);
 
+    DEFUN("libgit-revwalk-foreach", revwalk_foreach, 2, 3);
+
     // Signature
     DEFUN("libgit-signature-default", signature_default, 1, 1);
     DEFUN("libgit-signature-now", signature_now, 2, 2);

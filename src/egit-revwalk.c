@@ -219,3 +219,78 @@ emacs_value egit_revwalk_sorting(emacs_env *env, emacs_value _revwalk, emacs_val
     git_revwalk_sorting(revwalk, mode);
     return em_nil;
 }
+
+
+// =============================================================================
+// Foreach
+
+typedef struct {
+    emacs_env *env;
+    emacs_value hide_pred;
+} hide_context;
+
+static int revwalk_hide_callback(const git_oid *oid, void *payload)
+{
+    hide_context *ctx = (hide_context*) payload;
+    emacs_env *env = ctx->env;
+
+    const char *oid_s = git_oid_tostr_s(oid);
+    emacs_value arg = EM_STRING(oid_s);
+
+    emacs_value retval = env->funcall(env, ctx->hide_pred, 1, &arg);
+
+    // A hide callback can't return an error code, so we just return 'true'
+    // and propagate the non-local-exit if there is one
+    EM_RETURN_IF_NLE(1);
+
+    return EM_EXTRACT_BOOLEAN(retval);
+}
+
+EGIT_DOC(revwalk_foreach, "REVWALK FUNC &optional HIDE-PRED",
+         "Walk through the revision walker REVWALK.\n"
+         "FUNC will be called for each commit in order, with the\n"
+         "commit ID as its only argument.\n\n"
+         "If HIDE-PRED is given, it must be a function taking a\n"
+         "commit ID as its only argument, returning non-nil if\n"
+         "that commit and its parents should be hidden.");
+emacs_value egit_revwalk_foreach(
+    emacs_env *env, emacs_value _revwalk, emacs_value func, emacs_value hide_pred)
+{
+    EGIT_ASSERT_REVWALK(_revwalk);
+    EM_ASSERT_FUNCTION(func);
+
+    git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
+
+    hide_context *ctx = NULL;
+    if (EM_EXTRACT_BOOLEAN(hide_pred)) {
+        EM_ASSERT_FUNCTION(hide_pred);
+        ctx = malloc(sizeof(hide_context));
+        *ctx = (hide_context) {env, hide_pred};
+
+        // This function can only error if a callback is already set,
+        // however we don't expose git_revwalk_add_hide_cb to Emacs,
+        // so we have full control over it.
+        git_revwalk_add_hide_cb(revwalk, &revwalk_hide_callback, ctx);
+    }
+
+    // Since both the hide callback and the main function may trigger errors,
+    // we must check for non-local exits on both ends of the loop body
+    git_oid oid;
+    while (GIT_ITEROVER != git_revwalk_next(&oid, revwalk)) {
+        if (env->non_local_exit_check(env))
+            goto cleanup;
+
+        const char *oid_s = git_oid_tostr_s(&oid);
+        emacs_value arg = EM_STRING(oid_s);
+        env->funcall(env, func, 1, &arg);
+
+        if (env->non_local_exit_check(env))
+            goto cleanup;
+    }
+
+  cleanup:
+    free(ctx);
+    git_revwalk_add_hide_cb(revwalk, NULL, NULL);
+    git_revwalk_reset(revwalk);
+    return em_nil;
+}

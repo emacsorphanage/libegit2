@@ -21,4 +21,6 @@ EGIT_DEFUN(revwalk_reset, emacs_value _revwalk);
 EGIT_DEFUN(revwalk_simplify_first_parent, emacs_value _revwalk);
 EGIT_DEFUN(revwalk_sorting, emacs_value _revwalk, emacs_value _mode);
 
+EGIT_DEFUN(revwalk_foreach, emacs_value _revwalk, emacs_value _func, emacs_value _hide_pred);
+
 #endif /* EGIT_REVWALK_H */
