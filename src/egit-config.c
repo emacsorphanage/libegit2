@@ -75,7 +75,7 @@ emacs_value egit_config_get_path(emacs_env *env, emacs_value _config, emacs_valu
     // git_config_get_path does some normalization,
     // but I trust Emacs' path normalization to be more thorough.
     emacs_value ret = env->make_string(env, buf.ptr, buf.size);
-    git_buf_free(&buf);
+    git_buf_dispose(&buf);
     EM_NORMALIZE_PATH(ret);
     return ret;
 }
@@ -164,7 +164,7 @@ emacs_value egit_config_find_global(emacs_env *env)
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
     EM_NORMALIZE_PATH(ret);
-    git_buf_free(&out);
+    git_buf_dispose(&out);
     return ret;
 }
 
@@ -176,7 +176,7 @@ emacs_value egit_config_find_programdata(emacs_env *env)
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
     EM_NORMALIZE_PATH(ret);
-    git_buf_free(&out);
+    git_buf_dispose(&out);
     return ret;
 }
 
@@ -188,7 +188,7 @@ emacs_value egit_config_find_system(emacs_env *env)
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
     EM_NORMALIZE_PATH(ret);
-    git_buf_free(&out);
+    git_buf_dispose(&out);
     return ret;
 }
 
@@ -200,6 +200,6 @@ emacs_value egit_config_find_xdg(emacs_env *env)
     EGIT_CHECK_ERROR(retval);
     emacs_value ret = env->make_string(env, out.ptr, out.size);
     EM_NORMALIZE_PATH(ret);
-    git_buf_free(&out);
+    git_buf_dispose(&out);
     return ret;
 }
