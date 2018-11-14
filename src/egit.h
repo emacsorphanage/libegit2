@@ -112,8 +112,12 @@
 #define EGIT_ASSERT_REPOSITORY(val)                                     \
     do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_libgit_repository_p)) return em_nil; } while (0)
 
+// Assert that VAL is a git revwalk, signal an error and return otherwise.
+#define EGIT_ASSERT_REVWALK(val)                                        \
+    do { if (!egit_assert_type(env, (val), EGIT_REVWALK, em_libgit_revwalk_p)) return em_nil; } while (0)
+
 // Assert that VAL is a signature, signal an error and return otherwise.
-#define EGIT_ASSERT_SIGNATURE(val)                                     \
+#define EGIT_ASSERT_SIGNATURE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
@@ -256,7 +260,8 @@ typedef enum {
     EGIT_CRED,
     EGIT_ANNOTATED_COMMIT,
     EGIT_REFLOG,
-    EGIT_REFLOG_ENTRY
+    EGIT_REFLOG_ENTRY,
+    EGIT_REVWALK
 } egit_type;
 
 /**
