@@ -33,6 +33,7 @@
 #include "egit-remote.h"
 #include "egit-repository.h"
 #include "egit-revparse.h"
+#include "egit-revwalk.h"
 #include "egit-signature.h"
 #include "egit-status.h"
 #include "egit-submodule.h"
@@ -724,6 +725,25 @@ void egit_init(emacs_env *env)
 
     // Revparse
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
+
+    // Revwalk
+    DEFUN("libgit-revwalk-new", revwalk_new, 1, 1);
+    DEFUN("libgit-revwalk-repository", revwalk_repository, 1, 1);
+
+    DEFUN("libgit-revwalk-hide", revwalk_hide, 2, 2);
+    DEFUN("libgit-revwalk-hide-glob", revwalk_hide_glob, 2, 2);
+    DEFUN("libgit-revwalk-hide-head", revwalk_hide_head, 1, 1);
+    DEFUN("libgit-revwalk-hide-ref", revwalk_hide_ref, 2, 2);
+
+    DEFUN("libgit-revwalk-push", revwalk_push, 2, 2);
+    DEFUN("libgit-revwalk-push-glob", revwalk_push_glob, 2, 2);
+    DEFUN("libgit-revwalk-push-head", revwalk_push_head, 1, 1);
+    DEFUN("libgit-revwalk-push-range", revwalk_push_range, 2, 2);
+    DEFUN("libgit-revwalk-push-ref", revwalk_push_ref, 2, 2);
+
+    DEFUN("libgit-revwalk-reset", revwalk_reset, 1, 1);
+    DEFUN("libgit-revwalk-simplifiy-first-parent", revwalk_simplify_first_parent, 1, 1);
+    DEFUN("libgit-revwalk-sorting", revwalk_sorting, 1, 2);
 
     // Signature
     DEFUN("libgit-signature-default", signature_default, 1, 1);

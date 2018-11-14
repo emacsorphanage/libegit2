@@ -154,6 +154,9 @@ emacs_value em_find_renames, em_fail_on_conflict, em_skip_reuc,
 emacs_value em_up_to_date, em_fastforward, em_unborn, em_no_fastforward,
     em_fastforward_only;
 
+// Revwalk sorts
+emacs_value em_topological, em_time;
+
 // Libgit2 errors
 emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
     em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
@@ -463,6 +466,9 @@ void em_init(emacs_env *env)
     em_unborn = GLOBREF(INTERN("unborn"));
     em_no_fastforward = GLOBREF(INTERN("no-fastforward"));
     em_fastforward_only = GLOBREF(INTERN("fastforward-only"));
+
+    em_topological = GLOBREF(INTERN("topological"));
+    em_time = GLOBREF(INTERN("time"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
