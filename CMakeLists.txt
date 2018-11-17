@@ -18,7 +18,7 @@ enable_testing()
 set(EGIT_TESTS
   blame branch commit config describe diff ignore index
   refcount reference remote repository signature status
-  tag tree)
+  submodule tag tree)
 
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test} COMMAND
