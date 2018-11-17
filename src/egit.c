@@ -164,6 +164,10 @@ static void egit_finalize(void* _obj)
         git_transaction_free(obj->ptr);
         break;
 
+    case EGIT_SUBMODULE:
+        git_submodule_free(obj->ptr);
+        break;
+
     default: break;
     }
 
@@ -202,6 +206,10 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
             break;
         case EGIT_REMOTE:
             parent = egit_incref(EGIT_REPOSITORY, git_remote_owner(data));
+            break;
+        case EGIT_SUBMODULE:
+            // Why isn't git_submodule_owner const?
+            parent = egit_incref(EGIT_REPOSITORY, git_submodule_owner((void*) data));
             break;
         default: break;
         }
@@ -331,6 +339,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_DIFF_LINE: return em_diff_line;
     case EGIT_REMOTE: return em_remote;
     case EGIT_REFSPEC: return em_refspec;
+    case EGIT_SUBMODULE: return em_submodule;
     default: return em_nil;
     }
 }
@@ -439,6 +448,12 @@ static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
 }
 
+EGIT_DOC(submodule_p, "OBJ", "Return non-nil if OBJ is a git submodule.");
+static emacs_value egit_submodule_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_SUBMODULE ? em_t : em_nil;
+}
+
 EGIT_DOC(tag_p, "OBJ", "Return non-nil if OBJ is a git tag.");
 static emacs_value egit_tag_p(emacs_env *env, emacs_value obj)
 {
@@ -487,6 +502,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-remote-p", remote_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
     DEFUN("libgit-signature-p", signature_p, 1, 1);
+    DEFUN("libgit-submodule-p", submodule_p, 1, 1);
     DEFUN("libgit-tag-p", tag_p, 1, 1);
     DEFUN("libgit-transaction-p", transaction_p, 1, 1);
     DEFUN("libgit-tree-p", tree_p, 1, 1);
