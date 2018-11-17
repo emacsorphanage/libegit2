@@ -23,7 +23,11 @@
 (defun run (&rest args)
   (with-temp-buffer
     (unless (= 0 (apply 'call-process (car args) nil (cons (current-buffer) t) nil (cdr args)))
-      (error "failed to run '%s', output:\n%s" (mapconcat 'identity args " ") (buffer-string)))))
+      (error "failed to run '%s', output:\n%s" (mapconcat 'identity args " ") (buffer-string)))
+    (buffer-string)))
+
+(defun run-nnl (&rest args)
+  (replace-regexp-in-string "\n*\\'" "" (apply 'run args)))
 
 (defun run-fail (&rest args)
   (with-temp-buffer
@@ -46,8 +50,7 @@
 
 (defun init (&rest args)
   (apply 'run "git" "init" args)
-  (run "git" "config" "user.name" "A U Thor")
-  (run "git" "config" "user.email" "author@example.com"))
+  (set-user))
 
 (defun add (&rest args)
   (apply 'run "git" "add" args))
@@ -68,6 +71,10 @@
   (write filename content)
   (run "git" "add" filename)
   (commit msg))
+
+(defun set-user ()
+  (run "git" "config" "user.name" "A U Thor")
+  (run "git" "config" "user.email" "author@example.com"))
 
 (defun path= (a b)
   (string= (file-truename a) (file-truename b)))
