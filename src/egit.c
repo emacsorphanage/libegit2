@@ -23,6 +23,7 @@
 #include "egit-revparse.h"
 #include "egit-signature.h"
 #include "egit-status.h"
+#include "egit-submodule.h"
 #include "egit-tag.h"
 #include "egit-transaction.h"
 #include "egit-tree.h"
@@ -738,6 +739,20 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
     DEFUN("libgit-status-foreach", status_foreach, 2, 6);
+
+    // Submodule
+    DEFUN("libgit-submodule-lookup", submodule_lookup, 2, 2);
+    DEFUN("libgit-submodule-branch", submodule_branch, 1, 1);
+    DEFUN("libgit-submodule-head-id", submodule_head_id, 1, 1);
+    DEFUN("libgit-submodule-ignore", submodule_ignore, 1, 1);
+    DEFUN("libgit-submodule-index-id", submodule_index_id, 1, 1);
+    DEFUN("libgit-submodule-location", submodule_location, 1, 2);
+    DEFUN("libgit-submodule-name", submodule_name, 1, 1);
+    DEFUN("libgit-submodule-owner", submodule_owner, 1, 1);
+    DEFUN("libgit-submodule-path", submodule_path, 1, 1);
+    DEFUN("libgit-submodule-status", submodule_status, 2, 4);
+    DEFUN("libgit-submodule-url", submodule_url, 1, 1);
+    DEFUN("libgit-submodule-wd-id", submodule_wd_id, 1, 1);
 
     // Tag
     DEFUN("libgit-tag-lookup", tag_lookup, 2, 2);

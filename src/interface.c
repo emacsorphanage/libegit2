@@ -112,6 +112,11 @@ emacs_value em_auto;
 // Remote directions
 emacs_value em_fetch, em_push;
 
+// Submodule status
+emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_added,
+    em_wd_uninitialized, em_wd_added, em_wd_deleted, em_wd_modified,
+    em_wd_index_modified, em_wd_wd_modified, em_wd_untracked;
+
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
@@ -329,6 +334,19 @@ void em_init(emacs_env *env)
 
     em_fetch = GLOBREF(INTERN("fetch"));
     em_push = GLOBREF(INTERN("push"));
+
+    em_in_head = GLOBREF(INTERN("in-head"));
+    em_in_index = GLOBREF(INTERN("in-index"));
+    em_in_config = GLOBREF(INTERN("in-config"));
+    em_in_wd = GLOBREF(INTERN("in-wd"));
+    em_index_added = GLOBREF(INTERN("index-added"));
+    em_wd_uninitialized = GLOBREF(INTERN("wd-uninitialized"));
+    em_wd_added = GLOBREF(INTERN("wd-added"));
+    em_wd_deleted = GLOBREF(INTERN("wd-deleted"));
+    em_wd_modified = GLOBREF(INTERN("wd-modified"));
+    em_wd_index_modified = GLOBREF(INTERN("wd-index-modified"));
+    em_wd_wd_modified = GLOBREF(INTERN("wd-wd-modified"));
+    em_wd_untracked = GLOBREF(INTERN("wd-untracked"));
 
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
