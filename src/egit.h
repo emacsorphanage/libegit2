@@ -101,6 +101,10 @@
 #define EGIT_ASSERT_SIGNATURE_OR_NIL(val)                               \
     do { if (EGIT_EXTRACT_BOOLEAN(val)) EGIT_ASSERT_SIGNATURE(val); } while (0)
 
+// Assert that VAL is a signature, signal an error and return otherwise.
+#define EGIT_ASSERT_SUBMODULE(val)                                      \
+    do { if (!egit_assert_type(env, (val), EGIT_SUBMODULE, em_libgit_submodule_p)) return em_nil; } while (0)
+
 // Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_TAG(val)                                            \
     do { if (!egit_assert_type(env, (val), EGIT_TAG, em_libgit_tag_p)) return em_nil; } while (0)
@@ -221,7 +225,8 @@ typedef enum {
     EGIT_DIFF_HUNK,
     EGIT_DIFF_LINE,
     EGIT_REMOTE,
-    EGIT_REFSPEC
+    EGIT_REFSPEC,
+    EGIT_SUBMODULE
 } egit_type;
 
 /**
