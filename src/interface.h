@@ -106,6 +106,11 @@ extern emacs_value em_auto;
 // Remote directions
 extern emacs_value em_fetch, em_push;
 
+// Submodule status
+extern emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_added,
+    em_wd_uninitialized, em_wd_added, em_wd_deleted, em_wd_modified,
+    em_wd_index_modified, em_wd_wd_modified, em_wd_untracked;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)
