@@ -850,4 +850,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-annotated-commit-from-ref", annotated_commit_from_ref, 2, 2);
     DEFUN("libgit-annotated-commit-from-fetchhead", annotated_commit_from_fetchhead, 4, 4);
     DEFUN("libgit-annotated-commit-from-revspec", annotated_commit_from_revspec, 2, 2);
+    DEFUN("libgit-annotated-commit-lookup", annotated_commit_lookup, 2, 2);
 }

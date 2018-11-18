@@ -74,3 +74,23 @@ emacs_value egit_annotated_commit_from_revspec(emacs_env *env,
     return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
 }
 
+EGIT_DOC(annotated_commit_lookup, "REPO ID",
+         "Return an annotated commit for the given commit ID.");
+emacs_value egit_annotated_commit_lookup(emacs_env *env,
+                                         emacs_value _repo,
+                                         emacs_value _id)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_id);
+
+    git_annotated_commit *ann = NULL;
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_oid oid;
+    EGIT_EXTRACT_OID(_id, oid);
+
+    int retval = git_annotated_commit_lookup(&ann, repo, &oid);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
+}
+

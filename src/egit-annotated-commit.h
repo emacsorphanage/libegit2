@@ -15,4 +15,8 @@ EGIT_DEFUN(annotated_commit_from_revspec,
            emacs_value repo,
            emacs_value revspec);
 
+EGIT_DEFUN(annotated_commit_lookup,
+           emacs_value repo,
+           emacs_value id);
+
 #endif /* EGIT_ANNOTATED_COMMIT_H */
