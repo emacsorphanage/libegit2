@@ -94,3 +94,17 @@ emacs_value egit_annotated_commit_lookup(emacs_env *env,
     return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
 }
 
+EGIT_DOC(annotated_commit_id, "ANNOTATED-COMMIT",
+         "Return a commit id for the given ANNOTATED-COMMIT.");
+emacs_value egit_annotated_commit_id(emacs_env *env,
+                                     emacs_value _ann)
+{
+    EGIT_ASSERT_ANNOTATED_COMMIT(_ann);
+
+    git_annotated_commit *ann = EGIT_EXTRACT(_ann);
+    const git_oid *oid = git_annotated_commit_id(ann);                                                                  ;
+
+    const char *oid_s = git_oid_tostr_s(oid);
+    return env->make_string(env, oid_s, strlen(oid_s));
+}
+

@@ -44,3 +44,14 @@
 	   (id (libgit-reference-name-to-id repo "HEAD"))
            (ann  (libgit-annotated-commit-from-revspec repo id)))
       (should (libgit-annotated-commit-p ann)))))
+
+(ert-deftest annotated-commit-id ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test1" "foo")
+    (let* ((repo (libgit-repository-open path))
+	   (revspec-id (libgit-reference-name-to-id repo "HEAD")))
+      (commit-change "test2" "bar")
+      (let ((ann  (libgit-annotated-commit-from-revspec repo "HEAD^")))
+	(should (string= revspec-id
+			 (libgit-annotated-commit-id ann)))))))

@@ -19,4 +19,7 @@ EGIT_DEFUN(annotated_commit_lookup,
            emacs_value repo,
            emacs_value id);
 
+EGIT_DEFUN(annotated_commit_id,
+           emacs_value ann);
+
 #endif /* EGIT_ANNOTATED_COMMIT_H */
