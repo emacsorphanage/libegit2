@@ -748,6 +748,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-submodule-index-id", submodule_index_id, 1, 1);
     DEFUN("libgit-submodule-location", submodule_location, 1, 2);
     DEFUN("libgit-submodule-name", submodule_name, 1, 1);
+    DEFUN("libgit-submodule-open", submodule_open, 1, 1);
     DEFUN("libgit-submodule-owner", submodule_owner, 1, 1);
     DEFUN("libgit-submodule-path", submodule_path, 1, 1);
     DEFUN("libgit-submodule-status", submodule_status, 2, 4);

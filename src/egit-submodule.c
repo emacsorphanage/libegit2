@@ -189,6 +189,17 @@ emacs_value egit_submodule_name(emacs_env *env, emacs_value _sub)
     return EM_STRING(name);
 }
 
+EGIT_DOC(submodule_open, "SUBMODULE", "Get the sub-repository associated with SUBMODULE.");
+emacs_value egit_submodule_open(emacs_env *env, emacs_value _sub)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    git_repository *repo;
+    int retval = git_submodule_open(&repo, sub);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+}
+
 EGIT_DOC(submodule_owner, "SUBMODULE", "Get the repository in which SUBMODULE lives.");
 emacs_value egit_submodule_owner(emacs_env *env, emacs_value _sub)
 {
