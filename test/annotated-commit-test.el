@@ -35,3 +35,12 @@
     (let* ((repo (libgit-repository-open path))
            (ann  (libgit-annotated-commit-from-revspec repo "HEAD^")))
       (should (libgit-annotated-commit-p ann)))))
+
+(ert-deftest annotated-commit-lookup ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "foo")
+    (let* ((repo (libgit-repository-open path))
+	   (id (libgit-reference-name-to-id repo "HEAD"))
+           (ann  (libgit-annotated-commit-from-revspec repo id)))
+      (should (libgit-annotated-commit-p ann)))))
