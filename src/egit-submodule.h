@@ -19,4 +19,6 @@ EGIT_DEFUN(submodule_status, emacs_value _repo, emacs_value _name, emacs_value _
 EGIT_DEFUN(submodule_url, emacs_value _sub);
 EGIT_DEFUN(submodule_wd_id, emacs_value _sub);
 
+EGIT_DEFUN(submodule_reload, emacs_value _sub, emacs_value force);
+
 #endif /* EGIT_SUBMODULE_H */
