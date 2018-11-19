@@ -1035,21 +1035,21 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-submodule-add-finalize`
 - :grey_question: `git-submodule-add-setup`
 - :grey_question: `git-submodule-add-to-index`
-- :grey_question: `git-submodule-branch`
+- :heavy_check_mark: `git-submodule-branch`
 - :grey_question: `git-submodule-fetch-recurse-submodules`
-- :grey_question: `git-submodule-foreach`
+- :heavy_check_mark: `git-submodule-foreach`
 - :x: `git-submodule-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-submodule-head-id`
-- :grey_question: `git-submodule-ignore`
-- :grey_question: `git-submodule-index-id`
+- :heavy_check_mark: `git-submodule-head-id`
+- :heavy_check_mark: `git-submodule-ignore`
+- :heavy_check_mark: `git-submodule-index-id`
 - :grey_question: `git-submodule-init`
-- :grey_question: `git-submodule-location`
-- :grey_question: `git-submodule-lookup`
-- :grey_question: `git-submodule-name`
-- :grey_question: `git-submodule-open`
-- :grey_question: `git-submodule-owner`
-- :grey_question: `git-submodule-path`
-- :grey_question: `git-submodule-reload`
+- :heavy_check_mark: `git-submodule-location`
+- :heavy_check_mark: `git-submodule-lookup`
+- :heavy_check_mark: `git-submodule-name`
+- :heavy_check_mark: `git-submodule-open`
+- :heavy_check_mark: `git-submodule-owner`
+- :heavy_check_mark: `git-submodule-path`
+- :heavy_check_mark: `git-submodule-reload`
 - :grey_question: `git-submodule-repo-init`
 - :grey_question: `git-submodule-resolve-url`
 - :grey_question: `git-submodule-set-branch`
@@ -1057,13 +1057,13 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-submodule-set-ignore`
 - :grey_question: `git-submodule-set-update`
 - :grey_question: `git-submodule-set-url`
-- :grey_question: `git-submodule-status`
+- :heavy_check_mark: `git-submodule-status`
 - :grey_question: `git-submodule-sync`
 - :grey_question: `git-submodule-update`
 - :grey_question: `git-submodule-update-init-options`
 - :grey_question: `git-submodule-update-strategy`
-- :grey_question: `git-submodule-url`
-- :grey_question: `git-submodule-wd-id`
+- :heavy_check_mark: `git-submodule-url`
+- :heavy_check_mark: `git-submodule-wd-id`
 
 ### tag
 
