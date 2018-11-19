@@ -757,6 +757,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-submodule-url", submodule_url, 1, 1);
     DEFUN("libgit-submodule-wd-id", submodule_wd_id, 1, 1);
 
+    DEFUN("libgit-submodule-reload", submodule_reload, 1, 2);
+
     // Tag
     DEFUN("libgit-tag-lookup", tag_lookup, 2, 2);
     DEFUN("libgit-tag-lookup-prefix", tag_lookup_prefix, 2, 2);
