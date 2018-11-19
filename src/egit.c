@@ -7,6 +7,7 @@
 
 #include "interface.h"
 #include "egit-blame.h"
+#include "egit-blob.h"
 #include "egit-branch.h"
 #include "egit-clone.h"
 #include "egit-commit.h"
@@ -358,6 +359,12 @@ static emacs_value egit_blame_hunk_p(emacs_env *env, emacs_value obj)
     return egit_get_type(env, obj) == EGIT_BLAME_HUNK ? em_t : em_nil;
 }
 
+EGIT_DOC(blob_p, "OBJ", "Return non-nil if OBJ is a git blob.");
+static emacs_value egit_blob_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_BLOB ? em_t : em_nil;
+}
+
 EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git commit.");
 static emacs_value egit_commit_p(emacs_env *env, emacs_value obj)
 {
@@ -489,6 +496,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-blame-hunk-p", blame_hunk_p, 1, 1);
+    DEFUN("libgit-blob-p", blob_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
     DEFUN("libgit-diff-p", diff_p, 1, 1);
@@ -524,6 +532,12 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-hunk-orig-path", blame_hunk_orig_path, 1, 1);
     DEFUN("libgit-blame-hunk-signature", blame_hunk_signature, 1, 2);
     DEFUN("libgit-blame-hunk-start-line-number", blame_hunk_start_line_number, 1, 2);
+
+    // Blob
+    DEFUN("libgit-blob-lookup", blob_lookup, 2, 2);
+    DEFUN("libgit-blob-lookup-prefix", blob_lookup_prefix, 2, 2);
+
+    DEFUN("libgit-blob-id", blob_id, 1, 1);
 
     // Branch
     DEFUN("libgit-branch-create", branch_create, 3, 4);
