@@ -298,3 +298,48 @@ emacs_value egit_submodule_wd_id(emacs_env *env, emacs_value _sub)
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
+
+
+// =============================================================================
+// Foreach
+
+typedef struct {
+    emacs_env *env;
+    emacs_value callback;
+} submodule_foreach_ctx;
+
+static int submodule_callback(git_submodule *sub, const char *name, void *payload)
+{
+    submodule_foreach_ctx *ctx = (submodule_foreach_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = egit_wrap(env, EGIT_SUBMODULE, sub, NULL);
+    args[1] = EM_STRING(name);
+    env->funcall(env, ctx->callback, 2, args);
+
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    return 0;
+}
+
+EGIT_DOC(submodule_foreach, "REPO FUNC",
+         "Call FUNC for each submodule in REPO.\n"
+         "FUNC receives two arguments: the submodule object and its name.");
+emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_value func)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_FUNCTION(func);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    submodule_foreach_ctx *ctx = (submodule_foreach_ctx*) malloc(sizeof(submodule_foreach_ctx));
+    ctx->env = env;
+    ctx->callback = func;
+    int retval = git_submodule_foreach(repo, &submodule_callback, ctx);
+    free(ctx);
+
+    EM_RETURN_NIL_IF_NLE();
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
