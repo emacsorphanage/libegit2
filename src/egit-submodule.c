@@ -330,12 +330,9 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
+    submodule_foreach_ctx ctx = {env, func};
     git_repository *repo = EGIT_EXTRACT(_repo);
-    submodule_foreach_ctx *ctx = (submodule_foreach_ctx*) malloc(sizeof(submodule_foreach_ctx));
-    ctx->env = env;
-    ctx->callback = func;
-    int retval = git_submodule_foreach(repo, &submodule_callback, ctx);
-    free(ctx);
+    int retval = git_submodule_foreach(repo, &submodule_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)

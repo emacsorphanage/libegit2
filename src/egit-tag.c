@@ -78,13 +78,9 @@ emacs_value egit_tag_foreach(emacs_env *env, emacs_value _repo, emacs_value func
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    tag_callback_context *ctx = (tag_callback_context*) malloc(sizeof(tag_callback_context));
-    ctx->env = env;
-    ctx->callback = func;
-
+    tag_callback_context ctx = {env, func};
     git_repository *repo = EGIT_EXTRACT(_repo);
-    int retval = git_tag_foreach(repo, &egit_tag_foreach_callback, ctx);
-    free(ctx);
+    int retval = git_tag_foreach(repo, &egit_tag_foreach_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)

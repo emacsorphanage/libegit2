@@ -581,8 +581,7 @@ emacs_value egit_diff_foreach(
     if (EM_EXTRACT_BOOLEAN(line_cb)) EM_ASSERT_FUNCTION(line_cb);
 
     git_diff *diff = EGIT_EXTRACT(_diff);
-    diff_foreach_ctx *ctx = (diff_foreach_ctx*) malloc(sizeof(diff_foreach_ctx));
-    *ctx = (diff_foreach_ctx) {env, EM_EXTRACT_USER_PTR(_diff), file_cb, binary_cb, hunk_cb, line_cb};
+    diff_foreach_ctx ctx = {env, EM_EXTRACT_USER_PTR(_diff), file_cb, binary_cb, hunk_cb, line_cb};
 
     int retval = git_diff_foreach(
         diff,
@@ -590,9 +589,8 @@ emacs_value egit_diff_foreach(
         EM_EXTRACT_BOOLEAN(binary_cb) ? &egit_diff_foreach_binary_callback : NULL,
         EM_EXTRACT_BOOLEAN(hunk_cb) ? &egit_diff_foreach_hunk_callback : NULL,
         EM_EXTRACT_BOOLEAN(line_cb) ? &egit_diff_foreach_line_callback : NULL,
-        ctx
+        &ctx
     );
-    free(ctx);
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
@@ -672,11 +670,9 @@ emacs_value egit_diff_print(
     }
 
     git_diff *diff = EGIT_EXTRACT(_diff);
-    diff_print_ctx *ctx = (diff_print_ctx*) malloc(sizeof(diff_print_ctx));
-    *ctx = (diff_print_ctx) {env, EM_EXTRACT_USER_PTR(_diff), func};
+    diff_print_ctx ctx = {env, EM_EXTRACT_USER_PTR(_diff), func};
 
-    int retval = git_diff_print(diff, format, &egit_diff_print_line_callback, ctx);
-    free(ctx);
+    int retval = git_diff_print(diff, format, &egit_diff_print_line_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
