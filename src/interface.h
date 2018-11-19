@@ -111,6 +111,9 @@ extern emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_add
     em_wd_uninitialized, em_wd_added, em_wd_deleted, em_wd_modified,
     em_wd_index_modified, em_wd_wd_modified, em_wd_untracked;
 
+// Libgit2 features
+extern emacs_value em_threads, em_https, em_ssh;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)

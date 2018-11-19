@@ -15,6 +15,7 @@
 #include "egit-diff.h"
 #include "egit-ignore.h"
 #include "egit-index.h"
+#include "egit-libgit2.h"
 #include "egit-object.h"
 #include "egit-reference.h"
 #include "egit-refspec.h"
@@ -507,6 +508,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tag-p", tag_p, 1, 1);
     DEFUN("libgit-transaction-p", transaction_p, 1, 1);
     DEFUN("libgit-tree-p", tree_p, 1, 1);
+
+    // Libgit2 (not namespaced as others!)
+    DEFUN("libgit-feature-p", libgit2_feature_p, 1, 1);
+    DEFUN("libgit-version", libgit2_version, 0, 0);
 
     // Blame
     DEFUN("libgit-blame-file", blame_file, 2, 3);
