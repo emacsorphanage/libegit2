@@ -742,6 +742,8 @@ void egit_init(emacs_env *env)
 
     // Submodule
     DEFUN("libgit-submodule-lookup", submodule_lookup, 2, 2);
+    DEFUN("libgit-submodule-foreach", submodule_foreach, 2, 2);
+
     DEFUN("libgit-submodule-branch", submodule_branch, 1, 1);
     DEFUN("libgit-submodule-head-id", submodule_head_id, 1, 1);
     DEFUN("libgit-submodule-ignore", submodule_ignore, 1, 1);
