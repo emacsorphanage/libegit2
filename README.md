@@ -548,11 +548,11 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### libgit2
 
-- :grey_question: `git-libgit2-features`
-- :grey_question: `git-libgit2-init`
+- :heavy_check_mark: `git-libgit2-features` (as `libgit-feature-p`)
+- :x: `git-libgit2-init` (internal)
 - :grey_question: `git-libgit2-opts`
-- :grey_question: `git-libgit2-shutdown`
-- :grey_question: `git-libgit2-version`
+- :x: `git-libgit2-shutdown` (internal)
+- :heavy_check_mark: `git-libgit2-version` (as `libgit-version`)
 
 ### mempack
 
