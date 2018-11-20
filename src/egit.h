@@ -117,7 +117,7 @@
 #define EGIT_ASSERT_TRANSACTION(val)                                    \
     do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, em_libgit_transaction_p)) return em_nil; } while (0)
 
-// Assert that VAL is a transaction, signal an error and return otherwise.
+// Assert that VAL is a tree, signal an error and return otherwise.
 #define EGIT_ASSERT_TREE(val)                                           \
     do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
 

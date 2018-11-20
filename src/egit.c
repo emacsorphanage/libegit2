@@ -9,6 +9,7 @@
 #include "egit-blame.h"
 #include "egit-blob.h"
 #include "egit-branch.h"
+#include "egit-checkout.h"
 #include "egit-clone.h"
 #include "egit-commit.h"
 #include "egit-config.h"
@@ -594,6 +595,11 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-upstream", branch_upstream, 1, 1);
     DEFUN("libgit-branch-upstream-name", branch_upstream_name, 2, 2);
     DEFUN("libgit-branch-upstream-remote", branch_upstream_remote, 2, 2);
+
+    // Checkout
+    DEFUN("libgit-checkout-head", checkout_head, 1, 2);
+    DEFUN("libgit-checkout-index", checkout_index, 1, 3);
+    DEFUN("libgit-checkout-tree", checkout_tree, 1, 3);
 
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);
