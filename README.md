@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 184 (23.7%)
-- Should not implement: 145 (18.6%)
-- To do: 449 (57.7%)
+- Implemented: 209 (26.9%)
+- Should not implement: 147 (18.9%)
+- To do: 422 (54.2%)
 - Total: 778
 
 ### extra
@@ -239,15 +239,15 @@ Iterators converted to map functions:
 - :grey_question: `git-blob-create-fromstream-commit`
 - :grey_question: `git-blob-create-fromworkdir`
 - :grey_question: `git-blob-dup`
-- :grey_question: `git-blob-filtered-content`
+- :heavy_check_mark: `git-blob-filtered-content`
 - :x: `git-blob-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-blob-id`
-- :grey_question: `git-blob-is-binary`
-- :grey_question: `git-blob-lookup`
-- :grey_question: `git-blob-lookup-prefix`
-- :grey_question: `git-blob-owner`
-- :grey_question: `git-blob-rawcontent`
-- :grey_question: `git-blob-rawsize`
+- :heavy_check_mark: `git-blob-id`
+- :heavy_check_mark: `git-blob-is-binary` (as `libgit-blob-binary-p`)
+- :heavy_check_mark: `git-blob-lookup`
+- :heavy_check_mark: `git-blob-lookup-prefix`
+- :heavy_check_mark: `git-blob-owner`
+- :heavy_check_mark: `git-blob-rawcontent`
+- :heavy_check_mark: `git-blob-rawsize`
 
 ### branch
 
