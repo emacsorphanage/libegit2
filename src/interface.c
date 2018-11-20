@@ -124,7 +124,8 @@ emacs_value em_threads, em_https, em_ssh;
 static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
     _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _symbol_value,
-    _default_directory, _assq, _args_out_of_range, _decode_time, _insert;
+    _default_directory, _assq, _args_out_of_range, _decode_time, _insert,
+    _string_as_unibyte;
 
 
 void em_init(emacs_env *env)
@@ -376,6 +377,7 @@ void em_init(emacs_env *env)
     _user_ptrp = GLOBREF(INTERN("user-ptrp"));
     _vector = GLOBREF(INTERN("vector"));
     _insert = GLOBREF(INTERN("insert"));
+    _string_as_unibyte = GLOBREF(INTERN("string-as-unibyte"));
 
     _args_out_of_range = GLOBREF(INTERN("args-out-of-range"));
     _wrong_type_argument = GLOBREF(INTERN("wrong-type-argument"));
@@ -535,4 +537,9 @@ emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset)
 void em_insert(emacs_env *env, const char *ptr, size_t length)
 {
     em_funcall(env, _insert, 1, env->make_string(env, ptr, length));
+}
+
+emacs_value em_string_as_unibyte(emacs_env *env, emacs_value str)
+{
+    return em_funcall(env, _string_as_unibyte, 1, str);
 }

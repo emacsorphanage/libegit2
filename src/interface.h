@@ -383,4 +383,9 @@ emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset);
  */
 void em_insert(emacs_env *env, const char *ptr, size_t length);
 
+/**
+ * Convert an emacs string to unibyte.
+ */
+emacs_value em_string_as_unibyte(emacs_env *env, emacs_value str);
+
 #endif /* INTERFACE_H */
