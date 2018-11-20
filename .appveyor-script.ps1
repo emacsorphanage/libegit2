@@ -16,6 +16,7 @@ function Run-Test {
 Run-Test -TestName "blame"
 Run-Test -TestName "blob"
 Run-Test -TestName "branch"
+Run-Test -TestName "checkout"
 Run-Test -TestName "commit"
 Run-Test -TestName "config"
 Run-Test -TestName "describe"
