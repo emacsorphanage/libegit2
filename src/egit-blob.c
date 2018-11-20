@@ -49,6 +49,16 @@ emacs_value egit_blob_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_val
 // =============================================================================
 // Getters
 
+EGIT_DOC(blob_binary_p, "BLOB",
+         "Non-nil if BLOB is binary.\n"
+         "Note: This check is only heuristic!");
+emacs_value egit_blob_binary_p(emacs_env *env, emacs_value _blob)
+{
+    EGIT_ASSERT_BLOB(_blob);
+    git_blob *blob = EGIT_EXTRACT(_blob);
+    return git_blob_is_binary(blob) ? em_t : em_nil;
+}
+
 EGIT_DOC(blob_id, "BLOB", "Return the ID of BLOB.");
 emacs_value egit_blob_id(emacs_env *env, emacs_value _blob)
 {
@@ -57,4 +67,13 @@ emacs_value egit_blob_id(emacs_env *env, emacs_value _blob)
     const git_oid *oid = git_blob_id(blob);
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
+}
+
+EGIT_DOC(blob_rawsize, "BLOB", "Get the number of bytes in BLOB.");
+emacs_value egit_blob_rawsize(emacs_env *env, emacs_value _blob)
+{
+    EGIT_ASSERT_BLOB(_blob);
+    git_blob *blob = EGIT_EXTRACT(_blob);
+    git_off_t size = git_blob_rawsize(blob);
+    return EM_INTEGER(size);
 }

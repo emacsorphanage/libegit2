@@ -4,6 +4,8 @@
 EGIT_DEFUN(blob_lookup, emacs_value _repo, emacs_value _oid);
 EGIT_DEFUN(blob_lookup_prefix, emacs_value _repo, emacs_value _oid);
 
+EGIT_DEFUN(blob_binary_p, emacs_value _blob);
 EGIT_DEFUN(blob_id, emacs_value _blob);
+EGIT_DEFUN(blob_rawsize, emacs_value _blob);
 
 #endif /* EGIT_BLOB_H */
