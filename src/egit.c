@@ -538,7 +538,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blob-lookup-prefix", blob_lookup_prefix, 2, 2);
 
     DEFUN("libgit-blob-binary-p", blob_binary_p, 1, 1);
+    DEFUN("libgit-blob-filtered-content", blob_filtered_content, 2, 3);
     DEFUN("libgit-blob-id", blob_id, 1, 1);
+    DEFUN("libgit-blob-rawcontent", blob_rawcontent, 1, 1);
     DEFUN("libgit-blob-rawsize", blob_rawsize, 1, 1);
 
     // Branch

@@ -59,6 +59,30 @@ emacs_value egit_blob_binary_p(emacs_env *env, emacs_value _blob)
     return git_blob_is_binary(blob) ? em_t : em_nil;
 }
 
+EGIT_DOC(blob_filtered_content, "BLOB PATH &optional IGNORE-BINARY",
+         "Get the filtered content of BLOB as a unibyte string.\n"
+         "PATH is used for file attribute lookups.\n"
+         "If IGNORE-BINARY is non-nil, no checks are made for whether\n"
+         "the blob looks like binary data before applying filters.");
+emacs_value egit_blob_filtered_content(
+    emacs_env *env, emacs_value _blob, emacs_value _path, emacs_value ignore)
+{
+    EGIT_ASSERT_BLOB(_blob);
+    EM_ASSERT_STRING(_path);
+
+    git_blob *blob = EGIT_EXTRACT(_blob);
+    char *path = EM_EXTRACT_STRING(_path);
+
+    git_buf buf = {NULL};
+    int retval = git_blob_filtered_content(&buf, blob, path, !EM_EXTRACT_BOOLEAN(ignore));
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value str = env->make_string(env, buf.ptr, buf.size);
+    git_buf_dispose(&buf);
+    return em_string_as_unibyte(env, str);
+}
+
 EGIT_DOC(blob_id, "BLOB", "Return the ID of BLOB.");
 emacs_value egit_blob_id(emacs_env *env, emacs_value _blob)
 {
@@ -67,6 +91,16 @@ emacs_value egit_blob_id(emacs_env *env, emacs_value _blob)
     const git_oid *oid = git_blob_id(blob);
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
+}
+
+EGIT_DOC(blob_rawcontent, "BLOB", "Get the raw content of BLOB as a unibyte string.");
+emacs_value egit_blob_rawcontent(emacs_env *env, emacs_value _blob)
+{
+    EGIT_ASSERT_BLOB(_blob);
+    git_blob *blob = EGIT_EXTRACT(_blob);
+    const void *content = git_blob_rawcontent(blob);
+    emacs_value str = env->make_string(env, content, git_blob_rawsize(blob));
+    return em_string_as_unibyte(env, str);
 }
 
 EGIT_DOC(blob_rawsize, "BLOB", "Get the number of bytes in BLOB.");
