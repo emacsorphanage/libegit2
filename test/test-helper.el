@@ -38,6 +38,8 @@
     (when dir
       (make-directory dir 'parents)))
   (with-temp-file filename
+    (unless (multibyte-string-p content)
+      (set-buffer-multibyte nil))
     (insert content)))
 
 (defun read-file (filename)
