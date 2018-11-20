@@ -9,7 +9,7 @@
       (should (libgit-commit-p commit))
       (should (string= id (libgit-commit-id commit)))
       (should (string= id (libgit-commit-id commit-short)))
-      (should-error (libgit-commit-lookup repo "test") :type 'giterr))))
+      (should-error (libgit-commit-lookup repo "test") :type 'giterr-invalid))))
 
 (ert-deftest commit-parentcount ()
   (with-temp-dir path
@@ -39,7 +39,7 @@
         (should (string= parent-id (libgit-commit-id (libgit-commit-parent commit))))
         (should (string= parent-id (libgit-commit-id (libgit-commit-parent commit 0))))
         (should-error (libgit-commit-parent-id commit 1) :type 'args-out-of-range)
-        (should-error (libgit-commit-parent commit 1) :type 'giterr)))))
+        (should-error (libgit-commit-parent commit 1) :type 'giterr-invalid)))))
 
 (ert-deftest commit-ancestor ()
   (with-temp-dir path
@@ -55,8 +55,8 @@
           (should (string= id-3 (libgit-commit-id (libgit-commit-nth-gen-ancestor commit 0))))
           (should (string= id-2 (libgit-commit-id (libgit-commit-nth-gen-ancestor commit 1))))
           (should (string= id-1 (libgit-commit-id (libgit-commit-nth-gen-ancestor commit 2))))
-          (should-error (libgit-commit-nth-gen-ancestor commit 3) :type 'giterr)
-          (should-error (libgit-commit-nth-gen-ancestor commit -1) :type 'giterr))))))
+          (should-error (libgit-commit-nth-gen-ancestor commit 3) :type 'giterr-invalid)
+          (should-error (libgit-commit-nth-gen-ancestor commit -1) :type 'giterr-invalid))))))
 
 (ert-deftest commit-author-committer ()
   (with-temp-dir path

@@ -17,7 +17,7 @@
 (ert-deftest repository-open-bare ()
   (with-temp-dir path
     (shell-command-to-string "git init")
-    (should-error (libgit-repository-open-bare path) :type 'giterr))
+    (should-error (libgit-repository-open-bare path) :type 'giterr-repository))
  (with-temp-dir path
     (shell-command-to-string "git init --bare")
     (should (libgit-repository-open-bare path))))
@@ -252,4 +252,4 @@
     (in-dir a
       (init))
     (should (path= (libgit-repository-discover a) (concat a ".git/")))
-    (should-error (libgit-repository-discover b) :type 'giterr)))
+    (should-error (libgit-repository-discover b) :type 'giterr-repository)))

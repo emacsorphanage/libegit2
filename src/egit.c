@@ -305,7 +305,45 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     const git_error *err = giterr_last();
     if (!err) return false;
 
-    em_signal_giterr(env, err->klass, err->message);
+    emacs_value error;
+    switch (err->klass) {
+    case GITERR_NOMEMORY: error = em_giterr_nomemory; break;
+    case GITERR_OS: error = em_giterr_os; break;
+    case GITERR_INVALID: error = em_giterr_invalid; break;
+    case GITERR_REFERENCE: error = em_giterr_reference; break;
+    case GITERR_ZLIB: error = em_giterr_zlib; break;
+    case GITERR_REPOSITORY: error = em_giterr_repository; break;
+    case GITERR_CONFIG: error = em_giterr_config; break;
+    case GITERR_REGEX: error = em_giterr_regex; break;
+    case GITERR_ODB: error = em_giterr_odb; break;
+    case GITERR_INDEX: error = em_giterr_index; break;
+    case GITERR_OBJECT: error = em_giterr_object; break;
+    case GITERR_NET: error = em_giterr_net; break;
+    case GITERR_TAG: error = em_giterr_tag; break;
+    case GITERR_TREE: error = em_giterr_tree; break;
+    case GITERR_INDEXER: error = em_giterr_indexer; break;
+    case GITERR_SSL: error = em_giterr_ssl; break;
+    case GITERR_SUBMODULE: error = em_giterr_submodule; break;
+    case GITERR_THREAD: error = em_giterr_thread; break;
+    case GITERR_STASH: error = em_giterr_stash; break;
+    case GITERR_CHECKOUT: error = em_giterr_checkout; break;
+    case GITERR_FETCHHEAD: error = em_giterr_fetchhead; break;
+    case GITERR_MERGE: error = em_giterr_merge; break;
+    case GITERR_SSH: error = em_giterr_ssh; break;
+    case GITERR_FILTER: error = em_giterr_filter; break;
+    case GITERR_REVERT: error = em_giterr_revert; break;
+    case GITERR_CALLBACK: error = em_giterr_callback; break;
+    case GITERR_CHERRYPICK: error = em_giterr_cherrypick; break;
+    case GITERR_DESCRIBE: error = em_giterr_describe; break;
+    case GITERR_REBASE: error = em_giterr_rebase; break;
+    case GITERR_FILESYSTEM: error = em_giterr_filesystem; break;
+    case GITERR_PATCH: error = em_giterr_patch; break;
+    case GITERR_WORKTREE: error = em_giterr_worktree; break;
+    case GITERR_SHA1: error = em_giterr_sha1; break;
+    default: error = em_giterr; break;
+    }
+
+    em_signal(env, error, err->message);
     return true;
 }
 

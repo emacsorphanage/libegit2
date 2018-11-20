@@ -51,7 +51,7 @@ emacs_value egit_branch_create_from_annotated(
 
     // TODO: Deal with this more robustly
     if (!oid) {
-        em_signal_giterr(env, 1, "Reference is not direct");
+        em_signal(env, em_giterr, "Reference is not direct");
         git_reference_free(target_ref);
         return em_nil;
     }

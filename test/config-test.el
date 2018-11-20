@@ -23,7 +23,7 @@
            (config (libgit-repository-config repo))
            (snap (libgit-config-snapshot config)))
       ;; Can't read from a live config object
-      (should-error (libgit-config-get-string config "something") :type 'giterr)
+      (should-error (libgit-config-get-string config "something") :type 'giterr-config)
       (should (string= "someone@somewhere.com" (libgit-config-get-string snap "user.email")))
       (should (string= "John Doe" (libgit-config-get-string snap "user.name")))
       (should (= 7 (libgit-config-get-int snap "user.age")))
@@ -46,7 +46,7 @@
       (let ((snap (libgit-config-snapshot config)))
         (should (string= "Captain Spiff" (libgit-config-get-string snap "user.name")))
         ;; Can't write to a config snapshot
-        (should-error (libgit-config-set-string snap "user.name" "Zorg") :type 'giterr))
+        (should-error (libgit-config-set-string snap "user.name" "Zorg") :type 'giterr-config))
 
       ;; If the config is locked, writes aren't visible immediately
       (setq trans (libgit-config-lock config))

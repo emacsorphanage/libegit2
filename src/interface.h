@@ -114,6 +114,17 @@ extern emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_add
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 
+// Libgit2 errors
+extern emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
+    em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
+    em_giterr_regex, em_giterr_odb, em_giterr_index, em_giterr_object,
+    em_giterr_net, em_giterr_tag, em_giterr_tree, em_giterr_indexer,
+    em_giterr_ssl, em_giterr_submodule, em_giterr_thread, em_giterr_stash,
+    em_giterr_checkout, em_giterr_fetchhead, em_giterr_merge, em_giterr_ssh,
+    em_giterr_filter, em_giterr_revert, em_giterr_callback, em_giterr_cherrypick,
+    em_giterr_describe, em_giterr_rebase, em_giterr_filesystem, em_giterr_patch,
+    em_giterr_worktree, em_giterr_sha1;
+
 // Assert that VAL is a cons cell, signal an error and return otherwise.
 #define EM_ASSERT_CONS(val)                                             \
     do { if (!em_assert(env, em_cons_p, (val))) return em_nil; } while (0)
@@ -227,12 +238,12 @@ void em_init(emacs_env *env);
 bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg);
 
 /**
- * Signal an error originating form libgit2.
+ * Signal an error with string message.
  * @param env The active Emacs environment.
- * @param _klass The error code.
+ * @param error The error symbol.
  * @param _msg The error message.
  */
-void em_signal_giterr(emacs_env *env, int _klass, const char* _msg);
+void em_signal(emacs_env *env, emacs_value error, const char* _msg);
 
 /**
  * Signal a wrong-type-argument error.
@@ -333,10 +344,11 @@ emacs_value em_assq(emacs_env *env, emacs_value key, emacs_value list);
 /**
  * Call (define-error SYMBOL MSG) in Emacs.
  * @param env The active Emacs environment.
- * @param car The error symbol.
- * @param cdr The error description.
+ * @param symbol The error symbol.
+ * @param msg The error description.
+ * @param parent The parent error.
  */
-void em_define_error(emacs_env *env, emacs_value symbol, const char *msg);
+void em_define_error(emacs_env *env, emacs_value symbol, const char *msg, emacs_value parent);
 
 /**
  * Define a function in Emacs, using defalias.
