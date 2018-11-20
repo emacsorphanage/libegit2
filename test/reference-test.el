@@ -8,7 +8,7 @@
       (should (string= id (read-file-nnl ".git/OMFG")))
       (libgit-reference-create repo "refs/something" id)
       (should (string= id (read-file-nnl ".git/refs/something")))
-      (should-error (libgit-reference-create repo "OMFG" id) :type 'giterr)
+      (should-error (libgit-reference-create repo "OMFG" id) :type 'giterr-reference)
       (libgit-reference-create repo "OMFG" id 'force)
       (should (string= id (read-file-nnl ".git/OMFG"))))))
 
@@ -21,14 +21,14 @@
       (libgit-reference-create-matching repo "OMFG" current-id)
       (commit-change "test" "contents2")
       (let ((new-id (read-file-nnl ".git/refs/heads/master")))
-        (should-error (libgit-reference-create-matching repo "OMFG" new-id) :type 'giterr)
+        (should-error (libgit-reference-create-matching repo "OMFG" new-id) :type 'giterr-reference)
         (libgit-reference-create-matching repo "OMFG" new-id 'force)
         (should (string= new-id (read-file-nnl ".git/OMFG")))
         (libgit-reference-create-matching repo "OMFG" current-id 'force new-id)
         (should (string= current-id (read-file-nnl ".git/OMFG")))
         (should-error (libgit-reference-create-matching
                        repo "OMFG" new-id 'force (substring current-id 1))
-                      :type 'giterr)))))
+                      :type 'giterr-reference)))))
 
 (ert-deftest reference-dup ()
   ;; TODO
@@ -45,7 +45,7 @@
     (let* ((repo (libgit-repository-open path)))
       (libgit-reference-lookup repo "refs/heads/master")
       (libgit-reference-lookup repo "HEAD")
-      (should-error (libgit-reference-lookup repo "nonexistent" :type 'giterr)))))
+      (should-error (libgit-reference-lookup repo "nonexistent" :type 'giterr-invalid)))))
 
 (ert-deftest reference-list ()
   (with-temp-dir path

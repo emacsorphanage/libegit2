@@ -14,7 +14,7 @@
   (with-temp-dir path
     (init)
     (let ((repo (libgit-repository-open path)))
-      (should-error (libgit-status-file repo "a") :type 'giterr)
+      (should-error (libgit-status-file repo "a") :type 'giterr-invalid)
 
       (write "a" "a")
       (should (equal '(wt-new) (libgit-status-file repo "a")))
@@ -136,7 +136,7 @@
                     :type 'wrong-type-argument)
       (should-error (libgit-status-foreach repo #'ignore nil
                                            '(no-refresh update-index))
-                    :type 'giterr)
+                    :type 'giterr-invalid)
 
       ;; Should not error
       (libgit-status-foreach

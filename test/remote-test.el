@@ -16,7 +16,7 @@
              (rb (libgit-remote-lookup repo "b")))
         (should (equal '("a" "b") (libgit-remote-list repo)))
         (should (libgit-remote-p (libgit-remote-lookup repo "a")))
-        (should-error (libgit-remote-lookup repo "c") :type 'giterr)
+        (should-error (libgit-remote-lookup repo "c") :type 'giterr-config)
         (should (string-prefix-p "file://" (libgit-remote-url ra)))
         (should (path= remote-a (substring (libgit-remote-url ra) 7)))
         (should-not (libgit-remote-pushurl ra))

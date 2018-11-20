@@ -120,8 +120,19 @@ emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_added,
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
+// Libgit2 errors
+emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
+    em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
+    em_giterr_regex, em_giterr_odb, em_giterr_index, em_giterr_object,
+    em_giterr_net, em_giterr_tag, em_giterr_tree, em_giterr_indexer,
+    em_giterr_ssl, em_giterr_submodule, em_giterr_thread, em_giterr_stash,
+    em_giterr_checkout, em_giterr_fetchhead, em_giterr_merge, em_giterr_ssh,
+    em_giterr_filter, em_giterr_revert, em_giterr_callback, em_giterr_cherrypick,
+    em_giterr_describe, em_giterr_rebase, em_giterr_filesystem, em_giterr_patch,
+    em_giterr_worktree, em_giterr_sha1;
+
 // Symbols that are only reachable from within this file.
-static emacs_value _cons, _defalias, _define_error, _expand_file_name, _giterr,
+static emacs_value _cons, _defalias, _define_error, _expand_file_name,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
     _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _symbol_value,
     _default_directory, _assq, _args_out_of_range, _decode_time, _insert,
@@ -357,6 +368,41 @@ void em_init(emacs_env *env)
     em_https = GLOBREF(INTERN("https"));
     em_ssh = GLOBREF(INTERN("ssh"));
 
+    em_giterr = GLOBREF(INTERN("giterr"));
+    em_giterr_nomemory = GLOBREF(INTERN("giterr-nomemory"));
+    em_giterr_os = GLOBREF(INTERN("giterr-os"));
+    em_giterr_invalid = GLOBREF(INTERN("giterr-invalid"));
+    em_giterr_reference = GLOBREF(INTERN("giterr-reference"));
+    em_giterr_zlib = GLOBREF(INTERN("giterr-zlib"));
+    em_giterr_repository = GLOBREF(INTERN("giterr-repository"));
+    em_giterr_config = GLOBREF(INTERN("giterr-config"));
+    em_giterr_regex = GLOBREF(INTERN("giterr-regex"));
+    em_giterr_odb = GLOBREF(INTERN("giterr-odb"));
+    em_giterr_index = GLOBREF(INTERN("giterr-index"));
+    em_giterr_object = GLOBREF(INTERN("giterr-object"));
+    em_giterr_net = GLOBREF(INTERN("giterr-net"));
+    em_giterr_tag = GLOBREF(INTERN("giterr-tag"));
+    em_giterr_tree = GLOBREF(INTERN("giterr-tree"));
+    em_giterr_indexer = GLOBREF(INTERN("giterr-indexer"));
+    em_giterr_ssl = GLOBREF(INTERN("giterr-ssl"));
+    em_giterr_submodule = GLOBREF(INTERN("giterr-submodule"));
+    em_giterr_thread = GLOBREF(INTERN("giterr-thread"));
+    em_giterr_stash = GLOBREF(INTERN("giterr-stash"));
+    em_giterr_checkout = GLOBREF(INTERN("giterr-checkout"));
+    em_giterr_fetchhead = GLOBREF(INTERN("giterr-fetchhead"));
+    em_giterr_merge = GLOBREF(INTERN("giterr-merge"));
+    em_giterr_ssh = GLOBREF(INTERN("giterr-ssh"));
+    em_giterr_filter = GLOBREF(INTERN("giterr-filter"));
+    em_giterr_revert = GLOBREF(INTERN("giterr-revert"));
+    em_giterr_callback = GLOBREF(INTERN("giterr-callback"));
+    em_giterr_cherrypick = GLOBREF(INTERN("giterr-cherrypick"));
+    em_giterr_describe = GLOBREF(INTERN("giterr-describe"));
+    em_giterr_rebase = GLOBREF(INTERN("giterr-rebase"));
+    em_giterr_filesystem = GLOBREF(INTERN("giterr-filesystem"));
+    em_giterr_patch = GLOBREF(INTERN("giterr-patch"));
+    em_giterr_worktree = GLOBREF(INTERN("giterr-worktree"));
+    em_giterr_sha1 = GLOBREF(INTERN("giterr-sha1"));
+
     _cons = GLOBREF(INTERN("cons"));
     _consp = GLOBREF(INTERN("consp"));
     _car = GLOBREF(INTERN("car"));
@@ -370,7 +416,6 @@ void em_init(emacs_env *env)
     _defalias = GLOBREF(INTERN("defalias"));
     _define_error = GLOBREF(INTERN("define-error"));
     _expand_file_name = GLOBREF(INTERN("expand-file-name"));
-    _giterr = GLOBREF(INTERN("giterr"));
     _not_implemented = GLOBREF(INTERN("not-implemented"));
     _provide = GLOBREF(INTERN("provide"));
     _symbol_value = GLOBREF(INTERN("symbol-value"));
@@ -383,9 +428,43 @@ void em_init(emacs_env *env)
     _wrong_type_argument = GLOBREF(INTERN("wrong-type-argument"));
     _wrong_value_argument = GLOBREF(INTERN("wrong-value-argument"));
 
-    em_define_error(env, _giterr, "Git error");
-    em_define_error(env, _not_implemented, "Not implemented");
-    em_define_error(env, _wrong_value_argument, "Wrong argument value passed");
+    em_define_error(env, _not_implemented, "Not implemented", em_nil);
+    em_define_error(env, _wrong_value_argument, "Wrong argument value passed", em_nil);
+
+    em_define_error(env, em_giterr, "Git error", em_nil);
+    em_define_error(env, em_giterr_nomemory, "Git error: out of memory", em_giterr);
+    em_define_error(env, em_giterr_os, "Git error: OS", em_giterr);
+    em_define_error(env, em_giterr_invalid, "Git error: invalid", em_giterr);
+    em_define_error(env, em_giterr_reference, "Git error: reference", em_giterr);
+    em_define_error(env, em_giterr_zlib, "Git error: zlib", em_giterr);
+    em_define_error(env, em_giterr_repository, "Git error: repository", em_giterr);
+    em_define_error(env, em_giterr_config, "Git error: config", em_giterr);
+    em_define_error(env, em_giterr_regex, "Git error: regex", em_giterr);
+    em_define_error(env, em_giterr_odb, "Git error: ODB", em_giterr);
+    em_define_error(env, em_giterr_index, "Git error: index", em_giterr);
+    em_define_error(env, em_giterr_object, "Git error: object", em_giterr);
+    em_define_error(env, em_giterr_net, "Git error: net", em_giterr);
+    em_define_error(env, em_giterr_tag, "Git error: tag", em_giterr);
+    em_define_error(env, em_giterr_tree, "Git error: tree", em_giterr);
+    em_define_error(env, em_giterr_indexer, "Git error: indexer", em_giterr);
+    em_define_error(env, em_giterr_ssl, "Git error: SSL", em_giterr);
+    em_define_error(env, em_giterr_submodule, "Git error: submodule", em_giterr);
+    em_define_error(env, em_giterr_thread, "Git error: thread", em_giterr);
+    em_define_error(env, em_giterr_stash, "Git error: stash", em_giterr);
+    em_define_error(env, em_giterr_checkout, "Git error: checkout", em_giterr);
+    em_define_error(env, em_giterr_fetchhead, "Git error: fetch-head", em_giterr);
+    em_define_error(env, em_giterr_merge, "Git error: merge", em_giterr);
+    em_define_error(env, em_giterr_ssh, "Git error: SSH", em_giterr);
+    em_define_error(env, em_giterr_filter, "Git error: filter", em_giterr);
+    em_define_error(env, em_giterr_revert, "Git error: revert", em_giterr);
+    em_define_error(env, em_giterr_callback, "Git error: callback", em_giterr);
+    em_define_error(env, em_giterr_cherrypick, "Git error: cherry-pick", em_giterr);
+    em_define_error(env, em_giterr_describe, "Git error: describe", em_giterr);
+    em_define_error(env, em_giterr_rebase, "Git error: rebase", em_giterr);
+    em_define_error(env, em_giterr_filesystem, "Git error: filesystem", em_giterr);
+    em_define_error(env, em_giterr_patch, "Git error: patch", em_giterr);
+    em_define_error(env, em_giterr_worktree, "Git error: worktree", em_giterr);
+    em_define_error(env, em_giterr_sha1, "Git error: SHA-1", em_giterr);
 }
 
 /**
@@ -416,11 +495,10 @@ bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
     return cond;
 }
 
-void em_signal_giterr(emacs_env *env, int _klass, const char* _msg)
+void em_signal(emacs_env *env, emacs_value error, const char *_msg)
 {
-    emacs_value klass = EM_INTEGER(_klass);
     emacs_value msg = EM_STRING(_msg);
-    env->non_local_exit_signal(env, _giterr, em_cons(env, klass, em_cons(env, msg, em_nil)));
+    env->non_local_exit_signal(env, error, em_cons(env, msg, em_nil));
 }
 
 void em_signal_wrong_type(emacs_env *env, emacs_value expected, emacs_value actual)
@@ -495,9 +573,9 @@ emacs_value em_assq(emacs_env *env, emacs_value key, emacs_value list)
   return em_funcall(env, _assq, 2, key, list);
 }
 
-void em_define_error(emacs_env *env, emacs_value symbol, const char *msg)
+void em_define_error(emacs_env *env, emacs_value symbol, const char *msg, emacs_value parent)
 {
-    em_funcall(env, _define_error, 2, symbol, EM_STRING(msg));
+    em_funcall(env, _define_error, 3, symbol, EM_STRING(msg), parent);
 }
 
 void em_defun(emacs_env *env, const char *name, emacs_value func)

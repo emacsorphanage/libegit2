@@ -5,7 +5,7 @@
       (init)
       (run "git" "clone" a "somepath")
       (let* ((repo (libgit-repository-open path)))
-        (should-error (libgit-submodule-lookup repo "somepath") :type 'giterr)))))
+        (should-error (libgit-submodule-lookup repo "somepath") :type 'giterr-submodule)))))
 
 (ert-deftest status ()
   (with-temp-dir (a path)
