@@ -133,6 +133,18 @@ static emacs_value checkout_options_parse(emacs_env *env, emacs_value alist, git
             EM_ASSERT_FUNCTION(cdr);
             progress_callback = cdr;
         }
+        else if (EM_EQ(car, em_baseline)) {
+            egit_type type = egit_get_type(env, cdr);
+            if (type == EGIT_TREE)
+                opts->baseline = EGIT_EXTRACT(cdr);
+            else if (type == EGIT_INDEX)
+                opts->baseline_index = EGIT_EXTRACT(cdr);
+            else {
+                // TODO: libgit-tree-or-index-p?
+                em_signal_wrong_type(env, em_libgit_tree_p, cdr);
+                return em_nil;
+            }
+        }
 
         EM_DOLIST_END(options);
     }
