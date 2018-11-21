@@ -132,3 +132,39 @@
       (should (equal (reverse data)
                      '((nil 0 5) ("a" 1 5) ("b" 2 5) ("c" 3 5) ("d" 4 5) ("e" 5 5))))
       (should (string= "ABC" (read-file-nnl "a"))))))
+
+(ert-deftest checkout-baseline ()
+  (with-temp-dir path
+    (init)
+    (write "a" "abcdef")
+    (write "b" "ghijkl")
+    (write "c" "mnopqr")
+    (add "a" "b" "c")
+    (commit)
+    (commit-change "a" "changed")
+    (write "a" "conflicting")
+    (let* ((repo (libgit-repository-open path))
+           (head (libgit-revparse-single repo "HEAD")))
+
+      (should-error
+       (libgit-checkout-tree
+        repo (libgit-commit-parent head)
+        `((strategy . none)
+          (baseline . ,(libgit-commit-tree head))))
+       :type 'giterr-checkout)
+      (should (string= "conflicting" (read-file-nnl "a")))
+
+      (should-error
+       (libgit-checkout-tree
+        repo (libgit-commit-parent head)
+        `((strategy . safe)
+          (baseline . ,(libgit-commit-tree head))))
+       :type 'giterr-checkout)
+      (should (string= "conflicting" (read-file-nnl "a")))
+
+      ;; Force does not check baseline
+      (libgit-checkout-tree
+       repo (libgit-commit-parent head)
+       `((strategy . force)
+         (baseline . ,(libgit-commit-tree head))))
+      (should (string= "abcdef" (read-file-nnl "a"))))))

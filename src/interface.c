@@ -118,7 +118,8 @@ emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_added,
     em_wd_index_modified, em_wd_wd_modified, em_wd_untracked;
 
 // Checkout options
-emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated;
+emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated,
+    em_baseline;
 
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
@@ -376,6 +377,7 @@ void em_init(emacs_env *env)
     em_notify_when = GLOBREF(INTERN("notify-when"));
     em_conflict = GLOBREF(INTERN("conflict"));
     em_updated = GLOBREF(INTERN("updated"));
+    em_baseline = GLOBREF(INTERN("baseline"));
 
     em_giterr = GLOBREF(INTERN("giterr"));
     em_giterr_nomemory = GLOBREF(INTERN("giterr-nomemory"));
