@@ -73,8 +73,8 @@ static void checkout_progress_callback(
 
     env->funcall(env, ctx->callback, 3, args);
 
-    // TODO: Since we can't abort from inside a progress callback, we
-    // clear non-local exits, essentially running the whole callback
+    // Since we can't abort from inside a progress callback, we clear
+    // non-local exits, essentially running the whole callback
     // in an implicit (ignore-errors ...) form.
     if (env->non_local_exit_check(env))
         env->non_local_exit_clear(env);
@@ -195,7 +195,26 @@ static void checkout_options_release(git_checkout_options *opts)
     } while (0)
 
 EGIT_DOC(checkout_head, "REPO &optional OPTIONS",
-         "Update files in the working tree of REPO to match the content of HEEAD.");
+         "Update files in the working tree of REPO to match the content of HEAD.\n\n"
+         "OPTIONS is an alist with the following keys:\n"
+         "- `strategy': May be either `none' (a dry run that checks for conflicts\n"
+         "     without making actual changes), `safe' (the default; only makes\n"
+         "     modification that will not lose changes), and `force' (take any\n"
+         "     action necessary to make the working directory match the target).\n"
+         "- `notify-when': A list of conditions upon which to notify.  May contain\n"
+         "     any of the symbols `conflict', `dirty' (files that do not need update,\n"
+         "     but which do not match the baseline), `updated' (files that change)\n"
+         "     `untracked' and `ignored', or the single symbol `all'.\n"
+         "- `notify': Function to call when notifying.  Receives two arguments:\n"
+         "     the reason for notifying (one of the symbols above) and the path.\n"
+         "     All notifications are made before any changes are made, and the function\n"
+         "     may choose to return the symbol `abort' to cancel the checkout."
+         "- `progress': Function to call during checkout.  Receives three arguments:\n"
+         "     the current path (or nil), the current step and total number of steps.\n"
+         "     Note that error signals from this function will be ignored!"
+         "- `baseline': A tree or index object representing the expected contents of\n"
+         "     the working directory.  Mismatch will result in an error unless the\n"
+         "     `force' strategy is used.");
 emacs_value egit_checkout_head(emacs_env *env, emacs_value _repo, emacs_value opts)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -208,7 +227,8 @@ emacs_value egit_checkout_head(emacs_env *env, emacs_value _repo, emacs_value op
 }
 
 EGIT_DOC(checkout_index, "REPO &optional INDEX OPTIONS",
-         "Update files in the working tree of REPO to match the content of INDEX.");
+         "Update files in the working tree of REPO to match the content of INDEX.\n"
+         "See `libgit-checkout-head' for details on OPTIONS.");
 emacs_value egit_checkout_index(emacs_env *env, emacs_value _repo, emacs_value _index, emacs_value opts)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
@@ -226,7 +246,8 @@ emacs_value egit_checkout_index(emacs_env *env, emacs_value _repo, emacs_value _
 }
 
 EGIT_DOC(checkout_tree, "REPO &optional TREEISH OPTIONS",
-         "Update files in the index and working tree of REPO to match the content of TREEISH.");
+         "Update files in the index and working tree of REPO to match the content of TREEISH.\n"
+         "See `libgit-checkout-head' for details on OPTIONS.");
 emacs_value egit_checkout_tree(emacs_env *env, emacs_value _repo, emacs_value _treeish, emacs_value opts)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
