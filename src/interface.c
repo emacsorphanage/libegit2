@@ -124,6 +124,11 @@ emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated,
 // Index add
 emacs_value em_check_pathspec;
 
+// Push and fetch options
+emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
+    em_specified, em_url, em_credentials, em_certificate_check, em_prune, em_on,
+    em_off, em_download_tags, em_update_fetchhead;
+
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
@@ -372,6 +377,21 @@ void em_init(emacs_env *env)
     em_wd_untracked = GLOBREF(INTERN("wd-untracked"));
 
     em_check_pathspec = GLOBREF(INTERN("check-pathspec"));
+
+    em_callbacks = GLOBREF(INTERN("callbacks"));
+    em_headers = GLOBREF(INTERN("headers"));
+    em_proxy = GLOBREF(INTERN("proxy"));
+    em_type = GLOBREF(INTERN("type"));
+    em_auto = GLOBREF(INTERN("auto"));
+    em_specified = GLOBREF(INTERN("specified"));
+    em_url = GLOBREF(INTERN("url"));
+    em_credentials = GLOBREF(INTERN("credentials"));
+    em_certificate_check = GLOBREF(INTERN("certificate-check"));
+    em_prune = GLOBREF(INTERN("prune"));
+    em_on = GLOBREF(INTERN("on"));
+    em_off = GLOBREF(INTERN("off"));
+    em_download_tags = GLOBREF(INTERN("download-tags"));
+    em_update_fetchhead = GLOBREF(INTERN("update-fetchhead"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
