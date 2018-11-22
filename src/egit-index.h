@@ -19,5 +19,7 @@ EGIT_DEFUN(index_conflicts_p, emacs_value _index);
 
 EGIT_DEFUN(index_add_all, emacs_value _index, emacs_value _pathspec, emacs_value _options, emacs_value func);
 EGIT_DEFUN(index_add_bypath, emacs_value _index, emacs_value _path);
+EGIT_DEFUN(index_clear, emacs_value _index);
+EGIT_DEFUN(index_write, emacs_value _index);
 
 #endif /* EGIT_INDEX_H */
