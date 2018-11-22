@@ -325,3 +325,23 @@ emacs_value egit_index_add_bypath(emacs_env *env, emacs_value _index, emacs_valu
 
     return em_nil;
 }
+
+EGIT_DOC(index_clear, "INDEX", "Clear the entries from an index.");
+emacs_value egit_index_clear(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    int retval = git_index_clear(index);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(index_write, "INDEX", "Write the index to disk.");
+emacs_value egit_index_write(emacs_env *env, emacs_value _index)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    int retval = git_index_write(index);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
