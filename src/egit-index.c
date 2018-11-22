@@ -264,7 +264,19 @@ static int add_all_callback(const char *path, const char *matched_pathspec, void
     return 0;
 }
 
-EGIT_DOC(index_add_all, "INDEX &optional PATHSPEC OPTIONS FUNC", "");
+EGIT_DOC(index_add_all, "INDEX &optional PATHSPEC OPTIONS FUNC",
+         "Add all unstaged changes to INDEX.\n"
+         "PATHSPEC is list of path patterns to consider.\n"
+         "OPTIONS is a list containing any of the symbols:\n"
+         "- `force': stage files that are ignored,\n"
+         "- `disable-pathspec-match': treat PATHSPEC as literal\n"
+         "     paths instead of patterns,\n"
+         "- `check-pathspec`: check that each entry in PATHSPEC\n"
+         "     that matches a filename exactly is either not\n"
+         "     ignored or already in the index.\n\n"
+         "FUNC is a function that is called with two arguments for\n"
+         "each added file: the path to the file, and the matching\n"
+         "pathspec, if any.");
 emacs_value egit_index_add_all(
     emacs_env *env, emacs_value _index, emacs_value _pathspec,
     emacs_value _opts, emacs_value func)
