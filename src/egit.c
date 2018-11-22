@@ -693,8 +693,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-owner", index_owner, 1, 1);
     DEFUN("libgit-index-path", index_path, 1, 1);
     DEFUN("libgit-index-version", index_version, 1, 1);
-
     DEFUN("libgit-index-conflicts-p", index_conflicts_p, 1, 1);
+
+    DEFUN("libgit-index-add-all", index_add_all, 1, 4);
+    DEFUN("libgit-index-add-bypath", index_add_bypath, 2, 2);
 
     // Object
     DEFUN("libgit-object-lookup", object_lookup, 2, 3);
