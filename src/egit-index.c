@@ -348,6 +348,18 @@ emacs_value egit_index_clear(emacs_env *env, emacs_value _index)
     return em_nil;
 }
 
+EGIT_DOC(index_read, "INDEX &optional FORCE",
+         "Update INDEX by reading from disk.\n"
+         "If FORCE is non-nil, update even if no apparent changes are made.");
+emacs_value egit_index_read(emacs_env *env, emacs_value _index, emacs_value force)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+    int retval = git_index_read(index, EM_EXTRACT_BOOLEAN(force));
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(index_write, "INDEX", "Write the index to disk.");
 emacs_value egit_index_write(emacs_env *env, emacs_value _index)
 {
