@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 209 (26.9%)
-- Should not implement: 147 (18.9%)
-- To do: 422 (54.2%)
+- Implemented: 217 (27.9%)
+- Should not implement: 148 (19.0%)
+- To do: 413 (53.1%)
 - Total: 778
 
 ### extra
@@ -498,12 +498,12 @@ Probably none of these functions will be necessary, since we expose errors to Em
 ### index
 
 - :grey_question: `git-index-add`
-- :grey_question: `git-index-add-all`
-- :grey_question: `git-index-add-bypath`
+- :heavy_check_mark: `git-index-add-all`
+- :heavy_check_mark: `git-index-add-bypath`
 - :grey_question: `git-index-add-frombuffer`
 - :heavy_check_mark: `git-index-caps`
 - :heavy_check_mark: `git-index-checksum`
-- :grey_question: `git-index-clear`
+- :heavy_check_mark: `git-index-clear`
 - :grey_question: `git-index-conflict-add`
 - :grey_question: `git-index-conflict-cleanup`
 - :heavy_check_mark: `git-index-conflict-get`
@@ -524,7 +524,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :grey_question: `git-index-open`
 - :heavy_check_mark: `git-index-owner`
 - :heavy_check_mark: `git-index-path`
-- :grey_question: `git-index-read`
+- :heavy_check_mark: `git-index-read`
 - :grey_question: `git-index-read-tree`
 - :grey_question: `git-index-remove`
 - :grey_question: `git-index-remove-all`
@@ -534,7 +534,7 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :grey_question: `git-index-set-version`
 - :grey_question: `git-index-update-all`
 - :heavy_check_mark: `git-index-version`
-- :grey_question: `git-index-write`
+- :heavy_check_mark: `git-index-write`
 - :grey_question: `git-index-write-tree`
 - :grey_question: `git-index-write-tree-to`
 
