@@ -280,10 +280,10 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### checkout
 
-- :grey_question: `git-checkout-head`
-- :grey_question: `git-checkout-index`
-- :grey_question: `git-checkout-init-options`
-- :grey_question: `git-checkout-tree`
+- :heavy_check_mark: `git-checkout-head`
+- :heavy_check_mark: `git-checkout-index`
+- :x: `git-checkout-init-options`
+- :heavy_check_mark: `git-checkout-tree`
 
 ### cherrypick
 
