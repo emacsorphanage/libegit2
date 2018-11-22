@@ -118,6 +118,11 @@ extern emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated,
 // Index add
 extern emacs_value em_check_pathspec;
 
+// Push and fetch options
+extern emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
+    em_specified, em_url, em_credentials, em_certificate_check, em_prune, em_on,
+    em_off, em_download_tags, em_update_fetchhead;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 

@@ -864,7 +864,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-remote-disconnect`
 - :grey_question: `git-remote-download`
 - :grey_question: `git-remote-dup`
-- :grey_question: `git-remote-fetch`
+- :heavy_check_mark: `git-remote-fetch`
 - :x: `git-remote-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-remote-get-fetch-refspecs` (use `git-remote-get-refspecs`)
 - :heavy_check_mark: `git-remote-get-push-refspecs` (use `git-remote-get-refspecs`)
@@ -878,7 +878,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-remote-owner`
 - :grey_question: `git-remote-prune`
 - :grey_question: `git-remote-prune-refs`
-- :grey_question: `git-remote-push`
+- :heavy_check_mark: `git-remote-push`
 - :heavy_check_mark: `git-remote-pushurl`
 - :heavy_check_mark: `git-remote-refspec-count`
 - :grey_question: `git-remote-rename`
