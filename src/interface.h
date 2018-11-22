@@ -242,6 +242,17 @@ void em_init(emacs_env *env);
 bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg);
 
 /**
+ * Signal a wrong-type-argument error if ARG is not a proper list, every
+ * element of which satisfies PREDICATE. PREDICATE may be nil, in which
+ * case only the list-ness is checked.
+ * @param env The active Emacs environment.
+ * @param predicate The predicate.
+ * @param arg The list.
+ * @return The number of elements in the list, or negative if error.
+ */
+ptrdiff_t em_assert_list(emacs_env *env, emacs_value predicate, emacs_value arg);
+
+/**
  * Signal an error with string message.
  * @param env The active Emacs environment.
  * @param error The error symbol.

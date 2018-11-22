@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-diff.h"
 
@@ -196,27 +197,8 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
         EM_DOLIST_END(options);
     }
 
-    // Check the size of pathspec and ensure that it contains only strings
-    size_t pathspec_size = 0;
-    {
-        EM_DOLIST(path, pathspec, paths_count);
-        EM_ASSERT_STRING(path);
-        pathspec_size++;
-        EM_DOLIST_END(paths_count);
-    }
-
-    // At this point, we are certain that everything is in order, so we can start allocating
-    if (pathspec_size > 0) {
-        char **paths = (char**) malloc(pathspec_size * sizeof(char*));
-        size_t path_index = 0;
-        {
-            EM_DOLIST(path, pathspec, paths_copy);
-            paths[path_index++] = EM_EXTRACT_STRING(path);
-            EM_DOLIST_END(paths_copy);
-        }
-        opts->pathspec.strings = paths;
-        opts->pathspec.count = pathspec_size;
-    }
+    if (!egit_strarray_from_list(&opts->pathspec, env, pathspec))
+        return em_nil;
 
     diff_options_ctx *callback_ctx = (diff_options_ctx*) malloc(sizeof(diff_options_ctx));
     callback_ctx->env = env;
@@ -239,10 +221,8 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
 
 static void egit_diff_options_release(git_diff_options *opts)
 {
+    egit_strarray_dispose(&opts->pathspec);
     free(opts->payload);
-    for (size_t i = 0; i < opts->pathspec.count; i++)
-        free(opts->pathspec.strings[i]);
-    free(opts->pathspec.strings);
     free((char*) opts->new_prefix);
     free((char*) opts->old_prefix);
 }

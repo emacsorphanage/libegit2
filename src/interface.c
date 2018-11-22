@@ -506,6 +506,27 @@ bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
     return cond;
 }
 
+ptrdiff_t em_assert_list(emacs_env *env, emacs_value predicate, emacs_value arg)
+{
+    int nelems = 0;
+    bool predp = EM_EXTRACT_BOOLEAN(predicate);
+
+    while (em_consp(env, arg)) {
+        emacs_value car = em_car(env, arg);
+        if (predp && !em_assert(env, predicate, car))
+            return -1;
+        nelems++;
+        arg = em_cdr(env, arg);
+    }
+
+    if (EM_EXTRACT_BOOLEAN(arg)) {
+        em_signal_wrong_type(env, _listp, arg);
+        return -1;
+    }
+
+    return nelems;
+}
+
 void em_signal(emacs_env *env, emacs_value error, const char *_msg)
 {
     emacs_value msg = EM_STRING(_msg);

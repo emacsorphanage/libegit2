@@ -1,5 +1,6 @@
 #include "git2.h"
 
+#include "egit-util.h"
 #include "egit-status.h"
 #include "egit.h"
 #include "interface.h"
@@ -8,7 +9,6 @@ static int foreach_callback(const char *, unsigned int, void*);
 
 static bool convert_show_option(git_status_show_t *, emacs_env *, emacs_value);
 static bool convert_flags_option(git_status_opt_t *, emacs_env *, emacs_value);
-static bool convert_pathspec_option(git_strarray *, emacs_env *, emacs_value);
 static bool convert_baseline_option(git_tree **, emacs_env *, emacs_value);
 
 typedef struct {
@@ -137,10 +137,8 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
         return true;
     }
 
-    if (!em_listp(env, arg)) {
-        em_signal_wrong_type(env, env->intern(env, "listp"), arg);
+    if (em_assert_list(env, em_nil, arg) < 0)
         return false;
-    }
 
     *out = 0;
     emacs_value flag;
@@ -174,41 +172,6 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
 
         em_signal_wrong_value(env, flag);
         return false;
-    }
-
-    return true;
-}
-
-bool convert_pathspec_option(git_strarray *out, emacs_env *env,
-                             emacs_value arg)
-{
-    if (!em_listp(env, arg)) {
-        em_signal_wrong_type(env, env->intern(env, "listp"), arg);
-        return false;
-    }
-
-    ptrdiff_t length = em_length(env, arg);
-    if (length < 0) {
-        return false;
-    }
-
-    out->count = length;
-    out->strings = malloc(length * sizeof(const char *));
-    int nspecs = 0;
-
-    while (EM_EXTRACT_BOOLEAN(arg)) {
-        emacs_value elt = em_car(env, arg);
-
-        if (!em_assert(env, em_stringp, elt)) {
-            while (nspecs) {
-                free(out->strings[--nspecs]);
-            }
-            free(out->strings);
-            return false;
-        }
-
-        out->strings[nspecs++] = EM_EXTRACT_STRING(elt);
-        arg = em_cdr(env, arg);
     }
 
     return true;
@@ -309,20 +272,19 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
     if (!convert_flags_option(&options.flags, env, flags)) {
         return em_nil;
     }
-    if (!convert_pathspec_option(&options.pathspec, env, pathspec)) {
+    if (!egit_strarray_from_list(&options.pathspec, env, pathspec)) {
         return em_nil;
     }
     if (!convert_baseline_option(&options.baseline, env, baseline)) {
-        git_strarray_free(&options.pathspec);
+        egit_strarray_dispose(&options.pathspec);
         return em_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     foreach_ctx ctx = {.env = env, .function = function};
 
-    int rv =
-        git_status_foreach_ext(repo, &options, &foreach_callback, (void *)(&ctx));
-    git_strarray_free(&options.pathspec);
+    int rv = git_status_foreach_ext(repo, &options, &foreach_callback, (void *)(&ctx));
+    egit_strarray_dispose(&options.pathspec);
 
     if (rv != GIT_EUSER) {
         EGIT_CHECK_ERROR(rv);
