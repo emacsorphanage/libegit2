@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-submodule.h"
 
@@ -303,20 +304,15 @@ emacs_value egit_submodule_wd_id(emacs_env *env, emacs_value _sub)
 // =============================================================================
 // Foreach
 
-typedef struct {
-    emacs_env *env;
-    emacs_value callback;
-} submodule_foreach_ctx;
-
 static int submodule_callback(git_submodule *sub, const char *name, void *payload)
 {
-    submodule_foreach_ctx *ctx = (submodule_foreach_ctx*) payload;
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
     args[0] = egit_wrap(env, EGIT_SUBMODULE, sub, NULL);
     args[1] = EM_STRING(name);
-    env->funcall(env, ctx->callback, 2, args);
+    env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
     return 0;
@@ -330,7 +326,7 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    submodule_foreach_ctx ctx = {env, func};
+    egit_generic_payload ctx = {env, func};
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_submodule_foreach(repo, &submodule_callback, &ctx);
 
