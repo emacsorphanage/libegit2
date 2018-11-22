@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-index.h"
 
@@ -239,4 +240,88 @@ emacs_value egit_index_conflicts_p(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     return git_index_has_conflicts(index) ? em_t : em_nil;
+}
+
+
+// =============================================================================
+// Operations
+
+static int add_all_callback(const char *path, const char *matched_pathspec, void *payload)
+{
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[2];
+    args[0] = EM_STRING(path);
+    args[1] = matched_pathspec ? EM_STRING(matched_pathspec) : em_nil;
+    emacs_value retval = env->funcall(env, ctx->func, 2, args);
+
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    if (EM_EQ(retval, em_abort))
+        return GIT_EUSER;
+    if (EM_EQ(retval, em_skip))
+        return 1;
+    return 0;
+}
+
+EGIT_DOC(index_add_all, "INDEX &optional PATHSPEC OPTIONS FUNC", "");
+emacs_value egit_index_add_all(
+    emacs_env *env, emacs_value _index, emacs_value _pathspec,
+    emacs_value _opts, emacs_value func)
+{
+    EGIT_ASSERT_INDEX(_index);
+    git_index *index = EGIT_EXTRACT(_index);
+
+    git_index_add_option_t options = GIT_INDEX_ADD_DEFAULT;
+    {
+        EM_DOLIST(car, _opts, options);
+        if (EM_EQ(car, em_force))
+            options |= GIT_INDEX_ADD_FORCE;
+        else if (EM_EQ(car, em_disable_pathspec_match))
+            options |= GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH;
+        else if (EM_EQ(car, em_check_pathspec))
+            options |= GIT_INDEX_ADD_CHECK_PATHSPEC;
+        else {
+            em_signal_wrong_value(env, car);
+            return em_nil;
+        }
+        EM_DOLIST_END(options);
+    }
+
+    git_index_matched_path_cb callback = NULL;
+    egit_generic_payload payload = {env, func};
+    if (EM_EXTRACT_BOOLEAN(func)) {
+        EM_ASSERT_FUNCTION(func);
+        callback = add_all_callback;
+    }
+
+    git_strarray pathspec;
+    if (!egit_strarray_from_list(&pathspec, env, _pathspec))
+        return em_nil;
+
+    int retval = git_index_add_all(index, &pathspec, options, callback, &payload);
+    egit_strarray_dispose(&pathspec);
+
+    EM_RETURN_NIL_IF_NLE();
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(index_add_bypath, "INDEX PATH",
+         "Add or update an entry in INDEX from a file on disk.\n"
+         "Note: this does not obey ignore rules.");
+emacs_value egit_index_add_bypath(emacs_env *env, emacs_value _index, emacs_value _path)
+{
+    EGIT_ASSERT_INDEX(_index);
+    EM_ASSERT_STRING(_path);
+
+    git_index *index = EGIT_EXTRACT(_index);
+    char *path = EM_EXTRACT_STRING(_path);
+    int retval = git_index_add_bypath(index, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
 }

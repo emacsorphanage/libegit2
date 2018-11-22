@@ -115,6 +115,9 @@ extern emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_add
 extern emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated,
     em_baseline;
 
+// Index add
+extern emacs_value em_check_pathspec;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 

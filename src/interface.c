@@ -121,6 +121,9 @@ emacs_value em_in_head, em_in_index, em_in_config, em_in_wd, em_index_added,
 emacs_value em_safe, em_force, em_notify_when, em_conflict, em_updated,
     em_baseline;
 
+// Index add
+emacs_value em_check_pathspec;
+
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
@@ -367,6 +370,8 @@ void em_init(emacs_env *env)
     em_wd_index_modified = GLOBREF(INTERN("wd-index-modified"));
     em_wd_wd_modified = GLOBREF(INTERN("wd-wd-modified"));
     em_wd_untracked = GLOBREF(INTERN("wd-untracked"));
+
+    em_check_pathspec = GLOBREF(INTERN("check-pathspec"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
