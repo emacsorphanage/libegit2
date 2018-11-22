@@ -3,17 +3,13 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-checkout.h"
 
 
 // =============================================================================
 // Helpers - Checkout Options
-
-typedef struct {
-    emacs_env *env;
-    emacs_value callback;
-} checkout_options_ctx;
 
 static int checkout_notify_callback(
     git_checkout_notify_t why,
@@ -23,7 +19,7 @@ static int checkout_notify_callback(
     __attribute__((unused)) const git_diff_file *workdir,
     void *payload)
 {
-    checkout_options_ctx *ctx = (checkout_options_ctx*) payload;
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
@@ -49,7 +45,7 @@ static int checkout_notify_callback(
     default: break;
     }
 
-    emacs_value retval = env->funcall(env, ctx->callback, 2, args);
+    emacs_value retval = env->funcall(env, ctx->func, 2, args);
     EM_RETURN_IF_NLE(GIT_EUSER);
 
     if (EM_EQ(retval, em_abort))
@@ -63,7 +59,7 @@ static void checkout_progress_callback(
     size_t total_steps,
     void *payload)
 {
-    checkout_options_ctx *ctx = (checkout_options_ctx*) payload;
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
     emacs_value args[3];
@@ -71,7 +67,7 @@ static void checkout_progress_callback(
     args[1] = EM_INTEGER(completed_steps);
     args[2] = EM_INTEGER(total_steps);
 
-    env->funcall(env, ctx->callback, 3, args);
+    env->funcall(env, ctx->func, 3, args);
 
     // Since we can't abort from inside a progress callback, we clear
     // non-local exits, essentially running the whole callback
@@ -150,17 +146,17 @@ static emacs_value checkout_options_parse(emacs_env *env, emacs_value alist, git
     }
 
     if (EM_EXTRACT_BOOLEAN(notify_callback)) {
-        checkout_options_ctx *ctx = (checkout_options_ctx*) malloc(sizeof(checkout_options_ctx));
+        egit_generic_payload *ctx = (egit_generic_payload*) malloc(sizeof(egit_generic_payload));
         ctx->env = env;
-        ctx->callback = notify_callback;
+        ctx->func = notify_callback;
         opts->notify_payload = ctx;
         opts->notify_cb = &checkout_notify_callback;
     }
 
     if (EM_EXTRACT_BOOLEAN(progress_callback)) {
-        checkout_options_ctx *ctx = (checkout_options_ctx*) malloc(sizeof(checkout_options_ctx));
+        egit_generic_payload *ctx = (egit_generic_payload*) malloc(sizeof(egit_generic_payload));
         ctx->env = env;
-        ctx->callback = progress_callback;
+        ctx->func = progress_callback;
         opts->progress_payload = ctx;
         opts->progress_cb = &checkout_progress_callback;
     }

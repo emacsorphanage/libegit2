@@ -11,11 +11,6 @@ static bool convert_show_option(git_status_show_t *, emacs_env *, emacs_value);
 static bool convert_flags_option(git_status_opt_t *, emacs_env *, emacs_value);
 static bool convert_baseline_option(git_tree **, emacs_env *, emacs_value);
 
-typedef struct {
-    emacs_env *env;
-    emacs_value function;
-} foreach_ctx;
-
 EGIT_DOC(status_decode, "STATUS",
          "Decode git file STATUS.\n\n"
          "The return value is the same as that of `libgit-status-file'.");
@@ -281,7 +276,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    foreach_ctx ctx = {.env = env, .function = function};
+    egit_generic_payload ctx = {.env = env, .func = function};
 
     int rv = git_status_foreach_ext(repo, &options, &foreach_callback, (void *)(&ctx));
     egit_strarray_dispose(&options.pathspec);
@@ -295,14 +290,14 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
 
 int foreach_callback(const char *path, unsigned int flags, void *payload)
 {
-    foreach_ctx *ctx;
+    egit_generic_payload *ctx;
     emacs_env *env;
     emacs_value function;
     emacs_value args[2];
 
-    ctx = (foreach_ctx *)payload;
+    ctx = (egit_generic_payload *)payload;
     env = ctx->env;
-    function = ctx->function;
+    function = ctx->func;
 
     args[0] = EM_STRING(path);
     args[1] = EM_INTEGER(flags);

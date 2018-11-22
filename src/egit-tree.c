@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-tree.h"
 
@@ -202,20 +203,15 @@ emacs_value egit_tree_owner(emacs_env *env, emacs_value _tree)
 // =============================================================================
 // Tree walk
 
-typedef struct {
-    emacs_env *env;
-    emacs_value function;
-} walk_ctx;
-
 static int tree_walk_callback(const char *root, const git_tree_entry *entry, void *payload)
 {
-    walk_ctx *ctx = (walk_ctx*) payload;
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
     args[0] = EM_STRING(root);
     args[1] = entry_to_emacs(env, entry);
-    emacs_value ret = env->funcall(env, ctx->function, 2, args);
+    emacs_value ret = env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
     return EM_EQ(ret, em_skip) ? 1 : 0;
@@ -245,7 +241,7 @@ emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order,
     }
 
     git_tree *tree = EGIT_EXTRACT(_tree);
-    walk_ctx ctx = {.env = env, .function = function};
+    egit_generic_payload ctx = {.env = env, .func = function};
 
     int retval = git_tree_walk(tree, mode, &tree_walk_callback, (void*)(&ctx));
 

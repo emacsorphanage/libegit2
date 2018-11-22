@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-tag.h"
 
@@ -49,14 +50,9 @@ emacs_value egit_tag_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_valu
 // =============================================================================
 // Foreach
 
-typedef struct {
-    emacs_env *env;
-    emacs_value callback;
-} tag_callback_context;
-
 int egit_tag_foreach_callback(const char *name, git_oid *oid, void *payload)
 {
-    tag_callback_context *ctx = (tag_callback_context*) payload;
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
@@ -64,7 +60,7 @@ int egit_tag_foreach_callback(const char *name, git_oid *oid, void *payload)
     const char *oid_s = git_oid_tostr_s(oid);
     args[1] = EM_STRING(oid_s);
 
-    env->funcall(env, ctx->callback, 2, args);
+    env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
     return 0;
@@ -78,7 +74,7 @@ emacs_value egit_tag_foreach(emacs_env *env, emacs_value _repo, emacs_value func
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    tag_callback_context ctx = {env, func};
+    egit_generic_payload ctx = {env, func};
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_tag_foreach(repo, &egit_tag_foreach_callback, &ctx);
 
