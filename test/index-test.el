@@ -57,3 +57,125 @@
           (should (eq 'base (libgit-index-entry-stage (car conflicts))))
           (should (eq 'ours (libgit-index-entry-stage (cadr conflicts))))
           (should (eq 'theirs (libgit-index-entry-stage (caddr conflicts)))))))))
+
+(ert-deftest index-add-bypath ()
+  (with-temp-dir path
+    (init)
+    (write "a" "abcdef")
+    (write "b" "ghijkl")
+    (write "c" "mnopqr")
+    (let* ((repo (libgit-repository-open path))
+           (index (libgit-repository-index repo)))
+      (should (= 0 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file" (run "git" "status")))
+
+      (libgit-index-add-bypath index "a")
+      (should (= 1 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file" (run "git" "status")))
+      (libgit-index-write index)
+      (should (string-match-p "new file:\\s-+a$" (run "git" "status")))
+      (should-not (string-match-p "new file:\\s-+b$" (run "git" "status")))
+
+      (libgit-index-add-bypath index "b")
+      (should (= 2 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file:\\s-+b$" (run "git" "status")))
+      (libgit-index-write index)
+      (should (string-match-p "new file:\\s-+b$" (run "git" "status")))
+      (should-not (string-match-p "new file:\\s-+c$" (run "git" "status")))
+
+      (libgit-index-clear index)
+      (should (= 0 (libgit-index-entrycount index)))
+      (should (string-match-p "new file:\\s-+b$" (run "git" "status")))
+      (libgit-index-write index)
+      (should-not (string-match-p "new file" (run "git" "status"))))))
+
+(ert-deftest index-add-all ()
+  (with-temp-dir path
+    (init)
+    (write "a.txt" "abcdef")
+    (write "b.txt" "ghijkl")
+    (write "subdir/c.txt" "mnopqr")
+    (write "subdir/d" "stuvwx")
+    (let* ((repo (libgit-repository-open path))
+           (index (libgit-repository-index repo)))
+      (should (= 0 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file" (run "git" "status")))
+
+      (libgit-index-add-all index '("*.txt"))
+      (should (= 3 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      ;; TODO: Maybe I don't understand what disable-pathspec-match should do?
+      ;; (libgit-index-add-all index '("*.txt") '(disable-pathspec-match))
+      ;; (should (= 0 (libgit-index-entrycount index)))
+      ;; (libgit-index-clear index)
+
+      (libgit-index-add-all index)
+      (should (= 4 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      (libgit-index-add-all index '("z"))
+      (should (= 0 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      (libgit-index-add-all index '("d"))
+      (should (= 0 (libgit-index-entrycount index)))
+      (libgit-index-clear index))))
+
+(ert-deftest index-add-all-ignore ()
+  (with-temp-dir path
+    (init)
+    (write "a.txt" "abcdef")
+    (write "b.txt" "ghijkl")
+    (write "subdir/c.txt" "mnopqr")
+    (write "subdir/d" "stuvwx")
+    (write ".git/info/exclude" "/a.txt\n/subdir/d")
+    (let* ((repo (libgit-repository-open path))
+           (index (libgit-repository-index repo)))
+      (should (= 0 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file" (run "git" "status")))
+
+      (libgit-index-add-all index '("*.txt"))
+      (should (= 2 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      (libgit-index-add-all index '("*.txt") '(force))
+      (should (= 3 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      (libgit-index-add-all index)
+      (should (= 2 (libgit-index-entrycount index)))
+      (libgit-index-clear index)
+
+      (libgit-index-add-all index nil '(force))
+      (should (= 4 (libgit-index-entrycount index))))))
+
+(ert-deftest index-add-all-callback ()
+  (with-temp-dir path
+    (init)
+    (write "a.txt" "abcdef")
+    (write "b.txt" "ghijkl")
+    (write "subdir/c.txt" "mnopqr")
+    (write "subdir/d" "stuvwx")
+    (let* ((repo (libgit-repository-open path))
+           (index (libgit-repository-index repo))
+           data)
+      (should (= 0 (libgit-index-entrycount index)))
+      (should-not (string-match-p "new file" (run "git" "status")))
+
+      (libgit-index-add-all index nil nil (lambda (&rest args) (push args data)))
+      (setq data (sort data (lambda (a b) (string< (car a) (car b)))))
+      (should (equal data
+                     '(("a.txt" nil)
+                       ("b.txt" nil)
+                       ("subdir/c.txt" nil)
+                       ("subdir/d" nil))))
+      (libgit-index-clear index)
+      (setq data nil)
+
+      (libgit-index-add-all index '("*.txt") nil (lambda (&rest args) (push args data)))
+      (setq data (sort data (lambda (a b) (string< (car a) (car b)))))
+      (should (equal data
+                     '(("a.txt" "*.txt")
+                       ("b.txt" "*.txt")
+                       ("subdir/c.txt" "*.txt")))))))
