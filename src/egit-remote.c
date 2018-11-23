@@ -445,6 +445,40 @@ emacs_value egit_remote_valid_name_p(emacs_env *env, emacs_value _name)
 // =============================================================================
 // Operations
 
+EGIT_DOC(remote_add_refspec, "REPO NAME REFSPEC DIRECTION",
+         "Add a new REFSPEC to the remote named NAME in REPO.\n"
+         "DIRECTION may be either `fetch' or `push'.");
+emacs_value egit_remote_add_refspec(
+    emacs_env *env, emacs_value _repo, emacs_value _name,
+    emacs_value _refspec, emacs_value direction)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_refspec);
+
+    bool push;
+    if (EM_EQ(direction, em_push))
+        push = true;
+    else if (EM_EQ(direction, em_fetch))
+        push = false;
+    else {
+        em_signal_wrong_value(env, direction);
+        return em_nil;
+    }
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    char *refspec = EM_EXTRACT_STRING(_refspec);
+
+    int retval = push ? git_remote_add_push(repo, name, refspec) :
+                 git_remote_add_fetch(repo, name, refspec);
+    free(name);
+    free(refspec);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 EGIT_DOC(remote_fetch, "REMOTE &optional REFSPECS OPTIONS MESSAGE", "");
 emacs_value egit_remote_fetch(
     emacs_env *env, emacs_value _remote, emacs_value _refspecs, emacs_value opts, emacs_value _msg)

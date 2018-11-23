@@ -850,8 +850,8 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### remote
 
-- :grey_question: `git-remote-add-fetch`
-- :grey_question: `git-remote-add-push`
+- :heavy_check_mark: `git-remote-add-fetch` (use `git-remote-add-refspec`)
+- :heavy_check_mark: `git-remote-add-push` (use `git-remote-add-refspec`)
 - :heavy_check_mark: `git-remote-autotag`
 - :grey_question: `git-remote-connect`
 - :grey_question: `git-remote-connected`
