@@ -1,5 +1,7 @@
 (require 'cl-lib)
 
+(defvar file-prefix (if (eq 'windows-nt system-type) "file:///" "file://"))
+
 (defmacro with-temp-dir (varnames &rest body)
   (declare (indent 1))
   (let* ((cwd (if (listp varnames) temporary-file-directory varnames))
@@ -14,7 +16,7 @@
              ,@(mapcar (lambda (sym) `(make-directory ,sym 'parents)) varnames)
              (let ((default-directory ,cwd))
                ,@body))
-         ,@(mapcar (lambda (sym) `(delete-directory ,sym 'recursive)) varnames)))))
+         ,@(mapcar (lambda (sym) `(ignore-errors (delete-directory ,sym 'recursive))) varnames)))))
 
 (defmacro in-dir (dir &rest body)
   (declare (indent 1))

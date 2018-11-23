@@ -8,8 +8,8 @@
       (commit-change "test-b" "content"))
     (in-dir path
       (init)
-      (run "git" "remote" "add" "a" (concat "file://" remote-a))
-      (run "git" "remote" "add" "b" (concat "file://" remote-b))
+      (run "git" "remote" "add" "a" (concat file-prefix remote-a))
+      (run "git" "remote" "add" "b" (concat file-prefix remote-b))
       (run "git" "remote" "set-url" "--push" "b" "some-url")
       (let* ((repo (libgit-repository-open path))
              (ra (libgit-remote-lookup repo "a"))
@@ -17,11 +17,11 @@
         (should (equal '("a" "b") (libgit-remote-list repo)))
         (should (libgit-remote-p (libgit-remote-lookup repo "a")))
         (should-error (libgit-remote-lookup repo "c") :type 'giterr-config)
-        (should (string-prefix-p "file://" (libgit-remote-url ra)))
-        (should (path= remote-a (substring (libgit-remote-url ra) 7)))
+        (should (string-prefix-p file-prefix (libgit-remote-url ra)))
+        (should (path= remote-a (substring (libgit-remote-url ra) (length file-prefix))))
         (should-not (libgit-remote-pushurl ra))
-        (should (string-prefix-p "file://" (libgit-remote-url rb)))
-        (should (path= remote-b (substring (libgit-remote-url rb) 7)))
+        (should (string-prefix-p file-prefix (libgit-remote-url rb)))
+        (should (path= remote-b (substring (libgit-remote-url rb) (length file-prefix))))
         (should (string= "some-url" (libgit-remote-pushurl rb)))))))
 
 (ert-deftest remote-refspecs ()
@@ -35,8 +35,8 @@
       (run "git" "checkout" "-b" "branchname"))
     (in-dir path
       (init)
-      (run "git" "remote" "add" "rema" (concat "file://" rpath-a))
-      (run "git" "remote" "add" "-t" "branchname" "-t" "otherbranch" "remb" (concat "file://" rpath-a))
+      (run "git" "remote" "add" "rema" (concat file-prefix rpath-a))
+      (run "git" "remote" "add" "-t" "branchname" "-t" "otherbranch" "remb" (concat file-prefix rpath-a))
       (let* ((repo (libgit-repository-open path))
              (remote-a (libgit-remote-lookup repo "rema"))
              (remote-b (libgit-remote-lookup repo "remb")))
@@ -55,3 +55,68 @@
           (should (string= "refs/heads/branchname" (libgit-refspec-src spec)))
           (should (string= "+refs/heads/branchname:refs/remotes/remb/branchname" (libgit-refspec-string spec)))
           (should (libgit-refspec-force-p spec)))))))
+
+(ert-deftest remote-fetch-simple ()
+  (let (id)
+    (with-temp-dir (path rpath)
+      (in-dir rpath
+        (init)
+        (commit-change "test" "content")
+        (setq id (run-nnl "git" "rev-parse" "HEAD")))
+      (in-dir path
+        (init)
+        (run "git" "remote" "add" "origin" (concat file-prefix rpath))
+        (let* ((repo (libgit-repository-open path))
+               (remote (libgit-remote-lookup repo "origin")))
+          (should-not (libgit-reference-list repo))
+          (libgit-remote-fetch remote)
+          (should (equal (libgit-reference-list repo) '("refs/remotes/origin/master")))
+          (should (string= id (libgit-reference-name-to-id repo "refs/remotes/origin/master"))))))))
+
+(ert-deftest remote-fetch-nonexistent ()
+  (let (id)
+    (with-temp-dir path
+      (init)
+      (run "git" "remote" "add" "origin" (concat file-prefix "nonexistent"))
+      (let* ((repo (libgit-repository-open path))
+             (remote (libgit-remote-lookup repo "origin")))
+        (should-error (libgit-remote-fetch remote) :type 'giterr-os)))))
+
+(ert-deftest remote-push-simple ()
+  (let (id)
+    (with-temp-dir (path rpath)
+      (in-dir rpath
+        (init "--bare"))
+      (in-dir path
+        (init)
+        (commit-change "test" "content")
+        (setq id (run-nnl "git" "rev-parse" "HEAD"))
+        (run "git" "remote" "add" "origin" (concat file-prefix rpath))
+        (let* ((repo (libgit-repository-open path))
+               (remote (libgit-remote-lookup repo "origin"))
+               (remote-repo (libgit-repository-open rpath)))
+
+          (let ((remote (libgit-remote-lookup repo "origin")))
+            (should-not (libgit-remote-get-refspecs remote 'push))
+            (libgit-remote-push remote))
+
+          (should-not (libgit-reference-list remote-repo))
+          (should-error (libgit-commit-lookup remote-repo id) :type 'giterr-odb)
+
+          (libgit-remote-add-refspec repo "origin" "refs/heads/master:refs/heads/otherbranch" 'push)
+          (let ((remote (libgit-remote-lookup repo "origin")))
+            (should (equal '("refs/heads/master:refs/heads/otherbranch")
+                           (libgit-remote-get-refspecs remote 'push)))
+            (libgit-remote-push remote))
+
+          (should (equal (libgit-reference-list remote-repo) '("refs/heads/otherbranch")))
+          (should (string= id (libgit-reference-name-to-id remote-repo "refs/heads/otherbranch"))))))))
+
+(ert-deftest remote-push-nonexistent ()
+  (let (id)
+    (with-temp-dir path
+      (init)
+      (run "git" "remote" "add" "origin" (concat file-prefix "nonexistent"))
+      (let* ((repo (libgit-repository-open path))
+             (remote (libgit-remote-lookup repo "origin")))
+        (should-error (libgit-remote-push remote) :type 'giterr-os)))))
