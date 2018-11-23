@@ -17,13 +17,49 @@ typedef struct {
     emacs_value credentials;
 } remote_ctx;
 
-int certificate_check_cb(
-    __attribute__((unused)) git_cert *cert,
-    __attribute__((unused)) int valid,
-    __attribute__((unused)) const char *host,
-    __attribute__((unused)) void *payload)
+static int certificate_check_cb(git_cert *cert, int valid, const char *host, void *payload)
 {
-    return GIT_EUSER;
+    remote_ctx *ctx = (remote_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[3];
+    args[0] = em_nil;
+    args[1] = valid ? em_t : em_nil;
+    args[2] = host ? EM_STRING(host) : em_nil;
+
+    // TODO: GIT_CERT_STRARRAY?
+    if (cert->cert_type == GIT_CERT_X509) {
+        git_cert_x509 *c = (git_cert_x509*) cert;
+        emacs_value data = env->make_string(env, c->data, c->len);
+        data = em_string_as_unibyte(env, data);
+        args[0] = em_cons(env, em_x509, em_cons(env, data, em_nil));
+    }
+    else if (cert->cert_type == GIT_CERT_HOSTKEY_LIBSSH2) {
+        git_cert_hostkey *c = (git_cert_hostkey*) cert;
+
+        size_t nelts = 0;
+        emacs_value elts[5];
+        elts[nelts++] = em_hostkey_libssh2;
+
+        // We use libgit's own oid_tostr to decode hashes into hex strings
+        char buf[41];
+        if (c->type & GIT_CERT_SSH_MD5) {
+            elts[nelts++] = em_md5;
+            git_oid_tostr(buf, 33, (git_oid*) c->hash_md5);
+            elts[nelts++] = EM_STRING(buf);
+        }
+        if (c->type & GIT_CERT_SSH_SHA1) {
+            elts[nelts++] = em_sha1;
+            git_oid_tostr(buf, 41, (git_oid*) c->hash_sha1);
+            elts[nelts++] = EM_STRING(buf);
+        }
+
+        args[0] = em_list(env, elts, nelts);
+    }
+
+    env->funcall(env, ctx->certificate_check, 3, args);
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    return 0;
 }
 
 int credentials_cb(
