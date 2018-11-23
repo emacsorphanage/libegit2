@@ -763,6 +763,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-remote-list", remote_list, 1, 1);
     DEFUN("libgit-remote-valid-name-p", remote_valid_name_p, 1, 1);
 
+    DEFUN("libgit-remote-add-refspec", remote_add_refspec, 4, 4);
     DEFUN("libgit-remote-fetch", remote_fetch, 1, 4);
     DEFUN("libgit-remote-push", remote_push, 1, 3);
 
