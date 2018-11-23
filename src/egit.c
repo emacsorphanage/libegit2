@@ -751,7 +751,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-refspec-src-matches-p", refspec_src_matches_p, 2, 2);
 
     // Remote
+    DEFUN("libgit-remote-create", remote_create, 3, 3);
     DEFUN("libgit-remote-lookup", remote_lookup, 2, 2);
+
     DEFUN("libgit-remote-autotag", remote_autotag, 1, 1);
     DEFUN("libgit-remote-get-refspec", remote_get_refspec, 2, 2);
     DEFUN("libgit-remote-get-refspecs", remote_get_refspecs, 2, 2);

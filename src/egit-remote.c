@@ -290,6 +290,28 @@ static emacs_value push_options_parse(emacs_env *env, emacs_value alist, git_pus
 // =============================================================================
 // Constructors
 
+EGIT_DOC(remote_create, "REPO NAME URL",
+         "Create and return a new remote in REPO named NAME pointing to URL.\n"
+         "The new remote will have the default fetch refspec.");
+emacs_value egit_remote_create(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _url)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_url);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    char *url = EM_EXTRACT_STRING(_url);
+
+    git_remote *remote;
+    int retval = git_remote_create(&remote, repo, name, url);
+    free(name);
+    free(url);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REMOTE, remote, NULL);
+}
+
 EGIT_DOC(remote_lookup, "REPO NAME", "Look up a remote in REPO by NAME.");
 emacs_value egit_remote_lookup(emacs_env *env, emacs_value _repo, emacs_value _name)
 {

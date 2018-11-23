@@ -3,6 +3,7 @@
 #ifndef EGIT_REMOTE_H
 #define EGIT_REMOTE_H
 
+EGIT_DEFUN(remote_create, emacs_value _repo, emacs_value _name, emacs_value _url);
 EGIT_DEFUN(remote_lookup, emacs_value _repo, emacs_value _name);
 
 EGIT_DEFUN(remote_autotag, emacs_value _remote);
