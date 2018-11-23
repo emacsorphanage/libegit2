@@ -855,7 +855,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-remote-autotag`
 - :grey_question: `git-remote-connect`
 - :grey_question: `git-remote-connected`
-- :grey_question: `git-remote-create`
+- :heavy_check_mark: `git-remote-create`
 - :grey_question: `git-remote-create-anonymous`
 - :grey_question: `git-remote-create-detached`
 - :grey_question: `git-remote-create-with-fetchspec`
