@@ -129,6 +129,9 @@ emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
     em_specified, em_url, em_credentials, em_certificate_check, em_prune, em_on,
     em_off, em_download_tags, em_update_fetchhead;
 
+// Certificates
+emacs_value em_x509, em_hostkey_libssh2, em_md5, em_sha1;
+
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
@@ -392,6 +395,11 @@ void em_init(emacs_env *env)
     em_off = GLOBREF(INTERN("off"));
     em_download_tags = GLOBREF(INTERN("download-tags"));
     em_update_fetchhead = GLOBREF(INTERN("update-fetchhead"));
+
+    em_x509 = GLOBREF(INTERN("x509"));
+    em_hostkey_libssh2 = GLOBREF(INTERN("hostkey-libssh2"));
+    em_md5 = GLOBREF(INTERN("md5"));
+    em_sha1 = GLOBREF(INTERN("sha1"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
