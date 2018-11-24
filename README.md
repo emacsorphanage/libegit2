@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 217 (27.9%)
-- Should not implement: 148 (19.0%)
-- To do: 413 (53.1%)
+- Implemented: 229 (29.4%)
+- Should not implement: 153 (19.7%)
+- To do: 396 (50.9%)
 - Total: 778
 
 ### extra
@@ -390,7 +390,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-cred-ssh-key-memory-new`
 - :heavy_check_mark: `git-cred-ssh-key-new`
 - :heavy_check_mark: `git-cred-username-new`
-- :heavy_check_mark: `git-cred-userpass`
+- :x: `git-cred-userpass` (stock callback)
 - :heavy_check_mark: `git-cred-userpass-plaintext-new`
 
 ### describe
@@ -442,7 +442,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### fetch
 
-- :grey_question: `git-fetch-init-options`
+- :x: `git-fetch-init-options`
 
 ### filter
 
@@ -744,11 +744,11 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### proxy
 
-- :grey_question: `git-proxy-init-options`
+- :x: `git-proxy-init-options`
 
 ### push
 
-- :grey_question: `git-push-init-options`
+- :x: `git-push-init-options`
 
 ### rebase
 
@@ -870,7 +870,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-remote-get-fetch-refspecs` (use `git-remote-get-refspecs`)
 - :heavy_check_mark: `git-remote-get-push-refspecs` (use `git-remote-get-refspecs`)
 - :heavy_check_mark: `git-remote-get-refspec`
-- :grey_question: `git-remote-init-callbacks`
+- :x: `git-remote-init-callbacks`
 - :heavy_check_mark: `git-remote-is-valid-name`
 - :heavy_check_mark: `git-remote-list`
 - :heavy_check_mark: `git-remote-lookup`
