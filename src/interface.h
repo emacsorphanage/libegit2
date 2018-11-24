@@ -122,7 +122,7 @@ extern emacs_value em_check_pathspec;
 // Push and fetch options
 extern emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
     em_specified, em_url, em_credentials, em_certificate_check, em_prune, em_on,
-    em_off, em_download_tags, em_update_fetchhead;
+    em_off, em_download_tags, em_update_fetchhead, em_sideband_progress;
 
 // Certificates
 extern emacs_value em_x509, em_hostkey_libssh2, em_md5, em_sha1;

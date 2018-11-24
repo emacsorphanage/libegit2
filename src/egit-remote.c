@@ -13,9 +13,22 @@
 
 typedef struct {
     emacs_env *env;
+    emacs_value sideband_progress;
     emacs_value certificate_check;
     emacs_value credentials;
 } remote_ctx;
+
+static int sideband_progress_cb(const char *str, int len, void *payload)
+{
+    remote_ctx *ctx = (remote_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value msg = env->make_string(env, str, len);
+    env->funcall(env, ctx->sideband_progress, 1, &msg);
+
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    return 0;
+}
 
 static int certificate_check_cb(git_cert *cert, int valid, const char *host, void *payload)
 {
@@ -162,8 +175,22 @@ static emacs_value proxy_parse(emacs_env *env, emacs_value alist, git_proxy_opti
     return em_nil;
 }
 
+#define CHECK(sym, var)                         \
+    if (EM_EQ(car, (sym))) {                    \
+        EM_ASSERT_FUNCTION(cdr);                \
+        (var) = cdr;                            \
+        found = true;                           \
+    }
+
+#define STORE(sym, var)                         \
+    if (EM_EXTRACT_BOOLEAN((var))) {            \
+        opts->sym = &sym##_cb;                  \
+        payload->sym = (var);                   \
+    }
+
 static emacs_value callbacks_parse(emacs_env *env, emacs_value alist, git_remote_callbacks *opts)
 {
+    emacs_value side = em_nil;
     emacs_value cred = em_nil;
     emacs_value cert = em_nil;
     bool found = false;
@@ -175,36 +202,27 @@ static emacs_value callbacks_parse(emacs_env *env, emacs_value alist, git_remote
         car = em_car(env, cell);
         cdr = em_cdr(env, cell);
 
-        if (EM_EQ(car, em_credentials)) {
-            EM_ASSERT_FUNCTION(cdr);
-            cred = cdr;
-            found = true;
-        }
-        else if (EM_EQ(car, em_certificate_check)) {
-            EM_ASSERT_FUNCTION(cdr);
-            cert = cdr;
-            found = true;
-        }
+        CHECK(em_sideband_progress, side);
+        CHECK(em_credentials, cred);
+        CHECK(em_certificate_check, cert);
 
         EM_DOLIST_END(options);
     }
 
     if (found) {
         remote_ctx *payload = (remote_ctx*) malloc(sizeof(remote_ctx));
-        *payload = (remote_ctx) {
-            .env = env,
-            .credentials = cred,
-            .certificate_check = cert
-        };
+        *payload = (remote_ctx) {.env = env};
         opts->payload = payload;
-        if (EM_EXTRACT_BOOLEAN(cred))
-            opts->credentials = &credentials_cb;
-        if (EM_EXTRACT_BOOLEAN(cert))
-            opts->certificate_check = &certificate_check_cb;
+        STORE(sideband_progress, side);
+        STORE(credentials, cred);
+        STORE(certificate_check, cert);
     }
 
     return em_nil;
 }
+
+#undef CHECK
+#undef STORE
 
 static void fetch_options_dispose(git_fetch_options *opts)
 {

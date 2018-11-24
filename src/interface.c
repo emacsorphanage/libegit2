@@ -128,7 +128,7 @@ emacs_value em_check_pathspec;
 // Push and fetch options
 emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
     em_specified, em_url, em_credentials, em_certificate_check, em_prune, em_on,
-    em_off, em_download_tags, em_update_fetchhead;
+    em_off, em_download_tags, em_update_fetchhead, em_sideband_progress;
 
 // Certificates
 emacs_value em_x509, em_hostkey_libssh2, em_md5, em_sha1;
@@ -395,6 +395,7 @@ void em_init(emacs_env *env)
     em_auto = GLOBREF(INTERN("auto"));
     em_specified = GLOBREF(INTERN("specified"));
     em_url = GLOBREF(INTERN("url"));
+    em_sideband_progress = GLOBREF(INTERN("sideband-progress"));
     em_credentials = GLOBREF(INTERN("credentials"));
     em_certificate_check = GLOBREF(INTERN("certificate-check"));
     em_prune = GLOBREF(INTERN("prune"));
