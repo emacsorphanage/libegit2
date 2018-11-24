@@ -172,6 +172,10 @@ static void egit_finalize(void* _obj)
         git_submodule_free(obj->ptr);
         break;
 
+    case EGIT_CRED:
+        git_cred_free(obj->ptr);
+        break;
+
     default: break;
     }
 
@@ -382,6 +386,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_REMOTE: return em_remote;
     case EGIT_REFSPEC: return em_refspec;
     case EGIT_SUBMODULE: return em_submodule;
+    case EGIT_CRED: return em_cred;
     default: return em_nil;
     }
 }
@@ -414,6 +419,12 @@ EGIT_DOC(config_p, "OBJ", "Return non-nil if OBJ is a git config.");
 static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
 {
     return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
+}
+
+EGIT_DOC(cred_p, "OBJ", "Return non-nil if OBJ is a git credential.");
+static emacs_value egit_cred_p(emacs_env *env, emacs_value obj)
+{
+    return egit_get_type(env, obj) == EGIT_CRED ? em_t : em_nil;
 }
 
 EGIT_DOC(diff_p, "OBJ", "Return non-nil if OBJ is a git diff.");
@@ -538,6 +549,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blob-p", blob_p, 1, 1);
     DEFUN("libgit-commit-p", commit_p, 1, 1);
     DEFUN("libgit-config-p", config_p, 1, 1);
+    DEFUN("libgit-cred-p", cred_p, 1, 1);
     DEFUN("libgit-diff-p", diff_p, 1, 1);
     DEFUN("libgit-diff-delta-p", diff_delta_p, 1, 1);
     DEFUN("libgit-diff-binary-p", diff_binary_p, 1, 1);
