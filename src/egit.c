@@ -13,6 +13,7 @@
 #include "egit-clone.h"
 #include "egit-commit.h"
 #include "egit-config.h"
+#include "egit-cred.h"
 #include "egit-describe.h"
 #include "egit-diff.h"
 #include "egit-ignore.h"
@@ -652,6 +653,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-find-programdata", config_find_programdata, 0, 0);
     DEFUN("libgit-config-find-system", config_find_system, 0, 0);
     DEFUN("libgit-config-find-xdg", config_find_xdg, 0, 0);
+
+    // Cred
+    DEFUN("libgit-cred-default-new", cred_default_new, 0, 0);
+    DEFUN("libgit-cred-ssh-key-from-agent", cred_ssh_key_from_agent, 1, 1);
 
     // Describe
     DEFUN("libgit-describe-commit", describe_commit, 1, 2);
