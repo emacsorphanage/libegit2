@@ -127,6 +127,10 @@ extern emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
 // Certificates
 extern emacs_value em_x509, em_hostkey_libssh2, em_md5, em_sha1;
 
+// Credentials
+extern emacs_value em_userpass_plaintext, em_ssh_key, em_ssh_custom,
+    em_ssh_interactive, em_username, em_ssh_memory, em_default;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 
