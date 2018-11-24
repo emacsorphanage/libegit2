@@ -657,6 +657,11 @@ void egit_init(emacs_env *env)
     // Cred
     DEFUN("libgit-cred-default-new", cred_default_new, 0, 0);
     DEFUN("libgit-cred-ssh-key-from-agent", cred_ssh_key_from_agent, 1, 1);
+    DEFUN("libgit-cred-ssh-key-memory-new", cred_ssh_key_memory_new, 4, 4);
+    DEFUN("libgit-cred-ssh-key-new", cred_ssh_key_new, 4, 4);
+    DEFUN("libgit-cred-username-new", cred_username_new, 1, 1);
+    DEFUN("libgit-cred-userpass-plaintext-new", cred_userpass_plaintext_new, 2, 2);
+    DEFUN("libgit-cred-username-p", cred_username_p, 1, 1);
 
     // Describe
     DEFUN("libgit-describe-commit", describe_commit, 1, 2);
