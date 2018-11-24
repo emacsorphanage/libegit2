@@ -383,15 +383,15 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 - :heavy_check_mark: `git-cred-default-new`
 - :x: `git-cred-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-cred-has-username`
+- :heavy_check_mark: `git-cred-has-username` (`git-cred-username-p`)
 - :grey_question: `git-cred-ssh-custom-new`
 - :grey_question: `git-cred-ssh-interactive-new`
 - :heavy_check_mark: `git-cred-ssh-key-from-agent`
-- :grey_question: `git-cred-ssh-key-memory-new`
-- :grey_question: `git-cred-ssh-key-new`
-- :grey_question: `git-cred-username-new`
-- :grey_question: `git-cred-userpass`
-- :grey_question: `git-cred-userpass-plaintext-new`
+- :heavy_check_mark: `git-cred-ssh-key-memory-new`
+- :heavy_check_mark: `git-cred-ssh-key-new`
+- :heavy_check_mark: `git-cred-username-new`
+- :heavy_check_mark: `git-cred-userpass`
+- :heavy_check_mark: `git-cred-userpass-plaintext-new`
 
 ### describe
 
