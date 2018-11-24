@@ -133,6 +133,10 @@ emacs_value em_callbacks, em_headers, em_proxy, em_type, em_auto,
 // Certificates
 emacs_value em_x509, em_hostkey_libssh2, em_md5, em_sha1;
 
+// Credentials
+emacs_value em_userpass_plaintext, em_ssh_key, em_ssh_custom,
+    em_ssh_interactive, em_username, em_ssh_memory, em_default;
+
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
@@ -403,6 +407,14 @@ void em_init(emacs_env *env)
     em_hostkey_libssh2 = GLOBREF(INTERN("hostkey-libssh2"));
     em_md5 = GLOBREF(INTERN("md5"));
     em_sha1 = GLOBREF(INTERN("sha1"));
+
+    em_userpass_plaintext = GLOBREF(INTERN("userpass-plaintext"));
+    em_ssh_key = GLOBREF(INTERN("ssh-key"));
+    em_ssh_custom = GLOBREF(INTERN("ssh-custom"));
+    em_ssh_interactive = GLOBREF(INTERN("ssh-interactive"));
+    em_username = GLOBREF(INTERN("username"));
+    em_ssh_memory = GLOBREF(INTERN("ssh-memory"));
+    em_default = GLOBREF(INTERN("default"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));

@@ -62,14 +62,45 @@ static int certificate_check_cb(git_cert *cert, int valid, const char *host, voi
     return 0;
 }
 
-int credentials_cb(
-    __attribute__((unused)) git_cred **cred,
-    __attribute__((unused)) const char *url,
-    __attribute__((unused)) const char *username_from_url,
-    __attribute__((unused)) unsigned int allowed_types,
-    __attribute__((unused)) void *payload)
+static int credentials_cb(
+    git_cred **cred, const char *url, const char *username_from_url,
+    unsigned int allowed_types, void *payload)
 {
-    return GIT_EUSER;
+    remote_ctx *ctx = (remote_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[3];
+    args[0] = EM_STRING(url);
+    args[1] = username_from_url ? EM_STRING(username_from_url) : em_nil;
+
+    emacs_value types[7];
+    size_t ntypes = 0;
+    if (allowed_types & GIT_CREDTYPE_USERPASS_PLAINTEXT)
+        types[ntypes++] = em_userpass_plaintext;
+    if (allowed_types & GIT_CREDTYPE_SSH_KEY)
+        types[ntypes++] = em_ssh_key;
+    if (allowed_types & GIT_CREDTYPE_SSH_CUSTOM)
+        types[ntypes++] = em_ssh_custom;
+    if (allowed_types & GIT_CREDTYPE_DEFAULT)
+        types[ntypes++] = em_default;
+    if (allowed_types & GIT_CREDTYPE_SSH_INTERACTIVE)
+        types[ntypes++] = em_ssh_interactive;
+    if (allowed_types & GIT_CREDTYPE_USERNAME)
+        types[ntypes++] = em_username;
+    if (allowed_types & GIT_CREDTYPE_SSH_MEMORY)
+        types[ntypes++] = em_ssh_memory;
+    args[2] = em_list(env, types, ntypes);
+
+    emacs_value retval = env->funcall(env, ctx->credentials, 3, args);
+    EM_RETURN_IF_NLE(GIT_EUSER);
+
+    if (egit_get_type(env, retval) != EGIT_CRED) {
+        em_signal_wrong_type(env, em_libgit_cred_p, retval);
+        return GIT_EUSER;
+    }
+
+    *cred = EGIT_EXTRACT(retval);
+    return 0;
 }
 
 
