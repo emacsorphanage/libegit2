@@ -49,6 +49,10 @@
 #define EGIT_ASSERT_CONFIG(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
 
+// Assert that VAL is a git credential, signal an error and return otherwise.
+#define EGIT_ASSERT_CRED(val)                                           \
+    do { if (!egit_assert_type(env, (val), EGIT_CRED, em_libgit_cred_p)) return em_nil; } while (0)
+
 // Assert that VAL is a git diff, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF(val)                                           \
     do { if (!egit_assert_type(env, (val), EGIT_DIFF, em_libgit_diff_p)) return em_nil; } while (0)
@@ -230,7 +234,8 @@ typedef enum {
     EGIT_DIFF_LINE,
     EGIT_REMOTE,
     EGIT_REFSPEC,
-    EGIT_SUBMODULE
+    EGIT_SUBMODULE,
+    EGIT_CRED
 } egit_type;
 
 /**
