@@ -63,6 +63,26 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
     return false;
 }
 
+ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate, emacs_value arg)
+{
+    ptrdiff_t nelems = 0;
+
+    while (em_consp(env, arg)) {
+        emacs_value car = em_car(env, arg);
+        if (!egit_assert_type(env, car, type, predicate))
+            return -1;
+        nelems++;
+        arg = em_cdr(env, arg);
+    }
+
+    if (EM_EXTRACT_BOOLEAN(arg)) {
+        em_signal_wrong_type(env, em_list_p, arg);
+        return -1;
+    }
+
+    return nelems;
+}
+
 /**
  * Decrease the reference count of a wrapper object.
  * If the reference count reaches zero, the object will be freed,

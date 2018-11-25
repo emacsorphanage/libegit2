@@ -287,6 +287,17 @@ bool egit_assert_type(emacs_env *env, emacs_value obj, egit_type type, emacs_val
 bool egit_assert_object(emacs_env *env, emacs_value obj);
 
 /**
+ * Signal a wrong-type-argument error if ARG is not a proper list, every
+ * element of which satisfies has the correct libgit2 type.
+ * @param env The active Emacs environment.
+ * @param type The type to check for.
+ * @param predicate Symbol to use in a wrong-type-argument error signal.
+ * @param arg The list.
+ * @return The number of elements in the list, or negative if error.
+ */
+ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate, emacs_value arg);
+
+/**
  * Wrap a git_??? structure in an emacs_value.
  * @param env The active Emacs environment.
  * @param obj The type of the object.
