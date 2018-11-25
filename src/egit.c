@@ -423,83 +423,37 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     }
 }
 
-EGIT_DOC(blame_p, "OBJ", "Return non-nil if OBJ is a git blame.");
-static emacs_value egit_blame_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_BLAME ? em_t : em_nil;
-}
+#define TYPECHECKER(caps, small, text)                                  \
+    EGIT_DOC(small##_p, "OBJ", "Return non-nil if OBJ is a git " text "."); \
+    static emacs_value egit_##small##_p(emacs_env *env, emacs_value obj)\
+    {                                                                   \
+        return egit_get_type(env, obj) == EGIT_##caps ? em_t : em_nil;  \
+    }
 
-EGIT_DOC(blame_hunk_p, "OBJ", "Return non-nil if OBJ is a git blame hunk.");
-static emacs_value egit_blame_hunk_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_BLAME_HUNK ? em_t : em_nil;
-}
+TYPECHECKER(BLAME, blame, "blame");
+TYPECHECKER(BLAME_HUNK, blame_hunk, "blame hunk");
+TYPECHECKER(COMMIT, commit, "commit");
+TYPECHECKER(BLOB, blob, "blob");
+TYPECHECKER(CONFIG, config, "config");
+TYPECHECKER(CRED, cred, "credential");
+TYPECHECKER(DIFF, diff, "diff");
+TYPECHECKER(DIFF_DELTA, diff_delta, "diff delta");
+TYPECHECKER(DIFF_BINARY, diff_binary, "diff binary");
+TYPECHECKER(DIFF_HUNK, diff_hunk, "diff hunk");
+TYPECHECKER(DIFF_LINE, diff_line, "diff line");
+TYPECHECKER(INDEX, index, "index.");
+TYPECHECKER(INDEX_ENTRY, index_entry, "index entry");
+TYPECHECKER(REFERENCE, reference, "reference");
+TYPECHECKER(REFSPEC, refspec, "refspec");
+TYPECHECKER(REMOTE, remote, "remote");
+TYPECHECKER(REPOSITORY, repository, "repository");
+TYPECHECKER(SIGNATURE, signature, "signature");
+TYPECHECKER(SUBMODULE, submodule, "submodule");
+TYPECHECKER(TAG, tag, "tag");
+TYPECHECKER(TRANSACTION, transaction, "transaction");
+TYPECHECKER(TREE, tree, "tree");
 
-EGIT_DOC(blob_p, "OBJ", "Return non-nil if OBJ is a git blob.");
-static emacs_value egit_blob_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_BLOB ? em_t : em_nil;
-}
-
-EGIT_DOC(commit_p, "OBJ", "Return non-nil if OBJ is a git commit.");
-static emacs_value egit_commit_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_COMMIT ? em_t : em_nil;
-}
-
-EGIT_DOC(config_p, "OBJ", "Return non-nil if OBJ is a git config.");
-static emacs_value egit_config_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_CONFIG ? em_t : em_nil;
-}
-
-EGIT_DOC(cred_p, "OBJ", "Return non-nil if OBJ is a git credential.");
-static emacs_value egit_cred_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_CRED ? em_t : em_nil;
-}
-
-EGIT_DOC(diff_p, "OBJ", "Return non-nil if OBJ is a git diff.");
-static emacs_value egit_diff_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_DIFF ? em_t : em_nil;
-}
-
-EGIT_DOC(diff_delta_p, "OBJ", "Return non-nil if OBJ is a git diff delta.");
-static emacs_value egit_diff_delta_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_DIFF_DELTA ? em_t : em_nil;
-}
-
-EGIT_DOC(diff_binary_p, "OBJ", "Return non-nil if OBJ is a git diff binary.");
-static emacs_value egit_diff_binary_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_DIFF_BINARY ? em_t : em_nil;
-}
-
-EGIT_DOC(diff_hunk_p, "OBJ", "Return non-nil if OBJ is a git diff hunk.");
-static emacs_value egit_diff_hunk_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_DIFF_HUNK ? em_t : em_nil;
-}
-
-EGIT_DOC(diff_line_p, "OBJ", "Return non-nil if OBJ is a git diff line.");
-static emacs_value egit_diff_line_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_DIFF_LINE ? em_t : em_nil;
-}
-
-EGIT_DOC(index_p, "OBJ", "Return non-nil if OBJ is a git index.");
-static emacs_value egit_index_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_INDEX ? em_t : em_nil;
-}
-
-EGIT_DOC(index_entry_p, "OBJ", "Return non-nil if OBJ is a git index entry.");
-static emacs_value egit_index_entry_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_INDEX_ENTRY ? em_t : em_nil;
-}
+#undef TYPECHECKER
 
 EGIT_DOC(object_p, "OBJ", "Return non-nil if OBJ is a git object.");
 static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
@@ -507,60 +461,6 @@ static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
     egit_type type = egit_get_type(env, obj);
     return (type == EGIT_COMMIT || type == EGIT_TREE || type == EGIT_BLOB ||
             type == EGIT_TAG || type == EGIT_OBJECT) ? em_t : em_nil;
-}
-
-EGIT_DOC(reference_p, "OBJ", "Return non-nil if OBJ is a git reference.");
-static emacs_value egit_reference_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REFERENCE ? em_t : em_nil;
-}
-
-EGIT_DOC(refspec_p, "OBJ", "Return non-nil if OBJ is a git refspec.");
-static emacs_value egit_refspec_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REFSPEC ? em_t : em_nil;
-}
-
-EGIT_DOC(remote_p, "OBJ", "Return non-nil if OBJ is a git remote.");
-static emacs_value egit_remote_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REMOTE ? em_t : em_nil;
-}
-
-EGIT_DOC(repository_p, "OBJ", "Return non-nil if OBJ is a git repository.");
-static emacs_value egit_repository_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_REPOSITORY ? em_t : em_nil;
-}
-
-EGIT_DOC(signature_p, "OBJ", "Return non-nil if OBJ is a git signature.");
-static emacs_value egit_signature_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_SIGNATURE ? em_t : em_nil;
-}
-
-EGIT_DOC(submodule_p, "OBJ", "Return non-nil if OBJ is a git submodule.");
-static emacs_value egit_submodule_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_SUBMODULE ? em_t : em_nil;
-}
-
-EGIT_DOC(tag_p, "OBJ", "Return non-nil if OBJ is a git tag.");
-static emacs_value egit_tag_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_TAG ? em_t : em_nil;
-}
-
-EGIT_DOC(transaction_p, "OBJ", "Return non-nil if OBJ is a git transaction.");
-static emacs_value egit_transaction_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_TRANSACTION ? em_t : em_nil;
-}
-
-EGIT_DOC(tree_p, "OBJ", "Return non-nil if OBJ is a git tree.");
-static emacs_value egit_tree_p(emacs_env *env, emacs_value obj)
-{
-    return egit_get_type(env, obj) == EGIT_TREE ? em_t : em_nil;
 }
 
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \
