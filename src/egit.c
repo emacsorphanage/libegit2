@@ -19,6 +19,7 @@
 #include "egit-ignore.h"
 #include "egit-index.h"
 #include "egit-libgit2.h"
+#include "egit-message.h"
 #include "egit-object.h"
 #include "egit-reference.h"
 #include "egit-refspec.h"
@@ -722,6 +723,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-clear", index_clear, 1, 1);
     DEFUN("libgit-index-read", index_read, 1, 2);
     DEFUN("libgit-index-write", index_write, 1, 1);
+
+    // Message
+    DEFUN("libgit-message-prettify", message_prettify, 1, 2);
+    DEFUN("libgit-message-trailers", message_trailers, 1, 1);
 
     // Object
     DEFUN("libgit-object-lookup", object_lookup, 2, 3);
