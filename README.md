@@ -207,11 +207,11 @@ Iterators converted to map functions:
 ### annotated
 
 - :x: `git-annotated-commit-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-annotated-commit-from-fetchhead`
-- :grey_question: `git-annotated-commit-from-ref`
-- :grey_question: `git-annotated-commit-from-revspec`
-- :grey_question: `git-annotated-commit-id`
-- :grey_question: `git-annotated-commit-lookup`
+- :heavy_check_mark: `git-annotated-commit-from-fetchhead`
+- :heavy_check_mark: `git-annotated-commit-from-ref`
+- :heavy_check_mark: `git-annotated-commit-from-revspec`
+- :heavy_check_mark: `git-annotated-commit-id`
+- :heavy_check_mark: `git-annotated-commit-lookup`
 
 ### attr
 
