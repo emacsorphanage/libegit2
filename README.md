@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 235 (30.2%)
+- Implemented: 237 (30.5%)
 - Should not implement: 155 (19.9%)
-- To do: 388 (49.9%)
+- To do: 386 (49.6%)
 - Total: 778
 
 ### extra
@@ -480,8 +480,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### graph
 
-- :grey_question: `git-graph-ahead-behind`
-- :grey_question: `git-graph-descendant-of`
+- :heavy_check_mark: `git-graph-ahead-behind`
+- :heavy_check_mark: `git-graph-descendant-of`
 
 ### hashsig
 

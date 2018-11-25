@@ -16,6 +16,7 @@
 #include "egit-cred.h"
 #include "egit-describe.h"
 #include "egit-diff.h"
+#include "egit-graph.h"
 #include "egit-ignore.h"
 #include "egit-index.h"
 #include "egit-libgit2.h"
@@ -628,6 +629,10 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-diff-get-delta", diff_get_delta, 2, 2);
     DEFUN("libgit-diff-num-deltas", diff_num_deltas, 1, 2);
+
+    // Graph
+    DEFUN("libgit-graph-ahead-behind", graph_ahead_behind, 3, 3);
+    DEFUN("libgit-graph-descendant-p", graph_descendant_p, 3, 3);
 
     // Ignore
     DEFUN("libgit-ignore-add-rule", add_rule, 2, 2);
