@@ -26,6 +26,7 @@ set(EGIT_TESTS
   diff
   ignore
   index
+  message
   refcount
   reference
   remote

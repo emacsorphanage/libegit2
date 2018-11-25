@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 229 (29.4%)
-- Should not implement: 153 (19.7%)
-- To do: 396 (50.9%)
+- Implemented: 231 (29.7%)
+- Should not implement: 154 (19.8%)
+- To do: 393 (50.5%)
 - Total: 778
 
 ### extra
@@ -581,9 +581,9 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### message
 
-- :grey_question: `git-message-prettify`
-- :grey_question: `git-message-trailer-array-free`
-- :grey_question: `git-message-trailers`
+- :heavy_check_mark: `git-message-prettify`
+- :x: `git-message-trailer-array-free` (memory management shouldn't be exposed to Emacs)
+- :heavy_check_mark: `git-message-trailers`
 
 ### note
 
