@@ -22,5 +22,6 @@ EGIT_DEFUN(index_add_bypath, emacs_value _index, emacs_value _path);
 EGIT_DEFUN(index_clear, emacs_value _index);
 EGIT_DEFUN(index_read, emacs_value _index, emacs_value force);
 EGIT_DEFUN(index_write, emacs_value _index);
+EGIT_DEFUN(index_write_tree, emacs_value _index, emacs_value _repo);
 
 #endif /* EGIT_INDEX_H */

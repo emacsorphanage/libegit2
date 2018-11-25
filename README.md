@@ -536,8 +536,8 @@ Probably none of these functions will be necessary, since we expose errors to Em
 - :grey_question: `git-index-update-all`
 - :heavy_check_mark: `git-index-version`
 - :heavy_check_mark: `git-index-write`
-- :grey_question: `git-index-write-tree`
-- :grey_question: `git-index-write-tree-to`
+- :heavy_check_mark: `git-index-write-tree`
+- :heavy_check_mark: `git-index-write-tree-to` (use `git-index-write-tree`)
 
 ### indexer
 
