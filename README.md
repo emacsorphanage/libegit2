@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 231 (29.7%)
-- Should not implement: 154 (19.8%)
-- To do: 393 (50.5%)
+- Implemented: 235 (30.2%)
+- Should not implement: 155 (19.9%)
+- To do: 388 (49.9%)
 - Total: 778
 
 ### extra
