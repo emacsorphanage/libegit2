@@ -610,7 +610,41 @@ emacs_value egit_remote_add_refspec(
     return em_nil;
 }
 
-EGIT_DOC(remote_fetch, "REMOTE &optional REFSPECS OPTIONS MESSAGE", "");
+EGIT_DOC(remote_fetch, "REMOTE &optional REFSPECS OPTIONS MESSAGE",
+         "Fetch from REMOTE.\n"
+         "If REFSPECS is not given, use the default fetch refspecs of REMOTE.\n"
+         "MESSAGE (default 'fetch') will be inserted into the reflog.\n\n"
+         "OPTIONS is an alist with the following allowed keys:\n"
+         "- `callbacks': an alist of callback functions (see below)\n"
+         "- `proxy': an alist of proxy settings (see below)\n"
+         "- `headers': a list of extra headers to send\n"
+         "- `download-tags': either nil, or any of the symbols `auto', `none' or `all'\n"
+         "- `update-fetchhead': if non-nil (default), update FETCH_HEAD\n\n"
+         "Callbacks is an alist where all the values are functions:\n"
+         "- `certificate-check': called if certificate verification fails. If this function\n"
+         "     signals an error, the fetch is aborted. This function receives three arguments:\n"
+         "     1. The certificate. This is either nil (unknown type) or a list (`x509' DATA)\n"
+         "        for an X.509 certificate, or a cons (`hostkey-libssh2' . PLIST), where\n"
+         "        PLIST is a property list with certificate hash strings (possible keys are\n"
+         "        `md5' and `sha1'.\n"
+         "     2. `validp': non-nil if libgit2 thinks the certificate is valid.\n"
+         "     3. `host': the hostname, if applicable.\n"
+         "- `credentials': called if the remote requires authentication. This function receives\n"
+         "     three arguments: the URL, the username derived from the URL, if applicable, and a\n"
+         "     list of acceptable credential types: `userpass-plaintext', `ssh-key', `ssh-custom'\n"
+         "     (not implemented), `default', `ssh-interactive' (not implemented), `username' and \n"
+         "     `ssh-memory'. The function should return a credential object created with one of\n"
+         "     `libgit-cred-...' functions.\n"
+         "- `sideband-progress': receives one string argument with progress from the remote\n"
+         "- `transfer-progress': called during download with the current progress. This function\n"
+         "     receives seven arguments: total number of objects, number of indexed objects,\n"
+         "     number of received objects, number of local objects, total number of deltas,\n"
+         "     number of indexed deltas and bytes received.\n\n"
+         "Proxy settings is an alist with the following keys:\n"
+         "- `type': either nil (default: no proxy), `auto' or `specified'\n"
+         "- `url': the proxy URL\n"
+         "- `certificate-check': a certificate check callback (see above)\n"
+         "- `credentials': a credential callback (see above)");
 emacs_value egit_remote_fetch(
     emacs_env *env, emacs_value _remote, emacs_value _refspecs, emacs_value opts, emacs_value _msg)
 {
@@ -640,7 +674,15 @@ emacs_value egit_remote_fetch(
     return em_nil;
 }
 
-EGIT_DOC(remote_push, "REMOTE &optional REFSPECS OPTIONS", "");
+EGIT_DOC(remote_push, "REMOTE &optional REFSPECS OPTIONS",
+         "Push to REMOTE.\n"
+         "If REFSPECS is not given, use the default push refspecs of REMOTE.\n\n"
+         "OPTIONS is an alist with the following allowed keys:\n"
+         "- `callbacks': an alist of callback functions (see `libgit-remote-fetch')\n"
+         "- `proxy': an alist of proxy settings (see `libgit-remote-fetch')\n"
+         "- `headers': a list of extra headers to send\n"
+         "- `threads': number of threads to use for creating the packfile\n"
+         "     (default 1, use nil for auto-detection)");
 emacs_value egit_remote_push(emacs_env *env, emacs_value _remote, emacs_value _refspecs, emacs_value opts)
 {
     EGIT_ASSERT_REMOTE(_remote);
