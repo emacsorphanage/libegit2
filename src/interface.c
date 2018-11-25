@@ -11,7 +11,8 @@
 // We store some globa references to emacs objects, mostly symbols,
 // so that we don't have to waste time calling intern later on.
 
-emacs_value em_nil, em_cons_p, em_integerp, em_functionp, em_stringp, em_t, em_symbol_value;
+emacs_value em_nil, em_cons_p, em_integerp, em_functionp, em_stringp, em_t, em_symbol_value,
+    em_list_p;
 
 // Git object predicates and types
 emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
@@ -155,7 +156,7 @@ emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
 // Symbols that are only reachable from within this file.
 static emacs_value _cons, _defalias, _define_error, _expand_file_name,
     _not_implemented, _provide, _user_ptrp, _vector, _wrong_type_argument,
-    _wrong_value_argument, _consp, _car, _cdr, _list, _listp, _length, _symbol_value,
+    _wrong_value_argument, _consp, _car, _cdr, _list, _length, _symbol_value,
     _default_directory, _assq, _args_out_of_range, _decode_time, _insert,
     _string_as_unibyte;
 
@@ -168,6 +169,7 @@ void em_init(emacs_env *env)
     em_functionp = GLOBREF(INTERN("functionp"));
     em_stringp = GLOBREF(INTERN("stringp"));
     em_t = GLOBREF(INTERN("t"));
+    em_list_p = GLOBREF(INTERN("listp"));
 
     em_libgit_object_p = GLOBREF(INTERN("libgit-object-p"));
     em_libgit_repository_p = GLOBREF(INTERN("libgit-repository-p"));
@@ -472,7 +474,6 @@ void em_init(emacs_env *env)
     _decode_time = GLOBREF(INTERN("decode-time"));
     _default_directory = GLOBREF(INTERN("default-directory"));
     _list = GLOBREF(INTERN("list"));
-    _listp = GLOBREF(INTERN("listp"));
     _length = GLOBREF(INTERN("length"));
     _assq = GLOBREF(INTERN("assq"));
     _defalias = GLOBREF(INTERN("defalias"));
@@ -559,7 +560,7 @@ bool em_assert(emacs_env *env, emacs_value predicate, emacs_value arg)
 
 ptrdiff_t em_assert_list(emacs_env *env, emacs_value predicate, emacs_value arg)
 {
-    int nelems = 0;
+    ptrdiff_t nelems = 0;
     bool predp = EM_EXTRACT_BOOLEAN(predicate);
 
     while (em_consp(env, arg)) {
@@ -571,7 +572,7 @@ ptrdiff_t em_assert_list(emacs_env *env, emacs_value predicate, emacs_value arg)
     }
 
     if (EM_EXTRACT_BOOLEAN(arg)) {
-        em_signal_wrong_type(env, _listp, arg);
+        em_signal_wrong_type(env, em_list_p, arg);
         return -1;
     }
 
@@ -640,7 +641,7 @@ emacs_value em_list(emacs_env *env, emacs_value *objects, ptrdiff_t nobjects)
 
 bool em_listp(emacs_env *env, emacs_value object)
 {
-    return EM_EXTRACT_BOOLEAN(em_funcall(env, _listp, 1, object));
+    return EM_EXTRACT_BOOLEAN(em_funcall(env, em_list_p, 1, object));
 }
 
 ptrdiff_t em_length(emacs_env *env, emacs_value sequence)
