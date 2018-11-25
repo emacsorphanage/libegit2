@@ -90,3 +90,37 @@
            (commit (libgit-commit-lookup repo id)))
       (should (string= "here is a message!" (libgit-commit-summary commit)))
       (should (string= "here is some more info" (libgit-commit-body commit))))))
+
+(ert-deftest commit-create ()
+  (with-temp-dir path
+    (init)
+    (commit-change "b" "contents")
+    (write "a" "abcdef")
+    (write "b" "ghijkl")
+    (write "somedir/c" "mnopqr")
+    (let* ((repo (libgit-repository-open path))
+           (index (libgit-repository-index repo))
+           (parent (libgit-revparse-single repo "HEAD"))
+           tree commit)
+      (libgit-index-add-bypath index "a")
+      (libgit-index-add-bypath index "b")
+      (libgit-index-add-bypath index "somedir/c")
+      (setq tree (libgit-tree-lookup repo (libgit-index-write-tree index)))
+      (setq commit (libgit-commit-lookup
+                    repo
+                    (libgit-commit-create
+                     repo "HEAD"
+                     (libgit-signature-now "Zeus" "zeus@olympus.gr")
+                     (libgit-signature-now "Hades" "hades@underworld.gr")
+                     "This is a commit message"
+                     tree (list parent))))
+      (should (= 1 (libgit-commit-parentcount commit)))
+      (should (string= (libgit-commit-id parent) (libgit-commit-parent-id commit)))
+      (should (string= "Zeus" (libgit-signature-name (libgit-commit-author commit))))
+      (should (string= "zeus@olympus.gr" (libgit-signature-email (libgit-commit-author commit))))
+      (should (string= "Hades" (libgit-signature-name (libgit-commit-committer commit))))
+      (should (string= "hades@underworld.gr" (libgit-signature-email (libgit-commit-committer commit))))
+      (should (string= "This is a commit message" (libgit-commit-message commit)))
+      (should (string= (libgit-tree-id tree) (libgit-commit-tree-id commit)))
+      (should (string= (libgit-commit-id commit) (libgit-reference-name-to-id repo "HEAD")))
+      (should (string= (libgit-commit-id commit) (libgit-reference-name-to-id repo "refs/heads/master"))))))
