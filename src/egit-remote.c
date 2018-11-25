@@ -112,7 +112,9 @@ static int credentials_cb(
         return GIT_EUSER;
     }
 
-    *cred = EGIT_EXTRACT(retval);
+    // The transport object takes ownership of the credential,
+    // so we must duplicate it here.
+    return egit_cred_dup(cred, EGIT_EXTRACT(retval));
     return 0;
 }
 
