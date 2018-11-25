@@ -21,4 +21,7 @@ EGIT_DEFUN(commit_time, emacs_value _commit);
 EGIT_DEFUN(commit_tree, emacs_value _commit);
 EGIT_DEFUN(commit_tree_id, emacs_value _commit);
 
+EGIT_DEFUN(commit_create, emacs_value _repo, emacs_value _refname, emacs_value _author,
+           emacs_value _committer, emacs_value _msg, emacs_value _tree, emacs_value _parents);
+
 #endif /* EGIT_COMMIT_H */

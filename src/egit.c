@@ -275,6 +275,8 @@ typedef emacs_value (*func_5)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value);
 typedef emacs_value (*func_6)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value, emacs_value);
+typedef emacs_value (*func_7)(emacs_env*, emacs_value, emacs_value, emacs_value,
+                              emacs_value, emacs_value, emacs_value, emacs_value);
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
 #define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
@@ -323,6 +325,14 @@ static emacs_value egit_dispatch_6(emacs_env *env, ptrdiff_t nargs, emacs_value 
     func_6 func = (func_6) data;
     return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
                 GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5));
+}
+
+static emacs_value egit_dispatch_7(emacs_env *env, ptrdiff_t nargs, emacs_value *args, void *data)
+{
+    func_7 func = (func_7) data;
+    return func(env, GET_SAFE(args, nargs, 0), GET_SAFE(args, nargs, 1), GET_SAFE(args, nargs, 2),
+                GET_SAFE(args, nargs, 3), GET_SAFE(args, nargs, 4), GET_SAFE(args, nargs, 5),
+                GET_SAFE(args, nargs, 6));
 }
 
 bool egit_dispatch_error(emacs_env *env, int retval)
@@ -656,6 +666,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-time", commit_time, 1, 1);
     DEFUN("libgit-commit-tree", commit_tree, 1, 1);
     DEFUN("libgit-commit-tree-id", commit_tree_id, 1, 1);
+
+    DEFUN("libgit-commit-create", commit_create, 6, 7);
 
     // Config
     DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
