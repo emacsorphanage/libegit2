@@ -369,3 +369,23 @@ emacs_value egit_index_write(emacs_env *env, emacs_value _index)
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
+
+EGIT_DOC(index_write_tree, "INDEX &optional REPO",
+         "Write the index to a tree and return the ID.\n"
+         "If REPO is non-nil, write to that repository.");
+emacs_value egit_index_write_tree(emacs_env *env, emacs_value _index, emacs_value _repo)
+{
+    EGIT_ASSERT_INDEX(_index);
+    if (EM_EXTRACT_BOOLEAN(_repo))
+        EGIT_ASSERT_REPOSITORY(_repo);
+
+    git_index *index = EGIT_EXTRACT(_index);
+    git_repository *repo = EGIT_EXTRACT_OR_NULL(_repo);
+
+    git_oid oid;
+    int retval = repo ? git_index_write_tree_to(&oid, index, repo)
+                 : git_index_write_tree(&oid, index);
+    EGIT_CHECK_ERROR(retval);
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
