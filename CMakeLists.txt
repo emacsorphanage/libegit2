@@ -24,6 +24,7 @@ set(EGIT_TESTS
   config
   describe
   diff
+  graph
   ignore
   index
   message
