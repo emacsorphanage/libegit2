@@ -9,3 +9,9 @@
         (should (libgit-signature-p sig))
         (should (string= "Ludwig van" (libgit-signature-name sig)))
         (should (string= "somewhere@bonn.de" (libgit-signature-email sig)))))))
+
+(ert-deftest signature-now ()
+  (let ((sig (libgit-signature-now "Ludwig van Beethoven" "somewhere@bonn.de")))
+    (should (libgit-signature-p sig))
+    (should (string= "Ludwig van Beethoven" (libgit-signature-name sig)))
+    (should (string= "somewhere@bonn.de" (libgit-signature-email sig)))))
