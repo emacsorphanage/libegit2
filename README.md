@@ -303,11 +303,11 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-commit-author`
 - :heavy_check_mark: `git-commit-body`
 - :heavy_check_mark: `git-commit-committer`
-- :grey_question: `git-commit-create`
+- :heavy_check_mark: `git-commit-create`
 - :grey_question: `git-commit-create-buffer`
 - :x: `git-commit-create-from-callback` (in `sys`)
 - :x: `git-commit-create-from-ids` (in `sys`)
-- :grey_question: `git-commit-create-v`
+- :x: `git-commit-create-v` (`git-commit-create` does the same)
 - :grey_question: `git-commit-create-with-signature`
 - :grey_question: `git-commit-dup`
 - :grey_question: `git-commit-extract-signature`

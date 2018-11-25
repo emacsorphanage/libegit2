@@ -209,3 +209,56 @@ emacs_value egit_commit_tree_id(emacs_env *env, emacs_value _commit)
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
+
+
+// =============================================================================
+// Operations
+
+EGIT_DOC(commit_create, "REPO REFNAME AUTHOR COMMITTER MESSAGE TREE &optional PARENTS",
+         "Create a new committ in REPO and return its ID.\n"
+         "REFNAME, if non-nil, must be the name of a reference that will\n"
+         "be updated to point to the new commit. It will be created if it\n"
+         "does not exist. Use \"HEAD\" to update the HEAD of the current branch.\n"
+         "AUTHOR and COMMITTER must be signature objects. MESSAGE is the commit\n"
+         "message. MESSAGE will not be cleaned up, see `libgit-message-prettify'.\n"
+         "TREE is the root tree object associated with the new commit, and PARENTS\n"
+         "is a list of parent commits.\n\n"
+         "TREE and all PARENTS must be owned by REPO. If REFNAME exists, the first\n"
+         "parent must be the tip of that branch.");
+emacs_value egit_commit_create(
+    emacs_env *env, emacs_value _repo, emacs_value _refname, emacs_value _author,
+    emacs_value _committer, emacs_value _msg, emacs_value _tree, emacs_value _parents)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING_OR_NIL(_refname);
+    EGIT_ASSERT_SIGNATURE(_author);
+    EGIT_ASSERT_SIGNATURE(_committer);
+    EM_ASSERT_STRING(_msg);
+    EGIT_ASSERT_TREE(_tree);
+
+    ptrdiff_t i = 0, nparents = egit_assert_list(env, EGIT_COMMIT, em_libgit_commit_p, _parents);
+    if (nparents < 0)
+        return em_nil;
+    const git_commit *parents[nparents];
+    {
+        EM_DOLIST(p, _parents, get_parents);
+        parents[i++] = EGIT_EXTRACT(p);
+        EM_DOLIST_END(get_parents);
+    }
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *refname = EM_EXTRACT_STRING_OR_NULL(_refname);
+    git_signature *author = EGIT_EXTRACT(_author);
+    git_signature *committer = EGIT_EXTRACT(_committer);
+    char *msg = EM_EXTRACT_STRING(_msg);
+    git_tree *tree = EGIT_EXTRACT(_tree);
+
+    git_oid oid;
+    int retval = git_commit_create(&oid, repo, refname, author, committer, NULL, msg, tree, nparents, parents);
+    free(refname);
+    free(msg);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
