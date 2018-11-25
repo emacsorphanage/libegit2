@@ -16,6 +16,7 @@ typedef struct {
     emacs_value sideband_progress;
     emacs_value certificate_check;
     emacs_value credentials;
+    emacs_value transfer_progress;
 } remote_ctx;
 
 static int sideband_progress_cb(const char *str, int len, void *payload)
@@ -115,6 +116,24 @@ static int credentials_cb(
     // The transport object takes ownership of the credential,
     // so we must duplicate it here.
     return egit_cred_dup(cred, EGIT_EXTRACT(retval));
+}
+
+static int transfer_progress_cb(const git_transfer_progress *stats, void *payload)
+{
+    remote_ctx *ctx = (remote_ctx*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value args[7];
+    args[0] = EM_INTEGER(stats->total_objects);
+    args[1] = EM_INTEGER(stats->indexed_objects);
+    args[2] = EM_INTEGER(stats->received_objects);
+    args[3] = EM_INTEGER(stats->local_objects);
+    args[4] = EM_INTEGER(stats->total_deltas);
+    args[5] = EM_INTEGER(stats->indexed_deltas);
+    args[6] = EM_INTEGER(stats->received_bytes);
+
+    env->funcall(env, ctx->transfer_progress, 7, args);
+    EM_RETURN_IF_NLE(GIT_EUSER);
     return 0;
 }
 
@@ -192,9 +211,10 @@ static emacs_value proxy_parse(emacs_env *env, emacs_value alist, git_proxy_opti
 
 static emacs_value callbacks_parse(emacs_env *env, emacs_value alist, git_remote_callbacks *opts)
 {
-    emacs_value side = em_nil;
-    emacs_value cred = em_nil;
-    emacs_value cert = em_nil;
+    emacs_value side = em_nil,
+                cred = em_nil,
+                cert = em_nil,
+                prog = em_nil;
     bool found = false;
 
     emacs_value car, cdr;
@@ -207,6 +227,7 @@ static emacs_value callbacks_parse(emacs_env *env, emacs_value alist, git_remote
         CHECK(em_sideband_progress, side);
         CHECK(em_credentials, cred);
         CHECK(em_certificate_check, cert);
+        CHECK(em_transfer_progress, prog);
 
         EM_DOLIST_END(options);
     }
@@ -218,6 +239,7 @@ static emacs_value callbacks_parse(emacs_env *env, emacs_value alist, git_remote
         STORE(sideband_progress, side);
         STORE(credentials, cred);
         STORE(certificate_check, cert);
+        STORE(transfer_progress, prog);
     }
 
     return em_nil;
