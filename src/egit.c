@@ -671,6 +671,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-write-tree", index_write_tree, 1, 2);
 
     // Merge
+    DEFUN("libgit-merge", merge, 2, 4);
     DEFUN("libgit-merge-analysis", merge_analysis, 2, 2);
     DEFUN("libgit-merge-base", merge_base, 2, 2);
     DEFUN("libgit-merge-base-octopus", merge_base_octopus, 2, 2);

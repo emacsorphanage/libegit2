@@ -8,6 +8,76 @@
 #include "egit-merge.h"
 
 
+EGIT_DOC(merge, "REPO HEADS &optional MERGE-OPTIONS CHECKOUT-OPTIONS",
+         "Merge HEADS (a list of annotated commits) into the HEAD of REPO.\n"
+         "For CHECKOUT-OPTIONS, see `libgit-checkout-head'.\n"
+         "MERGE-OPTIONS is an alist with the following keys:\n"
+         "- `find-renames': if non-nil, detect renames, enabling the ability\n"
+         "     to merge between modified and renamed files\n"
+         "- `fail-on-conflict': if non-nil, exit immediately on conflict without\n"
+         "     continuing with resolution\n"
+         "- `skip-reuc': if non-nil, do not write the REUC extension on the\n"
+         "     generated index\n"
+         "- `no-recursive': if non-nil, do not build a recursive merge base\n"
+         "     in case of multiple merge bases, and instead simply use the first\n"
+         "     base"
+         "- `rename-threshold': similarity above which to consider a file to be\n"
+         "     renamed (default 50)\n"
+         "- `target-limit': maximum similarity sources to examine for renames\n"
+         "     (default 200); this setting overrides the merge.renameLimit setting\n"
+         "- `recursion-limit': maximum number of times to merge common ancestors\n"
+         "     to build a virtual merge base when faced with criss-cross merges.\n"
+         "     When the limit is reached, the next ancestor will be used instead of\n"
+         "     attempting to merge it. Default unlimited.\n"
+         "- `default-driver': string denoting the merge driver (default \"text\")\n"
+         "- `file-favor': can be any of the symbols `normal' (default): produce a\n"
+         "     conflict in case a region of a file is changed in both branches,\n"
+         "     `ours': choose our side, don't produce a conflict, `theirs': choose\n"
+         "     their side, don't produce a conflict, `union': pick each unique line\n"
+         "     from each side, don't produce a conflict\n"
+         "- `file-flags': an alist of flags (boolean options) with the following\n"
+         "     keys:\n"
+         "     - `style-merge': create standard conflicted merge files\n"
+         "     - `style-diff3': create diff3-style files\n"
+         "     - `simplify-alnum': condense non-alphanumeric regions\n"
+         "     - `ignore-whitespace': ignore all whitespace\n"
+         "     - `ignore-whitespace-change': ignore changes in whitespace\n"
+         "     - `ignore-whitespace-eol': ignore whitespace at end of line\n"
+         "     - `patience': use the patience diff algorithm\n"
+         "     - `minimal': take extra time to find a minimal diff");
+emacs_value egit_merge(
+    emacs_env *env, emacs_value _repo, emacs_value _heads,
+    emacs_value _merge_opts, emacs_value _checkout_opts)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    ptrdiff_t i = 0;
+    ptrdiff_t nheads = egit_assert_list(env, EGIT_ANNOTATED_COMMIT, em_libgit_annotated_commit_p, _heads);
+    if (nheads < 0)
+        return em_nil;
+    const git_annotated_commit *heads[nheads];
+    {
+        EM_DOLIST(h, _heads, get_heads);
+        heads[i++] = EGIT_EXTRACT(h);
+        EM_DOLIST_END(get_heads);
+    }
+
+    git_merge_options merge_opts;
+    egit_merge_options_parse(env, _merge_opts, &merge_opts);
+    EM_RETURN_NIL_IF_NLE();
+
+    git_checkout_options checkout_opts;
+    egit_checkout_options_parse(env, _checkout_opts, &checkout_opts);
+    EM_RETURN_NIL_IF_NLE();
+
+    int retval = git_merge(repo, heads, nheads, &merge_opts, &checkout_opts);
+    egit_checkout_options_release(&checkout_opts);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 EGIT_DOC(merge_analysis, "REPO HEADS",
          "Analyze the effects of merging HEADS into the current HEAD of repo.\n"
          "HEADS should be a list of annotated commits.\n"
