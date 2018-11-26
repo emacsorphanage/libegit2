@@ -90,3 +90,28 @@ emacs_value egit_merge_base(emacs_env *env, emacs_value _repo, emacs_value _ids)
     const char *oid_s = git_oid_tostr_s(&out);
     return EM_STRING(oid_s);
 }
+
+EGIT_DOC(merge_base_octopus, "REPO IDS",
+         "Find a merge base in preparation for an octopus merge.\n"
+         "Returns a commit ID.");
+emacs_value egit_merge_base_octopus(emacs_env *env, emacs_value _repo, emacs_value _ids)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    git_oid ids[nids];
+    {
+        EM_DOLIST(id, _ids, get_ids);
+        EGIT_EXTRACT_OID(id, ids[i]);
+        i++;
+        EM_DOLIST_END(get_ids);
+    }
+
+    git_oid out;
+    int retval = git_merge_base_octopus(&out, repo, nids, ids);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&out);
+    return EM_STRING(oid_s);
+}
