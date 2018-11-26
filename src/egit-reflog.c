@@ -128,3 +128,29 @@ emacs_value egit_reflog_append(
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
+
+EGIT_DOC(reflog_drop, "REFLOG N &optional REWRITE",
+         "Delete the Nth entry from REFLOG.\n"
+         "If REWRITE is non-nil, rewrite the history to ensure there's no gap,\n"
+         "i.e. set the old ID of the newer entry to the new ID of the older.");
+emacs_value egit_reflog_drop(emacs_env *env, emacs_value _reflog, emacs_value _index, emacs_value rewrite)
+{
+    EGIT_ASSERT_REFLOG(_reflog);
+    EM_ASSERT_INTEGER(_index);
+    git_reflog *reflog = EGIT_EXTRACT(_reflog);
+    ptrdiff_t index = EM_EXTRACT_INTEGER(_index);
+
+    int retval = git_reflog_drop(reflog, index, EM_EXTRACT_BOOLEAN(rewrite));
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(reflog_write, "REFLOG", "Write REFLOG back to disk.");
+emacs_value egit_reflog_write(emacs_env *env, emacs_value _reflog)
+{
+    EGIT_ASSERT_REFLOG(_reflog);
+    git_reflog *reflog = EGIT_EXTRACT(_reflog);
+    int retval = git_reflog_write(reflog);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
