@@ -205,6 +205,10 @@ static void egit_finalize(void* _obj)
         git_annotated_commit_free(obj->ptr);
         break;
 
+    case EGIT_REFLOG:
+        git_reflog_free(obj->ptr);
+        break;
+
     default: break;
     }
 
@@ -427,6 +431,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_SUBMODULE: return em_submodule;
     case EGIT_CRED: return em_cred;
     case EGIT_ANNOTATED_COMMIT: return em_annotated_commit;
+    case EGIT_REFLOG: return em_reflog;
     default: return em_nil;
     }
 }
@@ -453,6 +458,7 @@ TYPECHECKER(DIFF_LINE, diff_line, "diff line");
 TYPECHECKER(INDEX, index, "index.");
 TYPECHECKER(INDEX_ENTRY, index_entry, "index entry");
 TYPECHECKER(REFERENCE, reference, "reference");
+TYPECHECKER(REFLOG, reflog, "reflog");
 TYPECHECKER(REFSPEC, refspec, "refspec");
 TYPECHECKER(REMOTE, remote, "remote");
 TYPECHECKER(REPOSITORY, repository, "repository");
@@ -485,6 +491,7 @@ void egit_init(emacs_env *env)
     // Type checkers
     DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
+    DEFUN("libgit-annotated-commit-p", annotated_commit_p, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);
     DEFUN("libgit-blame-hunk-p", blame_hunk_p, 1, 1);
     DEFUN("libgit-blob-p", blob_p, 1, 1);
@@ -500,6 +507,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
+    DEFUN("libgit-reflog-p", reflog_p, 1, 1);
     DEFUN("libgit-refspec-p", refspec_p, 1, 1);
     DEFUN("libgit-remote-p", remote_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
@@ -512,6 +520,13 @@ void egit_init(emacs_env *env)
     // Libgit2 (not namespaced as others!)
     DEFUN("libgit-feature-p", libgit2_feature_p, 1, 1);
     DEFUN("libgit-version", libgit2_version, 0, 0);
+
+    // Annotated commit
+    DEFUN("libgit-annotated-commit-from-ref", annotated_commit_from_ref, 2, 2);
+    DEFUN("libgit-annotated-commit-from-fetchhead", annotated_commit_from_fetchhead, 4, 4);
+    DEFUN("libgit-annotated-commit-from-revspec", annotated_commit_from_revspec, 2, 2);
+    DEFUN("libgit-annotated-commit-lookup", annotated_commit_lookup, 2, 2);
+    DEFUN("libgit-annotated-commit-id", annotated_commit_id, 1, 1);
 
     // Blame
     DEFUN("libgit-blame-file", blame_file, 2, 3);
@@ -856,12 +871,4 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 
     DEFUN("libgit-tree-walk", tree_walk, 3, 3);
-
-    // Annotated commit
-    DEFUN("libgit-annotated-commit-p", annotated_commit_p, 1, 1);
-    DEFUN("libgit-annotated-commit-from-ref", annotated_commit_from_ref, 2, 2);
-    DEFUN("libgit-annotated-commit-from-fetchhead", annotated_commit_from_fetchhead, 4, 4);
-    DEFUN("libgit-annotated-commit-from-revspec", annotated_commit_from_revspec, 2, 2);
-    DEFUN("libgit-annotated-commit-lookup", annotated_commit_lookup, 2, 2);
-    DEFUN("libgit-annotated-commit-id", annotated_commit_id, 1, 1);
 }

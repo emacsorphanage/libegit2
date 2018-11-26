@@ -21,11 +21,11 @@ emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
     em_libgit_diff_p, em_libgit_diff_delta_p, em_libgit_diff_binary_p,
     em_libgit_diff_hunk_p, em_libgit_diff_line_p, em_libgit_tag_p, em_libgit_remote_p,
     em_libgit_refspec_p, em_libgit_blame_hunk_p, em_libgit_submodule_p, em_libgit_blob_p,
-    em_libgit_cred_p, em_libgit_annotated_commit_p;
+    em_libgit_cred_p, em_libgit_annotated_commit_p, em_libgit_reflog_p;
 emacs_value em_repository, em_reference, em_commit, em_tree, em_blob, em_tag, em_object,
     em_signature, em_blame, em_config, em_transaction, em_index, em_index_entry, em_diff,
     em_diff_delta, em_diff_binary, em_diff_hunk, em_diff_line, em_remote, em_refspec,
-    em_blame_hunk, em_submodule, em_cred, em_annotated_commit;
+    em_blame_hunk, em_submodule, em_cred, em_annotated_commit, em_reflog;
 
 // Repository states
 emacs_value em_merge, em_revert, em_revert_sequence, em_cherrypick,
@@ -205,6 +205,7 @@ void em_init(emacs_env *env)
     em_libgit_submodule_p = GLOBREF(INTERN("libgit-submodule-p"));
     em_libgit_blob_p = GLOBREF(INTERN("libgit-blob-p"));
     em_libgit_cred_p = GLOBREF(INTERN("libgit-cred-p"));
+    em_libgit_reflog_p = GLOBREF(INTERN("libgit-reflog-p"));
 
     em_repository = GLOBREF(INTERN("repository"));
     em_reference = GLOBREF(INTERN("reference"));
@@ -230,6 +231,7 @@ void em_init(emacs_env *env)
     em_submodule = GLOBREF(INTERN("submodule"));
     em_cred = GLOBREF(INTERN("cred"));
     em_annotated_commit = GLOBREF(INTERN("annotated-commit"));
+    em_reflog = GLOBREF(INTERN("reflog"));
 
     em_merge = GLOBREF(INTERN("merge"));
     em_revert = GLOBREF(INTERN("revert"));
