@@ -139,6 +139,10 @@ extern emacs_value em_find_renames, em_fail_on_conflict, em_skip_reuc,
     em_default_driver, em_file_favor, em_normal, em_union, em_file_flags,
     em_style_merge, em_style_diff3, em_simplify_alnum;
 
+// Merge analysis
+extern emacs_value em_up_to_date, em_fastforward, em_unborn, em_no_fastforward,
+    em_fastforward_only;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 
