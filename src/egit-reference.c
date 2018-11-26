@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-repository.h"
 
@@ -417,4 +418,87 @@ emacs_value egit_reference_valid_name_p(emacs_env *env, emacs_value _refname)
     }
 
     return retval ? em_t : em_nil;
+}
+
+
+// =============================================================================
+// Foreach
+
+static int name_callback(const char *name, void *payload)
+{
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value arg = EM_STRING(name);
+    env->funcall(env, ctx->func, 1, &arg);
+
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    return 0;
+}
+
+static int ref_callback(git_reference *ref, void *payload)
+{
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value arg = egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    env->funcall(env, ctx->func, 1, &arg);
+
+    EM_RETURN_IF_NLE(GIT_EUSER);
+    return 0;
+}
+
+EGIT_DOC(reference_foreach, "REPO FUNC", "Call FUNC for every reference in REPO.");
+emacs_value egit_reference_foreach(emacs_env *env, emacs_value _repo, emacs_value func)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_FUNCTION(func);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    egit_generic_payload ctx = {env, func};
+    int retval = git_reference_foreach(repo, &ref_callback, &ctx);
+
+    EM_RETURN_NIL_IF_NLE();
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(reference_foreach_glob, "REPO GLOB FUNC",
+         "Call FUNC for every reference name in REPO that matches GLOB.");
+emacs_value egit_reference_foreach_glob(emacs_env *env, emacs_value _repo, emacs_value _glob, emacs_value func)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_glob);
+    EM_ASSERT_FUNCTION(func);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *glob = EM_EXTRACT_STRING(_glob);
+    egit_generic_payload ctx = {env, func};
+    int retval = git_reference_foreach_glob(repo, glob, &name_callback, &ctx);
+    free(glob);
+
+    EM_RETURN_NIL_IF_NLE();
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(reference_foreach_name, "REPO FUNC", "Call FUNC for every reference name in REPO.");
+emacs_value egit_reference_foreach_name(emacs_env *env, emacs_value _repo, emacs_value func)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_FUNCTION(func);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    egit_generic_payload ctx = {env, func};
+    int retval = git_reference_foreach_name(repo, &name_callback, &ctx);
+
+    EM_RETURN_NIL_IF_NLE();
+    if (retval == GIT_EUSER)
+        return em_nil;
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
 }
