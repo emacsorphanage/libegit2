@@ -20,7 +20,7 @@ emacs_value egit_annotated_commit_from_ref(emacs_env *env,
     int retval = git_annotated_commit_from_ref(&ann_commit, repo, ref);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann_commit, NULL);
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann_commit, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(annotated_commit_from_fetchhead, "REPO BRANCH-NAME REMOTE-URL ID",
@@ -49,7 +49,7 @@ emacs_value egit_annotated_commit_from_fetchhead(emacs_env *env,
     free(remote_url);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(annotated_commit_from_revspec, "REPO REVSPEC",
@@ -71,7 +71,7 @@ emacs_value egit_annotated_commit_from_revspec(emacs_env *env,
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(annotated_commit_lookup, "REPO ID",
@@ -91,7 +91,7 @@ emacs_value egit_annotated_commit_lookup(emacs_env *env,
     int retval = git_annotated_commit_lookup(&ann, repo, &oid);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, NULL);
+    return egit_wrap(env, EGIT_ANNOTATED_COMMIT, ann, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(annotated_commit_id, "ANNOTATED-COMMIT",
@@ -102,7 +102,7 @@ emacs_value egit_annotated_commit_id(emacs_env *env,
     EGIT_ASSERT_ANNOTATED_COMMIT(_ann);
 
     git_annotated_commit *ann = EGIT_EXTRACT(_ann);
-    const git_oid *oid = git_annotated_commit_id(ann);                                                                  ;
+    const git_oid *oid = git_annotated_commit_id(ann);
 
     const char *oid_s = git_oid_tostr_s(oid);
     return env->make_string(env, oid_s, strlen(oid_s));
