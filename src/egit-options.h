@@ -6,4 +6,6 @@
 emacs_value egit_checkout_options_parse(emacs_env *env, emacs_value alist, git_checkout_options *opts);
 void egit_checkout_options_release(git_checkout_options *opts);
 
+emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merge_options *opts);
+
 #endif /* EGIT_OPTIONS_H */

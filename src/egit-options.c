@@ -187,3 +187,96 @@ void egit_checkout_options_release(git_checkout_options *opts)
     free(opts->notify_payload);
     free(opts->progress_payload);
 }
+
+
+// =============================================================================
+// Merge
+
+emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merge_options *opts)
+{
+    git_merge_init_options(opts, GIT_MERGE_OPTIONS_VERSION);
+
+    emacs_value file_flags = em_nil;
+
+    // Main loop through the options alist
+    {
+        emacs_value car, cdr;
+        EM_DOLIST(option, alist, options);
+        EM_ASSERT_CONS(option);
+
+        car = em_car(env, option);
+        cdr = em_cdr(env, option);
+
+        if (EM_EQ(car, em_find_renames))
+            EGIT_SET_BIT(opts->flags, GIT_MERGE_FIND_RENAMES, cdr);
+        else if (EM_EQ(car, em_fail_on_conflict))
+            EGIT_SET_BIT(opts->flags, GIT_MERGE_FAIL_ON_CONFLICT, cdr);
+        else if (EM_EQ(car, em_skip_reuc))
+            EGIT_SET_BIT(opts->flags, GIT_MERGE_SKIP_REUC, cdr);
+        else if (EM_EQ(car, em_no_recursive))
+            EGIT_SET_BIT(opts->flags, GIT_MERGE_NO_RECURSIVE, cdr);
+        else if (EM_EQ(car, em_rename_threshold))
+            opts->rename_threshold = EM_EXTRACT_INTEGER(cdr);
+        else if (EM_EQ(car, em_target_limit))
+            opts->target_limit = EM_EXTRACT_INTEGER(cdr);
+        else if (EM_EQ(car, em_recursion_limit))
+            opts->recursion_limit = EM_EXTRACT_INTEGER(cdr);
+        else if (EM_EQ(car, em_default_driver)) {
+            EM_ASSERT_STRING(cdr);
+            opts->default_driver = EM_EXTRACT_STRING(cdr);
+        }
+        else if (EM_EQ(car, em_file_favor)) {
+            if (EM_EQ(cdr, em_normal))
+                opts->file_favor = GIT_MERGE_FILE_FAVOR_NORMAL;
+            else if (EM_EQ(cdr, em_ours))
+                opts->file_favor = GIT_MERGE_FILE_FAVOR_OURS;
+            else if (EM_EQ(cdr, em_theirs))
+                opts->file_favor = GIT_MERGE_FILE_FAVOR_THEIRS;
+            else if (EM_EQ(cdr, em_union))
+                opts->file_favor = GIT_MERGE_FILE_FAVOR_UNION;
+            else {
+                em_signal_wrong_value(env, cdr);
+                return em_nil;
+            }
+        }
+        else if (EM_EQ(car, em_file_flags))
+            file_flags = cdr;
+
+        EM_DOLIST_END(options);
+    }
+
+    // File flags
+    {
+        emacs_value car, cdr;
+        EM_DOLIST(option, file_flags, flags);
+        EM_ASSERT_CONS(option);
+
+        car = em_car(env, option);
+        cdr = em_cdr(env, option);
+
+        if (EM_EQ(car, em_style_merge))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_STYLE_MERGE, cdr);
+        else if (EM_EQ(car, em_style_diff3))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_STYLE_DIFF3, cdr);
+        else if (EM_EQ(car, em_simplify_alnum))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_SIMPLIFY_ALNUM, cdr);
+        else if (EM_EQ(car, em_ignore_whitespace))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE, cdr);
+        else if (EM_EQ(car, em_ignore_whitespace_change))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE, cdr);
+        else if (EM_EQ(car, em_ignore_whitespace_eol))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE_EOL, cdr);
+        else if (EM_EQ(car, em_patience))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_DIFF_PATIENCE, cdr);
+        else if (EM_EQ(car, em_minimal))
+            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_DIFF_MINIMAL, cdr);
+        else {
+            em_signal_wrong_value(env, cdr);
+            return em_nil;
+        }
+
+        EM_DOLIST_END(flags);
+    }
+
+    return em_nil;
+}
