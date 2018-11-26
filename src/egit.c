@@ -25,6 +25,7 @@
 #include "egit-message.h"
 #include "egit-object.h"
 #include "egit-reference.h"
+#include "egit-reflog.h"
 #include "egit-refspec.h"
 #include "egit-remote.h"
 #include "egit-repository.h"
@@ -739,6 +740,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-foreach", reference_foreach, 2, 2);
     DEFUN("libgit-reference-foreach-glob", reference_foreach_glob, 3, 3);
     DEFUN("libgit-reference-foreach-name", reference_foreach_name, 2, 2);
+
+    // Reflog
+    DEFUN("libgit-reflog-read", reflog_read, 2, 2);
+    DEFUN("libgit-reflog-entrycount", reflog_entrycount, 1, 1);
 
     // Refspec
     DEFUN("libgit-refspec-direction", refspec_direction, 1, 1);
