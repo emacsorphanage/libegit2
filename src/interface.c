@@ -142,6 +142,12 @@ emacs_value em_userpass_plaintext, em_ssh_key, em_ssh_custom,
 // Libgit2 features
 emacs_value em_threads, em_https, em_ssh;
 
+// Merge options
+emacs_value em_find_renames, em_fail_on_conflict, em_skip_reuc,
+    em_no_recursive, em_rename_threshold, em_target_limit, em_recursion_limit,
+    em_default_driver, em_file_favor, em_normal, em_union, em_file_flags,
+    em_style_merge, em_style_diff3, em_simplify_alnum;
+
 // Libgit2 errors
 emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
     em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
@@ -422,6 +428,22 @@ void em_init(emacs_env *env)
     em_username = GLOBREF(INTERN("username"));
     em_ssh_memory = GLOBREF(INTERN("ssh-memory"));
     em_default = GLOBREF(INTERN("default"));
+
+    em_find_renames = GLOBREF(INTERN("find-renames"));
+    em_fail_on_conflict = GLOBREF(INTERN("fail-on-conflict"));
+    em_skip_reuc = GLOBREF(INTERN("skip-reuc"));
+    em_no_recursive = GLOBREF(INTERN("no-recursive"));
+    em_rename_threshold = GLOBREF(INTERN("rename-threshold"));
+    em_target_limit = GLOBREF(INTERN("target-limit"));
+    em_recursion_limit = GLOBREF(INTERN("recursion-limit"));
+    em_default_driver = GLOBREF(INTERN("default-driver"));
+    em_file_favor = GLOBREF(INTERN("file-favor"));
+    em_normal = GLOBREF(INTERN("normal"));
+    em_union = GLOBREF(INTERN("union"));
+    em_file_flags = GLOBREF(INTERN("file-flags"));
+    em_style_merge = GLOBREF(INTERN("style-merge"));
+    em_style_diff3 = GLOBREF(INTERN("style-diff3"));
+    em_simplify_alnum = GLOBREF(INTERN("simplify-alnum"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
