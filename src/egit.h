@@ -93,9 +93,13 @@
 #define EGIT_ASSERT_REFERENCE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
 
-// Assert that VAL is a reflog refspec, signal an error and return otherwise.
+// Assert that VAL is a reflog, signal an error and return otherwise.
 #define EGIT_ASSERT_REFLOG(val)                                         \
     do { if (!egit_assert_type(env, (val), EGIT_REFLOG, em_libgit_reflog_p)) return em_nil; } while (0)
+
+// Assert that VAL is a reflog entry, signal an error and return otherwise.
+#define EGIT_ASSERT_REFLOG_ENTRY(val)                                   \
+    do { if (!egit_assert_type(env, (val), EGIT_REFLOG_ENTRY, em_libgit_reflog_entry_p)) return em_nil; } while (0)
 
 // Assert that VAL is a git refspec, signal an error and return otherwise.
 #define EGIT_ASSERT_REFSPEC(val)                                        \
@@ -245,7 +249,8 @@ typedef enum {
     EGIT_SUBMODULE,
     EGIT_CRED,
     EGIT_ANNOTATED_COMMIT,
-    EGIT_REFLOG
+    EGIT_REFLOG,
+    EGIT_REFLOG_ENTRY
 } egit_type;
 
 /**

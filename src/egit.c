@@ -434,6 +434,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_CRED: return em_cred;
     case EGIT_ANNOTATED_COMMIT: return em_annotated_commit;
     case EGIT_REFLOG: return em_reflog;
+    case EGIT_REFLOG_ENTRY: return em_reflog_entry;
     default: return em_nil;
     }
 }
@@ -461,6 +462,7 @@ TYPECHECKER(INDEX, index, "index.");
 TYPECHECKER(INDEX_ENTRY, index_entry, "index entry");
 TYPECHECKER(REFERENCE, reference, "reference");
 TYPECHECKER(REFLOG, reflog, "reflog");
+TYPECHECKER(REFLOG_ENTRY, reflog_entry, "reflog entry");
 TYPECHECKER(REFSPEC, refspec, "refspec");
 TYPECHECKER(REMOTE, remote, "remote");
 TYPECHECKER(REPOSITORY, repository, "repository");
@@ -510,6 +512,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-object-p", object_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-reflog-p", reflog_p, 1, 1);
+    DEFUN("libgit-reflog-entry-p", reflog_entry_p, 1, 1);
     DEFUN("libgit-refspec-p", refspec_p, 1, 1);
     DEFUN("libgit-remote-p", remote_p, 1, 1);
     DEFUN("libgit-repository-p", repository_p, 1, 1);
