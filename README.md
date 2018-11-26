@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 252 (32.4%)
+- Implemented: 264 (33.9%)
 - Should not implement: 161 (20.7%)
-- To do: 365 (46.9%)
+- To do: 353 (45.4%)
 - Total: 778
 
 ### extra
@@ -823,19 +823,19 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### reflog
 
-- :grey_question: `git-reflog-append`
-- :grey_question: `git-reflog-delete`
-- :grey_question: `git-reflog-drop`
-- :grey_question: `git-reflog-entry-byindex`
-- :grey_question: `git-reflog-entry-committer`
-- :grey_question: `git-reflog-entry-id-new`
-- :grey_question: `git-reflog-entry-id-old`
-- :grey_question: `git-reflog-entry-message`
-- :grey_question: `git-reflog-entrycount`
+- :heavy_check_mark: `git-reflog-append`
+- :heavy_check_mark: `git-reflog-delete`
+- :heavy_check_mark: `git-reflog-drop`
+- :heavy_check_mark: `git-reflog-entry-byindex`
+- :heavy_check_mark: `git-reflog-entry-committer`
+- :heavy_check_mark: `git-reflog-entry-id-new` (use `git-reflog-entry-id`)
+- :heavy_check_mark: `git-reflog-entry-id-old` (use `git-reflog-entry-id`)
+- :heavy_check_mark: `git-reflog-entry-message`
+- :heavy_check_mark: `git-reflog-entrycount`
 - :x: `git-reflog-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-reflog-read`
-- :grey_question: `git-reflog-rename`
-- :grey_question: `git-reflog-write`
+- :heavy_check_mark: `git-reflog-read`
+- :heavy_check_mark: `git-reflog-rename`
+- :heavy_check_mark: `git-reflog-write`
 
 ### refspec
 
