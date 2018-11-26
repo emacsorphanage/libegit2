@@ -97,3 +97,34 @@ emacs_value egit_reflog_entrycount(emacs_env *env, emacs_value _reflog)
     git_reflog *reflog = EGIT_EXTRACT(_reflog);
     return EM_INTEGER(git_reflog_entrycount(reflog));
 }
+
+
+// =============================================================================
+// Operations
+
+EGIT_DOC(reflog_append, "REFLOG ID COMMITTER &optional MESSAGE",
+         "Add a new entry to REFLOG in memory.\n"
+         "ID is the new object ID the reference points to, and COMMITTER\n"
+         "is a signature object.");
+emacs_value egit_reflog_append(
+    emacs_env *env, emacs_value _reflog, emacs_value _id,
+    emacs_value _committer, emacs_value _msg)
+{
+    EGIT_ASSERT_REFLOG(_reflog);
+    EM_ASSERT_STRING(_id);
+    EGIT_ASSERT_SIGNATURE(_committer);
+    EM_ASSERT_STRING_OR_NIL(_msg);
+
+    git_reflog *reflog = EGIT_EXTRACT(_reflog);
+    git_signature *committer = EGIT_EXTRACT(_committer);
+    char *msg = EM_EXTRACT_STRING_OR_NULL(_msg);
+
+    git_oid id;
+    EGIT_EXTRACT_OID(_id, id);
+
+    int retval = git_reflog_append(reflog, &id, committer, msg);
+    free(msg);
+
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
