@@ -154,3 +154,55 @@
 (ert-deftest reference-valid-name-p ()
   ;; TODO
   (skip-unless nil))
+
+(ert-deftest reference-foreach ()
+  (with-temp-dir path
+    (init)
+    (commit-change "a" "abcdef")
+    (run "git" "checkout" "-b" "zamg")
+    (run "git" "checkout" "-b" "zemg")
+    (run "git" "checkout" "-b" "zomg")
+    (let* ((repo (libgit-repository-open path))
+           data)
+      (libgit-reference-foreach repo (lambda (ref)
+                                       (should (libgit-reference-p ref))
+                                       (push (libgit-reference-name ref) data)))
+      (should (equal (reverse data)
+                     '("refs/heads/master"
+                       "refs/heads/zamg"
+                       "refs/heads/zemg"
+                       "refs/heads/zomg"))))))
+
+(ert-deftest reference-foreach-glob ()
+  (with-temp-dir path
+    (init)
+    (commit-change "a" "abcdef")
+    (run "git" "checkout" "-b" "zamg")
+    (run "git" "checkout" "-b" "zemg")
+    (run "git" "checkout" "-b" "zomg")
+    (run "git" "checkout" "-b" "nope")
+    (let* ((repo (libgit-repository-open path))
+           data)
+      (libgit-reference-foreach-glob
+       repo "refs/heads/z*mg"
+       (lambda (refname) (push refname data)))
+      (should (equal (reverse data)
+                     '("refs/heads/zamg"
+                       "refs/heads/zemg"
+                       "refs/heads/zomg"))))))
+
+(ert-deftest reference-foreach-name ()
+  (with-temp-dir path
+    (init)
+    (commit-change "a" "abcdef")
+    (run "git" "checkout" "-b" "zamg")
+    (run "git" "checkout" "-b" "zemg")
+    (run "git" "checkout" "-b" "zomg")
+    (let* ((repo (libgit-repository-open path))
+           data)
+      (libgit-reference-foreach-name repo (lambda (refname) (push refname data)))
+      (should (equal (reverse data)
+                     '("refs/heads/master"
+                       "refs/heads/zamg"
+                       "refs/heads/zemg"
+                       "refs/heads/zomg"))))))

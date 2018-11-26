@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 242 (31.1%)
-- Should not implement: 155 (19.9%)
-- To do: 381 (49.0%)
+- Implemented: 245 (31.5%)
+- Should not implement: 160 (20.6%)
+- To do: 373 (47.9%)
 - Total: 778
 
 ### extra
@@ -786,9 +786,9 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-dup`
 - :heavy_check_mark: `git-reference-dwim`
 - :heavy_check_mark: `git-reference-ensure-log`
-- :grey_question: `git-reference-foreach`
-- :grey_question: `git-reference-foreach-glob`
-- :grey_question: `git-reference-foreach-name`
+- :heavy_check_mark: `git-reference-foreach`
+- :heavy_check_mark: `git-reference-foreach-glob`
+- :heavy_check_mark: `git-reference-foreach-name`
 - :x: `git-reference-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-reference-has-log`
 - :heavy_check_mark: `git-reference-is-branch`
@@ -796,15 +796,15 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-reference-is-remote`
 - :heavy_check_mark: `git-reference-is-tag`
 - :heavy_check_mark: `git-reference-is-valid-name`
-- :grey_question: `git-reference-iterator-free`
-- :grey_question: `git-reference-iterator-glob-new`
-- :grey_question: `git-reference-iterator-new`
+- :x: `git-reference-iterator-free` (use the foreach functions)
+- :x: `git-reference-iterator-glob-new` (use the foreach functions)
+- :x: `git-reference-iterator-new` (use the foreach functions)
 - :heavy_check_mark: `git-reference-list`
 - :heavy_check_mark: `git-reference-lookup`
 - :heavy_check_mark: `git-reference-name`
 - :heavy_check_mark: `git-reference-name-to-id`
-- :grey_question: `git-reference-next`
-- :grey_question: `git-reference-next-name`
+- :x: `git-reference-next` (use the foreach functions)
+- :x: `git-reference-next-name` (use the foreach functions)
 - :grey_question: `git-reference-normalize-name`
 - :heavy_check_mark: `git-reference-owner`
 - :heavy_check_mark: `git-reference-peel`

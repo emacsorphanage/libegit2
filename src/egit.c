@@ -713,6 +713,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reference-tag-p", reference_tag_p, 1, 1);
     DEFUN("libgit-reference-valid-name-p", reference_valid_name_p, 1, 1);
 
+    DEFUN("libgit-reference-foreach", reference_foreach, 2, 2);
+    DEFUN("libgit-reference-foreach-glob", reference_foreach_glob, 3, 3);
+    DEFUN("libgit-reference-foreach-name", reference_foreach_name, 2, 2);
+
     // Refspec
     DEFUN("libgit-refspec-direction", refspec_direction, 1, 1);
     DEFUN("libgit-refspec-dst", refspec_dst, 1, 1);

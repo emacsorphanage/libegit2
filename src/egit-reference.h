@@ -36,4 +36,8 @@ EGIT_DEFUN(reference_symbolic_p, emacs_value _ref);
 EGIT_DEFUN(reference_tag_p, emacs_value _ref);
 EGIT_DEFUN(reference_valid_name_p, emacs_value _refname);
 
+EGIT_DEFUN(reference_foreach, emacs_value _repo, emacs_value func);
+EGIT_DEFUN(reference_foreach_glob, emacs_value _repo, emacs_value _glob, emacs_value func);
+EGIT_DEFUN(reference_foreach_name, emacs_value _repo, emacs_value func);
+
 #endif /* EGIT_REFERENCE_H */
