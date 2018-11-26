@@ -21,6 +21,7 @@
 #include "egit-ignore.h"
 #include "egit-index.h"
 #include "egit-libgit2.h"
+#include "egit-merge.h"
 #include "egit-message.h"
 #include "egit-object.h"
 #include "egit-reference.h"
@@ -668,6 +669,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-read", index_read, 1, 2);
     DEFUN("libgit-index-write", index_write, 1, 1);
     DEFUN("libgit-index-write-tree", index_write_tree, 1, 2);
+
+    // Merge
+    DEFUN("libgit-merge-analysis", merge_analysis, 2, 2);
 
     // Message
     DEFUN("libgit-message-prettify", message_prettify, 1, 2);
