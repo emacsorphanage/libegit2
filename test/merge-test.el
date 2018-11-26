@@ -64,3 +64,18 @@
           (libgit-transaction-commit trans))
         (should (equal '((normal) . fastforward-only)
                        (libgit-merge-analysis repo (list ann))))))))
+
+(ert-deftest merge-base ()
+  (let (id)
+    (with-temp-dir path
+      (init)
+      (commit-change "a" "abcdef")
+      (setq id (run-nnl "git" "rev-parse" "HEAD"))
+      (run "git" "checkout" "-b" "newbranch")
+      (commit-change "a" "ghijkl")
+      (run "git" "checkout" "master")
+      (commit-change "a" "mnopqrs")
+      (let* ((repo (libgit-repository-open path))
+             (id1 (libgit-reference-name-to-id repo "refs/heads/master"))
+             (id2 (libgit-reference-name-to-id repo "refs/heads/newbranch")))
+        (should (string= id (libgit-merge-base repo (list id1 id2))))))))
