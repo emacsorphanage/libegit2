@@ -112,6 +112,9 @@ static void egit_decref_direct(egit_object *wrapper)
     case EGIT_INDEX:
         git_index_free(wrapper->ptr);
         break;
+    case EGIT_REFLOG:
+        git_reflog_free(wrapper->ptr);
+        break;
     case EGIT_REMOTE:
         git_remote_free(wrapper->ptr);
         break;
@@ -168,6 +171,7 @@ static void egit_finalize(void* _obj)
     case EGIT_BLAME:
     case EGIT_DIFF:
     case EGIT_INDEX:
+    case EGIT_REFLOG:
     case EGIT_REMOTE:
     case EGIT_REPOSITORY:
         egit_decref_direct(obj);
@@ -204,10 +208,6 @@ static void egit_finalize(void* _obj)
 
     case EGIT_ANNOTATED_COMMIT:
         git_annotated_commit_free(obj->ptr);
-        break;
-
-    case EGIT_REFLOG:
-        git_reflog_free(obj->ptr);
         break;
 
     default: break;
@@ -262,6 +262,7 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
     case EGIT_BLAME:
     case EGIT_DIFF:
     case EGIT_INDEX:
+    case EGIT_REFLOG:
     case EGIT_REMOTE:
     case EGIT_REPOSITORY:
         wrapper = egit_incref(type, data);
