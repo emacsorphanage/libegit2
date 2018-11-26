@@ -672,6 +672,7 @@ void egit_init(emacs_env *env)
 
     // Merge
     DEFUN("libgit-merge-analysis", merge_analysis, 2, 2);
+    DEFUN("libgit-merge-base", merge_base, 2, 2);
 
     // Message
     DEFUN("libgit-message-prettify", message_prettify, 1, 2);

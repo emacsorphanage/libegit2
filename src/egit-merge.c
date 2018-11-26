@@ -61,3 +61,32 @@ emacs_value egit_merge_analysis(emacs_env *env, emacs_value _repo, emacs_value _
 
     return em_cons(env, em_list(env, _analysis, nanal), _preference);
 }
+
+EGIT_DOC(merge_base, "REPO IDS",
+         "Find the best merge base between commits given by the list IDS.\n"
+         "Returns a commit ID.");
+emacs_value egit_merge_base(emacs_env *env, emacs_value _repo, emacs_value _ids)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    git_oid ids[nids];
+    {
+        EM_DOLIST(id, _ids, get_ids);
+        EGIT_EXTRACT_OID(id, ids[i]);
+        i++;
+        EM_DOLIST_END(get_ids);
+    }
+
+    git_oid out;
+    int retval;
+    if (nids == 2)
+        retval = git_merge_base(&out, repo, &ids[0], &ids[1]);
+    else
+        retval = git_merge_base_many(&out, repo, nids, ids);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&out);
+    return EM_STRING(oid_s);
+}
