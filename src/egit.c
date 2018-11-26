@@ -748,6 +748,9 @@ void egit_init(emacs_env *env)
     // Reflog
     DEFUN("libgit-reflog-read", reflog_read, 2, 2);
     DEFUN("libgit-reflog-entry-byindex", reflog_entry_byindex, 2, 2);
+    DEFUN("libgit-reflog-entry-committer", reflog_entry_committer, 1, 1);
+    DEFUN("libgit-reflog-entry-id", reflog_entry_id, 2, 2);
+    DEFUN("libgit-reflog-entry-message", reflog_entry_message, 1, 1);
     DEFUN("libgit-reflog-entrycount", reflog_entrycount, 1, 1);
 
     // Refspec

@@ -47,6 +47,49 @@ emacs_value egit_reflog_entry_byindex(emacs_env *env, emacs_value _reflog, emacs
     return egit_wrap(env, EGIT_REFLOG_ENTRY, entry, EM_EXTRACT_USER_PTR(_reflog));
 }
 
+EGIT_DOC(reflog_entry_committer, "REFLOG-ENTRY", "Get the committer of REFLOG-ENTRY.");
+emacs_value egit_reflog_entry_committer(emacs_env *env, emacs_value _entry)
+{
+    EGIT_ASSERT_REFLOG_ENTRY(_entry);
+    const git_reflog_entry *entry = EGIT_EXTRACT(_entry);
+    const git_signature *sig = git_reflog_entry_committer(entry);
+
+    git_signature *new;
+    int retval = git_signature_dup(&new, sig);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_SIGNATURE, new, NULL);
+}
+
+EGIT_DOC(reflog_entry_id, "REFLOG-ENTRY SIDE",
+         "Get the ID of REFLOG-ENTRY. SIDE is either `old' or `new'.");
+emacs_value egit_reflog_entry_id(emacs_env *env, emacs_value _entry, emacs_value side)
+{
+    EGIT_ASSERT_REFLOG_ENTRY(_entry);
+    const git_reflog_entry *entry = EGIT_EXTRACT(_entry);
+
+    const git_oid *oid;
+    if (EM_EQ(side, em_new))
+        oid = git_reflog_entry_id_new(entry);
+    else if (EM_EQ(side, em_old))
+        oid = git_reflog_entry_id_old(entry);
+    else {
+        em_signal_wrong_value(env, side);
+        return em_nil;
+    }
+
+    const char *oid_s = git_oid_tostr_s(oid);
+    return EM_STRING(oid_s);
+}
+
+EGIT_DOC(reflog_entry_message, "REFLOG-ENTRY", "Get the message of REFLOG-ENTRY.");
+emacs_value egit_reflog_entry_message(emacs_env *env, emacs_value _entry)
+{
+    EGIT_ASSERT_REFLOG_ENTRY(_entry);
+    const git_reflog_entry *entry = EGIT_EXTRACT(_entry);
+    const char *msg = git_reflog_entry_message(entry);
+    return EM_STRING(msg);
+}
+
 EGIT_DOC(reflog_entrycount, "REFLOG", "Get the number of entries in REFLOG");
 emacs_value egit_reflog_entrycount(emacs_env *env, emacs_value _reflog)
 {
