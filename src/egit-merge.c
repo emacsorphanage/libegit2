@@ -115,3 +115,38 @@ emacs_value egit_merge_base_octopus(emacs_env *env, emacs_value _repo, emacs_val
     const char *oid_s = git_oid_tostr_s(&out);
     return EM_STRING(oid_s);
 }
+
+EGIT_DOC(merge_bases, "REPO IDS",
+         "Find all merge bases between commits given by the list IDS.\n"
+         "Returns a list of commit IDs.");
+emacs_value egit_merge_bases(emacs_env *env, emacs_value _repo, emacs_value _ids)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+
+    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    git_oid ids[nids];
+    {
+        EM_DOLIST(id, _ids, get_ids);
+        EGIT_EXTRACT_OID(id, ids[i]);
+        i++;
+        EM_DOLIST_END(get_ids);
+    }
+
+    git_oidarray out;
+    int retval;
+    if (nids == 2)
+        retval = git_merge_bases(&out, repo, &ids[0], &ids[1]);
+    else
+        retval = git_merge_bases_many(&out, repo, nids, ids);
+    EGIT_CHECK_ERROR(retval);
+
+    emacs_value ret = em_nil;
+    for (size_t i = out.count; i > 0; i--) {
+        const char *oid_s = git_oid_tostr_s(&out.ids[i-1]);
+        ret = em_cons(env, EM_STRING(oid_s), ret);
+    }
+    git_oidarray_free(&out);
+
+    return ret;
+}

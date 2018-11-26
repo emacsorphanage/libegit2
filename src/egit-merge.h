@@ -6,5 +6,6 @@
 EGIT_DEFUN(merge_analysis, emacs_value _repo, emacs_value _heads);
 EGIT_DEFUN(merge_base, emacs_value _repo, emacs_value _ids);
 EGIT_DEFUN(merge_base_octopus, emacs_value _repo, emacs_value _ids);
+EGIT_DEFUN(merge_bases, emacs_value _repo, emacs_value _ids);
 
 #endif /* EGIT_MERGE_H */
