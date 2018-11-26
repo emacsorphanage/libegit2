@@ -129,6 +129,20 @@ emacs_value egit_reflog_append(
     return em_nil;
 }
 
+EGIT_DOC(reflog_delete, "REPO REFNAME", "Delete the reflog for REFNAME in REPO.");
+emacs_value egit_reflog_delete(emacs_env *env, emacs_value _repo, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *refname = EM_EXTRACT_STRING(_refname);
+    int retval = git_reflog_delete(repo, refname);
+    free(refname);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(reflog_drop, "REFLOG N &optional REWRITE",
          "Delete the Nth entry from REFLOG.\n"
          "If REWRITE is non-nil, rewrite the history to ensure there's no gap,\n"
@@ -141,6 +155,25 @@ emacs_value egit_reflog_drop(emacs_env *env, emacs_value _reflog, emacs_value _i
     ptrdiff_t index = EM_EXTRACT_INTEGER(_index);
 
     int retval = git_reflog_drop(reflog, index, EM_EXTRACT_BOOLEAN(rewrite));
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(reflog_rename, "REPO OLD-REFNAME NEW-REFNAME",
+         "Rename a reflog in REPO from OLD-REFNAME to NEW-REFNAME.");
+emacs_value egit_reflog_rename(
+    emacs_env *env, emacs_value _repo, emacs_value _old_refname, emacs_value _new_refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_old_refname);
+    EM_ASSERT_STRING(_new_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *old_refname = EM_EXTRACT_STRING(_old_refname);
+    char *new_refname = EM_EXTRACT_STRING(_new_refname);
+    int retval = git_reflog_rename(repo, old_refname, new_refname);
+    free(old_refname);
+    free(new_refname);
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
