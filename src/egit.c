@@ -752,6 +752,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reflog-entry-id", reflog_entry_id, 2, 2);
     DEFUN("libgit-reflog-entry-message", reflog_entry_message, 1, 1);
     DEFUN("libgit-reflog-entrycount", reflog_entrycount, 1, 1);
+    DEFUN("libgit-reflog-append", reflog_append, 3, 4);
 
     // Refspec
     DEFUN("libgit-refspec-direction", refspec_direction, 1, 1);
