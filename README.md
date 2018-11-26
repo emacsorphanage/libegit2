@@ -145,9 +145,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 245 (31.5%)
-- Should not implement: 160 (20.6%)
-- To do: 373 (47.9%)
+- Implemented: 252 (32.4%)
+- Should not implement: 161 (20.7%)
+- To do: 365 (46.9%)
 - Total: 778
 
 ### extra
@@ -563,20 +563,20 @@ Probably none of these functions will be necessary, since we expose errors to Em
 
 ### merge
 
-- :grey_question: `git-merge`
-- :grey_question: `git-merge-analysis`
-- :grey_question: `git-merge-base`
-- :grey_question: `git-merge-base-many`
-- :grey_question: `git-merge-base-octopus`
-- :grey_question: `git-merge-bases`
-- :grey_question: `git-merge-bases-many`
+- :heavy_check_mark: `git-merge`
+- :heavy_check_mark: `git-merge-analysis`
+- :heavy_check_mark: `git-merge-base`
+- :heavy_check_mark: `git-merge-base-many` (use `git-merge-base`)
+- :heavy_check_mark: `git-merge-base-octopus`
+- :heavy_check_mark: `git-merge-bases`
+- :heavy_check_mark: `git-merge-bases-many` (use `git-merge-bases`)
 - :grey_question: `git-merge-commits`
 - :grey_question: `git-merge-file`
 - :grey_question: `git-merge-file-from-index`
 - :grey_question: `git-merge-file-init-input`
 - :grey_question: `git-merge-file-init-options`
 - :grey_question: `git-merge-file-result-free`
-- :grey_question: `git-merge-init-options`
+- :x: `git-merge-init-options`
 - :grey_question: `git-merge-trees`
 
 ### message

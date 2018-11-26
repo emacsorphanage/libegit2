@@ -28,6 +28,7 @@ set(EGIT_TESTS
   graph
   ignore
   index
+  merge
   message
   refcount
   reference
