@@ -76,6 +76,9 @@
   (run "git" "add" filename)
   (commit msg))
 
+(defun rev-parse (&optional spec)
+  (run-nnl "git" "rev-parse" (or spec "HEAD")))
+
 (defun set-user ()
   (run "git" "config" "user.name" "A U Thor")
   (run "git" "config" "user.email" "author@example.com"))

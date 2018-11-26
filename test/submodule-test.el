@@ -68,7 +68,7 @@
           (set-user)
           (run "git" "checkout" "-b" "mybranch")
           (commit-change "b" "abc")
-          (setq new-id (run-nnl "git" "rev-parse" "HEAD")))
+          (setq new-id (rev-parse)))
         (let* ((repo (libgit-repository-open path))
                (sub (libgit-submodule-lookup repo "mymodule")))
           (should (string= old-id (libgit-submodule-index-id sub)))

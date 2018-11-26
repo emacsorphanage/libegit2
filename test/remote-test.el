@@ -62,7 +62,7 @@
       (in-dir rpath
         (init)
         (commit-change "test" "content")
-        (setq id (run-nnl "git" "rev-parse" "HEAD")))
+        (setq id (rev-parse)))
       (in-dir path
         (init)
         (run "git" "remote" "add" "origin" (concat file-prefix rpath))
@@ -90,7 +90,7 @@
       (in-dir path
         (init)
         (commit-change "test" "content")
-        (setq id (run-nnl "git" "rev-parse" "HEAD"))
+        (setq id (rev-parse))
         (run "git" "remote" "add" "origin" (concat file-prefix rpath))
         (let* ((repo (libgit-repository-open path))
                (remote (libgit-remote-lookup repo "origin"))
