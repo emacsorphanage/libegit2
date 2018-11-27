@@ -3,7 +3,6 @@
 
 #include "emacs-module.h"
 #include "git2.h"
-#include "uthash.h"
 
 #include "interface.h"
 #include "egit-annotated-commit.h"
@@ -37,9 +36,6 @@
 #include "egit-transaction.h"
 #include "egit-tree.h"
 #include "egit.h"
-
-// Hash table of stored objects
-egit_object *object_store = NULL;
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj)
 {
@@ -87,130 +83,44 @@ ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate
     return nelems;
 }
 
-/**
- * Decrease the reference count of a wrapper object.
- * If the reference count reaches zero, the object will be freed,
- * @param data The wrapper object to decref.
- */
-static void egit_decref_direct(egit_object *wrapper)
-{
-    wrapper->refcount--;
-    if (wrapper->refcount != 0)
-        return;
-
-    // First, delete the wrapper from the object store
-    HASH_DEL(object_store, wrapper);
-
-    // Free the wrappee and the wrapper
-    switch (wrapper->type) {
-    case EGIT_BLAME:
-        git_blame_free(wrapper->ptr);
-        break;
-    case EGIT_DIFF:
-        git_diff_free(wrapper->ptr);
-        break;
-    case EGIT_INDEX:
-        git_index_free(wrapper->ptr);
-        break;
-    case EGIT_REFLOG:
-        git_reflog_free(wrapper->ptr);
-        break;
-    case EGIT_REMOTE:
-        git_remote_free(wrapper->ptr);
-        break;
-    case EGIT_REPOSITORY:
-        git_repository_free(wrapper->ptr);
-        break;
-    default:
-        // This function should never be called on something that isn't a reference-counted type
-        assert(0);
-    }
-    free(wrapper);
-}
-
-/**
- * Increase the reference count of a reference-counted object.
- * If the pointer does not exist in the object store, add it with a refcount of one.
- * Otherwise, increase the refcount by one.
- * This function accepts NULL pointers and will return a NULL wrapper.
- * @param type The type of the object.
- * @param data The object to store.
- * @return Pointer to the egit_object wrapper struct.
- */
-static egit_object *egit_incref(egit_type type, const void *data)
-{
-    if (!data)
-        return NULL;
-
-    egit_object *wrapper;
-    HASH_FIND_PTR(object_store, &data, wrapper);
-
-    if (wrapper)
-        // Object is already stored, just incref
-        wrapper->refcount++;
-
-    else {
-        // Object must be added
-        wrapper = (egit_object*)malloc(sizeof(egit_object));
-        wrapper->type = type;
-        wrapper->refcount = 1;
-        wrapper->ptr = (void*) data;
-        HASH_ADD_PTR(object_store, ptr, wrapper);
-    }
-
-    return wrapper;
-}
-
 void egit_finalize(void* _obj)
 {
     // The argument type must be void* to make this function work as an Emacs finalizer
     egit_object *obj = (egit_object*)_obj;
     egit_object *parent = obj->parent;
 
+    // For reference-counted types, decref and possibly abort
     switch (obj->type) {
-    // Reference counted types can be freed entirely from egit_decref
     case EGIT_BLAME:
     case EGIT_DIFF:
     case EGIT_INDEX:
     case EGIT_REFLOG:
     case EGIT_REMOTE:
     case EGIT_REPOSITORY:
-        egit_decref_direct(obj);
-        return;
+        obj->refcount--;
+        if (obj->refcount != 0)
+            return;
+    default: break;
+    }
 
-    // Other types can be freed directly here
+    // Free the object based on its type
+    // For types that only expose weak pointers to the parent, this should be a no-op
+    switch (obj->type) {
     case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
-        git_object_free(obj->ptr);
-        break;
-
-    case EGIT_REFERENCE:
-        git_reference_free(obj->ptr);
-        break;
-
-    case EGIT_CONFIG:
-        git_config_free(obj->ptr);
-        break;
-
-    case EGIT_SIGNATURE:
-        git_signature_free(obj->ptr);
-        break;
-
-    case EGIT_TRANSACTION:
-        git_transaction_free(obj->ptr);
-        break;
-
-    case EGIT_SUBMODULE:
-        git_submodule_free(obj->ptr);
-        break;
-
-    case EGIT_CRED:
-        git_cred_free(obj->ptr);
-        break;
-
-    case EGIT_ANNOTATED_COMMIT:
-        git_annotated_commit_free(obj->ptr);
-        break;
-
+        git_object_free(obj->ptr); break;
+    case EGIT_BLAME: git_blame_free(obj->ptr); break;
+    case EGIT_DIFF: git_diff_free(obj->ptr); break;
+    case EGIT_INDEX: git_index_free(obj->ptr); break;
+    case EGIT_REFLOG: git_reflog_free(obj->ptr); break;
+    case EGIT_REMOTE: git_remote_free(obj->ptr); break;
+    case EGIT_REPOSITORY: git_repository_free(obj->ptr); break;
+    case EGIT_REFERENCE: git_reference_free(obj->ptr); break;
+    case EGIT_CONFIG: git_config_free(obj->ptr); break;
+    case EGIT_SIGNATURE: git_signature_free(obj->ptr); break;
+    case EGIT_TRANSACTION: git_transaction_free(obj->ptr); break;
+    case EGIT_SUBMODULE: git_submodule_free(obj->ptr); break;
+    case EGIT_CRED: git_cred_free(obj->ptr); break;
+    case EGIT_ANNOTATED_COMMIT: git_annotated_commit_free(obj->ptr); break;
     default: break;
     }
 
@@ -238,22 +148,13 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
         parent->refcount++;
 
     egit_object *wrapper;
-    switch (type) {
-    case EGIT_BLAME:
-    case EGIT_DIFF:
-    case EGIT_INDEX:
-    case EGIT_REFLOG:
-    case EGIT_REMOTE:
-    case EGIT_REPOSITORY:
-        wrapper = egit_incref(type, data);
-        break;
-    default:
-        wrapper = (egit_object*) malloc(sizeof(egit_object));
-        wrapper->type = type;
-        wrapper->ptr = (void*) data;
-        break;
-    }
+    wrapper = (egit_object*) malloc(sizeof(egit_object));
+    wrapper->type = type;
+    wrapper->ptr = (void*) data;
     wrapper->parent = parent;
+
+    // This has no effect for types that are not reference-counted
+    wrapper->refcount = 1;
 
     return EM_USER_PTR(wrapper, egit_finalize);
 }

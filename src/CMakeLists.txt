@@ -15,7 +15,6 @@ endif(WIN32)
 
 target_link_libraries(egit2 git2)
 target_include_directories(egit2 SYSTEM PRIVATE "${libgit2_SOURCE_DIR}/include")
-target_include_directories(egit2 SYSTEM PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../uthash")
 
 if(CMAKE_COMPILER_IS_GNUCC)
   target_compile_options(egit2 PRIVATE -Wall -Wextra)
