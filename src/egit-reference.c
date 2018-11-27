@@ -37,7 +37,7 @@ emacs_value egit_reference_create(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(reference_create_matching, "REPO NAME ID &optional FORCE CURRENT-ID LOG-MESSAGE",
@@ -73,7 +73,7 @@ emacs_value egit_reference_create_matching(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(reference_dup, "REF", "Duplicate an existing reference.");
@@ -84,7 +84,7 @@ emacs_value egit_reference_dup(emacs_env *env, emacs_value _ref)
     git_reference *new_ref;
     int retval = git_reference_dup(&new_ref, ref);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, new_ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, new_ref, EGIT_EXTRACT_PARENT(_ref));
 }
 
 EGIT_DOC(reference_dwim, "REPO SHORTHAND", "Lookup a reference by DWIMing its short name.");
@@ -103,7 +103,7 @@ emacs_value egit_reference_dwim(emacs_env *env, emacs_value _repo, emacs_value _
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(reference_lookup, "REPO NAME", "Lookup a reference by NAME in REPO.");
@@ -122,7 +122,7 @@ emacs_value egit_reference_lookup(emacs_env *env, emacs_value _repo, emacs_value
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 
@@ -222,7 +222,7 @@ emacs_value egit_reference_resolve(emacs_env *env, emacs_value _ref)
     git_reference *newref;
     int retval = git_reference_resolve(&newref, ref);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, newref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, newref, EGIT_EXTRACT_PARENT(_ref));
 }
 
 EGIT_DOC(reference_shorthand, "REF", "Get the short name of REF.");
@@ -441,7 +441,7 @@ static int ref_callback(git_reference *ref, void *payload)
     egit_generic_payload *ctx = (egit_generic_payload*) payload;
     emacs_env *env = ctx->env;
 
-    emacs_value arg = egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    emacs_value arg = egit_wrap(env, EGIT_REFERENCE, ref, ctx->parent);
     env->funcall(env, ctx->func, 1, &arg);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
@@ -455,7 +455,7 @@ emacs_value egit_reference_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EM_ASSERT_FUNCTION(func);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = EM_EXTRACT_USER_PTR(_repo)};
     int retval = git_reference_foreach(repo, &ref_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();

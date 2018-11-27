@@ -114,7 +114,7 @@ emacs_value egit_repository_head(emacs_env *env, emacs_value _repo)
     git_reference *ref;
     int retval = git_repository_head(&ref, repo);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(repository_head_for_worktree, "REPO NAME",
@@ -134,7 +134,7 @@ emacs_value egit_repository_head_for_worktree(emacs_env *env, emacs_value _repo,
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REFERENCE, ref, NULL);
+    return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(repository_ident, "REPO",
