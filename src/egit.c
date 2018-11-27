@@ -244,9 +244,6 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
         case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
             parent = egit_incref(EGIT_REPOSITORY, git_object_owner(data));
             break;
-        case EGIT_SUBMODULE:
-            // Why isn't git_submodule_owner const?
-            parent = egit_incref(EGIT_REPOSITORY, git_submodule_owner((void*) data));
             break;
         default: break;
         }
