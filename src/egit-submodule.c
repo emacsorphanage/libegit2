@@ -107,7 +107,7 @@ emacs_value egit_submodule_lookup(emacs_env *env, emacs_value _repo, emacs_value
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_SUBMODULE, sub, NULL);
+    return egit_wrap(env, EGIT_SUBMODULE, sub, EM_EXTRACT_USER_PTR(_repo));
 }
 
 
@@ -310,7 +310,7 @@ static int submodule_callback(git_submodule *sub, const char *name, void *payloa
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
-    args[0] = egit_wrap(env, EGIT_SUBMODULE, sub, NULL);
+    args[0] = egit_wrap(env, EGIT_SUBMODULE, sub, ctx->parent);
     args[1] = EM_STRING(name);
     env->funcall(env, ctx->func, 2, args);
 
@@ -326,7 +326,7 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = EM_EXTRACT_USER_PTR(_repo)};
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_submodule_foreach(repo, &submodule_callback, &ctx);
 
