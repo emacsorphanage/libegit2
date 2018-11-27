@@ -418,7 +418,7 @@ emacs_value egit_remote_create(emacs_env *env, emacs_value _repo, emacs_value _n
     free(url);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REMOTE, remote, NULL);
+    return egit_wrap(env, EGIT_REMOTE, remote, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(remote_lookup, "REPO NAME", "Look up a remote in REPO by NAME.");
@@ -434,7 +434,7 @@ emacs_value egit_remote_lookup(emacs_env *env, emacs_value _repo, emacs_value _n
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_REMOTE, remote, NULL);
+    return egit_wrap(env, EGIT_REMOTE, remote, EM_EXTRACT_USER_PTR(_repo));
 }
 
 
