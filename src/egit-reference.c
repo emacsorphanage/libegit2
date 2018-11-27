@@ -455,7 +455,7 @@ emacs_value egit_reference_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EM_ASSERT_FUNCTION(func);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    egit_generic_payload ctx = {env, func};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
     int retval = git_reference_foreach(repo, &ref_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();
@@ -475,7 +475,7 @@ emacs_value egit_reference_foreach_glob(emacs_env *env, emacs_value _repo, emacs
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     char *glob = EM_EXTRACT_STRING(_glob);
-    egit_generic_payload ctx = {env, func};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
     int retval = git_reference_foreach_glob(repo, glob, &name_callback, &ctx);
     free(glob);
 
@@ -493,7 +493,7 @@ emacs_value egit_reference_foreach_name(emacs_env *env, emacs_value _repo, emacs
     EM_ASSERT_FUNCTION(func);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    egit_generic_payload ctx = {env, func};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
     int retval = git_reference_foreach_name(repo, &name_callback, &ctx);
 
     EM_RETURN_NIL_IF_NLE();
