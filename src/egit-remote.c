@@ -512,9 +512,9 @@ EGIT_DOC(remote_owner, "REMOTE", "Get the repository that REMOTE belongs to.");
 emacs_value egit_remote_owner(emacs_env *env, emacs_value _remote)
 {
     EGIT_ASSERT_REMOTE(_remote);
-    git_remote *remote = EGIT_EXTRACT(_remote);
-    git_repository *repo = git_remote_owner(remote);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_remote);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(remote_pushurl, "REMOTE", "Get the push URL of REMOTE, or nil if none set.");

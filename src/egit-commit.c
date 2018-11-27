@@ -125,9 +125,9 @@ EGIT_DOC(commit_owner, "COMMIT", "Return the repository that COMMIT belongs to."
 emacs_value egit_commit_owner(emacs_env *env, emacs_value _commit)
 {
     EGIT_ASSERT_COMMIT(_commit);
-    git_commit *commit = EGIT_EXTRACT(_commit);
-    git_repository *repo = git_commit_owner(commit);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_commit);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(commit_parent, "COMMIT &optional N", "Return the Nth parent of COMMIT.");

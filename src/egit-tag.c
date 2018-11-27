@@ -103,9 +103,9 @@ EGIT_DOC(tag_owner, "TAG", "Return the repository that TAG belongs to.");
 emacs_value egit_tag_owner(emacs_env *env, emacs_value _tag)
 {
     EGIT_ASSERT_TAG(_tag);
-    git_tag *tag = EGIT_EXTRACT(_tag);
-    git_repository *repo = git_tag_owner(tag);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_tag);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(tag_message, "TAG", "Get the message of TAG, or nil.");

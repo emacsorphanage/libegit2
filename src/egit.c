@@ -161,10 +161,7 @@ static egit_object *egit_incref(egit_type type, const void *data)
     return wrapper;
 }
 
-/**
- * Finalizer for user pointers.
- */
-static void egit_finalize(void* _obj)
+void egit_finalize(void* _obj)
 {
     // The argument type must be void* to make this function work as an Emacs finalizer
     egit_object *obj = (egit_object*)_obj;
@@ -258,7 +255,7 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
     }
     wrapper->parent = parent;
 
-    return env->make_user_ptr(env, egit_finalize, wrapper);
+    return EM_USER_PTR(wrapper, egit_finalize);
 }
 
 typedef emacs_value (*func_0)(emacs_env*);
@@ -867,8 +864,6 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tree-entry-byname", tree_entry_byname, 2, 2);
     DEFUN("libgit-tree-entry-bypath", tree_entry_bypath, 2, 2);
     DEFUN("libgit-tree-entrycount", tree_entrycount, 1, 1);
-    DEFUN("libgit-tree-id", tree_id, 1, 1);
-    DEFUN("libgit-tree-owner", tree_owner, 1, 1);
 
     DEFUN("libgit-tree-walk", tree_walk, 3, 3);
 }

@@ -105,9 +105,9 @@ EGIT_DOC(object_owner, "OBJECT", "Return the repository that OBJECT belongs to."
 emacs_value egit_object_owner(emacs_env *env, emacs_value _object)
 {
     EGIT_ASSERT_OBJECT(_object);
-    git_object *object = EGIT_EXTRACT(_object);
-    git_repository *repo = git_object_owner(object);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_object);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(object_short_id, "OBJ", "Return the shortened ID for the given OBJ.");

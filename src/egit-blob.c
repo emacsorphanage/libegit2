@@ -97,9 +97,9 @@ EGIT_DOC(blob_owner, "BLOB", "Return the repository that BLOB belongs to.");
 emacs_value egit_blob_owner(emacs_env *env, emacs_value _blob)
 {
     EGIT_ASSERT_BLOB(_blob);
-    git_blob *blob = EGIT_EXTRACT(_blob);
-    git_repository *repo = git_blob_owner(blob);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_blob);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(blob_rawcontent, "BLOB", "Get the raw content of BLOB as a unibyte string.");

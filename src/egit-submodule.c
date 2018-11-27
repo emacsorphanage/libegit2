@@ -205,9 +205,9 @@ EGIT_DOC(submodule_owner, "SUBMODULE", "Get the repository in which SUBMODULE li
 emacs_value egit_submodule_owner(emacs_env *env, emacs_value _sub)
 {
     EGIT_ASSERT_SUBMODULE(_sub);
-    git_submodule *sub = EGIT_EXTRACT(_sub);
-    git_repository *repo = git_submodule_owner(sub);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_sub);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(submodule_path, "SUBMODULE", "Get the path of SUBMODULE.");
