@@ -160,7 +160,7 @@ emacs_value egit_repository_index(emacs_env *env, emacs_value _repo)
     git_index *index;
     int retval = git_repository_index(&index, repo);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_INDEX, index, NULL);
+    return egit_wrap(env, EGIT_INDEX, index, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(repository_message, "REPO",
