@@ -25,7 +25,7 @@ emacs_value egit_tag_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid)
     int retval = git_tag_lookup(&tag, repo, &oid);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_TAG, tag, NULL);
+    return egit_wrap(env, EGIT_TAG, tag, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(tag_lookup_prefix, "REPO OID", "Lookup a tag in REPO by shortened OID.");
@@ -43,7 +43,7 @@ emacs_value egit_tag_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_valu
     int retval = git_tag_lookup_prefix(&tag, repo, &oid, len);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_TAG, tag, NULL);
+    return egit_wrap(env, EGIT_TAG, tag, EM_EXTRACT_USER_PTR(_repo));
 }
 
 
@@ -136,7 +136,7 @@ emacs_value egit_tag_peel(emacs_env *env, emacs_value _tag)
     git_object *obj;
     int retval = git_tag_peel(&obj, tag);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_OBJECT, obj, NULL);
+    return egit_wrap(env, EGIT_OBJECT, obj, EGIT_EXTRACT_PARENT(_tag));
 }
 
 EGIT_DOC(tag_tagger, "TAG", "Get the tagger of TAG as a signature object.");
@@ -162,7 +162,7 @@ emacs_value egit_tag_target(emacs_env *env, emacs_value _tag)
     git_object *obj;
     int retval = git_tag_target(&obj, tag);
     EGIT_CHECK_ERROR(retval);
-    return egit_wrap(env, EGIT_OBJECT, obj, NULL);
+    return egit_wrap(env, EGIT_OBJECT, obj, EGIT_EXTRACT_PARENT(_tag));
 }
 
 EGIT_DOC(tag_target_id, "TAG", "Get the object ID pointed to by TAG.");

@@ -21,5 +21,5 @@ emacs_value egit_revparse_single(emacs_env *env, emacs_value _repo, emacs_value 
     }
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, obj, NULL);
+    return egit_wrap(env, EGIT_OBJECT, obj, EM_EXTRACT_USER_PTR(_repo));
 }
