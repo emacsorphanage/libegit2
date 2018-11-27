@@ -89,6 +89,10 @@ ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate
 
 void egit_finalize(void* _obj)
 {
+#ifdef EGIT_DEBUG
+    egit_signal_finalize(_obj);
+#endif
+
     // The argument type must be void* to make this function work as an Emacs finalizer
     egit_object *obj = (egit_object*)_obj;
     egit_object *parent = obj->parent;
@@ -106,6 +110,10 @@ void egit_finalize(void* _obj)
             return;
     default: break;
     }
+
+#ifdef EGIT_DEBUG
+    egit_signal_free(_obj);
+#endif
 
     // Free the object based on its type
     // For types that only expose weak pointers to the parent, this should be a no-op
@@ -159,6 +167,10 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
 
     // This has no effect for types that are not reference-counted
     wrapper->refcount = 1;
+
+#ifdef EGIT_DEBUG
+    egit_signal_alloc(wrapper);
+#endif
 
     return EM_USER_PTR(wrapper, egit_finalize);
 }
@@ -370,6 +382,9 @@ void egit_init(emacs_env *env)
 {
     // Debug mode functions
 #ifdef EGIT_DEBUG
+    DEFUN("libgit--allocs", _allocs, 0, 0);
+    DEFUN("libgit--finalizes", _finalizes, 0, 0);
+    DEFUN("libgit--frees", _frees, 0, 0);
     DEFUN("libgit--refcount", _refcount, 1, 1);
     DEFUN("libgit--wrapper", _wrapper, 1, 1);
     DEFUN("libgit--wrapped", _wrapped, 1, 1);
