@@ -1,6 +1,5 @@
 #include "emacs-module.h"
 #include "git2.h"
-#include "uthash.h"
 #include "git2.h"
 
 #ifndef EGIT_H
@@ -274,7 +273,6 @@ typedef enum {
 typedef struct egit_object_s egit_object;
 
 struct egit_object_s {
-    UT_hash_handle hh;          /**< For internal use by the hash table. */
     egit_type type;             /**< Type of object stored. */
     ptrdiff_t refcount;         /**< Reference count. */
     void *ptr;                  /**< Pointer to git_??? structure. */

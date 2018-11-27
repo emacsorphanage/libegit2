@@ -1,3 +1,4 @@
+#include <string.h>
 #include "git2.h"
 
 #include "egit-util.h"

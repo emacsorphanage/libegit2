@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "interface.h"
 #include "egit-branch.h"
 
