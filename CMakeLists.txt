@@ -32,6 +32,7 @@ set(EGIT_TESTS
   message
   refcount
   reference
+  reflog
   remote
   repository
   signature
