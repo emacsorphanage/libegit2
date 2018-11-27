@@ -5,6 +5,7 @@ project(elibgit2)
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE CACHE BOOL "pic" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "shared" FORCE)
 set(BUILD_CLAR OFF CACHE BOOL "clar" FORCE)
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DEGIT_DEBUG")
 
 add_subdirectory(libgit2)
 
@@ -30,7 +31,6 @@ set(EGIT_TESTS
   index
   merge
   message
-  refcount
   reference
   reflog
   remote
@@ -40,6 +40,10 @@ set(EGIT_TESTS
   submodule
   tag
   tree)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  list(APPEND EGIT_TESTS refcount)
+endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 foreach(test ${EGIT_TESTS})
   add_test(NAME libegit2_${test} COMMAND

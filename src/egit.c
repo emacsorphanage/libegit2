@@ -4,6 +4,10 @@
 #include "emacs-module.h"
 #include "git2.h"
 
+#ifdef EGIT_DEBUG
+#include "egit-debug.h"
+#endif
+
 #include "interface.h"
 #include "egit-annotated-commit.h"
 #include "egit-blame.h"
@@ -278,15 +282,6 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     return true;
 }
 
-EGIT_DOC(refcount, "OBJ", "Return the reference count of OBJ.");
-static emacs_value egit_refcount(emacs_env *env, emacs_value val)
-{
-    if (egit_get_type(env, val) != EGIT_REPOSITORY)
-        return em_nil;
-    egit_object *wrapper = (egit_object*) EM_EXTRACT_USER_PTR(val);
-    return EM_INTEGER(wrapper->refcount);
-}
-
 EGIT_DOC(typeof, "OBJ", "Return the type of the git pointer OBJ, or nil.");
 static emacs_value egit_typeof(emacs_env *env, emacs_value val)
 {
@@ -373,8 +368,15 @@ static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
 
 void egit_init(emacs_env *env)
 {
+    // Debug mode functions
+#ifdef EGIT_DEBUG
+    DEFUN("libgit--refcount", _refcount, 1, 1);
+    DEFUN("libgit--wrapper", _wrapper, 1, 1);
+    DEFUN("libgit--wrapped", _wrapped, 1, 1);
+    DEFUN("libgit--parent-wrapper", _parent_wrapper, 1, 1);
+#endif
+
     // Type checkers
-    DEFUN("libgit--refcount", refcount, 1, 1);
     DEFUN("libgit-typeof", typeof, 1, 1);
     DEFUN("libgit-annotated-commit-p", annotated_commit_p, 1, 1);
     DEFUN("libgit-blame-p", blame_p, 1, 1);

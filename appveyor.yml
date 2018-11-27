@@ -25,7 +25,7 @@ before_build:
 build_script:
   - mkdir build
   - cd build
-  - cmake .. -G"%GENERATOR%"
+  - cmake .. -G"%GENERATOR%" -DCMAKE_BUILD_TYPE=Debug
   - cmake --build .
   - cd ..
 
