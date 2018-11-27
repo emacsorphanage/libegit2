@@ -151,6 +151,13 @@
   (EM_EXTRACT_BOOLEAN(val) ? EGIT_EXTRACT(val) : NULL);
 
 /**
+ * Extract egit_object pointer representing a parent object, or NULL.
+ * Caller is responsible for ensuring that this is a valid operation.
+ */
+#define EGIT_EXTRACT_PARENT(val)                        \
+    (((egit_object*) EM_EXTRACT_USER_PTR(val))->parent) \
+
+/**
  * Extract a git_oid from an emacs_value.
  * Caller is responsible for ensuring that the emacs_value is a string.
  */
