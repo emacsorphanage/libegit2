@@ -10,16 +10,18 @@
 // =============================================================================
 // Constructors
 
-EGIT_DOC(reflog_read, "REPO REFNAME", "Open the reflog for REFNAME in REPO.");
+EGIT_DOC(reflog_read, "REPO &optional REFNAME",
+         "Open the reflog for REFNAME in REPO.\n"
+         "If REFNAME is nil, open the reflog for HEAD.");
 emacs_value egit_reflog_read(emacs_env *env, emacs_value _repo, emacs_value _refname)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
-    EM_ASSERT_STRING(_refname);
+    EM_ASSERT_STRING_OR_NIL(_refname);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
-    char *refname = EM_EXTRACT_STRING(_refname);
+    char *refname = EM_EXTRACT_STRING_OR_NULL(_refname);
     git_reflog *reflog;
-    int retval = git_reflog_read(&reflog, repo, refname);
+    int retval = git_reflog_read(&reflog, repo, refname ? refname : "HEAD");
     free(refname);
     EGIT_CHECK_ERROR(retval);
 
@@ -146,7 +148,8 @@ emacs_value egit_reflog_delete(emacs_env *env, emacs_value _repo, emacs_value _r
 EGIT_DOC(reflog_drop, "REFLOG N &optional REWRITE",
          "Delete the Nth entry from REFLOG.\n"
          "If REWRITE is non-nil, rewrite the history to ensure there's no gap,\n"
-         "i.e. set the old ID of the newer entry to the new ID of the older.");
+         "i.e. set the old ID of the next chronological entry to the new ID of\n"
+         "the previous chronological entry.");
 emacs_value egit_reflog_drop(emacs_env *env, emacs_value _reflog, emacs_value _index, emacs_value rewrite)
 {
     EGIT_ASSERT_REFLOG(_reflog);
