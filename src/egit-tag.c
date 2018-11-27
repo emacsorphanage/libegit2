@@ -74,7 +74,7 @@ emacs_value egit_tag_foreach(emacs_env *env, emacs_value _repo, emacs_value func
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    egit_generic_payload ctx = {env, func};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_tag_foreach(repo, &egit_tag_foreach_callback, &ctx);
 

@@ -326,7 +326,7 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(func);
 
-    egit_generic_payload ctx = {env, func};
+    egit_generic_payload ctx = {.env = env, .func = func, .parent = NULL};
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_submodule_foreach(repo, &submodule_callback, &ctx);
 

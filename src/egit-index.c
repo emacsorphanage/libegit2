@@ -301,7 +301,7 @@ emacs_value egit_index_add_all(
     }
 
     git_index_matched_path_cb callback = NULL;
-    egit_generic_payload payload = {env, func};
+    egit_generic_payload payload = {.env = env, .func = func, .parent = NULL};
     if (EM_EXTRACT_BOOLEAN(func)) {
         EM_ASSERT_FUNCTION(func);
         callback = add_all_callback;

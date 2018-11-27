@@ -6,6 +6,7 @@
 typedef struct {
     emacs_env *env;
     emacs_value func;
+    egit_object *parent;
 } egit_generic_payload;
 
 bool egit_strarray_from_list(git_strarray *array, emacs_env *env, emacs_value list);
