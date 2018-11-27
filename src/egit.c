@@ -132,12 +132,16 @@ static void egit_decref_direct(egit_object *wrapper)
  * Increase the reference count of a reference-counted object.
  * If the pointer does not exist in the object store, add it with a refcount of one.
  * Otherwise, increase the refcount by one.
+ * This function accepts NULL pointers and will return a NULL wrapper.
  * @param type The type of the object.
  * @param data The object to store.
  * @return Pointer to the egit_object wrapper struct.
  */
 static egit_object *egit_incref(egit_type type, const void *data)
 {
+    if (!data)
+        return NULL;
+
     egit_object *wrapper;
     HASH_FIND_PTR(object_store, &data, wrapper);
 
