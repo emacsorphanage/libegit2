@@ -32,6 +32,7 @@
 #include "egit-refspec.h"
 #include "egit-remote.h"
 #include "egit-repository.h"
+#include "egit-reset.h"
 #include "egit-revparse.h"
 #include "egit-revwalk.h"
 #include "egit-signature.h"
@@ -841,4 +842,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-treebuilder-remove", treebuilder_remove, 2, 2);
     DEFUN("libgit-treebuilder-write", treebuilder_write, 1, 1);
     DEFUN("libgit-treebuilder-filter", treebuilder_filter, 2, 2);
+
+    // Reset
+    DEFUN("libgit-reset", reset, 3, 4);
 }

@@ -35,6 +35,7 @@ set(EGIT_TESTS
   reflog
   remote
   repository
+  reset
   revwalk
   signature
   status

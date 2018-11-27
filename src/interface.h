@@ -152,6 +152,9 @@ extern emacs_value em_topological, em_time;
 extern emacs_value em_programdata, em_system, em_xdg, em_global, em_local,
     em_app;
 
+// Reset types
+extern emacs_value em_soft, em_mixed, em_hard;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 

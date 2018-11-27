@@ -161,6 +161,9 @@ emacs_value em_topological, em_time;
 emacs_value em_programdata, em_system, em_xdg, em_global, em_local,
     em_app;
 
+// Reset types
+emacs_value em_soft, em_mixed, em_hard;
+
 // Libgit2 errors
 emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
     em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
@@ -482,6 +485,10 @@ void em_init(emacs_env *env)
     em_global = GLOBREF(INTERN("global"));
     em_local = GLOBREF(INTERN("local"));
     em_app = GLOBREF(INTERN("app"));
+
+    em_soft = GLOBREF(INTERN("soft"));
+    em_mixed = GLOBREF(INTERN("mixed"));
+    em_hard = GLOBREF(INTERN("hard"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
