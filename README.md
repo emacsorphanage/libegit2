@@ -113,22 +113,34 @@ work.
 Sometimes a struct of type `git_???` may need to be returned to Emacs as an opaque user pointer.
 To do this, we use a wrapper structure with a type information tag.
 
-Usually, objects that belong to a repository need to keep the repository alive until after they are
-freed. To do this, we use a hash table with reference counting semantics for repositories to ensure
-that none of them are freed out of turn.
+Some objects expose data that belong to other objects. In many cases, libgit2 keeps reference-counts
+on these internally, but that's not always true. In particular, `git_repository` structs are not
+reference-counted (altough the data-owning sub-objects like `git_odb` are). Neither are lightweight
+public structs like `git_index_entry`, `git_diff_XYZ`, etc. In these cases, the *parent types* must
+be reference-counted on our side, and the *child types* must keep a reference to the parent alive.
 
-1. In `src/egit.h` add an entry to the `egit_type` enum for the new type.
-2. In `src/egit.h` ass a new `EGIT_ASSERT` macro for the new type.
-3. In `src/egit.c` add a new entry to the `egit_finalize` switch statement to free a
-   structure. If the new structure needs to keep a repository alive (usually the "owner" in libgit2
-   terms), also call `egit_decref_repository` on these (see existing code for examples).
-4. In `src/egit.c` add a new entry to the `egit_wrap` switch statement to increase the reference
-   counts of the repository if it must be kept alive.
-5. In `src/egit.c` add a new entry to the `egit_typeof` switch statement.
-6. In `src/egit.c` add a new `egit_TYPE_p` predicate function.
-7. In `src/egit.c` create a `DEFUN` call in `egit_init` for the predicate function.
-8. In `interface.h` add two new symbols, `TYPE-p` and `TYPE`.
-9. In `interface.c` initialize those symbols in the `em_init` function.
+1. In `src/egit.h`, add an entry to the `egit_type` enum for the new type.
+2. In `src/egit.h` add a new `EGIT_ASSERT` macro for the new type.
+3. In `src/egit.c` add a new entry to the `egit_finalize` switch statement to free the structure. If
+   the type is reference-counted, also add an entry to the decref switch statement.
+4. In `src/egit.c` add a new entry to the `egit_typeof` switch statement.
+5. In `src/egit.c` add a new type predicate by calling the `TYPECHECKER` macro.
+6. In `src/egit.c` create a `DEFUN` call in `egit_init` for the type predicate.
+7. In `src/interface.h` add two new symbols, `libgit-TYPE-p` and `TYPE`.
+8. In `src/interface.c` initialize those symbols in the `em_init` function.
+
+### Returning opaque pointers to Emacs
+
+To create a new user pointer, call `egit_wrap` with arguments:
+
+1. The `emacs_env*`
+2. The type tag
+3. The pointer to wrap
+4. The parent wrapper, if applicable (note: this is an `egit_object*`, not a `git_XYZ*`)
+
+To return an existing user pointer (usually by grabbing the parent field of an `egit_object*`), 
+just increase the reference count and use the `EM_USER_PTR` macro. Do not do this for types that are
+not reference-counted!
 
 ## Function list
 
