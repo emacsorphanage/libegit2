@@ -205,9 +205,14 @@ EGIT_DOC(index_owner, "INDEX", "Return the repository associated with INDEX.");
 emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
 {
     EGIT_ASSERT_INDEX(_index);
-    git_index *index = EGIT_EXTRACT(_index);
-    git_repository *repo = git_index_owner(index);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_index);
+
+    // Bare indexes may not have an owner
+    if (!owner)
+        return em_nil;
+
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(index_path, "INDEX", "Get the path to the index file on disk.");

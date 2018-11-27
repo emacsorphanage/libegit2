@@ -223,6 +223,9 @@ extern emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invali
 // Create an Emacs string from a null-terminated char*
 #define EM_STRING(val) (env->make_string(env, (val), strlen(val)))
 
+// Create an Emacs user pointer
+#define EM_USER_PTR(val, fin) (env->make_user_ptr(env, (fin), (val)))
+
 // Return if a non-local exit is set
 #define EM_RETURN_IF_NLE(val)                    \
     do {                                         \

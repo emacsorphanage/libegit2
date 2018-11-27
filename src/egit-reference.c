@@ -176,9 +176,9 @@ EGIT_DOC(reference_owner, "REF", "Return the repository that REF belongs to.");
 emacs_value egit_reference_owner(emacs_env *env, emacs_value _ref)
 {
     EGIT_ASSERT_REFERENCE(_ref);
-    git_reference *ref = EGIT_EXTRACT(_ref);
-    git_repository *repo = git_reference_owner(ref);
-    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+    egit_object *owner = EGIT_EXTRACT_PARENT(_ref);
+    owner->refcount++;
+    return EM_USER_PTR(owner, egit_finalize);
 }
 
 EGIT_DOC(reference_peel, "REF &optional TYPE",

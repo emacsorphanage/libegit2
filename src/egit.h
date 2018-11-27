@@ -320,6 +320,11 @@ bool egit_assert_object(emacs_env *env, emacs_value obj);
 ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate, emacs_value arg);
 
 /**
+ * Finalizer for user pointers.
+ */
+void egit_finalize(void* _obj);
+
+/**
  * Wrap a git_??? structure in an emacs_value.
  * @param env The active Emacs environment.
  * @param obj The type of the object.
