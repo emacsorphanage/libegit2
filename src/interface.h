@@ -6,7 +6,7 @@
 #define INTERFACE_H
 
 extern emacs_value em_nil, em_cons_p, em_integerp, em_functionp, em_stringp, em_t,
-    em_list_p;
+    em_list_p, em_user_ptr_p;
 
 // Git object predicates and types
 extern emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p,
@@ -181,6 +181,10 @@ extern emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invali
 // Assert that VAL is an integer or nil, signal an error and return otherwise.
 #define EM_ASSERT_INTEGER_OR_NIL(val)                                   \
     do { if (EM_EXTRACT_BOOLEAN(val)) EM_ASSERT_INTEGER(val); } while (0)
+
+// Assert that VAL is an user-ptr, signal an error and return otherwise.
+#define EM_ASSERT_USER_PTR(val)                                         \
+    do { if (!em_assert(env, em_user_ptr_p, (val))) return em_nil; } while (0)
 
 // Normalize an emacs_value string path. This macro may return.
 #define EM_NORMALIZE_PATH(val)                                  \

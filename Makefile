@@ -9,7 +9,7 @@ libgit2:                        ## pull down libgit2
 
 build/libegit2.so: libgit2      ## build the module
 	mkdir build
-	cd build && cmake .. && make
+	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
 
 test: EMACS_ARGS += -L build/ -l libegit2
 test: build/libegit2.so test-ert ## run tests
