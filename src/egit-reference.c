@@ -210,7 +210,7 @@ emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _t
     int retval = git_reference_peel(&obj, ref, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, obj, NULL);
+    return egit_wrap(env, EGIT_OBJECT, obj, EGIT_EXTRACT_PARENT(_ref));
 }
 
 EGIT_DOC(reference_resolve, "REF",

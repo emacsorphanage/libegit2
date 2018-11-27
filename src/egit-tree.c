@@ -65,7 +65,7 @@ emacs_value egit_tree_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid
     int retval = git_tree_lookup(&tree, repo, &oid);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_TREE, tree, NULL);
+    return egit_wrap(env, EGIT_TREE, tree, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(tree_lookup_prefix, "REPO OID", "Lookup a tree in REPO by shortened OID.");
@@ -83,7 +83,7 @@ emacs_value egit_tree_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_val
     int retval = git_tree_lookup_prefix(&tree, repo, &oid, len);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_TREE, tree, NULL);
+    return egit_wrap(env, EGIT_TREE, tree, EM_EXTRACT_USER_PTR(_repo));
 }
 
 

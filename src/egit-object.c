@@ -44,7 +44,7 @@ emacs_value egit_object_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
     int retval = git_object_lookup(&object, repo, &oid, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, object, NULL);
+    return egit_wrap(env, EGIT_OBJECT, object, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(object_lookup_prefix, "REPO OID",
@@ -84,7 +84,7 @@ emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_v
     int retval = git_object_lookup_prefix(&object, repo, &oid, len, type);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_OBJECT, object, NULL);
+    return egit_wrap(env, EGIT_OBJECT, object, EM_EXTRACT_USER_PTR(_repo));
 }
 
 

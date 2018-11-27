@@ -239,15 +239,6 @@ emacs_value egit_wrap(emacs_env *env, egit_type type, const void* data, egit_obj
     // Increase refcounts of owner object(s), if applicable
     if (parent)
         parent->refcount++;
-    else {
-        switch (type) {
-        case EGIT_COMMIT: case EGIT_TREE: case EGIT_BLOB: case EGIT_TAG: case EGIT_OBJECT:
-            parent = egit_incref(EGIT_REPOSITORY, git_object_owner(data));
-            break;
-            break;
-        default: break;
-        }
-    }
 
     egit_object *wrapper;
     switch (type) {

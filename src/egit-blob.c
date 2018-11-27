@@ -24,7 +24,7 @@ emacs_value egit_blob_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid
     int retval = git_blob_lookup(&blob, repo, &oid);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_BLOB, blob, NULL);
+    return egit_wrap(env, EGIT_BLOB, blob, EM_EXTRACT_USER_PTR(_repo));
 }
 
 EGIT_DOC(blob_lookup_prefix, "REPO OID", "Lookup a blob in REPO by shortened OID.");
@@ -42,7 +42,7 @@ emacs_value egit_blob_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_val
     int retval = git_blob_lookup_prefix(&blob, repo, &oid, len);
     EGIT_CHECK_ERROR(retval);
 
-    return egit_wrap(env, EGIT_BLOB, blob, NULL);
+    return egit_wrap(env, EGIT_BLOB, blob, EM_EXTRACT_USER_PTR(_repo));
 }
 
 
