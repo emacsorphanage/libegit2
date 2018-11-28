@@ -10,6 +10,8 @@
           (should (= 3 (libgit--refcount repo))))))))
 
 (ert-deftest memtest-1 ()
+  (skip-unless nil)
+
   ;; Clean out stacks
   (garbage-collect)
   (libgit--allocs)
@@ -77,6 +79,8 @@
       (should (= 3 (libgit--refcount repo))))))
 
 (ert-deftest memtest-2 ()
+  (skip-unless nil)
+
   ;; Clean out stacks
   (garbage-collect)
   (libgit--allocs)
