@@ -139,3 +139,42 @@ emacs_value egit_treebuilder_write(emacs_env *env, emacs_value _builder)
     const char *oid_s = git_oid_tostr_s(&oid);
     return EM_STRING(oid_s);
 }
+
+
+// =============================================================================
+// Filter
+
+static int filter_callback(const git_tree_entry *entry, void *payload)
+{
+    egit_generic_payload *ctx = (egit_generic_payload*) payload;
+    emacs_env *env = ctx->env;
+
+    emacs_value arg = egit_tree_entry_to_emacs(env, entry);
+    emacs_value retval = env->funcall(env, ctx->func, 1, &arg);
+
+    // Ignore errors
+    if (env->non_local_exit_check(env)) {
+        env->non_local_exit_clear(env);
+        return 0;
+    }
+
+    // Treat the elisp semantics as truthy value = keep,
+    // as is common with filters
+    return !EM_EXTRACT_BOOLEAN(retval);
+}
+
+EGIT_DOC(treebuilder_filter, "BUILDER FUNC",
+         "Call FUNC on each entry of BUILDER.\n"
+         "Those entries for which FUNC returns nil will be removed.\n"
+         "See `libgit-tree-entry-byindex' for more information.\n"
+         "Signals thrown in FUNC will be ignored.");
+emacs_value egit_treebuilder_filter(emacs_env *env, emacs_value _builder, emacs_value func)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    EM_ASSERT_FUNCTION(func);
+
+    egit_generic_payload payload = {.env = env, .func = func, .parent = NULL};
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    git_treebuilder_filter(bld, &filter_callback, &payload);
+    return em_nil;
+}
