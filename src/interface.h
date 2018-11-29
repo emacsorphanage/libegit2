@@ -327,6 +327,16 @@ void em_signal_wrong_value(emacs_env *env, emacs_value actual);
 void em_signal_args_out_of_range(emacs_env *env, intmax_t index);
 
 /**
+ * Return a string with size from an emacs_value.
+ * Caller is responsible for ensuring that the value is a string, and to free the returned pointer.
+ * @param env The active Emacs environment.
+ * @param arg Emacs value representing a string.
+ * @param size Where the size will be stored.
+ * @return The string (owned pointer).
+ */
+char *em_get_string_with_size(emacs_env *env, emacs_value arg, ptrdiff_t *size);
+
+/**
  * Return a string from an emacs_value.
  * Caller is responsible for ensuring that the value is a string, and to free the returned pointer.
  * @param env The active Emacs environment.
