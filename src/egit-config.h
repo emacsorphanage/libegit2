@@ -18,6 +18,7 @@ EGIT_DEFUN(config_set_string, emacs_value _config, emacs_value _name, emacs_valu
 EGIT_DEFUN(config_add_file_ondisk, emacs_value _config, emacs_value _path,
            emacs_value _level, emacs_value _repo, emacs_value _force);
 EGIT_DEFUN(config_delete_entry, emacs_value _config, emacs_value _name);
+EGIT_DEFUN(config_delete_multivar, emacs_value _config, emacs_value _name, emacs_value _regexp);
 
 EGIT_DEFUN_0(config_find_global);
 EGIT_DEFUN_0(config_find_programdata);

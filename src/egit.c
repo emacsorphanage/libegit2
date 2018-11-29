@@ -516,6 +516,7 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-config-add-file-ondisk", config_add_file_ondisk, 2, 5);
     DEFUN("libgit-config-delete-entry", config_delete_entry, 2, 2);
+    DEFUN("libgit-config-delete-multivar", config_delete_multivar, 3, 3);
 
     DEFUN("libgit-config-find-global", config_find_global, 0, 0);
     DEFUN("libgit-config-find-programdata", config_find_programdata, 0, 0);

@@ -218,6 +218,26 @@ emacs_value egit_config_delete_entry(emacs_env *env, emacs_value _config, emacs_
     return em_nil;
 }
 
+EGIT_DOC(config_delete_multivar, "CONFIG NAME REGEXP",
+         "Delete all values of NAME in CONFIG matching REGEXP.");
+emacs_value egit_config_delete_multivar(
+    emacs_env *env, emacs_value _config, emacs_value _name, emacs_value _regexp)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_regexp);
+
+    git_config *config = EGIT_EXTRACT(_config);
+    char *name = EM_EXTRACT_STRING(_name);
+    char *regexp = EM_EXTRACT_STRING(_regexp);
+    int retval = git_config_delete_multivar(config, name, regexp);
+    free(name);
+    free(regexp);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 
 // =============================================================================
 // Miscellaneous
