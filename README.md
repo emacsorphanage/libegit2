@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 278 (35.7%)
+- Implemented: 287 (36.9%)
 - Should not implement: 163 (21.0%)
-- To do: 337 (43.3%)
+- To do: 328 (42.2%)
 - Total: 778
 
 ### extra
@@ -346,10 +346,10 @@ Probably none of these functions are necessary, since we can expose buffers to E
 ### config
 
 - :x: `git-config-add-backend` (in `sys`)
-- :grey_question: `git-config-add-file-ondisk`
+- :heavy_check_mark: `git-config-add-file-ondisk`
 - :grey_question: `git-config-backend-foreach-match`
-- :grey_question: `git-config-delete-entry`
-- :grey_question: `git-config-delete-multivar`
+- :heavy_check_mark: `git-config-delete-entry`
+- :heavy_check_mark: `git-config-delete-multivar`
 - :x: `git-config-entry-free` (memory management shouldn't be exposed to Emacs)
 - :heavy_check_mark: `git-config-find-global`
 - :heavy_check_mark: `git-config-find-programdata`
@@ -374,12 +374,12 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-config-lock`
 - :grey_question: `git-config-lookup-map-value`
 - :grey_question: `git-config-multivar-iterator-new`
-- :grey_question: `git-config-new`
+- :heavy_check_mark: `git-config-new`
 - :grey_question: `git-config-next`
-- :grey_question: `git-config-open-default`
-- :grey_question: `git-config-open-global`
-- :grey_question: `git-config-open-level`
-- :grey_question: `git-config-open-ondisk`
+- :heavy_check_mark: `git-config-open-default`
+- :heavy_check_mark: `git-config-open-global`
+- :heavy_check_mark: `git-config-open-level`
+- :heavy_check_mark: `git-config-open-ondisk`
 - :grey_question: `git-config-parse-bool`
 - :grey_question: `git-config-parse-int32`
 - :grey_question: `git-config-parse-int64`
@@ -389,7 +389,7 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :heavy_check_mark: `git-config-set-int64` (as `-int`)
 - :grey_question: `git-config-set-multivar`
 - :heavy_check_mark: `git-config-set-string`
-- :grey_question: `git-config-snapshot`
+- :heavy_check_mark: `git-config-snapshot`
 
 ### cred
 
