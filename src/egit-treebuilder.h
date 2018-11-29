@@ -9,6 +9,8 @@ EGIT_DEFUN(treebuilder_entrycount, emacs_value _builder);
 EGIT_DEFUN(treebuilder_get, emacs_value _builder, emacs_value _path);
 
 EGIT_DEFUN(treebuilder_clear, emacs_value _builder);
+EGIT_DEFUN(treebuilder_insert, emacs_value _builder, emacs_value _path,
+           emacs_value _oid, emacs_value _mode);
 EGIT_DEFUN(treebuilder_remove, emacs_value _builder, emacs_value _path);
 EGIT_DEFUN(treebuilder_write, emacs_value _builder);
 

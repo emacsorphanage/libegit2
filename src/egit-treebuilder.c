@@ -72,6 +72,45 @@ emacs_value egit_treebuilder_clear(emacs_env *env, emacs_value _builder)
     return em_nil;
 }
 
+EGIT_DOC(treebuilder_insert, "BUILDER PATH ID MODE",
+         "Add a new entry to BUILDER.\n"
+         "PATH is the relative path to the file, and ID is the object ID.\n"
+         "MODE may be any of `tree', `blob', `blob-executable', `link', or `commit'.");
+emacs_value egit_treebuilder_insert(
+    emacs_env *env, emacs_value _builder, emacs_value _path,
+    emacs_value _oid, emacs_value _mode)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    EM_ASSERT_STRING(_path);
+    EM_ASSERT_STRING(_oid);
+
+    git_filemode_t mode;
+    if (EM_EQ(_mode, em_tree))
+        mode = GIT_FILEMODE_TREE;
+    else if (EM_EQ(_mode, em_blob))
+        mode = GIT_FILEMODE_BLOB;
+    else if (EM_EQ(_mode, em_blob_executable))
+        mode = GIT_FILEMODE_BLOB_EXECUTABLE;
+    else if (EM_EQ(_mode, em_link))
+        mode = GIT_FILEMODE_LINK;
+    else if (EM_EQ(_mode, em_commit))
+        mode = GIT_FILEMODE_COMMIT;
+    else {
+        em_signal_wrong_value(env, _mode);
+        return em_nil;
+    }
+
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_oid oid;
+    EGIT_EXTRACT_OID(_oid, oid);
+
+    int retval = git_treebuilder_insert(NULL, bld, path, &oid, mode);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(treebuilder_remove, "BUILDER PATH",
          "Delete the entry in BUILDER associated with PATH.");
 emacs_value egit_treebuilder_remove(emacs_env *env, emacs_value _builder, emacs_value _path)
