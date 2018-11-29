@@ -27,3 +27,16 @@ emacs_value egit_treebuilder_new(emacs_env *env, emacs_value _repo, emacs_value 
 
     return egit_wrap(env, EGIT_TREEBUILDER, bld, EM_EXTRACT_USER_PTR(_repo));
 }
+
+
+// =============================================================================
+// Operations
+
+EGIT_DOC(treebuilder_clear, "BUILDER", "Clear all entries in BUILDER.");
+emacs_value egit_treebuilder_clear(emacs_env *env, emacs_value _builder)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    git_treebuilder_clear(bld);
+    return em_nil;
+}
