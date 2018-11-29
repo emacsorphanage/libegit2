@@ -23,7 +23,7 @@ before_build:
   - set PATH=C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64\bin;C:\emacs;%PATH%
 
 build_script:
-  - mkdir build
+  - mkdir -p build
   - cd build
   - cmake .. -G"%GENERATOR%" -DCMAKE_BUILD_TYPE=Debug
   - cmake --build .

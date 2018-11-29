@@ -8,7 +8,7 @@ libgit2:                        ## pull down libgit2
 	git submodule update
 
 build/libegit2.so: libgit2      ## build the module
-	mkdir build
+	mkdir -p build
 	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
 
 test: EMACS_ARGS += -L build/ -l libegit2
