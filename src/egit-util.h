@@ -14,4 +14,6 @@ void egit_strarray_dispose(git_strarray *array);
 
 int egit_cred_dup(git_cred **out, git_cred *cred);
 
+emacs_value egit_tree_entry_to_emacs(emacs_env *env, const git_tree_entry *entry);
+
 #endif /* EGIT_UTIL_H */

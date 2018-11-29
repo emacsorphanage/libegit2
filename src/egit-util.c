@@ -62,3 +62,41 @@ int egit_cred_dup(git_cred **out, git_cred *cred)
         return -1;
     }
 }
+
+// TODO: This should probably be exposed as an opaque structure too,
+// for consistency.
+emacs_value egit_tree_entry_to_emacs(emacs_env *env, const git_tree_entry *entry)
+{
+    git_filemode_t mode = git_tree_entry_filemode(entry);
+    git_otype type = git_tree_entry_type(entry);
+    const git_oid *oid = git_tree_entry_id(entry);
+    const char *oid_s = git_oid_tostr_s(oid);
+    const char *name = git_tree_entry_name(entry);
+
+    emacs_value list_args[4];
+
+    list_args[0] = em_nil;
+    switch (mode) {
+    case GIT_FILEMODE_UNREADABLE: list_args[0] = em_unreadable; break;
+    case GIT_FILEMODE_TREE: list_args[0] = em_tree; break;
+    case GIT_FILEMODE_BLOB: list_args[0] = em_blob; break;
+    case GIT_FILEMODE_BLOB_EXECUTABLE: list_args[0] = em_blob_executable; break;
+    case GIT_FILEMODE_LINK: list_args[0] = em_link; break;
+    case GIT_FILEMODE_COMMIT: list_args[0] = em_commit; break;
+    default: break;
+    }
+
+    list_args[1] = em_nil;
+    switch (type) {
+    case GIT_OBJ_COMMIT: list_args[1] = em_commit; break;
+    case GIT_OBJ_TREE: list_args[1] = em_tree; break;
+    case GIT_OBJ_BLOB: list_args[1] = em_blob; break;
+    case GIT_OBJ_TAG: list_args[1] = em_tag; break;  // Probably impossible, but why assume
+    default: break;
+    }
+
+    list_args[2] = EM_STRING(oid_s);
+    list_args[3] = EM_STRING(name);
+
+    return em_list(env, list_args, 4);
+}
