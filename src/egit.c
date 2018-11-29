@@ -135,6 +135,7 @@ void egit_finalize(void* _obj)
     case EGIT_CRED: git_cred_free(obj->ptr); break;
     case EGIT_ANNOTATED_COMMIT: git_annotated_commit_free(obj->ptr); break;
     case EGIT_REVWALK: git_revwalk_free(obj->ptr); break;
+    case EGIT_TREEBUILDER: git_treebuilder_free(obj->ptr); break;
     default: break;
     }
 
@@ -326,6 +327,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_REFLOG: return em_reflog;
     case EGIT_REFLOG_ENTRY: return em_reflog_entry;
     case EGIT_REVWALK: return em_revwalk;
+    case EGIT_TREEBUILDER: return em_treebuilder;
     default: return em_nil;
     }
 }
@@ -363,6 +365,7 @@ TYPECHECKER(SUBMODULE, submodule, "submodule");
 TYPECHECKER(TAG, tag, "tag");
 TYPECHECKER(TRANSACTION, transaction, "transaction");
 TYPECHECKER(TREE, tree, "tree");
+TYPECHECKER(TREEBUILDER, treebuilder, "treebuilder");
 
 #undef TYPECHECKER
 
@@ -424,6 +427,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tag-p", tag_p, 1, 1);
     DEFUN("libgit-transaction-p", transaction_p, 1, 1);
     DEFUN("libgit-tree-p", tree_p, 1, 1);
+    DEFUN("libgit-treebuilder-p", treebuilder_p, 1, 1);
 
     // Libgit2 (not namespaced as others!)
     DEFUN("libgit-feature-p", libgit2_feature_p, 1, 1);
