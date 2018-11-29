@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 290 (37.3%)
+- Implemented: 298 (38.3%)
 - Should not implement: 163 (21.0%)
-- To do: 325 (41.8%)
+- To do: 317 (40.7%)
 - Total: 778
 
 ### extra
@@ -1162,15 +1162,15 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### treebuilder
 
-- :grey_question: `git-treebuilder-clear`
-- :grey_question: `git-treebuilder-entrycount`
-- :grey_question: `git-treebuilder-filter`
+- :heavy_check_mark: `git-treebuilder-clear`
+- :heavy_check_mark: `git-treebuilder-entrycount`
+- :heavy_check_mark: `git-treebuilder-filter`
 - :x: `git-treebuilder-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-treebuilder-get`
-- :grey_question: `git-treebuilder-insert`
-- :grey_question: `git-treebuilder-new`
-- :grey_question: `git-treebuilder-remove`
-- :grey_question: `git-treebuilder-write`
+- :heavy_check_mark: `git-treebuilder-get`
+- :heavy_check_mark: `git-treebuilder-insert`
+- :heavy_check_mark: `git-treebuilder-new`
+- :heavy_check_mark: `git-treebuilder-remove`
+- :heavy_check_mark: `git-treebuilder-write`
 - :grey_question: `git-treebuilder-write-with-buffer`
 
 ### worktree
