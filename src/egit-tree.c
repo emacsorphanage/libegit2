@@ -9,46 +9,6 @@
 
 
 // =============================================================================
-// Helpers
-
-static emacs_value entry_to_emacs(emacs_env *env, const git_tree_entry *entry)
-{
-    git_filemode_t mode = git_tree_entry_filemode(entry);
-    git_otype type = git_tree_entry_type(entry);
-    const git_oid *oid = git_tree_entry_id(entry);
-    const char *oid_s = git_oid_tostr_s(oid);
-    const char *name = git_tree_entry_name(entry);
-
-    emacs_value list_args[4];
-
-    list_args[0] = em_nil;
-    switch (mode) {
-    case GIT_FILEMODE_UNREADABLE: list_args[0] = em_unreadable; break;
-    case GIT_FILEMODE_TREE: list_args[0] = em_tree; break;
-    case GIT_FILEMODE_BLOB: list_args[0] = em_blob; break;
-    case GIT_FILEMODE_BLOB_EXECUTABLE: list_args[0] = em_blob_executable; break;
-    case GIT_FILEMODE_LINK: list_args[0] = em_link; break;
-    case GIT_FILEMODE_COMMIT: list_args[0] = em_commit; break;
-    default: break;
-    }
-
-    list_args[1] = em_nil;
-    switch (type) {
-    case GIT_OBJ_COMMIT: list_args[1] = em_commit; break;
-    case GIT_OBJ_TREE: list_args[1] = em_tree; break;
-    case GIT_OBJ_BLOB: list_args[1] = em_blob; break;
-    case GIT_OBJ_TAG: list_args[1] = em_tag; break;  // Probably impossible, but why assume
-    default: break;
-    }
-
-    list_args[2] = EM_STRING(oid_s);
-    list_args[3] = EM_STRING(name);
-
-    return em_list(env, list_args, 4);
-}
-
-
-// =============================================================================
 // Constructors
 
 EGIT_DOC(tree_lookup, "REPO OID", "Look up a tree in REPO by OID.");
@@ -103,7 +63,7 @@ emacs_value egit_tree_entry_byid(emacs_env *env, emacs_value _tree, emacs_value 
     const git_tree_entry *entry = git_tree_entry_byid(tree, &oid);
     if (!entry)
         return em_nil; // TODO: Should we signal an error instead?
-    return entry_to_emacs(env, entry);
+    return egit_tree_entry_to_emacs(env, entry);
 }
 
 EGIT_DOC(tree_entry_byindex, "TREE N",
@@ -134,7 +94,7 @@ emacs_value egit_tree_entry_byindex(emacs_env *env, emacs_value _tree, emacs_val
         em_signal_args_out_of_range(env, index);
         return em_nil;
     }
-    return entry_to_emacs(env, entry);
+    return egit_tree_entry_to_emacs(env, entry);
 }
 
 EGIT_DOC(tree_entry_byname, "TREE FILENAME",
@@ -150,7 +110,7 @@ emacs_value egit_tree_entry_byname(emacs_env *env, emacs_value _tree, emacs_valu
     free(name);
     if (!entry)
         return em_nil; // TODO: Should we signal an error instead?
-    return entry_to_emacs(env, entry);
+    return egit_tree_entry_to_emacs(env, entry);
 }
 
 EGIT_DOC(tree_entry_bypath, "TREE PATH",
@@ -166,7 +126,7 @@ emacs_value egit_tree_entry_bypath(emacs_env *env, emacs_value _tree, emacs_valu
     int retval = git_tree_entry_bypath(&entry, tree, path);
     free(path);
     EGIT_CHECK_ERROR(retval);
-    emacs_value ret = entry_to_emacs(env, entry);
+    emacs_value ret = egit_tree_entry_to_emacs(env, entry);
     git_tree_entry_free(entry);
     return ret;
 }
@@ -210,7 +170,7 @@ static int tree_walk_callback(const char *root, const git_tree_entry *entry, voi
 
     emacs_value args[2];
     args[0] = EM_STRING(root);
-    args[1] = entry_to_emacs(env, entry);
+    args[1] = egit_tree_entry_to_emacs(env, entry);
     emacs_value ret = env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);

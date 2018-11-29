@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-util.h"
 #include "interface.h"
 #include "egit-treebuilder.h"
 
@@ -38,6 +39,24 @@ emacs_value egit_treebuilder_entrycount(emacs_env *env, emacs_value _builder)
     EGIT_ASSERT_TREEBUILDER(_builder);
     git_treebuilder *bld = EGIT_EXTRACT(_builder);
     return EM_INTEGER(git_treebuilder_entrycount(bld));
+}
+
+EGIT_DOC(treebuilder_get, "BUILDER PATH",
+         "Get the entry in BUILDER associated with PATH.\n"
+         "See `libgit-tree-entry-byindex' for more information.");
+emacs_value egit_treebuilder_get(emacs_env *env, emacs_value _builder, emacs_value _path)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    EM_ASSERT_STRING(_path);
+
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    char *path = EM_EXTRACT_STRING(_path);
+    const git_tree_entry *entry = git_treebuilder_get(bld, path);
+    free(path);
+
+    if (!entry)
+        return em_nil;
+    return egit_tree_entry_to_emacs(env, entry);
 }
 
 
