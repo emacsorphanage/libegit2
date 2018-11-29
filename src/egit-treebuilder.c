@@ -86,3 +86,17 @@ emacs_value egit_treebuilder_remove(emacs_env *env, emacs_value _builder, emacs_
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
+
+EGIT_DOC(treebuilder_write, "BUILDER",
+         "Write the contents of BUILDER to a tree and return its ID.");
+emacs_value egit_treebuilder_write(emacs_env *env, emacs_value _builder)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    git_oid oid;
+    int retval = git_treebuilder_write(&oid, bld);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}

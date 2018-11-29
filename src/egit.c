@@ -834,4 +834,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-treebuilder-get", treebuilder_get, 2, 2);
     DEFUN("libgit-treebuilder-clear", treebuilder_clear, 1, 1);
     DEFUN("libgit-treebuilder-remove", treebuilder_remove, 2, 2);
+    DEFUN("libgit-treebuilder-write", treebuilder_write, 1, 1);
 }

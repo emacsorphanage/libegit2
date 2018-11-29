@@ -10,5 +10,6 @@ EGIT_DEFUN(treebuilder_get, emacs_value _builder, emacs_value _path);
 
 EGIT_DEFUN(treebuilder_clear, emacs_value _builder);
 EGIT_DEFUN(treebuilder_remove, emacs_value _builder, emacs_value _path);
+EGIT_DEFUN(treebuilder_write, emacs_value _builder);
 
 #endif /* EGIT_TREEBUILDER_H */
