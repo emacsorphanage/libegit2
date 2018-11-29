@@ -140,6 +140,10 @@
 #define EGIT_ASSERT_TREE(val)                                           \
     do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
 
+// Assert that VAL is a treebuilder, signal an error and return otherwise.
+#define EGIT_ASSERT_TREEBUILDER(val)                                    \
+    do { if (!egit_assert_type(env, (val), EGIT_TREEBUILDER, em_libgit_treebuilder_p)) return em_nil; } while (0)
+
 /**
  * Extract a libgit git_??? struct from an emacs_value.
  * Caller is responsible for ensuring that this is a valid operation.
@@ -261,7 +265,8 @@ typedef enum {
     EGIT_ANNOTATED_COMMIT,
     EGIT_REFLOG,
     EGIT_REFLOG_ENTRY,
-    EGIT_REVWALK
+    EGIT_REVWALK,
+    EGIT_TREEBUILDER
 } egit_type;
 
 /**
