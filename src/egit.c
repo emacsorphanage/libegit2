@@ -503,6 +503,7 @@ void egit_init(emacs_env *env)
 
     // Config
     DEFUN("libgit-config-new", config_new, 0, 0);
+    DEFUN("libgit-config-open-default", config_open_default, 0, 0);
     DEFUN("libgit-config-open-global", config_open_global, 1, 1);
     DEFUN("libgit-config-open-level", config_open_level, 1, 2);
     DEFUN("libgit-config-open-ondisk", config_open_ondisk, 1, 1);
