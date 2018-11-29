@@ -451,6 +451,7 @@ void egit_init(emacs_env *env)
     // Blob
     DEFUN("libgit-blob-create-fromdisk", blob_create_fromdisk, 2, 2);
     DEFUN("libgit-blob-create-fromstring", blob_create_fromstring, 2, 2);
+    DEFUN("libgit-blob-create-fromworkdir", blob_create_fromworkdir, 2, 2);
     DEFUN("libgit-blob-lookup", blob_lookup, 2, 2);
     DEFUN("libgit-blob-lookup-prefix", blob_lookup_prefix, 2, 2);
 

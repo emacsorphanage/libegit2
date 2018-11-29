@@ -50,6 +50,24 @@ emacs_value egit_blob_create_fromdisk(emacs_env *env, emacs_value _repo, emacs_v
     return EM_STRING(oid_s);
 }
 
+EGIT_DOC(blob_create_fromworkdir, "REPO PATH",
+         "Create a new blob in REPO from the file at workdir PATH and return its ID.");
+emacs_value egit_blob_create_fromworkdir(emacs_env *env, emacs_value _repo, emacs_value _path)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_path);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_oid oid;
+    int retval = git_blob_create_fromworkdir(&oid, repo, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
+
 EGIT_DOC(blob_lookup, "REPO OID", "Look up a blob in REPO by OID.");
 emacs_value egit_blob_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {
