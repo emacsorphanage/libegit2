@@ -502,6 +502,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-commit-create", commit_create, 6, 7);
 
     // Config
+    DEFUN("libgit-config-open-ondisk", config_open_ondisk, 1, 1);
     DEFUN("libgit-config-snapshot", config_snapshot, 1, 1);
 
     DEFUN("libgit-config-get-bool", config_get_bool, 2, 2);
