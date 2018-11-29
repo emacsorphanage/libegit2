@@ -68,3 +68,66 @@
       (libgit-config-set-bool config "user.intelligent" nil)
       (let ((snap (libgit-config-snapshot config)))
         (should-not (libgit-config-get-bool snap "user.intelligent"))))))
+
+(ert-deftest config-levels ()
+  (with-temp-dir path
+    (write "cfg-a" "\
+[user]
+  email = someone@somewhere.com
+  name = John Doe
+  age = 7
+  money = 1k
+  hairs = 1m
+  atoms = 1g
+  male = yes
+  intelligent = off
+  handsome = 1
+  rich = false
+")
+    (write "cfg-b" "\
+[user]
+  email = someone-else@somewhere-else.com
+  name = Jane Doe
+  age = 18
+  money = 1g
+  hairs = 1k
+  atoms = 1
+  male = no
+  intelligent = on
+  beautiful = 1
+  rich = true
+")
+    (let ((config (libgit-config-new)))
+      (libgit-config-add-file-ondisk config "cfg-a" 'global)
+      (libgit-config-add-file-ondisk config "cfg-b" 'local)
+      (let ((snap (libgit-config-snapshot config)))
+        (should (string= "someone-else@somewhere-else.com" (libgit-config-get-string snap "user.email")))
+        (should (string= "Jane Doe" (libgit-config-get-string snap "user.name")))
+        (should (= 18 (libgit-config-get-int snap "user.age")))
+        (should (= (* 1024 1024 1024) (libgit-config-get-int snap "user.money")))
+        (should (= 1024 (libgit-config-get-int snap "user.hairs")))
+        (should (= 1 (libgit-config-get-int snap "user.atoms")))
+        (should-not (libgit-config-get-bool snap "user.male"))
+        (should (libgit-config-get-bool snap "user.handsome"))
+        (should (libgit-config-get-bool snap "user.beautiful"))
+        (should (libgit-config-get-bool snap "user.rich")))
+      (let* ((subconfig (libgit-config-open-level config 'global))
+             (snap (libgit-config-snapshot subconfig)))
+        (should (string= "someone@somewhere.com" (libgit-config-get-string snap "user.email")))
+        (should (string= "John Doe" (libgit-config-get-string snap "user.name")))
+        (should (= 7 (libgit-config-get-int snap "user.age")))
+        (should (= 1024 (libgit-config-get-int snap "user.money")))
+        (should (= (* 1024 1024) (libgit-config-get-int snap "user.hairs")))
+        (should (= (* 1024 1024 1024) (libgit-config-get-int snap "user.atoms")))
+        (should (libgit-config-get-bool snap "user.male"))
+        (should (libgit-config-get-bool snap "user.handsome"))
+        (should-error (libgit-config-get-bool snap "user.beautiful") :type 'giterr-config)
+        (should-not (libgit-config-get-bool snap "user.rich")))
+
+      ;; Delete only deletes on the highest level
+      (libgit-config-delete-entry config "user.rich")
+      (let ((snap (libgit-config-snapshot config)))
+        (should-not (libgit-config-get-bool snap "user.rich")))
+
+      ;; Deleting again won't work, the lower levels are immutable
+      (should-error (libgit-config-delete-entry config "user.rich") :type 'giterr-config))))
