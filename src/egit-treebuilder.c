@@ -30,6 +30,18 @@ emacs_value egit_treebuilder_new(emacs_env *env, emacs_value _repo, emacs_value 
 
 
 // =============================================================================
+// Getters
+
+EGIT_DOC(treebuilder_entrycount, "BUILDER", "Get the number of entries in BUILDER.");
+emacs_value egit_treebuilder_entrycount(emacs_env *env, emacs_value _builder)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    return EM_INTEGER(git_treebuilder_entrycount(bld));
+}
+
+
+// =============================================================================
 // Operations
 
 EGIT_DOC(treebuilder_clear, "BUILDER", "Clear all entries in BUILDER.");
