@@ -40,6 +40,7 @@
 #include "egit-tag.h"
 #include "egit-transaction.h"
 #include "egit-tree.h"
+#include "egit-treebuilder.h"
 #include "egit.h"
 
 egit_type egit_get_type(emacs_env *env, emacs_value _obj)
@@ -826,4 +827,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-tree-entrycount", tree_entrycount, 1, 1);
 
     DEFUN("libgit-tree-walk", tree_walk, 3, 3);
+
+    // Treebuilder
+    DEFUN("libgit-treebuilder-new", treebuilder_new, 1, 2);
 }
