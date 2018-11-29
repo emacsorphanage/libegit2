@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 287 (36.9%)
+- Implemented: 290 (37.3%)
 - Should not implement: 163 (21.0%)
-- To do: 328 (42.2%)
+- To do: 325 (41.8%)
 - Total: 778
 
 ### extra
@@ -246,11 +246,11 @@ Iterators converted to map functions:
 
 ### blob
 
-- :grey_question: `git-blob-create-frombuffer`
-- :grey_question: `git-blob-create-fromdisk`
+- :heavy_check_mark: `git-blob-create-frombuffer`
+- :heavy_check_mark: `git-blob-create-fromdisk`
 - :grey_question: `git-blob-create-fromstream`
 - :grey_question: `git-blob-create-fromstream-commit`
-- :grey_question: `git-blob-create-fromworkdir`
+- :heavy_check_mark: `git-blob-create-fromworkdir`
 - :grey_question: `git-blob-dup`
 - :heavy_check_mark: `git-blob-filtered-content`
 - :x: `git-blob-free` (memory management shouldn't be exposed to Emacs)
