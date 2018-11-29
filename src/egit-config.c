@@ -202,6 +202,22 @@ emacs_value egit_config_add_file_ondisk(
     return em_nil;
 }
 
+EGIT_DOC(config_delete_entry, "CONFIG NAME",
+         "Delete the entry named NAME from the file in CONFIG with the highest level.");
+emacs_value egit_config_delete_entry(emacs_env *env, emacs_value _config, emacs_value _name)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EM_ASSERT_STRING(_name);
+
+    git_config *config = EGIT_EXTRACT(_config);
+    char *name = EM_EXTRACT_STRING(_name);
+    int retval = git_config_delete_entry(config, name);
+    free(name);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
+
 
 // =============================================================================
 // Miscellaneous
