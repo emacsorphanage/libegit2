@@ -18,6 +18,18 @@ emacs_value egit_config_new(emacs_env *env)
     return egit_wrap(env, EGIT_CONFIG, config, NULL);
 }
 
+EGIT_DOC(config_open_default, "",
+         "Finds the global, XDG and system configuration files and opens them\n"
+         "in a single prioritized config object that can be used for accessing\n"
+         "out-of-repo config.");
+emacs_value egit_config_open_default(emacs_env *env)
+{
+    git_config *config;
+    int retval = git_config_open_default(&config);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_CONFIG, config, NULL);
+}
+
 EGIT_DOC(config_open_global, "CONFIG",
          "Open the global/XDG configuration file according to git's rules.");
 emacs_value egit_config_open_global(emacs_env *env, emacs_value _config)
