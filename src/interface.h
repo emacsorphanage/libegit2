@@ -148,6 +148,10 @@ extern emacs_value em_up_to_date, em_fastforward, em_unborn, em_no_fastforward,
 // Revwalk sorts
 extern emacs_value em_topological, em_time;
 
+// Config file levels
+extern emacs_value em_programdata, em_system, em_xdg, em_global, em_local,
+    em_app;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 

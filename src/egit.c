@@ -514,6 +514,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-config-set-int", config_set_int, 3, 3);
     DEFUN("libgit-config-set-string", config_set_string, 3, 3);
 
+    DEFUN("libgit-config-add-file-ondisk", config_add_file_ondisk, 2, 5);
+
     DEFUN("libgit-config-find-global", config_find_global, 0, 0);
     DEFUN("libgit-config-find-programdata", config_find_programdata, 0, 0);
     DEFUN("libgit-config-find-system", config_find_system, 0, 0);

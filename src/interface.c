@@ -157,6 +157,10 @@ emacs_value em_up_to_date, em_fastforward, em_unborn, em_no_fastforward,
 // Revwalk sorts
 emacs_value em_topological, em_time;
 
+// Config file levels
+emacs_value em_programdata, em_system, em_xdg, em_global, em_local,
+    em_app;
+
 // Libgit2 errors
 emacs_value em_giterr, em_giterr_nomemory, em_giterr_os, em_giterr_invalid,
     em_giterr_reference, em_giterr_zlib, em_giterr_repository, em_giterr_config,
@@ -469,6 +473,13 @@ void em_init(emacs_env *env)
 
     em_topological = GLOBREF(INTERN("topological"));
     em_time = GLOBREF(INTERN("time"));
+
+    em_programdata = GLOBREF(INTERN("programdata"));
+    em_system = GLOBREF(INTERN("system"));
+    em_xdg = GLOBREF(INTERN("xdg"));
+    em_global = GLOBREF(INTERN("global"));
+    em_local = GLOBREF(INTERN("local"));
+    em_app = GLOBREF(INTERN("app"));
 
     em_threads = GLOBREF(INTERN("threads"));
     em_https = GLOBREF(INTERN("https"));
