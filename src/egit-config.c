@@ -155,6 +155,55 @@ emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_va
 
 
 // =============================================================================
+// Operations
+
+EGIT_DOC(config_add_file_ondisk, "CONFIG PATH &optional LEVEL REPO FORCE",
+         "Add a new config file at PATH to the given CONFIG.\n"
+         "LEVEL, if given, is the priority level: one of `programdata'\n"
+         "`system', `xdg', `global', `local' or `app' (default).\n\n"
+         "If REPO is given, parse optional includes.\n"
+         "If FORCE is non-nil, replace the config at the given level.");
+emacs_value egit_config_add_file_ondisk(
+    emacs_env *env, emacs_value _config, emacs_value _path,
+    emacs_value _level, emacs_value _repo, emacs_value _force)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
+    if (EM_EXTRACT_BOOLEAN(_repo))
+        EGIT_ASSERT_REPOSITORY(_repo);
+
+    git_config_level_t level;
+    if (EM_EQ(_level, em_programdata))
+        level = GIT_CONFIG_LEVEL_PROGRAMDATA;
+    else if (EM_EQ(_level, em_system))
+        level = GIT_CONFIG_LEVEL_SYSTEM;
+    else if (EM_EQ(_level, em_xdg))
+        level = GIT_CONFIG_LEVEL_XDG;
+    else if (EM_EQ(_level, em_global))
+        level = GIT_CONFIG_LEVEL_GLOBAL;
+    else if (EM_EQ(_level, em_local))
+        level = GIT_CONFIG_LEVEL_LOCAL;
+    else if (EM_EQ(_level, em_app))
+        level = GIT_CONFIG_LEVEL_APP;
+    else {
+        em_signal_wrong_value(env, _level);
+        return em_nil;
+    }
+
+    git_config *config = EGIT_EXTRACT(_config);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_repository *repo = EGIT_EXTRACT_OR_NULL(_repo);
+    int force = EM_EXTRACT_BOOLEAN(_force);
+
+    int retval = git_config_add_file_ondisk(config, path, level, repo, force);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+
+// =============================================================================
 // Miscellaneous
 
 EGIT_DOC(config_find_global, "", "Get the path to the global config file.");
