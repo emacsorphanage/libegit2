@@ -449,6 +449,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-blame-hunk-start-line-number", blame_hunk_start_line_number, 1, 2);
 
     // Blob
+    DEFUN("libgit-blob-create-fromdisk", blob_create_fromdisk, 2, 2);
+    DEFUN("libgit-blob-create-fromstring", blob_create_fromstring, 2, 2);
     DEFUN("libgit-blob-lookup", blob_lookup, 2, 2);
     DEFUN("libgit-blob-lookup-prefix", blob_lookup_prefix, 2, 2);
 

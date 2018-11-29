@@ -10,6 +10,46 @@
 // =============================================================================
 // Constructors
 
+EGIT_DOC(blob_create_fromstring, "REPO STR",
+         "Create a new blob in REPO from the string STR."
+         "If STR is multibyte, it will be UTF-8 encoded.");
+emacs_value egit_blob_create_fromstring(emacs_env *env, emacs_value _repo, emacs_value _str)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_str);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    ptrdiff_t size;
+    void *data = em_get_string_with_size(env, _str, &size);
+
+    git_oid oid;
+    int retval = git_blob_create_frombuffer(&oid, repo, data, size);
+    free(data);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
+
+EGIT_DOC(blob_create_fromdisk, "REPO PATH",
+         "Create a new blob in REPO from the file at PATH and return its ID.");
+emacs_value egit_blob_create_fromdisk(emacs_env *env, emacs_value _repo, emacs_value _path)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_oid oid;
+    int retval = git_blob_create_fromdisk(&oid, repo, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
+
 EGIT_DOC(blob_lookup, "REPO OID", "Look up a blob in REPO by OID.");
 emacs_value egit_blob_lookup(emacs_env *env, emacs_value _repo, emacs_value _oid)
 {

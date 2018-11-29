@@ -662,15 +662,21 @@ void em_signal_args_out_of_range(emacs_env *env, intmax_t index)
     env->non_local_exit_signal(env, _args_out_of_range, EM_INTEGER(index));
 }
 
+char *em_get_string_with_size(emacs_env *env, emacs_value arg, ptrdiff_t *size)
+{
+    env->copy_string_contents(env, arg, NULL, size);
+
+    char *buf = (char*) malloc((*size) * sizeof(char));
+    env->copy_string_contents(env, arg, buf, size);
+
+    (*size)--;
+    return buf;
+}
+
 char *em_get_string(emacs_env *env, emacs_value arg)
 {
     ptrdiff_t size;
-    env->copy_string_contents(env, arg, NULL, &size);
-
-    char *buf = (char*) malloc(size * sizeof(char));
-    env->copy_string_contents(env, arg, buf, &size);
-
-    return buf;
+    return em_get_string_with_size(env, arg, &size);
 }
 
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
