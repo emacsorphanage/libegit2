@@ -9,6 +9,19 @@
 // =============================================================================
 // Constructors
 
+EGIT_DOC(config_open_ondisk, "PATH", "Open a config file at PATH.");
+emacs_value egit_config_open_ondisk(emacs_env *env, emacs_value _path)
+{
+    EM_ASSERT_STRING(_path);
+    EM_NORMALIZE_PATH(_path);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_config *config;
+    int retval = git_config_open_ondisk(&config, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_CONFIG, config, NULL);
+}
+
 EGIT_DOC(config_snapshot, "CONFIG", "Create a consistent snapshot of CONFIG.");
 emacs_value egit_config_snapshot(emacs_env *env, emacs_value _config)
 {
