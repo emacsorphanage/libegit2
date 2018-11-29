@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 264 (33.9%)
-- Should not implement: 161 (20.7%)
-- To do: 353 (45.4%)
+- Implemented: 278 (35.7%)
+- Should not implement: 163 (21.0%)
+- To do: 337 (43.3%)
 - Total: 778
 
 ### extra
@@ -980,23 +980,23 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### revwalk
 
-- :grey_question: `git-revwalk-add-hide-cb`
+- :x: `git-revwalk-add-hide-cb` (use `git-revwalk-foreach`)
 - :x: `git-revwalk-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-revwalk-hide`
-- :grey_question: `git-revwalk-hide-glob`
-- :grey_question: `git-revwalk-hide-head`
-- :grey_question: `git-revwalk-hide-ref`
-- :grey_question: `git-revwalk-new`
-- :grey_question: `git-revwalk-next`
-- :grey_question: `git-revwalk-push`
-- :grey_question: `git-revwalk-push-glob`
-- :grey_question: `git-revwalk-push-head`
-- :grey_question: `git-revwalk-push-range`
-- :grey_question: `git-revwalk-push-ref`
-- :grey_question: `git-revwalk-repository`
-- :grey_question: `git-revwalk-reset`
-- :grey_question: `git-revwalk-simplify-first-parent`
-- :grey_question: `git-revwalk-sorting`
+- :heavy_check_mark: `git-revwalk-hide`
+- :heavy_check_mark: `git-revwalk-hide-glob`
+- :heavy_check_mark: `git-revwalk-hide-head`
+- :heavy_check_mark: `git-revwalk-hide-ref`
+- :heavy_check_mark: `git-revwalk-new`
+- :x: `git-revwalk-next` (use `git-revwalk-foreach`)
+- :heavy_check_mark: `git-revwalk-push`
+- :heavy_check_mark: `git-revwalk-push-glob`
+- :heavy_check_mark: `git-revwalk-push-head`
+- :heavy_check_mark: `git-revwalk-push-range`
+- :heavy_check_mark: `git-revwalk-push-ref`
+- :heavy_check_mark: `git-revwalk-repository`
+- :heavy_check_mark: `git-revwalk-reset`
+- :heavy_check_mark: `git-revwalk-simplify-first-parent`
+- :heavy_check_mark: `git-revwalk-sorting`
 
 ### signature
 
