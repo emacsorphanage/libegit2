@@ -9,6 +9,42 @@
 // =============================================================================
 // Constructors
 
+EGIT_DOC(config_open_level, "CONFIG &optional LEVEL",
+         "Open a single config file in CONFIG at the given LEVEL.\n"
+         "LEVEL, if given, is the priority level: one of `programdata'\n"
+         "`system', `xdg', `global', `local', `app' or nil.\n"
+         "If LEVEL is nil, the highest priority file will be opened.");
+emacs_value egit_config_open_level(emacs_env *env, emacs_value _config, emacs_value _level)
+{
+    EGIT_ASSERT_CONFIG(_config);
+
+    git_config_level_t level;
+    if (!EM_EXTRACT_BOOLEAN(_level))
+        level = GIT_CONFIG_HIGHEST_LEVEL;
+    else if (EM_EQ(_level, em_programdata))
+        level = GIT_CONFIG_LEVEL_PROGRAMDATA;
+    else if (EM_EQ(_level, em_system))
+        level = GIT_CONFIG_LEVEL_SYSTEM;
+    else if (EM_EQ(_level, em_xdg))
+        level = GIT_CONFIG_LEVEL_XDG;
+    else if (EM_EQ(_level, em_global))
+        level = GIT_CONFIG_LEVEL_GLOBAL;
+    else if (EM_EQ(_level, em_local))
+        level = GIT_CONFIG_LEVEL_LOCAL;
+    else if (EM_EQ(_level, em_app))
+        level = GIT_CONFIG_LEVEL_APP;
+    else {
+        em_signal_wrong_value(env, _level);
+        return em_nil;
+    }
+
+    git_config *config = EGIT_EXTRACT(_config);
+    git_config *new;
+    int retval = git_config_open_level(&new, config, level);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_CONFIG, new, NULL);
+}
+
 EGIT_DOC(config_open_ondisk, "PATH", "Open a config file at PATH.");
 emacs_value egit_config_open_ondisk(emacs_env *env, emacs_value _path)
 {
