@@ -4,6 +4,7 @@
 #define EGIT_CONFIG_H
 
 EGIT_DEFUN_0(config_new);
+EGIT_DEFUN(config_open_global, emacs_value _config);
 EGIT_DEFUN(config_open_level, emacs_value _config, emacs_value _level);
 EGIT_DEFUN(config_open_ondisk, emacs_value _path);
 EGIT_DEFUN(config_snapshot, emacs_value _config);

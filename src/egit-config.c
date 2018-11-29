@@ -18,6 +18,18 @@ emacs_value egit_config_new(emacs_env *env)
     return egit_wrap(env, EGIT_CONFIG, config, NULL);
 }
 
+EGIT_DOC(config_open_global, "CONFIG",
+         "Open the global/XDG configuration file according to git's rules.");
+emacs_value egit_config_open_global(emacs_env *env, emacs_value _config)
+{
+    EGIT_ASSERT_CONFIG(_config);
+    git_config *config = EGIT_EXTRACT(_config);
+    git_config *new;
+    int retval = git_config_open_global(&new, config);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_CONFIG, new, NULL);
+}
+
 EGIT_DOC(config_open_level, "CONFIG &optional LEVEL",
          "Open a single config file in CONFIG at the given LEVEL.\n"
          "LEVEL, if given, is the priority level: one of `programdata'\n"
