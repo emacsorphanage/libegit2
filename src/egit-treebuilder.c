@@ -71,3 +71,18 @@ emacs_value egit_treebuilder_clear(emacs_env *env, emacs_value _builder)
     git_treebuilder_clear(bld);
     return em_nil;
 }
+
+EGIT_DOC(treebuilder_remove, "BUILDER PATH",
+         "Delete the entry in BUILDER associated with PATH.");
+emacs_value egit_treebuilder_remove(emacs_env *env, emacs_value _builder, emacs_value _path)
+{
+    EGIT_ASSERT_TREEBUILDER(_builder);
+    EM_ASSERT_STRING(_path);
+
+    git_treebuilder *bld = EGIT_EXTRACT(_builder);
+    char *path = EM_EXTRACT_STRING(_path);
+    int retval = git_treebuilder_remove(bld, path);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
