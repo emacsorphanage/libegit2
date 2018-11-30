@@ -975,7 +975,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 ### revparse
 
 - :grey_question: `git-revparse`
-- :grey_question: `git-revparse-ext`
+- :heavy_check_mark: `git-revparse-ext`
 - :heavy_check_mark: `git-revparse-single`
 
 ### revwalk
