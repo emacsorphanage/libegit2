@@ -5,6 +5,34 @@
 #include "egit-repository.h"
 
 
+EGIT_DOC(revparse, "REPO SPEC",
+         "Return the object(s) referred to by spec.\n"
+         "The return value is either a single object or a list (triplep FROM TO)\n"
+         "where triplep indicates whether the .. or the ... operator was present.");
+emacs_value egit_revparse(emacs_env *env, emacs_value _repo, emacs_value _spec)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_spec);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_revspec revspec;
+    int retval;
+    {
+        char *spec = EM_EXTRACT_STRING(_spec);
+        retval = git_revparse(&revspec, repo, spec);
+        free(spec);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    if (revspec.flags & GIT_REVPARSE_SINGLE)
+        return egit_wrap(env, EGIT_OBJECT, revspec.from, EM_EXTRACT_USER_PTR(_repo));
+    emacs_value ret;
+    ret = em_cons(env, egit_wrap(env, EGIT_OBJECT, revspec.to, EM_EXTRACT_USER_PTR(_repo)), em_nil);
+    ret = em_cons(env, egit_wrap(env, EGIT_OBJECT, revspec.from, EM_EXTRACT_USER_PTR(_repo)), ret);
+    ret = em_cons(env, revspec.flags & GIT_REVPARSE_MERGE_BASE ? em_t : em_nil, ret);
+    return ret;
+}
+
 EGIT_DOC(revparse_ext, "REPO SPEC",
          "Find the object and reference (if applicable) referred to by SPEC in REPO.\n"
          "The return value is a cons cell where the car is an object and the cdr is\n"
