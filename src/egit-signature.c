@@ -19,6 +19,21 @@ emacs_value egit_signature_default(emacs_env *env, emacs_value _repo)
     return egit_wrap(env, EGIT_SIGNATURE, signature, NULL);
 }
 
+EGIT_DOC(signature_from_string, "STRING",
+         "Create a signature from a string representation on the form\n"
+         "  Real Name <email> timestamp offset\n"
+         "where timestamp is the number of seconds since the Unix epoch\n"
+         "and offset is the timezone offset in +hhmm or -hhmm format.");
+emacs_value egit_signature_from_string(emacs_env *env, emacs_value _str)
+{
+    EM_ASSERT_STRING(_str);
+    char *string = EM_EXTRACT_STRING(_str);
+    git_signature *signature;
+    int retval = git_signature_from_buffer(&signature, string);
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_SIGNATURE, signature, NULL);
+}
+
 EGIT_DOC(signature_new, "NAME EMAIL TIME",
          "Create a new signature with NAME, EMAIL and TIME timestamp.");
 emacs_value egit_signature_new(emacs_env *env, emacs_value _name, emacs_value _email, emacs_value _time)
