@@ -1,0 +1,57 @@
+(ert-deftest treebuilder-empty ()
+  (with-temp-dir path
+    (init)
+    (let* ((repo (libgit-repository-open path))
+           (bld (libgit-treebuilder-new repo)))
+      (should (= 0 (libgit-treebuilder-entrycount bld)))
+      (should (string= "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+                       (libgit-treebuilder-write bld))))))
+
+(ert-deftest treebuilder-simple ()
+  (with-temp-dir path
+    (init)
+    (let* ((repo (libgit-repository-open path))
+           (b1 (libgit-blob-create-fromstring repo "abcdef"))
+           (b2 (libgit-blob-create-fromstring repo "ghijkl"))
+           (fake-id "0123456789abcdef0123456789abcdef01234567")
+           (bld (libgit-treebuilder-new repo)))
+
+      (libgit-treebuilder-insert bld "file1" b1 'blob)
+      (libgit-treebuilder-insert bld "file2" b2 'blob-executable)
+      (should-error (libgit-treebuilder-insert bld "file3" fake-id 'blob) :type 'giterr-tree)
+      (should-error (libgit-treebuilder-insert bld "subdir/file3" fake-id 'blob) :type 'giterr-tree)
+      (should (= 2 (libgit-treebuilder-entrycount bld)))
+      (should (equal `(blob blob ,b1 "file1") (libgit-treebuilder-get bld "file1")))
+      (should (equal `(blob-executable blob ,b2 "file2") (libgit-treebuilder-get bld "file2")))
+
+      (let ((tree (libgit-tree-lookup repo (libgit-treebuilder-write bld))))
+        (should (= 2 (libgit-tree-entrycount tree)))
+        (should (equal `(blob blob ,b1 "file1") (libgit-tree-entry-byname tree "file1")))
+        (should (equal `(blob-executable blob ,b2 "file2") (libgit-tree-entry-byname tree "file2")))
+        (libgit-checkout-tree repo tree)
+        (should (string= "abcdef" (read-file-nnl "file1")))
+        (should (string= "ghijkl" (read-file-nnl "file2")))))))
+
+(ert-deftest treebuilder-subdirs ()
+  (with-temp-dir path
+    (init)
+    (let* ((repo (libgit-repository-open path))
+           (b1 (libgit-blob-create-fromstring repo "abcdef"))
+           (b2 (libgit-blob-create-fromstring repo "ghijkl"))
+           (bld (libgit-treebuilder-new repo))
+           subid)
+
+      (libgit-treebuilder-insert bld "file2" b2 'blob)
+      (setq subid (libgit-treebuilder-write bld))
+      (libgit-treebuilder-clear bld)
+      (should (= 0 (libgit-treebuilder-entrycount bld)))
+      (libgit-treebuilder-insert bld "file1" b1 'blob)
+      (libgit-treebuilder-insert bld "subdir" subid 'tree)
+      (should (= 2 (libgit-treebuilder-entrycount bld)))
+
+      (let ((tree (libgit-tree-lookup repo (libgit-treebuilder-write bld))))
+        (should (equal `(blob blob ,b1 "file1") (libgit-tree-entry-bypath tree "file1")))
+        (should (equal `(blob blob ,b2 "file2") (libgit-tree-entry-bypath tree "subdir/file2")))
+        (libgit-checkout-tree repo tree)
+        (should (string= "abcdef" (read-file-nnl "file1")))
+        (should (string= "ghijkl" (read-file-nnl "subdir/file2")))))))
