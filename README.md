@@ -1003,7 +1003,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-signature-default`
 - :grey_question: `git-signature-dup`
 - :x: `git-signature-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-signature-from-buffer`
+- :heavy_check_mark: `git-signature-from-buffer` (use `git-signature-from-string`)
 - :heavy_check_mark: `git-signature-new`
 - :heavy_check_mark: `git-signature-now`
 
