@@ -19,6 +19,28 @@ emacs_value egit_signature_default(emacs_env *env, emacs_value _repo)
     return egit_wrap(env, EGIT_SIGNATURE, signature, NULL);
 }
 
+EGIT_DOC(signature_new, "NAME EMAIL TIME",
+         "Create a new signature with NAME, EMAIL and TIME timestamp.");
+emacs_value egit_signature_new(emacs_env *env, emacs_value _name, emacs_value _email, emacs_value _time)
+{
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_email);
+
+    intmax_t timestamp, offset;
+    if (!em_encode_time(env, _time, &timestamp, &offset))
+        return em_nil;
+
+    char *name = EM_EXTRACT_STRING(_name);
+    char *email = EM_EXTRACT_STRING(_email);
+    git_signature *signature;
+    int retval = git_signature_new(&signature, name, email, timestamp, offset / 60);
+    free(name);
+    free(email);
+
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_SIGNATURE, signature, NULL);
+}
+
 EGIT_DOC(signature_now, "NAME EMAIL",
          "Create a new action signature with NAME and EMAIL and now timestamp.");
 emacs_value egit_signature_now(emacs_env *env, emacs_value _name, emacs_value _email)

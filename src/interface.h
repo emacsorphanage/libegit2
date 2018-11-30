@@ -460,6 +460,11 @@ char *em_default_directory(emacs_env *env);
 emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset);
 
 /**
+ * Run (encode-time ...) in Emacs.
+ */
+bool em_encode_time(emacs_env *env, emacs_value time, intmax_t *timestamp, intmax_t *offset);
+
+/**
  * Run (insert ...) in Emacs.
  */
 void em_insert(emacs_env *env, const char *ptr, size_t length);

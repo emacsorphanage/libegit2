@@ -15,3 +15,8 @@
     (should (libgit-signature-p sig))
     (should (string= "Ludwig van Beethoven" (libgit-signature-name sig)))
     (should (string= "somewhere@bonn.de" (libgit-signature-email sig)))))
+
+(ert-deftest signature-new ()
+  (let* ((time (decode-time (current-time)))
+         (sig (libgit-signature-new "a" "b" time)))
+    (should (equal (libgit-signature-time sig) time))))

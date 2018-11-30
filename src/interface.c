@@ -177,7 +177,7 @@ static emacs_value _cons, _defalias, _define_error, _expand_file_name,
     _not_implemented, _provide, _vector, _wrong_type_argument,
     _wrong_value_argument, _consp, _car, _cdr, _list, _length, _symbol_value,
     _default_directory, _assq, _args_out_of_range, _decode_time, _insert,
-    _string_as_unibyte;
+    _string_as_unibyte, _encode_time, _apply, _last;
 
 
 void em_init(emacs_env *env)
@@ -547,6 +547,9 @@ void em_init(emacs_env *env)
     _vector = GLOBREF(INTERN("vector"));
     _insert = GLOBREF(INTERN("insert"));
     _string_as_unibyte = GLOBREF(INTERN("string-as-unibyte"));
+    _encode_time = GLOBREF(INTERN("encode-time"));
+    _apply = GLOBREF(INTERN("apply"));
+    _last = GLOBREF(INTERN("last"));
 
     _args_out_of_range = GLOBREF(INTERN("args-out-of-range"));
     _wrong_type_argument = GLOBREF(INTERN("wrong-type-argument"));
@@ -761,6 +764,33 @@ emacs_value em_decode_time(emacs_env *env, intmax_t timestamp, intmax_t offset)
     return em_funcall(env, _decode_time, 2,
                       EM_INTEGER(timestamp),
                       EM_INTEGER(offset));
+}
+
+bool em_encode_time(emacs_env *env, emacs_value time, intmax_t *timestamp, intmax_t *offset)
+{
+    emacs_value encoded = em_funcall(env, _apply, 2, _encode_time, time);
+    EM_RETURN_IF_NLE(false);
+
+    emacs_value high = em_car(env, encoded);
+    *timestamp = EM_EXTRACT_INTEGER(high) << 16;
+
+    encoded = em_cdr(env, encoded);
+    emacs_value low = em_car(env, encoded);
+    *timestamp += EM_EXTRACT_INTEGER(low);
+
+    emacs_value last = em_funcall(env, _last, 1, time);
+    if (!em_consp(env, last)) {
+        em_signal_wrong_type(env, last, em_cons_p);
+        return false;
+    }
+    emacs_value zone = em_car(env, last);
+    if (!EM_EXTRACT_BOOLEAN(em_funcall(env, em_integerp, 1, zone))) {
+        em_signal_wrong_type(env, zone, em_integerp);
+        return false;
+    }
+    *offset = EM_EXTRACT_INTEGER(zone);
+
+    return true;
 }
 
 void em_insert(emacs_env *env, const char *ptr, size_t length)
