@@ -741,6 +741,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-repository-discover", repository_discover, 0, 3);
 
     // Revparse
+    DEFUN("libgit-revparse-ext", revparse_ext, 2, 2);
     DEFUN("libgit-revparse-single", revparse_single, 2, 2);
 
     // Revwalk
