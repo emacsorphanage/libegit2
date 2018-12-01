@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "git2.h"
 #include "interface.h"
 
