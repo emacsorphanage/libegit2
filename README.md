@@ -1047,7 +1047,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 - :heavy_check_mark: `git-submodule-add-finalize`
 - :heavy_check_mark: `git-submodule-add-setup`
-- :grey_question: `git-submodule-add-to-index`
+- :heavy_check_mark: `git-submodule-add-to-index`
 - :heavy_check_mark: `git-submodule-branch`
 - :grey_question: `git-submodule-fetch-recurse-submodules`
 - :heavy_check_mark: `git-submodule-foreach`
