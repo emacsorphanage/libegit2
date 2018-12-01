@@ -3,6 +3,7 @@
 #ifndef EGIT_SUBMODULE_H
 #define EGIT_SUBMODULE_H
 
+EGIT_DEFUN(submodule_add_setup, emacs_value _repo, emacs_value _url, emacs_value _path, emacs_value linkp);
 EGIT_DEFUN(submodule_lookup, emacs_value _repo, emacs_value _name);
 EGIT_DEFUN(submodule_foreach, emacs_value _repo, emacs_value func);
 
