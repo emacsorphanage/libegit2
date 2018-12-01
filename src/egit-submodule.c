@@ -378,6 +378,18 @@ emacs_value egit_submodule_add_finalize(emacs_env *env, emacs_value _sub)
     return em_nil;
 }
 
+EGIT_DOC(submodule_add_to_index, "SUBMODULE WRITE",
+         "Add HEAD of SUBMODULE to index in superproject.\n"
+         "If WRITE is non-nil, the index will be immediately written.");
+emacs_value egit_submodule_add_to_index(emacs_env *env, emacs_value _sub, emacs_value write)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    int retval = git_submodule_add_to_index(sub, EM_EXTRACT_BOOLEAN(write));
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(submodule_reload, "SUBMODULE &optional FORCE",
          "Re-read info about SUBMODULE from config, index and HEAD.\n"
          "If FORCE is non-nil, force reload even if data does not seem\n"

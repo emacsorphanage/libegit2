@@ -21,6 +21,7 @@ EGIT_DEFUN(submodule_url, emacs_value _sub);
 EGIT_DEFUN(submodule_wd_id, emacs_value _sub);
 
 EGIT_DEFUN(submodule_add_finalize, emacs_value _sub);
+EGIT_DEFUN(submodule_add_to_index, emacs_value _sub, emacs_value write);
 EGIT_DEFUN(submodule_reload, emacs_value _sub, emacs_value force);
 
 #endif /* EGIT_SUBMODULE_H */
