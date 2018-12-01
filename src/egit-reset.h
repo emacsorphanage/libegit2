@@ -9,4 +9,10 @@ EGIT_DEFUN(reset,
            emacs_value reset_type,
            emacs_value checkout_opts);
 
+EGIT_DEFUN(reset_from_annotated,
+           emacs_value repo,
+           emacs_value ann,
+           emacs_value reset_type,
+           emacs_value checkout_opts);
+
 #endif /* EGIT_RESET_H */
