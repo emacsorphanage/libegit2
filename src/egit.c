@@ -846,4 +846,5 @@ void egit_init(emacs_env *env)
     // Reset
     DEFUN("libgit-reset", reset, 3, 4);
     DEFUN("libgit-reset-from-annotated", reset_from_annotated, 3, 4);
+    DEFUN("libgit-reset-default", reset_default, 3, 3);
 }
