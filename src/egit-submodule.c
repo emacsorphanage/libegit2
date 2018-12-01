@@ -390,6 +390,18 @@ emacs_value egit_submodule_add_to_index(emacs_env *env, emacs_value _sub, emacs_
     return em_nil;
 }
 
+EGIT_DOC(submodule_init, "SUBMODULE &optional FORCE",
+         "Copy submodule info to .git/config.\n"
+         "If FORCE is non-nil, overwrite even if an entry already exists.");
+emacs_value egit_submodule_init(emacs_env *env, emacs_value _sub, emacs_value force)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    int retval = git_submodule_init(sub, EM_EXTRACT_BOOLEAN(force));
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(submodule_reload, "SUBMODULE &optional FORCE",
          "Re-read info about SUBMODULE from config, index and HEAD.\n"
          "If FORCE is non-nil, force reload even if data does not seem\n"

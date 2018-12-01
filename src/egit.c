@@ -802,6 +802,7 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-submodule-add-finalize", submodule_add_finalize, 1, 1);
     DEFUN("libgit-submodule-add-to-index", submodule_add_to_index, 1, 2);
+    DEFUN("libgit-submodule-init", submodule_init, 1, 2);
     DEFUN("libgit-submodule-reload", submodule_reload, 1, 2);
 
     // Tag

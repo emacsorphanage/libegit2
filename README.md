@@ -1055,7 +1055,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-submodule-head-id`
 - :heavy_check_mark: `git-submodule-ignore`
 - :heavy_check_mark: `git-submodule-index-id`
-- :grey_question: `git-submodule-init`
+- :heavy_check_mark: `git-submodule-init`
 - :heavy_check_mark: `git-submodule-location`
 - :heavy_check_mark: `git-submodule-lookup`
 - :heavy_check_mark: `git-submodule-name`
