@@ -94,6 +94,31 @@ static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int 
 // =============================================================================
 // Constructors
 
+EGIT_DOC(submodule_add_setup, "REPO URL PATH &optional LINKP",
+         "Set up a new submodule for checkout.\n"
+         "This emulates `git submodule add' up to fetch and checkout.\n"
+         "If LINK is non-nil, PATH will contain a git link to a repo\n"
+         "in REPO's own .git/modules.");
+emacs_value egit_submodule_add_setup(
+    emacs_env *env, emacs_value _repo, emacs_value _url,
+    emacs_value _path, emacs_value linkp)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_url);
+    EM_ASSERT_STRING(_path);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *url = EM_EXTRACT_STRING(_url);
+    char *path = EM_EXTRACT_STRING(_path);
+    git_submodule *sub;
+    int retval = git_submodule_add_setup(&sub, repo, url, path, EM_EXTRACT_BOOLEAN(linkp));
+    free(url);
+    free(path);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_SUBMODULE, sub, EM_EXTRACT_USER_PTR(_repo));
+}
+
 EGIT_DOC(submodule_lookup, "REPO NAME", "Look up a submodule in REPO by NAME or path.");
 emacs_value egit_submodule_lookup(emacs_env *env, emacs_value _repo, emacs_value _name)
 {
