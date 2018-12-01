@@ -366,6 +366,18 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
 // =============================================================================
 // Operations
 
+EGIT_DOC(submodule_add_finalize, "SUBMODULE",
+         "Resolve the setup of SUBMODULE.\n"
+         "This should be called after `libgit-add-setup', and after clone.");
+emacs_value egit_submodule_add_finalize(emacs_env *env, emacs_value _sub)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    int retval = git_submodule_add_finalize(sub);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
 EGIT_DOC(submodule_reload, "SUBMODULE &optional FORCE",
          "Re-read info about SUBMODULE from config, index and HEAD.\n"
          "If FORCE is non-nil, force reload even if data does not seem\n"
