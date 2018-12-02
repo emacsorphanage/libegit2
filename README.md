@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 302 (38.8%)
+- Implemented: 305 (39.2%)
 - Should not implement: 163 (21.0%)
-- To do: 313 (40.2%)
+- To do: 310 (39.8%)
 - Total: 778
 
 ### extra
@@ -962,9 +962,9 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### reset
 
-- :grey_question: `git-reset`
-- :grey_question: `git-reset-default`
-- :grey_question: `git-reset-from-annotated`
+- :heavy_check_mark: `git-reset`
+- :heavy_check_mark: `git-reset-default`
+- :heavy_check_mark: `git-reset-from-annotated`
 
 ### revert
 
