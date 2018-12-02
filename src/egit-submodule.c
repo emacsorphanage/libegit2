@@ -560,3 +560,13 @@ emacs_value egit_submodule_set_url(
 
     return em_nil;
 }
+
+EGIT_DOC(submodule_sync, "SUBMODULE", "Copy SUBMODULE's remote info into its repository.");
+emacs_value egit_submodule_sync(emacs_env *env, emacs_value _sub)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    int retval = git_submodule_sync(sub);
+    EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
