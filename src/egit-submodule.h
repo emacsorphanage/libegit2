@@ -28,5 +28,6 @@ EGIT_DEFUN(submodule_repo_init, emacs_value _sub, emacs_value linkp);
 EGIT_DEFUN(submodule_set_branch, emacs_value _repo, emacs_value _name, emacs_value _refname);
 EGIT_DEFUN(submodule_set_fetch_recurse_submodules, emacs_value _repo, emacs_value _name, emacs_value _value);
 EGIT_DEFUN(submodule_set_ignore, emacs_value _repo, emacs_value _name, emacs_value _value);
+EGIT_DEFUN(submodule_set_update, emacs_value _repo, emacs_value _name, emacs_value _value);
 
 #endif /* EGIT_SUBMODULE_H */

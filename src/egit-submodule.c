@@ -507,3 +507,35 @@ emacs_value egit_submodule_set_ignore(
 
     return em_nil;
 }
+
+EGIT_DOC(submodule_set_update, "REPO NAME &optional VALUE",
+         "Set the ignore rule for submodule NAME.\n"
+         "Possible VALUE are `checkout', `rebase', `merge' and `none'.");
+emacs_value egit_submodule_set_update(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _value)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+
+    git_submodule_update_t value;
+    if (EM_EQ(_value, em_checkout))
+        value = GIT_SUBMODULE_UPDATE_CHECKOUT;
+    else if (EM_EQ(_value, em_rebase))
+        value = GIT_SUBMODULE_UPDATE_REBASE;
+    else if (EM_EQ(_value, em_merge))
+        value = GIT_SUBMODULE_UPDATE_MERGE;
+    else if (EM_EQ(_value, em_none))
+        value = GIT_SUBMODULE_UPDATE_NONE;
+    else {
+        em_signal_wrong_value(env, _value);
+        return em_nil;
+    }
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    int retval = git_submodule_set_update(repo, name, value);
+    free(name);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
