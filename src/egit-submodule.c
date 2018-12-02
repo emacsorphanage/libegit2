@@ -304,6 +304,23 @@ emacs_value egit_submodule_status(
     return status_decode(env, flag, status, true);
 }
 
+EGIT_DOC(submodule_update_strategy, "SUBMODULE",
+         "Get the update rule for SUBMODULE.\n"
+         "This is one of the symbols `checkout', `rebase', `merge' and `none'.");
+emacs_value egit_submodule_update_strategy(emacs_env *env, emacs_value _sub)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    git_submodule_update_t update = git_submodule_update_strategy(sub);
+    switch (update) {
+    case GIT_SUBMODULE_UPDATE_NONE: return em_none;
+    case GIT_SUBMODULE_UPDATE_CHECKOUT: return em_checkout;
+    case GIT_SUBMODULE_UPDATE_MERGE: return em_merge;
+    case GIT_SUBMODULE_UPDATE_REBASE: return em_rebase;
+    default: return em_nil;  // Should be unreachable
+    }
+}
+
 EGIT_DOC(submodule_url, "SUBMODULE", "Get the url of SUBMODULE.");
 emacs_value egit_submodule_url(emacs_env *env, emacs_value _sub)
 {

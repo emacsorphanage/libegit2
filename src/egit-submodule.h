@@ -17,6 +17,7 @@ EGIT_DEFUN(submodule_open, emacs_value _sub);
 EGIT_DEFUN(submodule_owner, emacs_value _sub);
 EGIT_DEFUN(submodule_path, emacs_value _sub);
 EGIT_DEFUN(submodule_status, emacs_value _repo, emacs_value _name, emacs_value _ignore, emacs_value flag);
+EGIT_DEFUN(submodule_update_strategy, emacs_value _sub);
 EGIT_DEFUN(submodule_url, emacs_value _sub);
 EGIT_DEFUN(submodule_wd_id, emacs_value _sub);
 
