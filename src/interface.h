@@ -156,6 +156,9 @@ extern emacs_value em_programdata, em_system, em_xdg, em_global, em_local,
 // Reset types
 extern emacs_value em_soft, em_mixed, em_hard;
 
+// Fetch recurse submodules
+extern emacs_value em_ondemand;
+
 // Libgit2 features
 extern emacs_value em_threads, em_https, em_ssh;
 

@@ -449,3 +449,29 @@ emacs_value egit_submodule_set_branch(
 
     return em_nil;
 }
+
+EGIT_DOC(submodule_set_fetch_recurse_submodules, "REPO NAME &optional VALUE",
+         "Set the fetchRecurseSubmodules rule for submodule NAME.\n"
+         "Possible VALUE are nil, `ondemand', or other non-nil.");
+emacs_value egit_submodule_set_fetch_recurse_submodules(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _value)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+
+    git_submodule_recurse_t value;
+    if (!EM_EXTRACT_BOOLEAN(_value))
+        value = GIT_SUBMODULE_RECURSE_NO;
+    else if (EM_EQ(_value, em_ondemand))
+        value = GIT_SUBMODULE_RECURSE_ONDEMAND;
+    else
+        value = GIT_SUBMODULE_RECURSE_YES;
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    int retval = git_submodule_set_fetch_recurse_submodules(repo, name, value);
+    free(name);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
