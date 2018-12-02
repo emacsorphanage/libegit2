@@ -1067,7 +1067,7 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :grey_question: `git-submodule-resolve-url`
 - :heavy_check_mark: `git-submodule-set-branch`
 - :heavy_check_mark: `git-submodule-set-fetch-recurse-submodules`
-- :grey_question: `git-submodule-set-ignore`
+- :heavy_check_mark: `git-submodule-set-ignore`
 - :grey_question: `git-submodule-set-update`
 - :grey_question: `git-submodule-set-url`
 - :heavy_check_mark: `git-submodule-status`
