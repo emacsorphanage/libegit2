@@ -797,6 +797,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-submodule-owner", submodule_owner, 1, 1);
     DEFUN("libgit-submodule-path", submodule_path, 1, 1);
     DEFUN("libgit-submodule-status", submodule_status, 2, 4);
+    DEFUN("libgit-submodule-update-strategy", submodule_update_strategy, 1, 1);
     DEFUN("libgit-submodule-url", submodule_url, 1, 1);
     DEFUN("libgit-submodule-wd-id", submodule_wd_id, 1, 1);
 
