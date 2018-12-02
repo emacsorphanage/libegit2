@@ -8,6 +8,7 @@ EGIT_DEFUN(submodule_lookup, emacs_value _repo, emacs_value _name);
 EGIT_DEFUN(submodule_foreach, emacs_value _repo, emacs_value func);
 
 EGIT_DEFUN(submodule_branch, emacs_value _sub);
+EGIT_DEFUN(submodule_fetch_recurse_submodules, emacs_value _sub);
 EGIT_DEFUN(submodule_head_id, emacs_value _sub);
 EGIT_DEFUN(submodule_ignore, emacs_value _sub);
 EGIT_DEFUN(submodule_index_id, emacs_value _sub);

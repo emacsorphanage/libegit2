@@ -148,6 +148,19 @@ emacs_value egit_submodule_branch(emacs_env *env, emacs_value _sub)
     return EM_STRING(branch);
 }
 
+EGIT_DOC(submodule_fetch_recurse_submodules, "SUBMODULE",
+         "Get the fetchRecurseSubmodules rule for SUBMODULE.\n"
+         "This is `nil', `ondemand' or `t'.");
+emacs_value egit_submodule_fetch_recurse_submodules(emacs_env *env, emacs_value _sub)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    git_submodule_recurse_t rec = git_submodule_fetch_recurse_submodules(sub);
+    if (rec == GIT_SUBMODULE_RECURSE_ONDEMAND)
+        return em_ondemand;
+    return (rec == GIT_SUBMODULE_RECURSE_NO) ? em_nil : em_t;
+}
+
 EGIT_DOC(submodule_head_id, "SUBMODULE", "Get the ID for SUBMODULE in HEAD.");
 emacs_value egit_submodule_head_id(emacs_env *env, emacs_value _sub)
 {
