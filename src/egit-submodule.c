@@ -475,3 +475,35 @@ emacs_value egit_submodule_set_fetch_recurse_submodules(
 
     return em_nil;
 }
+
+EGIT_DOC(submodule_set_ignore, "REPO NAME &optional VALUE",
+         "Set the ignore rule for submodule NAME.\n"
+         "Possible VALUE are `none', `dirty', `untracked' and `all'.");
+emacs_value egit_submodule_set_ignore(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _value)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+
+    git_submodule_ignore_t value;
+    if (EM_EQ(_value, em_none))
+        value = GIT_SUBMODULE_IGNORE_NONE;
+    else if (EM_EQ(_value, em_dirty))
+        value = GIT_SUBMODULE_IGNORE_DIRTY;
+    else if (EM_EQ(_value, em_untracked))
+        value = GIT_SUBMODULE_IGNORE_UNTRACKED;
+    else if (EM_EQ(_value, em_all))
+        value = GIT_SUBMODULE_IGNORE_ALL;
+    else {
+        em_signal_wrong_value(env, _value);
+        return em_nil;
+    }
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    int retval = git_submodule_set_ignore(repo, name, value);
+    free(name);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
