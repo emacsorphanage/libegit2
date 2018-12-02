@@ -539,3 +539,24 @@ emacs_value egit_submodule_set_update(
 
     return em_nil;
 }
+
+EGIT_DOC(submodule_set_url, "REPO NAME URL",
+         "Set the URL of submodule NAME to URL.\n"
+         "After this, you may wish to call `libgit-submodule-sync'.");
+emacs_value egit_submodule_set_url(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _url)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_url);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    char *url = EM_EXTRACT_STRING(_url);
+    int retval = git_submodule_set_url(repo, name, url);
+    free(name);
+    free(url);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
