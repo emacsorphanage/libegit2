@@ -414,3 +414,17 @@ emacs_value egit_submodule_reload(emacs_env *env, emacs_value _sub, emacs_value 
     EGIT_CHECK_ERROR(retval);
     return em_nil;
 }
+
+EGIT_DOC(submodule_repo_init, "SUBMODULE &optional LINKP",
+         "Set up and return the subrepo for SUBMODULE in preparation for clone.\n"
+         "If LINK is non-nil, the subrepo will contain a git link to a repo\n"
+         "in the parent repository's own .git/modules.");
+emacs_value egit_submodule_repo_init(emacs_env *env, emacs_value _sub, emacs_value linkp)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    git_repository *repo;
+    int retval = git_submodule_repo_init(&repo, sub, EM_EXTRACT_BOOLEAN(linkp));
+    EGIT_CHECK_ERROR(retval);
+    return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
+}
