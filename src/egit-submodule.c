@@ -428,3 +428,24 @@ emacs_value egit_submodule_repo_init(emacs_env *env, emacs_value _sub, emacs_val
     EGIT_CHECK_ERROR(retval);
     return egit_wrap(env, EGIT_REPOSITORY, repo, NULL);
 }
+
+EGIT_DOC(submodule_set_branch, "REPO NAME BRANCHNAME",
+         "Set the branch of submodule NAME to BRANCHNAME.\n"
+         "After this, you may wish to call `libgit-submodule-sync'.");
+emacs_value egit_submodule_set_branch(
+    emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _refname)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_STRING(_name);
+    EM_ASSERT_STRING(_refname);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    char *name = EM_EXTRACT_STRING(_name);
+    char *refname = EM_EXTRACT_STRING(_refname);
+    int retval = git_submodule_set_branch(repo, name, refname);
+    free(name);
+    free(refname);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_nil;
+}
