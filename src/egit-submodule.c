@@ -3,6 +3,7 @@
 #include "git2.h"
 
 #include "egit.h"
+#include "egit-options.h"
 #include "egit-util.h"
 #include "interface.h"
 #include "egit-submodule.h"
@@ -598,5 +599,38 @@ emacs_value egit_submodule_sync(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_sync(sub);
     EGIT_CHECK_ERROR(retval);
+    return em_nil;
+}
+
+EGIT_DOC(submodule_update, "SUBMODULE &optional INITP FETCHP CHECKOUT-OPTS FETCH-OPTS",
+         "Update a submodule and checkout the subrepo to the commit\n"
+         "specified in the index of the parent repo.\n"
+         "If the submodule is missing it will be cloned.\n"
+         "If INITP is non-nil, initialize the submodule if not already done.\n"
+         "If FETCHP is non-nil, fetch from the remote if the subrepo does not\n"
+         "contain the desired commit.\n"
+         "For CHECKOUT-OPTS, see `libgit-checkout-head', and for FETCH-OPTS,\n"
+         "see `libgit-remote-fetch'.");
+emacs_value egit_submodule_update(
+    emacs_env *env, emacs_value _sub, emacs_value initp, emacs_value fetchp,
+    emacs_value checkout_opts, emacs_value fetch_opts)
+{
+    EGIT_ASSERT_SUBMODULE(_sub);
+
+    git_submodule_update_options opts;
+    opts.allow_fetch = EM_EXTRACT_BOOLEAN(fetchp);
+
+    egit_checkout_options_parse(env, checkout_opts, &opts.checkout_opts);
+    EM_RETURN_NIL_IF_NLE();
+
+    egit_fetch_options_parse(env, fetch_opts, &opts.fetch_opts);
+    EM_RETURN_NIL_IF_NLE();
+
+    git_submodule *sub = EGIT_EXTRACT(_sub);
+    int retval = git_submodule_update(sub, EM_EXTRACT_BOOLEAN(initp), &opts);
+    egit_checkout_options_release(&opts.checkout_opts);
+    egit_fetch_options_release(&opts.fetch_opts);
+    EGIT_CHECK_ERROR(retval);
+
     return em_nil;
 }

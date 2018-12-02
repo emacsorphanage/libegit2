@@ -1072,8 +1072,8 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 - :heavy_check_mark: `git-submodule-set-url`
 - :heavy_check_mark: `git-submodule-status`
 - :heavy_check_mark: `git-submodule-sync`
-- :grey_question: `git-submodule-update`
-- :grey_question: `git-submodule-update-init-options`
+- :heavy_check_mark: `git-submodule-update`
+- :x: `git-submodule-update-init-options`
 - :heavy_check_mark: `git-submodule-update-strategy`
 - :heavy_check_mark: `git-submodule-url`
 - :heavy_check_mark: `git-submodule-wd-id`
