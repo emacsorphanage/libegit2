@@ -146,6 +146,8 @@ emacs_value egit_submodule_branch(emacs_env *env, emacs_value _sub)
     EGIT_ASSERT_SUBMODULE(_sub);
     git_submodule *sub = EGIT_EXTRACT(_sub);
     const char *branch = git_submodule_branch(sub);
+    if (!branch)
+        return em_nil;
     return EM_STRING(branch);
 }
 
