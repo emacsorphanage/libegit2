@@ -123,3 +123,32 @@
               (should (string= ".gitmodules" (libgit-index-entry-path (libgit-index-get-byindex index 0))))
               (should (string= "subdir" (libgit-index-entry-path (libgit-index-get-byindex index 1))))
               (should (string= id (libgit-index-entry-id (libgit-index-get-byindex index 1)))))))))))
+
+(ert-deftest repo-init ()
+  (with-temp-dir (a path)
+    (in-dir a (init) (commit-change "a" "abc"))
+    (in-dir path
+      (init)
+      (write ".gitmodules" (format "\
+[submodule \"test\"]
+	path = test
+	url = %s
+" a))
+      (let* ((repo (libgit-repository-open path)))
+        (let ((sub (libgit-submodule-lookup repo "test")))
+          (should-not (string-match-p "\\[submodule \"test\"\\]" (read-file ".git/config")))
+          (libgit-submodule-init sub)
+          (should (string-match-p "\\[submodule \"test\"\\]" (read-file ".git/config")))
+          (let ((subrepo (libgit-submodule-repo-init sub t)))
+            (should (file-exists-p "test"))
+            (should (file-directory-p "test"))
+            (should (string= "gitdir: ../.git/modules/test/" (read-file-nnl "test/.git")))))
+        (libgit-submodule-set-url repo "test" "http://github.com/nothing")
+        (should (string-match-p "github" (read-file ".gitmodules")))
+        (should-not (string-match-p "github" (read-file ".git/config")))
+        (should-not (string-match-p "github" (read-file ".git/modules/test/config")))
+        (let ((sub (libgit-submodule-lookup repo "test")))
+          (libgit-submodule-sync sub))
+        (should (string-match-p "github" (read-file ".gitmodules")))
+        (should (string-match-p "github" (read-file ".git/config")))
+        (should (string-match-p "github" (read-file ".git/modules/test/config")))))))
