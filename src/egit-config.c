@@ -54,21 +54,21 @@ emacs_value egit_config_open_level(emacs_env *env, emacs_value _config, emacs_va
     git_config_level_t level;
     if (!EM_EXTRACT_BOOLEAN(_level))
         level = GIT_CONFIG_HIGHEST_LEVEL;
-    else if (EM_EQ(_level, em_programdata))
+    else if (EM_EQ(_level, esym_programdata))
         level = GIT_CONFIG_LEVEL_PROGRAMDATA;
-    else if (EM_EQ(_level, em_system))
+    else if (EM_EQ(_level, esym_system))
         level = GIT_CONFIG_LEVEL_SYSTEM;
-    else if (EM_EQ(_level, em_xdg))
+    else if (EM_EQ(_level, esym_xdg))
         level = GIT_CONFIG_LEVEL_XDG;
-    else if (EM_EQ(_level, em_global))
+    else if (EM_EQ(_level, esym_global))
         level = GIT_CONFIG_LEVEL_GLOBAL;
-    else if (EM_EQ(_level, em_local))
+    else if (EM_EQ(_level, esym_local))
         level = GIT_CONFIG_LEVEL_LOCAL;
-    else if (EM_EQ(_level, em_app))
+    else if (EM_EQ(_level, esym_app))
         level = GIT_CONFIG_LEVEL_APP;
     else {
         em_signal_wrong_value(env, _level);
-        return em_nil;
+        return esym_nil;
     }
 
     git_config *config = EGIT_EXTRACT(_config);
@@ -119,7 +119,7 @@ emacs_value egit_config_get_bool(emacs_env *env, emacs_value _config, emacs_valu
     int retval = git_config_get_bool(&value, config, name);
     free(name);
     EGIT_CHECK_ERROR(retval);
-    return value ? em_t : em_nil;
+    return value ? esym_t : esym_nil;
 }
 
 EGIT_DOC(config_get_int, "CONFIG NAME",
@@ -204,7 +204,7 @@ emacs_value egit_config_set_bool(emacs_env *env, emacs_value _config, emacs_valu
     int value = EM_EXTRACT_BOOLEAN(_value);
     int retval = git_config_set_bool(config, name, value);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(config_set_int, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG to VALUE.");
@@ -218,7 +218,7 @@ emacs_value egit_config_set_int(emacs_env *env, emacs_value _config, emacs_value
     int64_t value = EM_EXTRACT_INTEGER(_value);
     int retval = git_config_set_int64(config, name, value);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(config_set_string, "CONFIG NAME VALUE", "Set the value of NAME in CONFIG to VALUE.");
@@ -232,7 +232,7 @@ emacs_value egit_config_set_string(emacs_env *env, emacs_value _config, emacs_va
     const char *value = EM_EXTRACT_STRING(_value);
     int retval = git_config_set_string(config, name, value);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -256,21 +256,21 @@ emacs_value egit_config_add_file_ondisk(
         EGIT_ASSERT_REPOSITORY(_repo);
 
     git_config_level_t level;
-    if (EM_EQ(_level, em_programdata))
+    if (EM_EQ(_level, esym_programdata))
         level = GIT_CONFIG_LEVEL_PROGRAMDATA;
-    else if (EM_EQ(_level, em_system))
+    else if (EM_EQ(_level, esym_system))
         level = GIT_CONFIG_LEVEL_SYSTEM;
-    else if (EM_EQ(_level, em_xdg))
+    else if (EM_EQ(_level, esym_xdg))
         level = GIT_CONFIG_LEVEL_XDG;
-    else if (EM_EQ(_level, em_global))
+    else if (EM_EQ(_level, esym_global))
         level = GIT_CONFIG_LEVEL_GLOBAL;
-    else if (EM_EQ(_level, em_local))
+    else if (EM_EQ(_level, esym_local))
         level = GIT_CONFIG_LEVEL_LOCAL;
-    else if (EM_EQ(_level, em_app))
+    else if (EM_EQ(_level, esym_app))
         level = GIT_CONFIG_LEVEL_APP;
     else {
         em_signal_wrong_value(env, _level);
-        return em_nil;
+        return esym_nil;
     }
 
     git_config *config = EGIT_EXTRACT(_config);
@@ -281,7 +281,7 @@ emacs_value egit_config_add_file_ondisk(
     int retval = git_config_add_file_ondisk(config, path, level, repo, force);
     free(path);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(config_delete_entry, "CONFIG NAME",
@@ -297,7 +297,7 @@ emacs_value egit_config_delete_entry(emacs_env *env, emacs_value _config, emacs_
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(config_delete_multivar, "CONFIG NAME REGEXP",
@@ -317,7 +317,7 @@ emacs_value egit_config_delete_multivar(
     free(regexp);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 

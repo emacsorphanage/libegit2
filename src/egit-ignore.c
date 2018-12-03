@@ -21,7 +21,7 @@ emacs_value egit_add_rule(emacs_env *env, emacs_value _repo, emacs_value _rules)
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(clear_internal_rules, "REPO",
@@ -36,7 +36,7 @@ emacs_value egit_clear_internal_rules(emacs_env *env, emacs_value _repo)
     int retval = git_ignore_clear_internal_rules(repo);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(path_ignored_p, "REPO PATH", "Check if PATH is ignored");
@@ -55,5 +55,5 @@ emacs_value egit_path_ignored_p(emacs_env *env, emacs_value _repo, emacs_value _
         free(path);
     }
     EGIT_CHECK_ERROR(retval);
-    return out ? em_t : em_nil;
+    return out ? esym_t : esym_nil;
 }

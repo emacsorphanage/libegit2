@@ -12,5 +12,5 @@ emacs_value egit_transaction_commit(emacs_env *env, emacs_value _trans)
     git_transaction *trans = EGIT_EXTRACT(_trans);
     int retval = git_transaction_commit(trans);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }

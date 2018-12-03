@@ -32,15 +32,15 @@ emacs_value egit_reset(emacs_env *env, emacs_value _repo, emacs_value _obj,
     git_object *obj = EGIT_EXTRACT(_obj);
 
     git_reset_t type;
-    if (EM_EQ(_type, em_soft))
+    if (EM_EQ(_type, esym_soft))
         type = GIT_RESET_SOFT;
-    else if (EM_EQ(_type, em_mixed))
+    else if (EM_EQ(_type, esym_mixed))
         type = GIT_RESET_MIXED;
-    else if (EM_EQ(_type, em_hard))
+    else if (EM_EQ(_type, esym_hard))
         type = GIT_RESET_HARD;
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     git_checkout_options opts;
@@ -51,7 +51,7 @@ emacs_value egit_reset(emacs_env *env, emacs_value _repo, emacs_value _obj,
     egit_checkout_options_release(&opts);
     EGIT_CHECK_ERROR(retval);
 
-    return em_t;
+    return esym_t;
 }
 
 EGIT_DOC(reset_from_annotated, "REPOSITORY ANNOTATED-COMMIT TYPE &optional CHECKOUT-OPTIONS",
@@ -78,15 +78,15 @@ emacs_value egit_reset_from_annotated(emacs_env *env, emacs_value _repo,
     git_annotated_commit *ann = EGIT_EXTRACT(_ann);
 
     git_reset_t type;
-    if (EM_EQ(_type, em_soft))
+    if (EM_EQ(_type, esym_soft))
         type = GIT_RESET_SOFT;
-    else if (EM_EQ(_type, em_mixed))
+    else if (EM_EQ(_type, esym_mixed))
         type = GIT_RESET_MIXED;
-    else if (EM_EQ(_type, em_hard))
+    else if (EM_EQ(_type, esym_hard))
         type = GIT_RESET_HARD;
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     git_checkout_options opts;
@@ -97,7 +97,7 @@ emacs_value egit_reset_from_annotated(emacs_env *env, emacs_value _repo,
     egit_checkout_options_release(&opts);
     EGIT_CHECK_ERROR(retval);
 
-    return em_t;
+    return esym_t;
 }
 
 EGIT_DOC(reset_default, "REPOSITORY TARGET PATHSPECS",
@@ -122,12 +122,12 @@ emacs_value egit_reset_default(emacs_env *env, emacs_value _repo,
 
     git_strarray pathspecs;
     if (!egit_strarray_from_list(&pathspecs, env, _pathspecs)) {
-	return em_nil;
+	return esym_nil;
     }
 
     int retval = git_reset_default(repo, target, &pathspecs);
     egit_strarray_dispose(&pathspecs);
     EGIT_CHECK_ERROR(retval);
 
-    return em_t;
+    return esym_t;
 }

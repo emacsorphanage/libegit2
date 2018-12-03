@@ -43,7 +43,7 @@ emacs_value egit_reflog_entry_byindex(emacs_env *env, emacs_value _reflog, emacs
 
     if (!entry) {
         em_signal_args_out_of_range(env, index);
-        return em_nil;
+        return esym_nil;
     }
 
     return egit_wrap(env, EGIT_REFLOG_ENTRY, entry, EM_EXTRACT_USER_PTR(_reflog));
@@ -70,13 +70,13 @@ emacs_value egit_reflog_entry_id(emacs_env *env, emacs_value _entry, emacs_value
     const git_reflog_entry *entry = EGIT_EXTRACT(_entry);
 
     const git_oid *oid;
-    if (EM_EQ(side, em_new))
+    if (EM_EQ(side, esym_new))
         oid = git_reflog_entry_id_new(entry);
-    else if (EM_EQ(side, em_old))
+    else if (EM_EQ(side, esym_old))
         oid = git_reflog_entry_id_old(entry);
     else {
         em_signal_wrong_value(env, side);
-        return em_nil;
+        return esym_nil;
     }
 
     const char *oid_s = git_oid_tostr_s(oid);
@@ -128,7 +128,7 @@ emacs_value egit_reflog_append(
     free(msg);
 
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reflog_delete, "REPO REFNAME", "Delete the reflog for REFNAME in REPO.");
@@ -142,7 +142,7 @@ emacs_value egit_reflog_delete(emacs_env *env, emacs_value _repo, emacs_value _r
     int retval = git_reflog_delete(repo, refname);
     free(refname);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reflog_drop, "REFLOG N &optional REWRITE",
@@ -159,7 +159,7 @@ emacs_value egit_reflog_drop(emacs_env *env, emacs_value _reflog, emacs_value _i
 
     int retval = git_reflog_drop(reflog, index, EM_EXTRACT_BOOLEAN(rewrite));
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reflog_rename, "REPO OLD-REFNAME NEW-REFNAME",
@@ -178,7 +178,7 @@ emacs_value egit_reflog_rename(
     free(old_refname);
     free(new_refname);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reflog_write, "REFLOG", "Write REFLOG back to disk.");
@@ -188,5 +188,5 @@ emacs_value egit_reflog_write(emacs_env *env, emacs_value _reflog)
     git_reflog *reflog = EGIT_EXTRACT(_reflog);
     int retval = git_reflog_write(reflog);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }

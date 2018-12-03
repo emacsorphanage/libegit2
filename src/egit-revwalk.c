@@ -52,7 +52,7 @@ emacs_value egit_revwalk_hide(emacs_env *env, emacs_value _revwalk, emacs_value 
 
     int retval = git_revwalk_hide(revwalk, &oid);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_hide_glob, "REVWALK GLOB", "Hide references matched by GLOB in REVWALK.");
@@ -67,7 +67,7 @@ emacs_value egit_revwalk_hide_glob(emacs_env *env, emacs_value _revwalk, emacs_v
     int retval = git_revwalk_hide_glob(revwalk, glob);
     free(glob);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_hide_head, "REVWALK", "Hide the repository HEAD in REVWALK.");
@@ -77,7 +77,7 @@ emacs_value egit_revwalk_hide_head(emacs_env *env, emacs_value _revwalk)
     git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
     int retval = git_revwalk_hide_head(revwalk);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_hide_ref, "REVWALK REFNAME", "Hide the OID pointed to by REFNAME in REVWALK.");
@@ -92,7 +92,7 @@ emacs_value egit_revwalk_hide_ref(emacs_env *env, emacs_value _revwalk, emacs_va
     int retval = git_revwalk_hide_ref(revwalk, refname);
     free(refname);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_push, "REVWALK OID", "Add OID as a new root for traversal in REVWALK");
@@ -107,7 +107,7 @@ emacs_value egit_revwalk_push(emacs_env *env, emacs_value _revwalk, emacs_value 
 
     int retval = git_revwalk_push(revwalk, &oid);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_push_glob, "REVWALK GLOB", "Push references matched by GLOB to REVWALK.");
@@ -122,7 +122,7 @@ emacs_value egit_revwalk_push_glob(emacs_env *env, emacs_value _revwalk, emacs_v
     int retval = git_revwalk_push_glob(revwalk, glob);
     free(glob);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_push_head, "REVWALK", "Push the repository HEAD to REVWALK.");
@@ -132,7 +132,7 @@ emacs_value egit_revwalk_push_head(emacs_env *env, emacs_value _revwalk)
     git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
     int retval = git_revwalk_push_head(revwalk);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_push_range, "REVWALK RANGE",
@@ -150,7 +150,7 @@ emacs_value egit_revwalk_push_range(emacs_env *env, emacs_value _revwalk, emacs_
     int retval = git_revwalk_push_range(revwalk, range);
     free(range);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_push_ref, "REVWALK REFNAME", "Push the OID pointed to by REFNAME to REVWALK.");
@@ -165,7 +165,7 @@ emacs_value egit_revwalk_push_ref(emacs_env *env, emacs_value _revwalk, emacs_va
     int retval = git_revwalk_push_ref(revwalk, refname);
     free(refname);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -178,7 +178,7 @@ emacs_value egit_revwalk_reset(emacs_env *env, emacs_value _revwalk)
     EGIT_ASSERT_REVWALK(_revwalk);
     git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
     git_revwalk_reset(revwalk);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_simplify_first_parent, "REVWALK",
@@ -188,7 +188,7 @@ emacs_value egit_revwalk_simplify_first_parent(emacs_env *env, emacs_value _revw
     EGIT_ASSERT_REVWALK(_revwalk);
     git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
     git_revwalk_simplify_first_parent(revwalk);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(revwalk_sorting, "REVWALK &optional MODE",
@@ -203,22 +203,22 @@ emacs_value egit_revwalk_sorting(emacs_env *env, emacs_value _revwalk, emacs_val
     {
         EM_DOLIST(car, _mode, list);
 
-        if (EM_EQ(car, em_topological))
+        if (EM_EQ(car, esym_topological))
             mode |= GIT_SORT_TOPOLOGICAL;
-        else if (EM_EQ(car, em_time))
+        else if (EM_EQ(car, esym_time))
             mode |= GIT_SORT_TIME;
-        else if (EM_EQ(car, em_reverse))
+        else if (EM_EQ(car, esym_reverse))
             mode |= GIT_SORT_REVERSE;
         else {
             em_signal_wrong_value(env, car);
-            return em_nil;
+            return esym_nil;
         }
 
         EM_DOLIST_END(list);
     }
 
     git_revwalk_sorting(revwalk, mode);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -296,5 +296,5 @@ emacs_value egit_revwalk_foreach(
     // TODO: Get resolution from libgit2 on #4887
     git_revwalk_add_hide_cb(revwalk, NULL, NULL);
     git_revwalk_reset(revwalk);
-    return em_nil;
+    return esym_nil;
 }

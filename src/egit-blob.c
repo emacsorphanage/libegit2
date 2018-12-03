@@ -114,7 +114,7 @@ emacs_value egit_blob_binary_p(emacs_env *env, emacs_value _blob)
 {
     EGIT_ASSERT_BLOB(_blob);
     git_blob *blob = EGIT_EXTRACT(_blob);
-    return git_blob_is_binary(blob) ? em_t : em_nil;
+    return git_blob_is_binary(blob) ? esym_t : esym_nil;
 }
 
 EGIT_DOC(blob_filtered_content, "BLOB PATH &optional IGNORE-BINARY",

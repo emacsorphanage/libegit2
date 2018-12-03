@@ -30,95 +30,95 @@
 
 // Assert that VAL is a git annotated commit, signal an error and return otherwise.
 #define EGIT_ASSERT_ANNOTATED_COMMIT(val)                                          \
-    do { if (!egit_assert_type(env, (val), EGIT_ANNOTATED_COMMIT, em_libgit_annotated_commit_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_ANNOTATED_COMMIT, esym_libgit_annotated_commit_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git blame, signal an error and return otherwise.
 #define EGIT_ASSERT_BLAME(val)                                          \
-    do { if (!egit_assert_type(env, (val), EGIT_BLAME, em_libgit_blame_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_BLAME, esym_libgit_blame_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git blob, signal an error and return otherwise.
 #define EGIT_ASSERT_BLOB(val)                                           \
-    do { if (!egit_assert_type(env, (val), EGIT_BLOB, em_libgit_blob_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_BLOB, esym_libgit_blob_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git blame hunk, signal an error and return otherwise.
 #define EGIT_ASSERT_BLAME_HUNK(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_BLAME_HUNK, em_libgit_blame_hunk_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_BLAME_HUNK, esym_libgit_blame_hunk_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git commit, signal an error and return otherwise.
 #define EGIT_ASSERT_COMMIT(val)                                         \
-    do { if (!egit_assert_type(env, (val), EGIT_COMMIT, em_libgit_commit_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_COMMIT, esym_libgit_commit_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git config, signal an error and return otherwise.
 #define EGIT_ASSERT_CONFIG(val)                                         \
-    do { if (!egit_assert_type(env, (val), EGIT_CONFIG, em_libgit_config_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_CONFIG, esym_libgit_config_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git credential, signal an error and return otherwise.
 #define EGIT_ASSERT_CRED(val)                                           \
-    do { if (!egit_assert_type(env, (val), EGIT_CRED, em_libgit_cred_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_CRED, esym_libgit_cred_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git diff, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF(val)                                           \
-    do { if (!egit_assert_type(env, (val), EGIT_DIFF, em_libgit_diff_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF, esym_libgit_diff_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git diff delta, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF_DELTA(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_DIFF_DELTA, em_libgit_diff_delta_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_DELTA, esym_libgit_diff_delta_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git diff binary, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF_BINARY(val)                                    \
-    do { if (!egit_assert_type(env, (val), EGIT_DIFF_BINARY, em_libgit_diff_binary_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_BINARY, esym_libgit_diff_binary_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git diff hunk, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF_HUNK(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_DIFF_HUNK, em_libgit_diff_hunk_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_HUNK, esym_libgit_diff_hunk_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git diff line, signal an error and return otherwise.
 #define EGIT_ASSERT_DIFF_LINE(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_DIFF_LINE, em_libgit_diff_line_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_DIFF_LINE, esym_libgit_diff_line_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git index, signal an error and return otherwise.
 #define EGIT_ASSERT_INDEX(val)                                          \
-    do { if (!egit_assert_type(env, (val), EGIT_INDEX, em_libgit_index_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_INDEX, esym_libgit_index_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git index entry, signal an error and return otherwise.
 #define EGIT_ASSERT_INDEX_ENTRY(val)                                    \
-    do { if (!egit_assert_type(env, (val), EGIT_INDEX_ENTRY, em_libgit_index_entry_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_INDEX_ENTRY, esym_libgit_index_entry_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git object, signal an error and return otherwise.
 #define EGIT_ASSERT_OBJECT(val)                                         \
-    do { if (!egit_assert_object(env, (val))) return em_nil; } while (0)
+    do { if (!egit_assert_object(env, (val))) return esym_nil; } while (0)
 
 // Assert that VAL is a git reference, signal an error and return otherwise.
 #define EGIT_ASSERT_REFERENCE(val)                                      \
-    do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, em_libgit_reference_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, esym_libgit_reference_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a reflog, signal an error and return otherwise.
 #define EGIT_ASSERT_REFLOG(val)                                         \
-    do { if (!egit_assert_type(env, (val), EGIT_REFLOG, em_libgit_reflog_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REFLOG, esym_libgit_reflog_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a reflog entry, signal an error and return otherwise.
 #define EGIT_ASSERT_REFLOG_ENTRY(val)                                   \
-    do { if (!egit_assert_type(env, (val), EGIT_REFLOG_ENTRY, em_libgit_reflog_entry_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REFLOG_ENTRY, esym_libgit_reflog_entry_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git refspec, signal an error and return otherwise.
 #define EGIT_ASSERT_REFSPEC(val)                                        \
-    do { if (!egit_assert_type(env, (val), EGIT_REFSPEC, em_libgit_refspec_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REFSPEC, esym_libgit_refspec_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git remote, signal an error and return otherwise.
 #define EGIT_ASSERT_REMOTE(val)                                         \
-    do { if (!egit_assert_type(env, (val), EGIT_REMOTE, em_libgit_remote_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REMOTE, esym_libgit_remote_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git repository, signal an error and return otherwise.
 #define EGIT_ASSERT_REPOSITORY(val)                                     \
-    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, em_libgit_repository_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REPOSITORY, esym_libgit_repository_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a git revwalk, signal an error and return otherwise.
 #define EGIT_ASSERT_REVWALK(val)                                        \
-    do { if (!egit_assert_type(env, (val), EGIT_REVWALK, em_libgit_revwalk_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_REVWALK, esym_libgit_revwalk_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a signature, signal an error and return otherwise.
 #define EGIT_ASSERT_SIGNATURE(val)                                      \
-    do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, em_libgit_signature_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_SIGNATURE, esym_libgit_signature_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_SIGNATURE_OR_NIL(val)                               \
@@ -126,23 +126,23 @@
 
 // Assert that VAL is a signature, signal an error and return otherwise.
 #define EGIT_ASSERT_SUBMODULE(val)                                      \
-    do { if (!egit_assert_type(env, (val), EGIT_SUBMODULE, em_libgit_submodule_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_SUBMODULE, esym_libgit_submodule_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_TAG(val)                                            \
-    do { if (!egit_assert_type(env, (val), EGIT_TAG, em_libgit_tag_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_TAG, esym_libgit_tag_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a transaction, signal an error and return otherwise.
 #define EGIT_ASSERT_TRANSACTION(val)                                    \
-    do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, em_libgit_transaction_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_TRANSACTION, esym_libgit_transaction_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a tree, signal an error and return otherwise.
 #define EGIT_ASSERT_TREE(val)                                           \
-    do { if (!egit_assert_type(env, (val), EGIT_TREE, em_libgit_tree_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_TREE, esym_libgit_tree_p)) return esym_nil; } while (0)
 
 // Assert that VAL is a treebuilder, signal an error and return otherwise.
 #define EGIT_ASSERT_TREEBUILDER(val)                                    \
-    do { if (!egit_assert_type(env, (val), EGIT_TREEBUILDER, em_libgit_treebuilder_p)) return em_nil; } while (0)
+    do { if (!egit_assert_type(env, (val), EGIT_TREEBUILDER, esym_libgit_treebuilder_p)) return esym_nil; } while (0)
 
 /**
  * Extract a libgit git_??? struct from an emacs_value.
@@ -194,7 +194,7 @@
  * @param val A libgit2 return value (negative value indicates error).
  */
 #define EGIT_CHECK_ERROR(val)                                           \
-    do { if (egit_dispatch_error(env, (val))) return em_nil; } while (0)
+    do { if (egit_dispatch_error(env, (val))) return esym_nil; } while (0)
 
 /**
  * Convert a git_buf to an Emacs string and return it, freeing the git_buf in the process.
@@ -211,7 +211,7 @@
  */
 #define EGIT_RET_STRARRAY(arr)                                  \
     do {                                                        \
-        emacs_value list = em_nil;                              \
+        emacs_value list = esym_nil;                              \
         for (ptrdiff_t c = (arr).count-1; c >= 0; c--) {        \
             emacs_value str = EM_STRING((arr).strings[c]);      \
             list = em_cons(env, str, list);                     \

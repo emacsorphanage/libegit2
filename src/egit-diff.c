@@ -33,9 +33,9 @@ static int egit_diff_notify_callback(
     emacs_value retval = env->funcall(env, ctx->notify_callback, 3, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
-    if (EM_EQ(retval, em_skip))
+    if (EM_EQ(retval, esym_skip))
         return 1;
     return 0;
 }
@@ -56,7 +56,7 @@ static int egit_diff_progress_callback(
     emacs_value retval = env->funcall(env, ctx->progress_callback, 3, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -68,9 +68,9 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
 
     // Some options require additional parsing and/or allocation to fully integrate.
     // Since the main loop may exit, we save those here for later.
-    emacs_value pathspec = em_nil;
-    emacs_value notify_callback = em_nil, progress_callback = em_nil;
-    emacs_value old_prefix = em_nil, new_prefix = em_nil;
+    emacs_value pathspec = esym_nil;
+    emacs_value notify_callback = esym_nil, progress_callback = esym_nil;
+    emacs_value old_prefix = esym_nil, new_prefix = esym_nil;
 
     // Main loop through the options alist
     {
@@ -81,124 +81,124 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (EM_EQ(car, em_reverse))
+        if (EM_EQ(car, esym_reverse))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_REVERSE, cdr);
-        else if (EM_EQ(car, em_include_ignored))
+        else if (EM_EQ(car, esym_include_ignored))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_IGNORED, cdr);
-        else if (EM_EQ(car, em_recurse_ignored_dirs))
+        else if (EM_EQ(car, esym_recurse_ignored_dirs))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_RECURSE_IGNORED_DIRS, cdr);
-        else if (EM_EQ(car, em_include_untracked))
+        else if (EM_EQ(car, esym_include_untracked))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNTRACKED, cdr);
-        else if (EM_EQ(car, em_recurse_untracked_dirs))
+        else if (EM_EQ(car, esym_recurse_untracked_dirs))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_RECURSE_UNTRACKED_DIRS, cdr);
-        else if (EM_EQ(car, em_include_unmodified))
+        else if (EM_EQ(car, esym_include_unmodified))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNMODIFIED, cdr);
-        else if (EM_EQ(car, em_include_typechange))
+        else if (EM_EQ(car, esym_include_typechange))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE, cdr);
-        else if (EM_EQ(car, em_include_typechange_trees))
+        else if (EM_EQ(car, esym_include_typechange_trees))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_TYPECHANGE_TREES, cdr);
-        else if (EM_EQ(car, em_ignore_filemode))
+        else if (EM_EQ(car, esym_ignore_filemode))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_FILEMODE, cdr);
-        else if (EM_EQ(car, em_ignore_submodules))
+        else if (EM_EQ(car, esym_ignore_submodules))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_SUBMODULES, cdr);
-        else if (EM_EQ(car, em_ignore_case))
+        else if (EM_EQ(car, esym_ignore_case))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_CASE, cdr);
-        else if (EM_EQ(car, em_include_casechange))
+        else if (EM_EQ(car, esym_include_casechange))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_CASECHANGE, cdr);
-        else if (EM_EQ(car, em_disable_pathspec_match))
+        else if (EM_EQ(car, esym_disable_pathspec_match))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_DISABLE_PATHSPEC_MATCH, cdr);
-        else if (EM_EQ(car, em_skip_binary_check))
+        else if (EM_EQ(car, esym_skip_binary_check))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_SKIP_BINARY_CHECK, cdr);
-        else if (EM_EQ(car, em_enable_fast_untracked_dirs))
+        else if (EM_EQ(car, esym_enable_fast_untracked_dirs))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS, cdr);
-        else if (EM_EQ(car, em_update_index))
+        else if (EM_EQ(car, esym_update_index))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_UPDATE_INDEX, cdr);
-        else if (EM_EQ(car, em_include_unreadable))
+        else if (EM_EQ(car, esym_include_unreadable))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE, cdr);
-        else if (EM_EQ(car, em_include_unreadable_as_untracked))
+        else if (EM_EQ(car, esym_include_unreadable_as_untracked))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INCLUDE_UNREADABLE_AS_UNTRACKED, cdr);
-        else if (EM_EQ(car, em_force_text))
+        else if (EM_EQ(car, esym_force_text))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_FORCE_TEXT, cdr);
-        else if (EM_EQ(car, em_force_binary))
+        else if (EM_EQ(car, esym_force_binary))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_FORCE_BINARY, cdr);
-        else if (EM_EQ(car, em_ignore_whitespace))
+        else if (EM_EQ(car, esym_ignore_whitespace))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE, cdr);
-        else if (EM_EQ(car, em_ignore_whitespace_change))
+        else if (EM_EQ(car, esym_ignore_whitespace_change))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_CHANGE, cdr);
-        else if (EM_EQ(car, em_ignore_whitespace_eol))
+        else if (EM_EQ(car, esym_ignore_whitespace_eol))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_IGNORE_WHITESPACE_EOL, cdr);
-        else if (EM_EQ(car, em_show_untracked_content))
+        else if (EM_EQ(car, esym_show_untracked_content))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_UNTRACKED_CONTENT, cdr);
-        else if (EM_EQ(car, em_show_unmodified))
+        else if (EM_EQ(car, esym_show_unmodified))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_UNMODIFIED, cdr);
-        else if (EM_EQ(car, em_patience))
+        else if (EM_EQ(car, esym_patience))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_PATIENCE, cdr);
-        else if (EM_EQ(car, em_minimal))
+        else if (EM_EQ(car, esym_minimal))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_MINIMAL, cdr);
-        else if (EM_EQ(car, em_show_binary))
+        else if (EM_EQ(car, esym_show_binary))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_SHOW_BINARY, cdr);
-        else if (EM_EQ(car, em_indent_heuristic))
+        else if (EM_EQ(car, esym_indent_heuristic))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INDENT_HEURISTIC, cdr);
-        else if (EM_EQ(car, em_ignore_submodules)) {
+        else if (EM_EQ(car, esym_ignore_submodules)) {
             if (!EM_EXTRACT_BOOLEAN(cdr))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_UNSPECIFIED;
-            else if (EM_EQ(cdr, em_none))
+            else if (EM_EQ(cdr, esym_none))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_NONE;
-            else if (EM_EQ(cdr, em_untracked))
+            else if (EM_EQ(cdr, esym_untracked))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_UNTRACKED;
-            else if (EM_EQ(cdr, em_dirty))
+            else if (EM_EQ(cdr, esym_dirty))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_DIRTY;
-            else if (EM_EQ(cdr, em_all))
+            else if (EM_EQ(cdr, esym_all))
                 opts->ignore_submodules = GIT_SUBMODULE_IGNORE_ALL;
             else {
                 em_signal_wrong_value(env, cdr);
-                return em_nil;
+                return esym_nil;
             }
         }
-        else if (EM_EQ(car, em_pathspec))
+        else if (EM_EQ(car, esym_pathspec))
             pathspec = cdr;  // Parse outside the main loop
-        else if (EM_EQ(car, em_notify)) {
+        else if (EM_EQ(car, esym_notify)) {
             EM_ASSERT_FUNCTION(cdr);
             notify_callback = cdr;
         }
-        else if (EM_EQ(car, em_progress)) {
+        else if (EM_EQ(car, esym_progress)) {
             EM_ASSERT_FUNCTION(cdr);
             progress_callback = cdr;
         }
-        else if (EM_EQ(car, em_context_lines)) {
+        else if (EM_EQ(car, esym_context_lines)) {
             EM_ASSERT_INTEGER(cdr);
             opts->context_lines = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_interhunk_lines)) {
+        else if (EM_EQ(car, esym_interhunk_lines)) {
             EM_ASSERT_INTEGER(cdr);
             opts->interhunk_lines = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_id_abbrev)) {
+        else if (EM_EQ(car, esym_id_abbrev)) {
             EM_ASSERT_INTEGER(cdr);
             opts->id_abbrev = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_max_size)) {
+        else if (EM_EQ(car, esym_max_size)) {
             EM_ASSERT_INTEGER(cdr);
             opts->max_size = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_old_prefix)) {
+        else if (EM_EQ(car, esym_old_prefix)) {
             EM_ASSERT_STRING(cdr);
             old_prefix = cdr;
         }
-        else if (EM_EQ(car, em_new_prefix)) {
+        else if (EM_EQ(car, esym_new_prefix)) {
             EM_ASSERT_STRING(cdr);
             new_prefix = cdr;
         }
         else {
             em_signal_wrong_value(env, car);
-            return em_nil;
+            return esym_nil;
         }
 
         EM_DOLIST_END(options);
     }
 
     if (!egit_strarray_from_list(&opts->pathspec, env, pathspec))
-        return em_nil;
+        return esym_nil;
 
     diff_options_ctx *callback_ctx = (diff_options_ctx*) malloc(sizeof(diff_options_ctx));
     callback_ctx->env = env;
@@ -216,7 +216,7 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
     if (EM_EXTRACT_BOOLEAN(new_prefix))
         opts->new_prefix = EM_EXTRACT_STRING(new_prefix);
 
-    return em_nil;
+    return esym_nil;
 }
 
 static void egit_diff_options_release(git_diff_options *opts)
@@ -250,7 +250,7 @@ static void egit_diff_options_release(git_diff_options *opts)
         egit_diff_options_release(&options);                 \
         EM_RETURN_NIL_IF_NLE();                              \
         if (retval == GIT_EUSER)                             \
-            return em_nil;                                   \
+            return esym_nil;                                   \
         EGIT_CHECK_ERROR(retval);                            \
         return egit_wrap(env, EGIT_DIFF, diff, NULL);        \
     } while(0)
@@ -479,7 +479,7 @@ static int egit_diff_foreach_file_callback(const git_diff_delta *delta, float pr
     emacs_value retval = env->funcall(env, ctx->file_callback, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -496,7 +496,7 @@ static int egit_diff_foreach_binary_callback(
     emacs_value retval = env->funcall(env, ctx->binary_callback, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -513,7 +513,7 @@ static int egit_diff_foreach_hunk_callback(
     emacs_value retval = env->funcall(env, ctx->hunk_callback, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -532,7 +532,7 @@ static int egit_diff_foreach_line_callback(
     emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -574,9 +574,9 @@ emacs_value egit_diff_foreach(
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -613,7 +613,7 @@ int egit_diff_print_line_callback(
     emacs_value retval = env->funcall(env, ctx->line_callback, 3, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
     return 0;
 }
@@ -634,19 +634,19 @@ emacs_value egit_diff_print(
     if (EM_EXTRACT_BOOLEAN(func)) EM_ASSERT_FUNCTION(func);
 
     git_diff_format_t format;
-    if (!EM_EXTRACT_BOOLEAN(_format) || EM_EQ(_format, em_patch))
+    if (!EM_EXTRACT_BOOLEAN(_format) || EM_EQ(_format, esym_patch))
         format = GIT_DIFF_FORMAT_PATCH;
-    else if (EM_EQ(_format, em_patch_header))
+    else if (EM_EQ(_format, esym_patch_header))
         format = GIT_DIFF_FORMAT_PATCH_HEADER;
-    else if (EM_EQ(_format, em_raw))
+    else if (EM_EQ(_format, esym_raw))
         format = GIT_DIFF_FORMAT_RAW;
-    else if (EM_EQ(_format, em_name_only))
+    else if (EM_EQ(_format, esym_name_only))
         format = GIT_DIFF_FORMAT_NAME_ONLY;
-    else if (EM_EQ(_format, em_name_status))
+    else if (EM_EQ(_format, esym_name_status))
         format = GIT_DIFF_FORMAT_NAME_STATUS;
     else {
         em_signal_wrong_value(env, _format);
-        return em_nil;
+        return esym_nil;
     }
 
     git_diff *diff = EGIT_EXTRACT(_diff);
@@ -656,9 +656,9 @@ emacs_value egit_diff_print(
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -673,7 +673,7 @@ emacs_value egit_diff_delta_file_id(emacs_env *env, emacs_value _delta, emacs_va
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    const git_oid *oid = EM_EQ(side, em_old) ? &delta->old_file.id : &delta->new_file.id;
+    const git_oid *oid = EM_EQ(side, esym_old) ? &delta->old_file.id : &delta->new_file.id;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -685,7 +685,7 @@ emacs_value egit_diff_delta_file_path(emacs_env *env, emacs_value _delta, emacs_
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    const char *path = EM_EQ(side, em_old) ? delta->old_file.path : delta->new_file.path;
+    const char *path = EM_EQ(side, esym_old) ? delta->old_file.path : delta->new_file.path;
     return EM_STRING(path);
 }
 
@@ -719,20 +719,20 @@ emacs_value egit_diff_delta_status(emacs_env *env, emacs_value _delta)
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
 
     switch (delta->status) {
-    case GIT_DELTA_UNMODIFIED: return em_unmodified;
-    case GIT_DELTA_ADDED: return em_added;
-    case GIT_DELTA_DELETED: return em_deleted;
-    case GIT_DELTA_MODIFIED: return em_modified;
-    case GIT_DELTA_RENAMED: return em_renamed;
-    case GIT_DELTA_COPIED: return em_copied;
-    case GIT_DELTA_IGNORED: return em_ignored;
-    case GIT_DELTA_UNTRACKED: return em_untracked;
-    case GIT_DELTA_TYPECHANGE: return em_typechange;
-    case GIT_DELTA_UNREADABLE: return em_unreadable;
-    case GIT_DELTA_CONFLICTED: return em_conflicted;
+    case GIT_DELTA_UNMODIFIED: return esym_unmodified;
+    case GIT_DELTA_ADDED: return esym_added;
+    case GIT_DELTA_DELETED: return esym_deleted;
+    case GIT_DELTA_MODIFIED: return esym_modified;
+    case GIT_DELTA_RENAMED: return esym_renamed;
+    case GIT_DELTA_COPIED: return esym_copied;
+    case GIT_DELTA_IGNORED: return esym_ignored;
+    case GIT_DELTA_UNTRACKED: return esym_untracked;
+    case GIT_DELTA_TYPECHANGE: return esym_typechange;
+    case GIT_DELTA_UNREADABLE: return esym_unreadable;
+    case GIT_DELTA_CONFLICTED: return esym_conflicted;
     }
 
-    return em_nil;  // Should be unreachable
+    return esym_nil;  // Should be unreachable
 }
 
 
@@ -746,8 +746,8 @@ emacs_value egit_diff_delta_file_exists_p(emacs_env *env, emacs_value _delta, em
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    int flags = EM_EQ(side, em_old) ? delta->old_file.flags : delta->new_file.flags;
-    return (flags & GIT_DIFF_FLAG_EXISTS) ? em_t : em_nil;
+    int flags = EM_EQ(side, esym_old) ? delta->old_file.flags : delta->new_file.flags;
+    return (flags & GIT_DIFF_FLAG_EXISTS) ? esym_t : esym_nil;
 }
 
 
@@ -769,7 +769,7 @@ emacs_value egit_diff_hunk_lines(emacs_env *env, emacs_value _hunk, emacs_value 
 {
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
-    int num = EM_EQ(side, em_old) ? hunk->old_lines : hunk->new_lines;
+    int num = EM_EQ(side, esym_old) ? hunk->old_lines : hunk->new_lines;
     return EM_INTEGER(num);
 }
 
@@ -780,7 +780,7 @@ emacs_value egit_diff_hunk_start(emacs_env *env, emacs_value _hunk, emacs_value 
 {
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
-    int num = EM_EQ(side, em_old) ? hunk->old_start : hunk->new_start;
+    int num = EM_EQ(side, esym_old) ? hunk->old_start : hunk->new_start;
     return EM_INTEGER(num);
 }
 
@@ -818,7 +818,7 @@ emacs_value egit_diff_line_lineno(emacs_env *env, emacs_value _line, emacs_value
 {
     EGIT_ASSERT_DIFF_LINE(_line);
     git_diff_line *line = EGIT_EXTRACT(_line);
-    int lineno = EM_EQ(side, em_old) ? line->old_lineno : line->new_lineno;
+    int lineno = EM_EQ(side, esym_old) ? line->old_lineno : line->new_lineno;
     return EM_INTEGER(lineno);
 }
 
@@ -844,7 +844,7 @@ emacs_value egit_diff_get_delta(emacs_env *env, emacs_value _diff, emacs_value _
     const git_diff_delta *delta = git_diff_get_delta(diff, index);
     if (!delta) {
         em_signal_args_out_of_range(env, index);
-        return em_nil;
+        return esym_nil;
     }
     return egit_wrap(env, EGIT_DIFF_DELTA, delta, EM_EXTRACT_USER_PTR(_diff));
 }
@@ -863,31 +863,31 @@ emacs_value egit_diff_num_deltas(emacs_env *env, emacs_value _diff, emacs_value 
     size_t num;
     if (!EM_EXTRACT_BOOLEAN(_type))
         num = git_diff_num_deltas(diff);
-    else if (EM_EQ(_type, em_unmodified))
+    else if (EM_EQ(_type, esym_unmodified))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNMODIFIED);
-    else if (EM_EQ(_type, em_added))
+    else if (EM_EQ(_type, esym_added))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_ADDED);
-    else if (EM_EQ(_type, em_deleted))
+    else if (EM_EQ(_type, esym_deleted))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_DELETED);
-    else if (EM_EQ(_type, em_modified))
+    else if (EM_EQ(_type, esym_modified))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_MODIFIED);
-    else if (EM_EQ(_type, em_renamed))
+    else if (EM_EQ(_type, esym_renamed))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_RENAMED);
-    else if (EM_EQ(_type, em_copied))
+    else if (EM_EQ(_type, esym_copied))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_COPIED);
-    else if (EM_EQ(_type, em_ignored))
+    else if (EM_EQ(_type, esym_ignored))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_IGNORED);
-    else if (EM_EQ(_type, em_untracked))
+    else if (EM_EQ(_type, esym_untracked))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNTRACKED);
-    else if (EM_EQ(_type, em_typechange))
+    else if (EM_EQ(_type, esym_typechange))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_TYPECHANGE);
-    else if (EM_EQ(_type, em_unreadable))
+    else if (EM_EQ(_type, esym_unreadable))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNREADABLE);
-    else if (EM_EQ(_type, em_conflicted))
+    else if (EM_EQ(_type, esym_conflicted))
         num = git_diff_num_deltas_of_type(diff, GIT_DELTA_CONFLICTED);
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     return EM_INTEGER(num);

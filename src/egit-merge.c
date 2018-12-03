@@ -53,9 +53,9 @@ emacs_value egit_merge(
     git_repository *repo = EGIT_EXTRACT(_repo);
 
     ptrdiff_t i = 0;
-    ptrdiff_t nheads = egit_assert_list(env, EGIT_ANNOTATED_COMMIT, em_libgit_annotated_commit_p, _heads);
+    ptrdiff_t nheads = egit_assert_list(env, EGIT_ANNOTATED_COMMIT, esym_libgit_annotated_commit_p, _heads);
     if (nheads < 0)
-        return em_nil;
+        return esym_nil;
     const git_annotated_commit *heads[nheads];
     {
         EM_DOLIST(h, _heads, get_heads);
@@ -75,7 +75,7 @@ emacs_value egit_merge(
     egit_checkout_options_release(&checkout_opts);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(merge_analysis, "REPO HEADS",
@@ -95,9 +95,9 @@ emacs_value egit_merge_analysis(emacs_env *env, emacs_value _repo, emacs_value _
     git_repository *repo = EGIT_EXTRACT(_repo);
 
     ptrdiff_t i = 0;
-    ptrdiff_t nheads = egit_assert_list(env, EGIT_ANNOTATED_COMMIT, em_libgit_annotated_commit_p, _heads);
+    ptrdiff_t nheads = egit_assert_list(env, EGIT_ANNOTATED_COMMIT, esym_libgit_annotated_commit_p, _heads);
     if (nheads < 0)
-        return em_nil;
+        return esym_nil;
     const git_annotated_commit *heads[nheads];
     {
         EM_DOLIST(h, _heads, get_heads);
@@ -114,20 +114,20 @@ emacs_value egit_merge_analysis(emacs_env *env, emacs_value _repo, emacs_value _
 
     ptrdiff_t nanal = 0;
     if (analysis & GIT_MERGE_ANALYSIS_NORMAL)
-        _analysis[nanal++] = em_normal;
+        _analysis[nanal++] = esym_normal;
     if (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)
-        _analysis[nanal++] = em_up_to_date;
+        _analysis[nanal++] = esym_up_to_date;
     if (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD)
-        _analysis[nanal++] = em_fastforward;
+        _analysis[nanal++] = esym_fastforward;
     if (analysis & GIT_MERGE_ANALYSIS_UNBORN)
-        _analysis[nanal++] = em_unborn;
+        _analysis[nanal++] = esym_unborn;
 
     // These are bit flags but only one can be set
-    emacs_value _preference = em_nil;
+    emacs_value _preference = esym_nil;
     if (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD)
-        _preference = em_no_fastforward;
+        _preference = esym_no_fastforward;
     if (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)
-        _preference = em_fastforward_only;
+        _preference = esym_fastforward_only;
 
     return em_cons(env, em_list(env, _analysis, nanal), _preference);
 }
@@ -140,7 +140,7 @@ emacs_value egit_merge_base(emacs_env *env, emacs_value _repo, emacs_value _ids)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
 
-    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    ptrdiff_t i = 0, nids = em_assert_list(env, esym_stringp, _ids);
     git_oid ids[nids];
     {
         EM_DOLIST(id, _ids, get_ids);
@@ -169,7 +169,7 @@ emacs_value egit_merge_base_octopus(emacs_env *env, emacs_value _repo, emacs_val
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
 
-    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    ptrdiff_t i = 0, nids = em_assert_list(env, esym_stringp, _ids);
     git_oid ids[nids];
     {
         EM_DOLIST(id, _ids, get_ids);
@@ -194,7 +194,7 @@ emacs_value egit_merge_bases(emacs_env *env, emacs_value _repo, emacs_value _ids
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
 
-    ptrdiff_t i = 0, nids = em_assert_list(env, em_stringp, _ids);
+    ptrdiff_t i = 0, nids = em_assert_list(env, esym_stringp, _ids);
     git_oid ids[nids];
     {
         EM_DOLIST(id, _ids, get_ids);
@@ -211,7 +211,7 @@ emacs_value egit_merge_bases(emacs_env *env, emacs_value _repo, emacs_value _ids
         retval = git_merge_bases_many(&out, repo, nids, ids);
     EGIT_CHECK_ERROR(retval);
 
-    emacs_value ret = em_nil;
+    emacs_value ret = esym_nil;
     for (size_t i = out.count; i > 0; i--) {
         const char *oid_s = git_oid_tostr_s(&out.ids[i-1]);
         ret = em_cons(env, EM_STRING(oid_s), ret);

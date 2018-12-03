@@ -63,10 +63,10 @@ emacs_value egit_remote_autotag(emacs_env *env, emacs_value _remote)
     git_remote *remote = EGIT_EXTRACT(_remote);
     git_remote_autotag_option_t ret = git_remote_autotag(remote);
     switch (ret) {
-    case GIT_REMOTE_DOWNLOAD_TAGS_AUTO: return em_auto;
-    case GIT_REMOTE_DOWNLOAD_TAGS_NONE: return em_none;
-    case GIT_REMOTE_DOWNLOAD_TAGS_ALL: return em_all;
-    default: return em_nil;
+    case GIT_REMOTE_DOWNLOAD_TAGS_AUTO: return esym_auto;
+    case GIT_REMOTE_DOWNLOAD_TAGS_NONE: return esym_none;
+    case GIT_REMOTE_DOWNLOAD_TAGS_ALL: return esym_all;
+    default: return esym_nil;
     }
 }
 
@@ -81,7 +81,7 @@ emacs_value egit_remote_get_refspec(emacs_env *env, emacs_value _remote, emacs_v
     const git_refspec *refspec = git_remote_get_refspec(remote, index);
     if (!refspec) {
         em_signal_args_out_of_range(env, index);
-        return em_nil;
+        return esym_nil;
     }
 
     return egit_wrap(env, EGIT_REFSPEC, refspec, EM_EXTRACT_USER_PTR(_remote));
@@ -97,13 +97,13 @@ emacs_value egit_remote_get_refspecs(emacs_env *env, emacs_value _remote, emacs_
 
     git_strarray out = {NULL, 0};
     int retval;
-    if (EM_EQ(dir, em_fetch))
+    if (EM_EQ(dir, esym_fetch))
         retval = git_remote_get_fetch_refspecs(&out, remote);
-    else if (EM_EQ(dir, em_push))
+    else if (EM_EQ(dir, esym_push))
         retval = git_remote_get_push_refspecs(&out, remote);
     else {
         em_signal_wrong_value(env, dir);
-        return em_nil;
+        return esym_nil;
     }
     EGIT_CHECK_ERROR(retval);
 
@@ -118,7 +118,7 @@ emacs_value egit_remote_name(emacs_env *env, emacs_value _remote)
     const char *name = git_remote_name(remote);
     if (name)
         return EM_STRING(name);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(remote_owner, "REMOTE", "Get the repository that REMOTE belongs to.");
@@ -138,7 +138,7 @@ emacs_value egit_remote_pushurl(emacs_env *env, emacs_value _remote)
     const char *url = git_remote_pushurl(remote);
     if (url)
         return EM_STRING(url);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(remote_refspec_count, "REMOTE", "Get the number of refspecs configured in REMOTE.");
@@ -182,7 +182,7 @@ emacs_value egit_remote_valid_name_p(emacs_env *env, emacs_value _name)
     char *name = EM_EXTRACT_STRING(_name);
     int retval = git_remote_is_valid_name(name);
     free(name);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 
@@ -201,13 +201,13 @@ emacs_value egit_remote_add_refspec(
     EM_ASSERT_STRING(_refspec);
 
     bool push;
-    if (EM_EQ(direction, em_push))
+    if (EM_EQ(direction, esym_push))
         push = true;
-    else if (EM_EQ(direction, em_fetch))
+    else if (EM_EQ(direction, esym_fetch))
         push = false;
     else {
         em_signal_wrong_value(env, direction);
-        return em_nil;
+        return esym_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -220,7 +220,7 @@ emacs_value egit_remote_add_refspec(
     free(refspec);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(remote_fetch, "REMOTE &optional REFSPECS OPTIONS MESSAGE",
@@ -266,13 +266,13 @@ emacs_value egit_remote_fetch(
 
     git_strarray refspecs;
     if (!egit_strarray_from_list(&refspecs, env, _refspecs))
-        return em_nil;
+        return esym_nil;
 
     git_fetch_options options;
     egit_fetch_options_parse(env, opts, &options);
     if (env->non_local_exit_check(env)) {
         egit_strarray_dispose(&refspecs);
-        return em_nil;
+        return esym_nil;
     }
 
     git_remote *remote = EGIT_EXTRACT(_remote);
@@ -284,7 +284,7 @@ emacs_value egit_remote_fetch(
     egit_fetch_options_release(&options);
 
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(remote_push, "REMOTE &optional REFSPECS OPTIONS",
@@ -302,13 +302,13 @@ emacs_value egit_remote_push(emacs_env *env, emacs_value _remote, emacs_value _r
 
     git_strarray refspecs;
     if (!egit_strarray_from_list(&refspecs, env, _refspecs))
-        return em_nil;
+        return esym_nil;
 
     git_push_options options;
     egit_push_options_parse(env, opts, &options);
     if (env->non_local_exit_check(env)) {
         egit_strarray_dispose(&refspecs);
-        return em_nil;
+        return esym_nil;
     }
 
     git_remote *remote = EGIT_EXTRACT(_remote);
@@ -318,5 +318,5 @@ emacs_value egit_remote_push(emacs_env *env, emacs_value _remote, emacs_value _r
     egit_push_options_release(&options);
 
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }

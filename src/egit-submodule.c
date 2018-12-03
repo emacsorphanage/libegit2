@@ -15,41 +15,41 @@
 static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int status, bool full)
 {
     if (EM_EXTRACT_BOOLEAN(flag)) {
-        if (EM_EQ(flag, em_in_head))
-            return status & GIT_SUBMODULE_STATUS_IN_HEAD ? em_t : em_nil;
-        else if (EM_EQ(flag, em_in_index))
-            return status & GIT_SUBMODULE_STATUS_IN_INDEX ? em_t : em_nil;
-        else if (EM_EQ(flag, em_in_config))
-            return status & GIT_SUBMODULE_STATUS_IN_CONFIG ? em_t : em_nil;
-        else if (EM_EQ(flag, em_in_wd))
-            return status & GIT_SUBMODULE_STATUS_IN_WD ? em_t : em_nil;
+        if (EM_EQ(flag, esym_in_head))
+            return status & GIT_SUBMODULE_STATUS_IN_HEAD ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_in_index))
+            return status & GIT_SUBMODULE_STATUS_IN_INDEX ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_in_config))
+            return status & GIT_SUBMODULE_STATUS_IN_CONFIG ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_in_wd))
+            return status & GIT_SUBMODULE_STATUS_IN_WD ? esym_t : esym_nil;
         else if (!full) {
             em_signal_wrong_value(env, flag);
-            return em_nil;
+            return esym_nil;
         }
-        else if (EM_EQ(flag, em_index_added))
-            return status & GIT_SUBMODULE_STATUS_INDEX_ADDED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_index_deleted))
-            return status & GIT_SUBMODULE_STATUS_INDEX_DELETED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_index_modified))
-            return status & GIT_SUBMODULE_STATUS_INDEX_MODIFIED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_uninitialized))
-            return status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_added))
-            return status & GIT_SUBMODULE_STATUS_WD_ADDED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_deleted))
-            return status & GIT_SUBMODULE_STATUS_WD_DELETED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_MODIFIED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_index_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_wd_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_WD_MODIFIED ? em_t : em_nil;
-        else if (EM_EQ(flag, em_wd_untracked))
-            return status & GIT_SUBMODULE_STATUS_WD_UNTRACKED ? em_t : em_nil;
+        else if (EM_EQ(flag, esym_index_added))
+            return status & GIT_SUBMODULE_STATUS_INDEX_ADDED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_index_deleted))
+            return status & GIT_SUBMODULE_STATUS_INDEX_DELETED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_index_modified))
+            return status & GIT_SUBMODULE_STATUS_INDEX_MODIFIED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_uninitialized))
+            return status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_added))
+            return status & GIT_SUBMODULE_STATUS_WD_ADDED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_deleted))
+            return status & GIT_SUBMODULE_STATUS_WD_DELETED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_modified))
+            return status & GIT_SUBMODULE_STATUS_WD_MODIFIED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_index_modified))
+            return status & GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_wd_modified))
+            return status & GIT_SUBMODULE_STATUS_WD_WD_MODIFIED ? esym_t : esym_nil;
+        else if (EM_EQ(flag, esym_wd_untracked))
+            return status & GIT_SUBMODULE_STATUS_WD_UNTRACKED ? esym_t : esym_nil;
         else {
             em_signal_wrong_value(env, flag);
-            return em_nil;
+            return esym_nil;
         }
     }
 
@@ -57,35 +57,35 @@ static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int 
     size_t i = 0;
 
     if (status & GIT_SUBMODULE_STATUS_IN_HEAD)
-        entries[i++] = em_in_head;
+        entries[i++] = esym_in_head;
     if (status & GIT_SUBMODULE_STATUS_IN_INDEX)
-        entries[i++] = em_in_index;
+        entries[i++] = esym_in_index;
     if (status & GIT_SUBMODULE_STATUS_IN_CONFIG)
-        entries[i++] = em_in_config;
+        entries[i++] = esym_in_config;
     if (status & GIT_SUBMODULE_STATUS_IN_WD)
-        entries[i++] = em_in_wd;
+        entries[i++] = esym_in_wd;
 
     if (full) {
         if (status & GIT_SUBMODULE_STATUS_INDEX_ADDED)
-            entries[i++] = em_index_added;
+            entries[i++] = esym_index_added;
         if (status & GIT_SUBMODULE_STATUS_INDEX_DELETED)
-            entries[i++] = em_index_deleted;
+            entries[i++] = esym_index_deleted;
         if (status & GIT_SUBMODULE_STATUS_INDEX_MODIFIED)
-            entries[i++] = em_index_modified;
+            entries[i++] = esym_index_modified;
         if (status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED)
-            entries[i++] = em_wd_uninitialized;
+            entries[i++] = esym_wd_uninitialized;
         if (status & GIT_SUBMODULE_STATUS_WD_ADDED)
-            entries[i++] = em_wd_added;
+            entries[i++] = esym_wd_added;
         if (status & GIT_SUBMODULE_STATUS_WD_DELETED)
-            entries[i++] = em_wd_deleted;
+            entries[i++] = esym_wd_deleted;
         if (status & GIT_SUBMODULE_STATUS_WD_MODIFIED)
-            entries[i++] = em_wd_modified;
+            entries[i++] = esym_wd_modified;
         if (status & GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED)
-            entries[i++] = em_wd_index_modified;
+            entries[i++] = esym_wd_index_modified;
         if (status & GIT_SUBMODULE_STATUS_WD_WD_MODIFIED)
-            entries[i++] = em_wd_wd_modified;
+            entries[i++] = esym_wd_wd_modified;
         if (status & GIT_SUBMODULE_STATUS_WD_UNTRACKED)
-            entries[i++] = em_wd_untracked;
+            entries[i++] = esym_wd_untracked;
     }
 
     return em_list(env, entries, i);
@@ -147,7 +147,7 @@ emacs_value egit_submodule_branch(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     const char *branch = git_submodule_branch(sub);
     if (!branch)
-        return em_nil;
+        return esym_nil;
     return EM_STRING(branch);
 }
 
@@ -160,8 +160,8 @@ emacs_value egit_submodule_fetch_recurse_submodules(emacs_env *env, emacs_value 
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_recurse_t rec = git_submodule_fetch_recurse_submodules(sub);
     if (rec == GIT_SUBMODULE_RECURSE_ONDEMAND)
-        return em_ondemand;
-    return (rec == GIT_SUBMODULE_RECURSE_NO) ? em_nil : em_t;
+        return esym_ondemand;
+    return (rec == GIT_SUBMODULE_RECURSE_NO) ? esym_nil : esym_t;
 }
 
 EGIT_DOC(submodule_head_id, "SUBMODULE", "Get the ID for SUBMODULE in HEAD.");
@@ -171,7 +171,7 @@ emacs_value egit_submodule_head_id(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     const git_oid *oid = git_submodule_head_id(sub);
     if (!oid)
-        return em_nil;
+        return esym_nil;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -185,11 +185,11 @@ emacs_value egit_submodule_ignore(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_ignore_t ignore = git_submodule_ignore(sub);
     switch (ignore) {
-    case GIT_SUBMODULE_IGNORE_NONE: return em_none;
-    case GIT_SUBMODULE_IGNORE_UNTRACKED: return em_untracked;
-    case GIT_SUBMODULE_IGNORE_DIRTY: return em_dirty;
-    case GIT_SUBMODULE_IGNORE_ALL: return em_all;
-    default: return em_nil;  // Should be unreachable
+    case GIT_SUBMODULE_IGNORE_NONE: return esym_none;
+    case GIT_SUBMODULE_IGNORE_UNTRACKED: return esym_untracked;
+    case GIT_SUBMODULE_IGNORE_DIRTY: return esym_dirty;
+    case GIT_SUBMODULE_IGNORE_ALL: return esym_all;
+    default: return esym_nil;  // Should be unreachable
     }
 }
 
@@ -200,7 +200,7 @@ emacs_value egit_submodule_index_id(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     const git_oid *oid = git_submodule_index_id(sub);
     if (!oid)
-        return em_nil;
+        return esym_nil;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -296,17 +296,17 @@ emacs_value egit_submodule_status(
     EM_ASSERT_STRING(_name);
 
     git_submodule_ignore_t ignore;
-    if (!EM_EXTRACT_BOOLEAN(_ignore) || EM_EQ(_ignore, em_none))
+    if (!EM_EXTRACT_BOOLEAN(_ignore) || EM_EQ(_ignore, esym_none))
         ignore = GIT_SUBMODULE_IGNORE_NONE;
-    else if (EM_EQ(_ignore, em_untracked))
+    else if (EM_EQ(_ignore, esym_untracked))
         ignore = GIT_SUBMODULE_IGNORE_UNTRACKED;
-    else if (EM_EQ(_ignore, em_dirty))
+    else if (EM_EQ(_ignore, esym_dirty))
         ignore = GIT_SUBMODULE_IGNORE_DIRTY;
-    else if (EM_EQ(_ignore, em_all))
+    else if (EM_EQ(_ignore, esym_all))
         ignore = GIT_SUBMODULE_IGNORE_ALL;
     else {
         em_signal_wrong_value(env, _ignore);
-        return em_nil;
+        return esym_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -329,11 +329,11 @@ emacs_value egit_submodule_update_strategy(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_update_t update = git_submodule_update_strategy(sub);
     switch (update) {
-    case GIT_SUBMODULE_UPDATE_NONE: return em_none;
-    case GIT_SUBMODULE_UPDATE_CHECKOUT: return em_checkout;
-    case GIT_SUBMODULE_UPDATE_MERGE: return em_merge;
-    case GIT_SUBMODULE_UPDATE_REBASE: return em_rebase;
-    default: return em_nil;  // Should be unreachable
+    case GIT_SUBMODULE_UPDATE_NONE: return esym_none;
+    case GIT_SUBMODULE_UPDATE_CHECKOUT: return esym_checkout;
+    case GIT_SUBMODULE_UPDATE_MERGE: return esym_merge;
+    case GIT_SUBMODULE_UPDATE_REBASE: return esym_rebase;
+    default: return esym_nil;  // Should be unreachable
     }
 }
 
@@ -353,7 +353,7 @@ emacs_value egit_submodule_wd_id(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     const git_oid *oid = git_submodule_wd_id(sub);
     if (!oid)
-        return em_nil;
+        return esym_nil;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -390,9 +390,9 @@ emacs_value egit_submodule_foreach(emacs_env *env, emacs_value _repo, emacs_valu
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -408,7 +408,7 @@ emacs_value egit_submodule_add_finalize(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_add_finalize(sub);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_add_to_index, "SUBMODULE WRITE",
@@ -420,7 +420,7 @@ emacs_value egit_submodule_add_to_index(emacs_env *env, emacs_value _sub, emacs_
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_add_to_index(sub, EM_EXTRACT_BOOLEAN(write));
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_init, "SUBMODULE &optional FORCE",
@@ -432,7 +432,7 @@ emacs_value egit_submodule_init(emacs_env *env, emacs_value _sub, emacs_value fo
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_init(sub, EM_EXTRACT_BOOLEAN(force));
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_reload, "SUBMODULE &optional FORCE",
@@ -445,7 +445,7 @@ emacs_value egit_submodule_reload(emacs_env *env, emacs_value _sub, emacs_value 
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_reload(sub, EM_EXTRACT_BOOLEAN(force));
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_repo_init, "SUBMODULE &optional LINKP",
@@ -480,7 +480,7 @@ emacs_value egit_submodule_set_branch(
     free(refname);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_set_fetch_recurse_submodules, "REPO NAME &optional VALUE",
@@ -495,7 +495,7 @@ emacs_value egit_submodule_set_fetch_recurse_submodules(
     git_submodule_recurse_t value;
     if (!EM_EXTRACT_BOOLEAN(_value))
         value = GIT_SUBMODULE_RECURSE_NO;
-    else if (EM_EQ(_value, em_ondemand))
+    else if (EM_EQ(_value, esym_ondemand))
         value = GIT_SUBMODULE_RECURSE_ONDEMAND;
     else
         value = GIT_SUBMODULE_RECURSE_YES;
@@ -506,7 +506,7 @@ emacs_value egit_submodule_set_fetch_recurse_submodules(
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_set_ignore, "REPO NAME &optional VALUE",
@@ -519,17 +519,17 @@ emacs_value egit_submodule_set_ignore(
     EM_ASSERT_STRING(_name);
 
     git_submodule_ignore_t value;
-    if (EM_EQ(_value, em_none))
+    if (EM_EQ(_value, esym_none))
         value = GIT_SUBMODULE_IGNORE_NONE;
-    else if (EM_EQ(_value, em_dirty))
+    else if (EM_EQ(_value, esym_dirty))
         value = GIT_SUBMODULE_IGNORE_DIRTY;
-    else if (EM_EQ(_value, em_untracked))
+    else if (EM_EQ(_value, esym_untracked))
         value = GIT_SUBMODULE_IGNORE_UNTRACKED;
-    else if (EM_EQ(_value, em_all))
+    else if (EM_EQ(_value, esym_all))
         value = GIT_SUBMODULE_IGNORE_ALL;
     else {
         em_signal_wrong_value(env, _value);
-        return em_nil;
+        return esym_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -538,7 +538,7 @@ emacs_value egit_submodule_set_ignore(
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_set_update, "REPO NAME &optional VALUE",
@@ -551,17 +551,17 @@ emacs_value egit_submodule_set_update(
     EM_ASSERT_STRING(_name);
 
     git_submodule_update_t value;
-    if (EM_EQ(_value, em_checkout))
+    if (EM_EQ(_value, esym_checkout))
         value = GIT_SUBMODULE_UPDATE_CHECKOUT;
-    else if (EM_EQ(_value, em_rebase))
+    else if (EM_EQ(_value, esym_rebase))
         value = GIT_SUBMODULE_UPDATE_REBASE;
-    else if (EM_EQ(_value, em_merge))
+    else if (EM_EQ(_value, esym_merge))
         value = GIT_SUBMODULE_UPDATE_MERGE;
-    else if (EM_EQ(_value, em_none))
+    else if (EM_EQ(_value, esym_none))
         value = GIT_SUBMODULE_UPDATE_NONE;
     else {
         em_signal_wrong_value(env, _value);
-        return em_nil;
+        return esym_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -570,7 +570,7 @@ emacs_value egit_submodule_set_update(
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_set_url, "REPO NAME URL",
@@ -591,7 +591,7 @@ emacs_value egit_submodule_set_url(
     free(url);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_sync, "SUBMODULE", "Copy SUBMODULE's remote info into its repository.");
@@ -601,7 +601,7 @@ emacs_value egit_submodule_sync(emacs_env *env, emacs_value _sub)
     git_submodule *sub = EGIT_EXTRACT(_sub);
     int retval = git_submodule_sync(sub);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(submodule_update, "SUBMODULE &optional INITP FETCHP CHECKOUT-OPTS FETCH-OPTS",
@@ -634,5 +634,5 @@ emacs_value egit_submodule_update(
     egit_fetch_options_release(&opts.fetch_opts);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }

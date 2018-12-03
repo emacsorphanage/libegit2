@@ -27,7 +27,7 @@ emacs_value egit_status_decode(emacs_env *env, emacs_value status)
 #define CHECK(name, symbol)                             \
     do {                                                \
         if (flags & GIT_STATUS_##name) {                \
-            statuses[nstatuses++] = em_##symbol;        \
+            statuses[nstatuses++] = esym_##symbol;      \
         }                                               \
     } while (false)
 
@@ -102,19 +102,19 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
     free(path);
     EGIT_CHECK_ERROR(rv);
 
-    return ignored == 0 ? em_nil : em_t;
+    return ignored == 0 ? esym_nil : esym_t;
 }
 
 bool convert_show_option(git_status_show_t *out, emacs_env *env,
                          emacs_value arg)
 {
-    if (EM_EQ(arg, em_index_only)) {
+    if (EM_EQ(arg, esym_index_only)) {
         *out = GIT_STATUS_SHOW_INDEX_ONLY;
         return true;
-    } else if (EM_EQ(arg, em_workdir_only)) {
+    } else if (EM_EQ(arg, esym_workdir_only)) {
         *out = GIT_STATUS_SHOW_WORKDIR_ONLY;
         return true;
-    } else if (EM_EQ(arg, em_index_and_workdir)) {
+    } else if (EM_EQ(arg, esym_index_and_workdir)) {
         *out = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
         return true;
     } else if (EM_EXTRACT_BOOLEAN(arg)) {
@@ -133,7 +133,7 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
         return true;
     }
 
-    if (em_assert_list(env, em_nil, arg) < 0)
+    if (em_assert_list(env, esym_nil, arg) < 0)
         return false;
 
     *out = 0;
@@ -143,7 +143,7 @@ bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
         arg = em_cdr(env, arg);
 
 #define CHECK(symbol, enum)                                     \
-        if (EM_EQ(flag, em_##symbol)) {                  \
+        if (EM_EQ(flag, esym_##symbol)) {                  \
             *out |= GIT_STATUS_OPT_##enum;                      \
             continue;                                           \
         }
@@ -179,7 +179,7 @@ bool convert_baseline_option(git_tree **out, emacs_env *env, emacs_value arg)
         *out = NULL;
         return true;
     }
-    if (!egit_assert_type(env, arg, EGIT_TREE, em_libgit_tree_p)) {
+    if (!egit_assert_type(env, arg, EGIT_TREE, esym_libgit_tree_p)) {
         return false;
     }
 
@@ -263,17 +263,17 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
     git_status_init_options(&options, GIT_STATUS_OPTIONS_VERSION);
 
     if (!convert_show_option(&options.show, env, show)) {
-        return em_nil;
+        return esym_nil;
     }
     if (!convert_flags_option(&options.flags, env, flags)) {
-        return em_nil;
+        return esym_nil;
     }
     if (!egit_strarray_from_list(&options.pathspec, env, pathspec)) {
-        return em_nil;
+        return esym_nil;
     }
     if (!convert_baseline_option(&options.baseline, env, baseline)) {
         egit_strarray_dispose(&options.pathspec);
-        return em_nil;
+        return esym_nil;
     }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -286,7 +286,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
         EGIT_CHECK_ERROR(rv);
     }
 
-    return em_nil;
+    return esym_nil;
 }
 
 int foreach_callback(const char *path, unsigned int flags, void *payload)

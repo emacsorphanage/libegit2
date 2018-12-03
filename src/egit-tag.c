@@ -80,9 +80,9 @@ emacs_value egit_tag_foreach(emacs_env *env, emacs_value _repo, emacs_value func
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -115,7 +115,7 @@ emacs_value egit_tag_message(emacs_env *env, emacs_value _tag)
     git_tag *tag = EGIT_EXTRACT(_tag);
     const char *message = git_tag_message(tag);
     if (!message)
-        return em_nil;
+        return esym_nil;
     return EM_STRING(message);
 }
 
@@ -183,11 +183,11 @@ emacs_value egit_tag_target_type(emacs_env *env, emacs_value _tag)
     git_otype type = git_tag_target_type(tag);
 
     switch (type) {
-    case GIT_OBJ_COMMIT: return em_commit; break;
-    case GIT_OBJ_TREE: return em_tree; break;
-    case GIT_OBJ_BLOB: return em_blob; break;
-    case GIT_OBJ_TAG: return em_tag; break;
-    default: return em_nil;
+    case GIT_OBJ_COMMIT: return esym_commit; break;
+    case GIT_OBJ_TREE: return esym_tree; break;
+    case GIT_OBJ_BLOB: return esym_blob; break;
+    case GIT_OBJ_TAG: return esym_tag; break;
+    default: return esym_nil;
     }
 }
 

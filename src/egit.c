@@ -66,7 +66,7 @@ bool egit_assert_object(emacs_env *env, emacs_value obj)
     if (type == EGIT_COMMIT || type == EGIT_TREE ||
         type == EGIT_BLOB || type == EGIT_TAG || type == EGIT_OBJECT)
         return true;
-    em_signal_wrong_type(env, em_libgit_object_p, obj);
+    em_signal_wrong_type(env, esym_libgit_object_p, obj);
     return false;
 }
 
@@ -83,7 +83,7 @@ ptrdiff_t egit_assert_list(emacs_env *env, egit_type type, emacs_value predicate
     }
 
     if (EM_EXTRACT_BOOLEAN(arg)) {
-        em_signal_wrong_type(env, em_list_p, arg);
+        em_signal_wrong_type(env, esym_listp, arg);
         return -1;
     }
 
@@ -194,7 +194,7 @@ typedef emacs_value (*func_7)(emacs_env*, emacs_value, emacs_value, emacs_value,
                               emacs_value, emacs_value, emacs_value, emacs_value);
 
 // Get an argument index, or nil. Useful for simulating optional arguments.
-#define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : em_nil)
+#define GET_SAFE(arglist, nargs, index) ((index) < (nargs) ? (arglist)[(index)] : esym_nil)
 
 static emacs_value egit_dispatch_0(emacs_env *env, __attribute__((unused)) ptrdiff_t nargs,
                             __attribute__((unused)) emacs_value *args, void *data)
@@ -259,40 +259,40 @@ bool egit_dispatch_error(emacs_env *env, int retval)
 
     emacs_value error;
     switch (err->klass) {
-    case GITERR_NOMEMORY: error = em_giterr_nomemory; break;
-    case GITERR_OS: error = em_giterr_os; break;
-    case GITERR_INVALID: error = em_giterr_invalid; break;
-    case GITERR_REFERENCE: error = em_giterr_reference; break;
-    case GITERR_ZLIB: error = em_giterr_zlib; break;
-    case GITERR_REPOSITORY: error = em_giterr_repository; break;
-    case GITERR_CONFIG: error = em_giterr_config; break;
-    case GITERR_REGEX: error = em_giterr_regex; break;
-    case GITERR_ODB: error = em_giterr_odb; break;
-    case GITERR_INDEX: error = em_giterr_index; break;
-    case GITERR_OBJECT: error = em_giterr_object; break;
-    case GITERR_NET: error = em_giterr_net; break;
-    case GITERR_TAG: error = em_giterr_tag; break;
-    case GITERR_TREE: error = em_giterr_tree; break;
-    case GITERR_INDEXER: error = em_giterr_indexer; break;
-    case GITERR_SSL: error = em_giterr_ssl; break;
-    case GITERR_SUBMODULE: error = em_giterr_submodule; break;
-    case GITERR_THREAD: error = em_giterr_thread; break;
-    case GITERR_STASH: error = em_giterr_stash; break;
-    case GITERR_CHECKOUT: error = em_giterr_checkout; break;
-    case GITERR_FETCHHEAD: error = em_giterr_fetchhead; break;
-    case GITERR_MERGE: error = em_giterr_merge; break;
-    case GITERR_SSH: error = em_giterr_ssh; break;
-    case GITERR_FILTER: error = em_giterr_filter; break;
-    case GITERR_REVERT: error = em_giterr_revert; break;
-    case GITERR_CALLBACK: error = em_giterr_callback; break;
-    case GITERR_CHERRYPICK: error = em_giterr_cherrypick; break;
-    case GITERR_DESCRIBE: error = em_giterr_describe; break;
-    case GITERR_REBASE: error = em_giterr_rebase; break;
-    case GITERR_FILESYSTEM: error = em_giterr_filesystem; break;
-    case GITERR_PATCH: error = em_giterr_patch; break;
-    case GITERR_WORKTREE: error = em_giterr_worktree; break;
-    case GITERR_SHA1: error = em_giterr_sha1; break;
-    default: error = em_giterr; break;
+    case GITERR_NOMEMORY: error = esym_giterr_nomemory; break;
+    case GITERR_OS: error = esym_giterr_os; break;
+    case GITERR_INVALID: error = esym_giterr_invalid; break;
+    case GITERR_REFERENCE: error = esym_giterr_reference; break;
+    case GITERR_ZLIB: error = esym_giterr_zlib; break;
+    case GITERR_REPOSITORY: error = esym_giterr_repository; break;
+    case GITERR_CONFIG: error = esym_giterr_config; break;
+    case GITERR_REGEX: error = esym_giterr_regex; break;
+    case GITERR_ODB: error = esym_giterr_odb; break;
+    case GITERR_INDEX: error = esym_giterr_index; break;
+    case GITERR_OBJECT: error = esym_giterr_object; break;
+    case GITERR_NET: error = esym_giterr_net; break;
+    case GITERR_TAG: error = esym_giterr_tag; break;
+    case GITERR_TREE: error = esym_giterr_tree; break;
+    case GITERR_INDEXER: error = esym_giterr_indexer; break;
+    case GITERR_SSL: error = esym_giterr_ssl; break;
+    case GITERR_SUBMODULE: error = esym_giterr_submodule; break;
+    case GITERR_THREAD: error = esym_giterr_thread; break;
+    case GITERR_STASH: error = esym_giterr_stash; break;
+    case GITERR_CHECKOUT: error = esym_giterr_checkout; break;
+    case GITERR_FETCHHEAD: error = esym_giterr_fetchhead; break;
+    case GITERR_MERGE: error = esym_giterr_merge; break;
+    case GITERR_SSH: error = esym_giterr_ssh; break;
+    case GITERR_FILTER: error = esym_giterr_filter; break;
+    case GITERR_REVERT: error = esym_giterr_revert; break;
+    case GITERR_CALLBACK: error = esym_giterr_callback; break;
+    case GITERR_CHERRYPICK: error = esym_giterr_cherrypick; break;
+    case GITERR_DESCRIBE: error = esym_giterr_describe; break;
+    case GITERR_REBASE: error = esym_giterr_rebase; break;
+    case GITERR_FILESYSTEM: error = esym_giterr_filesystem; break;
+    case GITERR_PATCH: error = esym_giterr_patch; break;
+    case GITERR_WORKTREE: error = esym_giterr_worktree; break;
+    case GITERR_SHA1: error = esym_giterr_sha1; break;
+    default: error = esym_giterr; break;
     }
 
     em_signal(env, error, err->message);
@@ -303,34 +303,34 @@ EGIT_DOC(typeof, "OBJ", "Return the type of the git pointer OBJ, or nil.");
 static emacs_value egit_typeof(emacs_env *env, emacs_value val)
 {
     switch (egit_get_type(env, val)) {
-    case EGIT_REPOSITORY: return em_repository;
-    case EGIT_REFERENCE: return em_reference;
-    case EGIT_COMMIT: return em_commit;
-    case EGIT_TREE: return em_tree;
-    case EGIT_BLOB: return em_blob;
-    case EGIT_TAG: return em_tag;
-    case EGIT_OBJECT: return em_object;
-    case EGIT_BLAME: return em_blame;
-    case EGIT_BLAME_HUNK: return em_blame_hunk;
-    case EGIT_CONFIG: return em_config;
-    case EGIT_TRANSACTION: return em_transaction;
-    case EGIT_INDEX: return em_index;
-    case EGIT_INDEX_ENTRY: return em_index_entry;
-    case EGIT_DIFF: return em_diff;
-    case EGIT_DIFF_DELTA: return em_diff_delta;
-    case EGIT_DIFF_BINARY: return em_diff_binary;
-    case EGIT_DIFF_HUNK: return em_diff_hunk;
-    case EGIT_DIFF_LINE: return em_diff_line;
-    case EGIT_REMOTE: return em_remote;
-    case EGIT_REFSPEC: return em_refspec;
-    case EGIT_SUBMODULE: return em_submodule;
-    case EGIT_CRED: return em_cred;
-    case EGIT_ANNOTATED_COMMIT: return em_annotated_commit;
-    case EGIT_REFLOG: return em_reflog;
-    case EGIT_REFLOG_ENTRY: return em_reflog_entry;
-    case EGIT_REVWALK: return em_revwalk;
-    case EGIT_TREEBUILDER: return em_treebuilder;
-    default: return em_nil;
+    case EGIT_REPOSITORY: return esym_repository;
+    case EGIT_REFERENCE: return esym_reference;
+    case EGIT_COMMIT: return esym_commit;
+    case EGIT_TREE: return esym_tree;
+    case EGIT_BLOB: return esym_blob;
+    case EGIT_TAG: return esym_tag;
+    case EGIT_OBJECT: return esym_object;
+    case EGIT_BLAME: return esym_blame;
+    case EGIT_BLAME_HUNK: return esym_blame_hunk;
+    case EGIT_CONFIG: return esym_config;
+    case EGIT_TRANSACTION: return esym_transaction;
+    case EGIT_INDEX: return esym_index;
+    case EGIT_INDEX_ENTRY: return esym_index_entry;
+    case EGIT_DIFF: return esym_diff;
+    case EGIT_DIFF_DELTA: return esym_diff_delta;
+    case EGIT_DIFF_BINARY: return esym_diff_binary;
+    case EGIT_DIFF_HUNK: return esym_diff_hunk;
+    case EGIT_DIFF_LINE: return esym_diff_line;
+    case EGIT_REMOTE: return esym_remote;
+    case EGIT_REFSPEC: return esym_refspec;
+    case EGIT_SUBMODULE: return esym_submodule;
+    case EGIT_CRED: return esym_cred;
+    case EGIT_ANNOTATED_COMMIT: return esym_annotated_commit;
+    case EGIT_REFLOG: return esym_reflog;
+    case EGIT_REFLOG_ENTRY: return esym_reflog_entry;
+    case EGIT_REVWALK: return esym_revwalk;
+    case EGIT_TREEBUILDER: return esym_treebuilder;
+    default: return esym_nil;
     }
 }
 
@@ -338,7 +338,7 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     EGIT_DOC(small##_p, "OBJ", "Return non-nil if OBJ is a git " text "."); \
     static emacs_value egit_##small##_p(emacs_env *env, emacs_value obj)\
     {                                                                   \
-        return egit_get_type(env, obj) == EGIT_##caps ? em_t : em_nil;  \
+        return egit_get_type(env, obj) == EGIT_##caps ? esym_t : esym_nil;  \
     }
 
 TYPECHECKER(ANNOTATED_COMMIT, annotated_commit, "annotated commit");
@@ -376,7 +376,7 @@ static emacs_value egit_object_p(emacs_env *env, emacs_value obj)
 {
     egit_type type = egit_get_type(env, obj);
     return (type == EGIT_COMMIT || type == EGIT_TREE || type == EGIT_BLOB ||
-            type == EGIT_TAG || type == EGIT_OBJECT) ? em_t : em_nil;
+            type == EGIT_TAG || type == EGIT_OBJECT) ? esym_t : esym_nil;
 }
 
 #define DEFUN(ename, cname, min_nargs, max_nargs)                       \

@@ -19,44 +19,44 @@ static emacs_value extract_options(emacs_env *env, emacs_value eopts, git_blame_
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (EM_EQ(car, em_first_parent))
+        if (EM_EQ(car, esym_first_parent))
             EGIT_SET_BIT(opts->flags, GIT_BLAME_FIRST_PARENT, cdr);
 
         /* According to libgit2 documentation, the min_match_characters
          * setting only takes effect if GIT_BLAME_TRACK_COPIES_* flags
          * are set, but all of those are marked as not implemented in
          * the source code.
-        else if (EM_EQ(car, em_min_match_characters)) {
+        else if (EM_EQ(car, esym_min_match_characters)) {
             EM_ASSERT_INTEGER(cdr);
             opts->min_match_characters = EM_EXTRACT_INTEGER(cdr);
         }
         */
 
-        else if (EM_EQ(car, em_newest_commit)) {
+        else if (EM_EQ(car, esym_newest_commit)) {
             EM_ASSERT_STRING(cdr);
             EGIT_EXTRACT_OID(cdr, opts->newest_commit);
         }
-        else if (EM_EQ(car, em_oldest_commit)) {
+        else if (EM_EQ(car, esym_oldest_commit)) {
             EM_ASSERT_STRING(cdr);
             EGIT_EXTRACT_OID(cdr, opts->oldest_commit);
         }
-        else if (EM_EQ(car, em_min_line)) {
+        else if (EM_EQ(car, esym_min_line)) {
             EM_ASSERT_INTEGER(cdr);
             opts->min_line = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_max_line)) {
+        else if (EM_EQ(car, esym_max_line)) {
             EM_ASSERT_INTEGER(cdr);
             opts->max_line = EM_EXTRACT_INTEGER(cdr);
         }
         else {
             em_signal_wrong_value(env, car);
-            return em_nil;
+            return esym_nil;
         }
 
         EM_DOLIST_END(loop);
     }
 
-    return em_t;
+    return esym_t;
 }
 
 EGIT_DOC(blame_file, "REPOSITORY PATH &optional OPTIONS",
@@ -102,7 +102,7 @@ emacs_value egit_blame_get_hunk_byindex(emacs_env *env, emacs_value _blame, emac
     const git_blame_hunk *hunk = git_blame_get_hunk_byindex(blame, index);
     if (!hunk) {
         em_signal_args_out_of_range(env, index);
-        return em_nil;
+        return esym_nil;
     }
 
     return egit_wrap(env, EGIT_BLAME_HUNK, hunk, EM_EXTRACT_USER_PTR(_blame));
@@ -120,7 +120,7 @@ emacs_value egit_blame_get_hunk_byline(emacs_env *env, emacs_value _blame, emacs
     const git_blame_hunk *hunk = git_blame_get_hunk_byline(blame, line);
     if (!hunk) {
         em_signal_args_out_of_range(env, line);
-        return em_nil;
+        return esym_nil;
     }
 
     return egit_wrap(env, EGIT_BLAME_HUNK, hunk, EM_EXTRACT_USER_PTR(_blame));

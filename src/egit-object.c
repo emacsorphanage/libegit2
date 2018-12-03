@@ -28,17 +28,17 @@ emacs_value egit_object_lookup(emacs_env *env, emacs_value _repo, emacs_value _o
     git_otype type;
     if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
-    else if (EM_EQ(_type, em_blob))
+    else if (EM_EQ(_type, esym_blob))
         type = GIT_OBJ_BLOB;
-    else if (EM_EQ(_type, em_commit))
+    else if (EM_EQ(_type, esym_commit))
         type = GIT_OBJ_COMMIT;
-    else if (EM_EQ(_type, em_tag))
+    else if (EM_EQ(_type, esym_tag))
         type = GIT_OBJ_TAG;
-    else if (EM_EQ(_type, em_tree))
+    else if (EM_EQ(_type, esym_tree))
         type = GIT_OBJ_TREE;
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     git_object *object;
@@ -68,17 +68,17 @@ emacs_value egit_object_lookup_prefix(emacs_env *env, emacs_value _repo, emacs_v
     git_otype type;
     if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
-    else if (EM_EQ(_type, em_blob))
+    else if (EM_EQ(_type, esym_blob))
         type = GIT_OBJ_BLOB;
-    else if (EM_EQ(_type, em_commit))
+    else if (EM_EQ(_type, esym_commit))
         type = GIT_OBJ_COMMIT;
-    else if (EM_EQ(_type, em_tag))
+    else if (EM_EQ(_type, esym_tag))
         type = GIT_OBJ_TAG;
-    else if (EM_EQ(_type, em_tree))
+    else if (EM_EQ(_type, esym_tree))
         type = GIT_OBJ_TREE;
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     git_object *object;

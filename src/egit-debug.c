@@ -36,7 +36,7 @@ static void *pop_stack(ptr_cell **stack)
 
 static emacs_value convert_stack(emacs_env *env, ptr_cell **stack)
 {
-    emacs_value list = em_nil;
+    emacs_value list = esym_nil;
     void *ptr;
     while ((ptr = pop_stack(stack)))
         list = em_cons(env, EM_INTEGER((ptrdiff_t) ptr), list);
