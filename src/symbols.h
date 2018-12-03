@@ -3,12 +3,87 @@
 // Instead, edit ../symbols.cfg and run ../gensyms.py
 
 #include "emacs-module.h"
+#include "git2.h"
 
 #ifndef SYMBOLS_H
 #define SYMBOLS_H
 
-void esyms_init(emacs_env *env);
+typedef union {
+    git_blame_flag_t blame_flag;
+    git_cert_ssh_t cert_ssh;
+    git_cert_t cert;
+    git_checkout_notify_t checkout_notify;
+    git_checkout_strategy_t checkout_strategy;
+    git_config_level_t config_level;
+    git_credtype_t credtype;
+    git_describe_strategy_t describe_strategy;
+    git_delta_t delta;
+    git_diff_format_t diff_format;
+    git_diff_option_t diff_option;
+    git_direction direction;
+    git_feature_t feature;
+    git_fetch_prune_t fetch_prune;
+    git_filemode_t filemode;
+    git_index_add_option_t index_add_option;
+    git_indexcap_t indexcap;
+    git_merge_analysis_t merge_analysis;
+    git_merge_file_favor_t merge_file_favor;
+    git_merge_file_flag_t merge_file_flag;
+    git_merge_flag_t merge_flag;
+    git_merge_preference_t merge_preference;
+    git_otype otype;
+    git_repository_state_t repository_state;
+    git_status_opt_t status_opt;
+    git_status_show_t status_show;
+    git_status_t status;
+    git_proxy_t proxy;
+    git_reset_t reset;
+    git_sort_t sort;
+    git_submodule_status_t submodule_status;
+    git_submodule_ignore_t submodule_ignore;
+    git_submodule_recurse_t submodule_recurse;
+    git_submodule_update_t submodule_update;
+} esym_enumval;
 
+typedef struct {
+    emacs_value *symbol;
+    esym_enumval value;
+} esym_map;
+
+extern esym_map esym_blame_flag_map[8];
+extern esym_map esym_cert_ssh_map[3];
+extern esym_map esym_cert_map[5];
+extern esym_map esym_checkout_notify_map[8];
+extern esym_map esym_checkout_strategy_map[23];
+extern esym_map esym_config_level_map[7];
+extern esym_map esym_credtype_map[8];
+extern esym_map esym_describe_strategy_map[4];
+extern esym_map esym_delta_map[12];
+extern esym_map esym_diff_format_map[6];
+extern esym_map esym_diff_option_map[31];
+extern esym_map esym_direction_map[3];
+extern esym_map esym_feature_map[5];
+extern esym_map esym_fetch_prune_map[4];
+extern esym_map esym_filemode_map[7];
+extern esym_map esym_index_add_option_map[5];
+extern esym_map esym_indexcap_map[5];
+extern esym_map esym_merge_analysis_map[6];
+extern esym_map esym_merge_file_favor_map[5];
+extern esym_map esym_merge_file_flag_map[10];
+extern esym_map esym_merge_flag_map[5];
+extern esym_map esym_merge_preference_map[4];
+extern esym_map esym_otype_map[7];
+extern esym_map esym_repository_state_map[13];
+extern esym_map esym_status_opt_map[17];
+extern esym_map esym_status_show_map[5];
+extern esym_map esym_status_map[15];
+extern esym_map esym_proxy_map[4];
+extern esym_map esym_reset_map[4];
+extern esym_map esym_sort_map[5];
+extern esym_map esym_submodule_status_map[15];
+extern esym_map esym_submodule_ignore_map[5];
+extern esym_map esym_submodule_recurse_map[4];
+extern esym_map esym_submodule_update_map[5];
 extern emacs_value esym_abbreviated_size;
 extern emacs_value esym_abort;
 extern emacs_value esym_added;
@@ -16,6 +91,7 @@ extern emacs_value esym_all;
 extern emacs_value esym_allow_conflicts;
 extern emacs_value esym_always_use_long_format;
 extern emacs_value esym_annotated_commit;
+extern emacs_value esym_any;
 extern emacs_value esym_app;
 extern emacs_value esym_apply;
 extern emacs_value esym_apply_mailbox;
@@ -72,7 +148,6 @@ extern emacs_value esym_dont_remove_existing;
 extern emacs_value esym_dont_update_index;
 extern emacs_value esym_dont_write_index;
 extern emacs_value esym_download_tags;
-extern emacs_value esym_emrge;
 extern emacs_value esym_enable_fast_untracked_dirs;
 extern emacs_value esym_encode_time;
 extern emacs_value esym_exclude_submodules;
@@ -361,5 +436,7 @@ extern emacs_value esym_wt_unreadable;
 extern emacs_value esym_x509;
 extern emacs_value esym_xdg;
 extern emacs_value esym_yes;
+
+void esyms_init(emacs_env *env);
 
 #endif /* SYMBOLS_H */
