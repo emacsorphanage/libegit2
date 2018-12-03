@@ -3,6 +3,7 @@
 // Instead, edit ../symbols.cfg and run ../gensyms.py
 
 #include "symbols.h"
+#include "git2.h"
 
 emacs_value esym_abbreviated_size;
 emacs_value esym_abort;
@@ -11,6 +12,7 @@ emacs_value esym_all;
 emacs_value esym_allow_conflicts;
 emacs_value esym_always_use_long_format;
 emacs_value esym_annotated_commit;
+emacs_value esym_any;
 emacs_value esym_app;
 emacs_value esym_apply;
 emacs_value esym_apply_mailbox;
@@ -67,7 +69,6 @@ emacs_value esym_dont_remove_existing;
 emacs_value esym_dont_update_index;
 emacs_value esym_dont_write_index;
 emacs_value esym_download_tags;
-emacs_value esym_emrge;
 emacs_value esym_enable_fast_untracked_dirs;
 emacs_value esym_encode_time;
 emacs_value esym_exclude_submodules;
@@ -356,6 +357,347 @@ emacs_value esym_wt_unreadable;
 emacs_value esym_x509;
 emacs_value esym_xdg;
 emacs_value esym_yes;
+esym_map esym_blame_flag_map[8] = {
+    {&esym_normal, {.blame_flag = GIT_BLAME_NORMAL}},
+    {&esym_track_copies_same_file, {.blame_flag = GIT_BLAME_TRACK_COPIES_SAME_FILE}},
+    {&esym_track_copies_same_commit_moves, {.blame_flag = GIT_BLAME_TRACK_COPIES_SAME_COMMIT_MOVES}},
+    {&esym_track_copies_same_commit_copies, {.blame_flag = GIT_BLAME_TRACK_COPIES_SAME_COMMIT_COPIES}},
+    {&esym_track_copies_any_commit_copies, {.blame_flag = GIT_BLAME_TRACK_COPIES_ANY_COMMIT_COPIES}},
+    {&esym_first_parent, {.blame_flag = GIT_BLAME_FIRST_PARENT}},
+    {&esym_use_mailmap, {.blame_flag = GIT_BLAME_USE_MAILMAP}},
+    {NULL, {0}}
+};
+esym_map esym_cert_ssh_map[3] = {
+    {&esym_md5, {.cert_ssh = GIT_CERT_SSH_MD5}},
+    {&esym_sha1, {.cert_ssh = GIT_CERT_SSH_SHA1}},
+    {NULL, {0}}
+};
+esym_map esym_cert_map[5] = {
+    {&esym_none, {.cert = GIT_CERT_NONE}},
+    {&esym_x509, {.cert = GIT_CERT_X509}},
+    {&esym_hostkey_libssh2, {.cert = GIT_CERT_HOSTKEY_LIBSSH2}},
+    {&esym_strarray, {.cert = GIT_CERT_STRARRAY}},
+    {NULL, {0}}
+};
+esym_map esym_checkout_notify_map[8] = {
+    {&esym_none, {.checkout_notify = GIT_CHECKOUT_NOTIFY_NONE}},
+    {&esym_conflict, {.checkout_notify = GIT_CHECKOUT_NOTIFY_CONFLICT}},
+    {&esym_dirty, {.checkout_notify = GIT_CHECKOUT_NOTIFY_DIRTY}},
+    {&esym_updated, {.checkout_notify = GIT_CHECKOUT_NOTIFY_UPDATED}},
+    {&esym_untracked, {.checkout_notify = GIT_CHECKOUT_NOTIFY_UNTRACKED}},
+    {&esym_ignored, {.checkout_notify = GIT_CHECKOUT_NOTIFY_IGNORED}},
+    {&esym_all, {.checkout_notify = GIT_CHECKOUT_NOTIFY_ALL}},
+    {NULL, {0}}
+};
+esym_map esym_checkout_strategy_map[23] = {
+    {&esym_none, {.checkout_strategy = GIT_CHECKOUT_NONE}},
+    {&esym_safe, {.checkout_strategy = GIT_CHECKOUT_SAFE}},
+    {&esym_force, {.checkout_strategy = GIT_CHECKOUT_FORCE}},
+    {&esym_recreate_missing, {.checkout_strategy = GIT_CHECKOUT_RECREATE_MISSING}},
+    {&esym_allow_conflicts, {.checkout_strategy = GIT_CHECKOUT_ALLOW_CONFLICTS}},
+    {&esym_remove_untracked, {.checkout_strategy = GIT_CHECKOUT_REMOVE_UNTRACKED}},
+    {&esym_remove_ignored, {.checkout_strategy = GIT_CHECKOUT_REMOVE_IGNORED}},
+    {&esym_update_only, {.checkout_strategy = GIT_CHECKOUT_UPDATE_ONLY}},
+    {&esym_dont_update_index, {.checkout_strategy = GIT_CHECKOUT_DONT_UPDATE_INDEX}},
+    {&esym_no_refresh, {.checkout_strategy = GIT_CHECKOUT_NO_REFRESH}},
+    {&esym_skip_unmerged, {.checkout_strategy = GIT_CHECKOUT_SKIP_UNMERGED}},
+    {&esym_use_ours, {.checkout_strategy = GIT_CHECKOUT_USE_OURS}},
+    {&esym_use_theirs, {.checkout_strategy = GIT_CHECKOUT_USE_THEIRS}},
+    {&esym_disable_pathspec_match, {.checkout_strategy = GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH}},
+    {&esym_skip_locked_directories, {.checkout_strategy = GIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES}},
+    {&esym_dont_overwrite_ignored, {.checkout_strategy = GIT_CHECKOUT_DONT_OVERWRITE_IGNORED}},
+    {&esym_conflict_style_merge, {.checkout_strategy = GIT_CHECKOUT_CONFLICT_STYLE_MERGE}},
+    {&esym_conflict_style_diff3, {.checkout_strategy = GIT_CHECKOUT_CONFLICT_STYLE_DIFF3}},
+    {&esym_dont_remove_existing, {.checkout_strategy = GIT_CHECKOUT_DONT_REMOVE_EXISTING}},
+    {&esym_dont_write_index, {.checkout_strategy = GIT_CHECKOUT_DONT_WRITE_INDEX}},
+    {&esym_update_submodules, {.checkout_strategy = GIT_CHECKOUT_UPDATE_SUBMODULES}},
+    {&esym_update_submodules_if_changed, {.checkout_strategy = GIT_CHECKOUT_UPDATE_SUBMODULES_IF_CHANGED}},
+    {NULL, {0}}
+};
+esym_map esym_config_level_map[7] = {
+    {&esym_programdata, {.config_level = GIT_CONFIG_LEVEL_PROGRAMDATA}},
+    {&esym_system, {.config_level = GIT_CONFIG_LEVEL_SYSTEM}},
+    {&esym_xdg, {.config_level = GIT_CONFIG_LEVEL_XDG}},
+    {&esym_global, {.config_level = GIT_CONFIG_LEVEL_GLOBAL}},
+    {&esym_local, {.config_level = GIT_CONFIG_LEVEL_LOCAL}},
+    {&esym_app, {.config_level = GIT_CONFIG_LEVEL_APP}},
+    {NULL, {0}}
+};
+esym_map esym_credtype_map[8] = {
+    {&esym_userpass_plaintext, {.credtype = GIT_CREDTYPE_USERPASS_PLAINTEXT}},
+    {&esym_ssh_key, {.credtype = GIT_CREDTYPE_SSH_KEY}},
+    {&esym_ssh_custom, {.credtype = GIT_CREDTYPE_SSH_CUSTOM}},
+    {&esym_default, {.credtype = GIT_CREDTYPE_DEFAULT}},
+    {&esym_ssh_interactive, {.credtype = GIT_CREDTYPE_SSH_INTERACTIVE}},
+    {&esym_username, {.credtype = GIT_CREDTYPE_USERNAME}},
+    {&esym_ssh_memory, {.credtype = GIT_CREDTYPE_SSH_MEMORY}},
+    {NULL, {0}}
+};
+esym_map esym_describe_strategy_map[4] = {
+    {&esym_default, {.describe_strategy = GIT_DESCRIBE_DEFAULT}},
+    {&esym_tags, {.describe_strategy = GIT_DESCRIBE_TAGS}},
+    {&esym_all, {.describe_strategy = GIT_DESCRIBE_ALL}},
+    {NULL, {0}}
+};
+esym_map esym_delta_map[12] = {
+    {&esym_unmodified, {.delta = GIT_DELTA_UNMODIFIED}},
+    {&esym_added, {.delta = GIT_DELTA_ADDED}},
+    {&esym_deleted, {.delta = GIT_DELTA_DELETED}},
+    {&esym_modified, {.delta = GIT_DELTA_MODIFIED}},
+    {&esym_renamed, {.delta = GIT_DELTA_RENAMED}},
+    {&esym_copied, {.delta = GIT_DELTA_COPIED}},
+    {&esym_ignored, {.delta = GIT_DELTA_IGNORED}},
+    {&esym_untracked, {.delta = GIT_DELTA_UNTRACKED}},
+    {&esym_typechange, {.delta = GIT_DELTA_TYPECHANGE}},
+    {&esym_unreadable, {.delta = GIT_DELTA_UNREADABLE}},
+    {&esym_conflicted, {.delta = GIT_DELTA_CONFLICTED}},
+    {NULL, {0}}
+};
+esym_map esym_diff_format_map[6] = {
+    {&esym_patch, {.diff_format = GIT_DIFF_FORMAT_PATCH}},
+    {&esym_patch_header, {.diff_format = GIT_DIFF_FORMAT_PATCH_HEADER}},
+    {&esym_raw, {.diff_format = GIT_DIFF_FORMAT_RAW}},
+    {&esym_name_only, {.diff_format = GIT_DIFF_FORMAT_NAME_ONLY}},
+    {&esym_name_status, {.diff_format = GIT_DIFF_FORMAT_NAME_STATUS}},
+    {NULL, {0}}
+};
+esym_map esym_diff_option_map[31] = {
+    {&esym_normal, {.diff_option = GIT_DIFF_NORMAL}},
+    {&esym_reverse, {.diff_option = GIT_DIFF_REVERSE}},
+    {&esym_include_ignored, {.diff_option = GIT_DIFF_INCLUDE_IGNORED}},
+    {&esym_recurse_ignored_dirs, {.diff_option = GIT_DIFF_RECURSE_IGNORED_DIRS}},
+    {&esym_include_untracked, {.diff_option = GIT_DIFF_INCLUDE_UNTRACKED}},
+    {&esym_recurse_untracked_dirs, {.diff_option = GIT_DIFF_RECURSE_UNTRACKED_DIRS}},
+    {&esym_include_unmodified, {.diff_option = GIT_DIFF_INCLUDE_UNMODIFIED}},
+    {&esym_include_typechange, {.diff_option = GIT_DIFF_INCLUDE_TYPECHANGE}},
+    {&esym_include_typechange_trees, {.diff_option = GIT_DIFF_INCLUDE_TYPECHANGE_TREES}},
+    {&esym_ignore_filemode, {.diff_option = GIT_DIFF_IGNORE_FILEMODE}},
+    {&esym_ignore_submodules, {.diff_option = GIT_DIFF_IGNORE_SUBMODULES}},
+    {&esym_ignore_case, {.diff_option = GIT_DIFF_IGNORE_CASE}},
+    {&esym_include_casechange, {.diff_option = GIT_DIFF_INCLUDE_CASECHANGE}},
+    {&esym_disable_pathspec_match, {.diff_option = GIT_DIFF_DISABLE_PATHSPEC_MATCH}},
+    {&esym_skip_binary_check, {.diff_option = GIT_DIFF_SKIP_BINARY_CHECK}},
+    {&esym_enable_fast_untracked_dirs, {.diff_option = GIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS}},
+    {&esym_update_index, {.diff_option = GIT_DIFF_UPDATE_INDEX}},
+    {&esym_include_unreadable, {.diff_option = GIT_DIFF_INCLUDE_UNREADABLE}},
+    {&esym_include_unreadable_as_untracked, {.diff_option = GIT_DIFF_INCLUDE_UNREADABLE_AS_UNTRACKED}},
+    {&esym_indent_heuristic, {.diff_option = GIT_DIFF_INDENT_HEURISTIC}},
+    {&esym_force_text, {.diff_option = GIT_DIFF_FORCE_TEXT}},
+    {&esym_force_binary, {.diff_option = GIT_DIFF_FORCE_BINARY}},
+    {&esym_ignore_whitespace, {.diff_option = GIT_DIFF_IGNORE_WHITESPACE}},
+    {&esym_ignore_whitespace_change, {.diff_option = GIT_DIFF_IGNORE_WHITESPACE_CHANGE}},
+    {&esym_ignore_whitespace_eol, {.diff_option = GIT_DIFF_IGNORE_WHITESPACE_EOL}},
+    {&esym_show_untracked_content, {.diff_option = GIT_DIFF_SHOW_UNTRACKED_CONTENT}},
+    {&esym_show_unmodified, {.diff_option = GIT_DIFF_SHOW_UNMODIFIED}},
+    {&esym_patience, {.diff_option = GIT_DIFF_PATIENCE}},
+    {&esym_minimal, {.diff_option = GIT_DIFF_MINIMAL}},
+    {&esym_show_binary, {.diff_option = GIT_DIFF_SHOW_BINARY}},
+    {NULL, {0}}
+};
+esym_map esym_direction_map[3] = {
+    {&esym_fetch, {.direction = GIT_DIRECTION_FETCH}},
+    {&esym_push, {.direction = GIT_DIRECTION_PUSH}},
+    {NULL, {0}}
+};
+esym_map esym_feature_map[5] = {
+    {&esym_threads, {.feature = GIT_FEATURE_THREADS}},
+    {&esym_https, {.feature = GIT_FEATURE_HTTPS}},
+    {&esym_ssh, {.feature = GIT_FEATURE_SSH}},
+    {&esym_nsec, {.feature = GIT_FEATURE_NSEC}},
+    {NULL, {0}}
+};
+esym_map esym_fetch_prune_map[4] = {
+    {&esym_unspecified, {.fetch_prune = GIT_FETCH_PRUNE_UNSPECIFIED}},
+    {&esym_on, {.fetch_prune = GIT_FETCH_PRUNE}},
+    {&esym_off, {.fetch_prune = GIT_FETCH_NO_PRUNE}},
+    {NULL, {0}}
+};
+esym_map esym_filemode_map[7] = {
+    {&esym_unreadable, {.filemode = GIT_FILEMODE_UNREADABLE}},
+    {&esym_tree, {.filemode = GIT_FILEMODE_TREE}},
+    {&esym_blob, {.filemode = GIT_FILEMODE_BLOB}},
+    {&esym_blob_executable, {.filemode = GIT_FILEMODE_BLOB_EXECUTABLE}},
+    {&esym_link, {.filemode = GIT_FILEMODE_LINK}},
+    {&esym_commit, {.filemode = GIT_FILEMODE_COMMIT}},
+    {NULL, {0}}
+};
+esym_map esym_index_add_option_map[5] = {
+    {&esym_default, {.index_add_option = GIT_INDEX_ADD_DEFAULT}},
+    {&esym_force, {.index_add_option = GIT_INDEX_ADD_FORCE}},
+    {&esym_disable_pathspec_match, {.index_add_option = GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH}},
+    {&esym_check_pathspec, {.index_add_option = GIT_INDEX_ADD_CHECK_PATHSPEC}},
+    {NULL, {0}}
+};
+esym_map esym_indexcap_map[5] = {
+    {&esym_ignore_case, {.indexcap = GIT_INDEXCAP_IGNORE_CASE}},
+    {&esym_no_filemode, {.indexcap = GIT_INDEXCAP_NO_FILEMODE}},
+    {&esym_no_symlinks, {.indexcap = GIT_INDEXCAP_NO_SYMLINKS}},
+    {&esym_from_owner, {.indexcap = GIT_INDEXCAP_FROM_OWNER}},
+    {NULL, {0}}
+};
+esym_map esym_merge_analysis_map[6] = {
+    {&esym_none, {.merge_analysis = GIT_MERGE_ANALYSIS_NONE}},
+    {&esym_normal, {.merge_analysis = GIT_MERGE_ANALYSIS_NORMAL}},
+    {&esym_up_to_date, {.merge_analysis = GIT_MERGE_ANALYSIS_UP_TO_DATE}},
+    {&esym_fastforward, {.merge_analysis = GIT_MERGE_ANALYSIS_FASTFORWARD}},
+    {&esym_unborn, {.merge_analysis = GIT_MERGE_ANALYSIS_UNBORN}},
+    {NULL, {0}}
+};
+esym_map esym_merge_file_favor_map[5] = {
+    {&esym_normal, {.merge_file_favor = GIT_MERGE_FILE_FAVOR_NORMAL}},
+    {&esym_ours, {.merge_file_favor = GIT_MERGE_FILE_FAVOR_OURS}},
+    {&esym_theirs, {.merge_file_favor = GIT_MERGE_FILE_FAVOR_THEIRS}},
+    {&esym_union, {.merge_file_favor = GIT_MERGE_FILE_FAVOR_UNION}},
+    {NULL, {0}}
+};
+esym_map esym_merge_file_flag_map[10] = {
+    {&esym_default, {.merge_file_flag = GIT_MERGE_FILE_DEFAULT}},
+    {&esym_style_merge, {.merge_file_flag = GIT_MERGE_FILE_STYLE_MERGE}},
+    {&esym_style_diff3, {.merge_file_flag = GIT_MERGE_FILE_STYLE_DIFF3}},
+    {&esym_simplify_alnum, {.merge_file_flag = GIT_MERGE_FILE_SIMPLIFY_ALNUM}},
+    {&esym_ignore_whitespace, {.merge_file_flag = GIT_MERGE_FILE_IGNORE_WHITESPACE}},
+    {&esym_ignore_whitespace_change, {.merge_file_flag = GIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE}},
+    {&esym_ignore_whitespace_eol, {.merge_file_flag = GIT_MERGE_FILE_IGNORE_WHITESPACE_EOL}},
+    {&esym_patience, {.merge_file_flag = GIT_MERGE_FILE_DIFF_PATIENCE}},
+    {&esym_minimal, {.merge_file_flag = GIT_MERGE_FILE_DIFF_MINIMAL}},
+    {NULL, {0}}
+};
+esym_map esym_merge_flag_map[5] = {
+    {&esym_find_renames, {.merge_flag = GIT_MERGE_FIND_RENAMES}},
+    {&esym_fail_on_conflict, {.merge_flag = GIT_MERGE_FAIL_ON_CONFLICT}},
+    {&esym_skip_reuc, {.merge_flag = GIT_MERGE_SKIP_REUC}},
+    {&esym_no_recursive, {.merge_flag = GIT_MERGE_NO_RECURSIVE}},
+    {NULL, {0}}
+};
+esym_map esym_merge_preference_map[4] = {
+    {&esym_none, {.merge_preference = GIT_MERGE_PREFERENCE_NONE}},
+    {&esym_no_fastforward, {.merge_preference = GIT_MERGE_PREFERENCE_NO_FASTFORWARD}},
+    {&esym_fastforward_only, {.merge_preference = GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY}},
+    {NULL, {0}}
+};
+esym_map esym_otype_map[7] = {
+    {&esym_nil, {.otype = GIT_OBJ_ANY}},
+    {&esym_any, {.otype = GIT_OBJ_ANY}},
+    {&esym_blob, {.otype = GIT_OBJ_BLOB}},
+    {&esym_commit, {.otype = GIT_OBJ_COMMIT}},
+    {&esym_tag, {.otype = GIT_OBJ_TAG}},
+    {&esym_tree, {.otype = GIT_OBJ_TREE}},
+    {NULL, {0}}
+};
+esym_map esym_repository_state_map[13] = {
+    {&esym_none, {.repository_state = GIT_REPOSITORY_STATE_NONE}},
+    {&esym_merge, {.repository_state = GIT_REPOSITORY_STATE_MERGE}},
+    {&esym_revert, {.repository_state = GIT_REPOSITORY_STATE_REVERT}},
+    {&esym_revert_sequence, {.repository_state = GIT_REPOSITORY_STATE_REVERT_SEQUENCE}},
+    {&esym_cherrypick, {.repository_state = GIT_REPOSITORY_STATE_CHERRYPICK}},
+    {&esym_cherrypick_sequence, {.repository_state = GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE}},
+    {&esym_bisect, {.repository_state = GIT_REPOSITORY_STATE_BISECT}},
+    {&esym_rebase, {.repository_state = GIT_REPOSITORY_STATE_REBASE}},
+    {&esym_rebase_interactive, {.repository_state = GIT_REPOSITORY_STATE_REBASE_INTERACTIVE}},
+    {&esym_rebase_merge, {.repository_state = GIT_REPOSITORY_STATE_REBASE_MERGE}},
+    {&esym_apply_mailbox, {.repository_state = GIT_REPOSITORY_STATE_APPLY_MAILBOX}},
+    {&esym_apply_mailbox_or_rebase, {.repository_state = GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE}},
+    {NULL, {0}}
+};
+esym_map esym_status_opt_map[17] = {
+    {&esym_include_untracked, {.status_opt = GIT_STATUS_OPT_INCLUDE_UNTRACKED}},
+    {&esym_include_ignored, {.status_opt = GIT_STATUS_OPT_INCLUDE_IGNORED}},
+    {&esym_include_unmodified, {.status_opt = GIT_STATUS_OPT_INCLUDE_UNMODIFIED}},
+    {&esym_exclude_submodules, {.status_opt = GIT_STATUS_OPT_EXCLUDE_SUBMODULES}},
+    {&esym_recurse_untracked_dirs, {.status_opt = GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS}},
+    {&esym_disable_pathspec_match, {.status_opt = GIT_STATUS_OPT_DISABLE_PATHSPEC_MATCH}},
+    {&esym_recurse_ignored_dirs, {.status_opt = GIT_STATUS_OPT_RECURSE_IGNORED_DIRS}},
+    {&esym_renames_head_to_index, {.status_opt = GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX}},
+    {&esym_renames_index_to_workdir, {.status_opt = GIT_STATUS_OPT_RENAMES_INDEX_TO_WORKDIR}},
+    {&esym_sort_case_sensitively, {.status_opt = GIT_STATUS_OPT_SORT_CASE_SENSITIVELY}},
+    {&esym_sort_case_insensitively, {.status_opt = GIT_STATUS_OPT_SORT_CASE_INSENSITIVELY}},
+    {&esym_renames_from_rewrites, {.status_opt = GIT_STATUS_OPT_RENAMES_FROM_REWRITES}},
+    {&esym_no_refresh, {.status_opt = GIT_STATUS_OPT_NO_REFRESH}},
+    {&esym_update_index, {.status_opt = GIT_STATUS_OPT_UPDATE_INDEX}},
+    {&esym_include_unreadable, {.status_opt = GIT_STATUS_OPT_INCLUDE_UNREADABLE}},
+    {&esym_include_unreadable_as_untracked, {.status_opt = GIT_STATUS_OPT_INCLUDE_UNREADABLE_AS_UNTRACKED}},
+    {NULL, {0}}
+};
+esym_map esym_status_show_map[5] = {
+    {&esym_nil, {.status_show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR}},
+    {&esym_index_and_workdir, {.status_show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR}},
+    {&esym_index_only, {.status_show = GIT_STATUS_SHOW_INDEX_ONLY}},
+    {&esym_workdir_only, {.status_show = GIT_STATUS_SHOW_WORKDIR_ONLY}},
+    {NULL, {0}}
+};
+esym_map esym_status_map[15] = {
+    {&esym_current, {.status = GIT_STATUS_CURRENT}},
+    {&esym_index_new, {.status = GIT_STATUS_INDEX_NEW}},
+    {&esym_index_modified, {.status = GIT_STATUS_INDEX_MODIFIED}},
+    {&esym_index_deleted, {.status = GIT_STATUS_INDEX_DELETED}},
+    {&esym_index_renamed, {.status = GIT_STATUS_INDEX_RENAMED}},
+    {&esym_index_typechange, {.status = GIT_STATUS_INDEX_TYPECHANGE}},
+    {&esym_wt_new, {.status = GIT_STATUS_WT_NEW}},
+    {&esym_wt_modified, {.status = GIT_STATUS_WT_MODIFIED}},
+    {&esym_wt_deleted, {.status = GIT_STATUS_WT_DELETED}},
+    {&esym_wt_typechange, {.status = GIT_STATUS_WT_TYPECHANGE}},
+    {&esym_wt_renamed, {.status = GIT_STATUS_WT_RENAMED}},
+    {&esym_wt_unreadable, {.status = GIT_STATUS_WT_UNREADABLE}},
+    {&esym_ignored, {.status = GIT_STATUS_IGNORED}},
+    {&esym_conflicted, {.status = GIT_STATUS_CONFLICTED}},
+    {NULL, {0}}
+};
+esym_map esym_proxy_map[4] = {
+    {&esym_none, {.proxy = GIT_PROXY_NONE}},
+    {&esym_auto, {.proxy = GIT_PROXY_AUTO}},
+    {&esym_specified, {.proxy = GIT_PROXY_SPECIFIED}},
+    {NULL, {0}}
+};
+esym_map esym_reset_map[4] = {
+    {&esym_soft, {.reset = GIT_RESET_SOFT}},
+    {&esym_mixed, {.reset = GIT_RESET_MIXED}},
+    {&esym_hard, {.reset = GIT_RESET_HARD}},
+    {NULL, {0}}
+};
+esym_map esym_sort_map[5] = {
+    {&esym_none, {.sort = GIT_SORT_NONE}},
+    {&esym_topological, {.sort = GIT_SORT_TOPOLOGICAL}},
+    {&esym_time, {.sort = GIT_SORT_TIME}},
+    {&esym_reverse, {.sort = GIT_SORT_REVERSE}},
+    {NULL, {0}}
+};
+esym_map esym_submodule_status_map[15] = {
+    {&esym_in_head, {.submodule_status = GIT_SUBMODULE_STATUS_IN_HEAD}},
+    {&esym_in_index, {.submodule_status = GIT_SUBMODULE_STATUS_IN_INDEX}},
+    {&esym_in_config, {.submodule_status = GIT_SUBMODULE_STATUS_IN_CONFIG}},
+    {&esym_in_wd, {.submodule_status = GIT_SUBMODULE_STATUS_IN_WD}},
+    {&esym_index_added, {.submodule_status = GIT_SUBMODULE_STATUS_INDEX_ADDED}},
+    {&esym_index_deleted, {.submodule_status = GIT_SUBMODULE_STATUS_INDEX_DELETED}},
+    {&esym_index_modified, {.submodule_status = GIT_SUBMODULE_STATUS_INDEX_MODIFIED}},
+    {&esym_wd_uninitialized, {.submodule_status = GIT_SUBMODULE_STATUS_WD_UNINITIALIZED}},
+    {&esym_wd_added, {.submodule_status = GIT_SUBMODULE_STATUS_WD_ADDED}},
+    {&esym_wd_deleted, {.submodule_status = GIT_SUBMODULE_STATUS_WD_DELETED}},
+    {&esym_wd_modified, {.submodule_status = GIT_SUBMODULE_STATUS_WD_MODIFIED}},
+    {&esym_wd_index_modified, {.submodule_status = GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED}},
+    {&esym_wd_wd_modified, {.submodule_status = GIT_SUBMODULE_STATUS_WD_WD_MODIFIED}},
+    {&esym_wd_untracked, {.submodule_status = GIT_SUBMODULE_STATUS_WD_UNTRACKED}},
+    {NULL, {0}}
+};
+esym_map esym_submodule_ignore_map[5] = {
+    {&esym_none, {.submodule_ignore = GIT_SUBMODULE_IGNORE_NONE}},
+    {&esym_untracked, {.submodule_ignore = GIT_SUBMODULE_IGNORE_UNTRACKED}},
+    {&esym_dirty, {.submodule_ignore = GIT_SUBMODULE_IGNORE_DIRTY}},
+    {&esym_all, {.submodule_ignore = GIT_SUBMODULE_IGNORE_ALL}},
+    {NULL, {0}}
+};
+esym_map esym_submodule_recurse_map[4] = {
+    {&esym_no, {.submodule_recurse = GIT_SUBMODULE_RECURSE_NO}},
+    {&esym_yes, {.submodule_recurse = GIT_SUBMODULE_RECURSE_YES}},
+    {&esym_ondemand, {.submodule_recurse = GIT_SUBMODULE_RECURSE_ONDEMAND}},
+    {NULL, {0}}
+};
+esym_map esym_submodule_update_map[5] = {
+    {&esym_checkout, {.submodule_update = GIT_SUBMODULE_UPDATE_CHECKOUT}},
+    {&esym_rebase, {.submodule_update = GIT_SUBMODULE_UPDATE_REBASE}},
+    {&esym_merge, {.submodule_update = GIT_SUBMODULE_UPDATE_MERGE}},
+    {&esym_none, {.submodule_update = GIT_SUBMODULE_UPDATE_NONE}},
+    {NULL, {0}}
+};
 
 void esyms_init(emacs_env *env)
 {
@@ -366,6 +708,7 @@ void esyms_init(emacs_env *env)
     esym_allow_conflicts = env->make_global_ref(env, env->intern(env, "allow-conflicts"));
     esym_always_use_long_format = env->make_global_ref(env, env->intern(env, "always-use-long-format"));
     esym_annotated_commit = env->make_global_ref(env, env->intern(env, "annotated-commit"));
+    esym_any = env->make_global_ref(env, env->intern(env, "any"));
     esym_app = env->make_global_ref(env, env->intern(env, "app"));
     esym_apply = env->make_global_ref(env, env->intern(env, "apply"));
     esym_apply_mailbox = env->make_global_ref(env, env->intern(env, "apply-mailbox"));
@@ -422,7 +765,6 @@ void esyms_init(emacs_env *env)
     esym_dont_update_index = env->make_global_ref(env, env->intern(env, "dont-update-index"));
     esym_dont_write_index = env->make_global_ref(env, env->intern(env, "dont-write-index"));
     esym_download_tags = env->make_global_ref(env, env->intern(env, "download-tags"));
-    esym_emrge = env->make_global_ref(env, env->intern(env, "emrge"));
     esym_enable_fast_untracked_dirs = env->make_global_ref(env, env->intern(env, "enable-fast-untracked-dirs"));
     esym_encode_time = env->make_global_ref(env, env->intern(env, "encode-time"));
     esym_exclude_submodules = env->make_global_ref(env, env->intern(env, "exclude-submodules"));
