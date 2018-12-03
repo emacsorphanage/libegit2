@@ -152,3 +152,33 @@
         (should (string-match-p "github" (read-file ".gitmodules")))
         (should (string-match-p "github" (read-file ".git/config")))
         (should (string-match-p "github" (read-file ".git/modules/test/config")))))))
+
+(ert-deftest config ()
+  (with-temp-dir path
+    (init)
+    (write ".gitmodules" "\
+[submodule \"test\"]
+        path = test
+        url = http://github.com/nothing
+")
+    (let* ((repo (libgit-repository-open path))
+           (sub (libgit-submodule-lookup repo "test")))
+      (libgit-submodule-init sub)
+
+      (should-not (libgit-submodule-branch sub))
+      (libgit-submodule-set-branch repo "test" "somebranch")
+      (should-not (libgit-submodule-branch sub))
+      (libgit-submodule-reload sub)
+      (should (string= "somebranch" (libgit-submodule-branch sub)))
+      (should (string-match-p "branch = somebranch" (read-file ".gitmodules")))
+      (should-not (string-match-p "branch = somebranch" (read-file ".git/config")))
+
+      (should (string= "http://github.com/nothing" (libgit-submodule-url sub)))
+      (libgit-submodule-set-url repo "test" "http://github.com/nowhere")
+      (should (string= "http://github.com/nothing" (libgit-submodule-url sub)))
+      (libgit-submodule-reload sub)
+      (should (string= "http://github.com/nowhere" (libgit-submodule-url sub)))
+      (should (string-match-p "url = http://github\\.com/nowhere" (read-file ".gitmodules")))
+      (should-not (string-match-p "http://github\\.com/nowhere" (read-file ".git/config")))
+      (libgit-submodule-sync sub)
+      (should (string-match-p "http://github\\.com/nowhere" (read-file ".git/config"))))))
