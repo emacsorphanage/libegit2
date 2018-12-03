@@ -21,15 +21,15 @@ emacs_value egit_index_caps(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     int caps = git_index_caps(index);
 
-    emacs_value ret = em_nil;
+    emacs_value ret = esym_nil;
     if (caps & GIT_INDEXCAP_FROM_OWNER)
-        ret = em_cons(env, em_from_owner, ret);
+        ret = em_cons(env, esym_from_owner, ret);
     if (caps & GIT_INDEXCAP_NO_SYMLINKS)
-        ret = em_cons(env, em_no_symlinks, ret);
+        ret = em_cons(env, esym_no_symlinks, ret);
     if (caps & GIT_INDEXCAP_NO_FILEMODE)
-        ret = em_cons(env, em_no_filemode, ret);
+        ret = em_cons(env, esym_no_filemode, ret);
     if (caps & GIT_INDEXCAP_IGNORE_CASE)
-        ret = em_cons(env, em_ignore_case, ret);
+        ret = em_cons(env, esym_ignore_case, ret);
 
     return ret;
 }
@@ -68,9 +68,9 @@ emacs_value egit_index_conflict_foreach(emacs_env *env, emacs_value _index, emac
         if (retval != 0) {
             git_index_conflict_iterator_free(iter);
             if (retval == GIT_ITEROVER)
-                return em_nil;
+                return esym_nil;
             EGIT_CHECK_ERROR(retval);
-            return em_nil;  // Should be unreachable
+            return esym_nil;  // Should be unreachable
         }
 
         emacs_value args[4];
@@ -133,14 +133,14 @@ emacs_value egit_index_entry_stage(emacs_env *env, emacs_value _entry)
     git_index_entry *entry = EGIT_EXTRACT(_entry);
     int stage = git_index_entry_stage(entry);
     switch (stage) {
-    case 0: return em_nil;
-    case 1: return em_base;
-    case 2: return em_ours;
-    case 3: return em_theirs;
+    case 0: return esym_nil;
+    case 1: return esym_base;
+    case 2: return esym_ours;
+    case 3: return esym_theirs;
     }
 
     // Should be unreachable
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_entrycount, "INDEX", "Get the number of entries in INDEX.");
@@ -162,7 +162,7 @@ emacs_value egit_index_get_byindex(emacs_env *env, emacs_value _index, emacs_val
     const git_index_entry *entry = git_index_get_byindex(index, n);
     if (!entry) {
         em_signal_args_out_of_range(env, n);
-        return em_nil;
+        return esym_nil;
     }
     return egit_wrap(env, EGIT_INDEX_ENTRY, entry, EM_EXTRACT_USER_PTR(_index));
 }
@@ -180,15 +180,15 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
     int stage;
     if (!EM_EXTRACT_BOOLEAN(_stage))
         stage = 0;
-    else if (EM_EQ(_stage, em_base))
+    else if (EM_EQ(_stage, esym_base))
         stage = 1;
-    else if (EM_EQ(_stage, em_ours))
+    else if (EM_EQ(_stage, esym_ours))
         stage = 2;
-    else if (EM_EQ(_stage, em_theirs))
+    else if (EM_EQ(_stage, esym_theirs))
         stage = 3;
     else {
         em_signal_wrong_value(env, _stage);
-        return em_nil;
+        return esym_nil;
     }
 
     git_index *index = EGIT_EXTRACT(_index);
@@ -197,7 +197,7 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
     free(path);
 
     if (!entry)
-        return em_nil; // TODO: Better to signal an error?
+        return esym_nil; // TODO: Better to signal an error?
     return egit_wrap(env, EGIT_INDEX_ENTRY, entry, EM_EXTRACT_USER_PTR(_index));
 }
 
@@ -209,7 +209,7 @@ emacs_value egit_index_owner(emacs_env *env, emacs_value _index)
 
     // Bare indexes may not have an owner
     if (!owner)
-        return em_nil;
+        return esym_nil;
 
     owner->refcount++;
     return EM_USER_PTR(owner, egit_finalize);
@@ -222,7 +222,7 @@ emacs_value egit_index_path(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     const char *path = git_index_path(index);
     if (!path)
-        return em_nil;
+        return esym_nil;
     return EM_STRING(path);
 }
 
@@ -244,7 +244,7 @@ emacs_value egit_index_conflicts_p(emacs_env *env, emacs_value _index)
 {
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
-    return git_index_has_conflicts(index) ? em_t : em_nil;
+    return git_index_has_conflicts(index) ? esym_t : esym_nil;
 }
 
 
@@ -258,13 +258,13 @@ static int add_all_callback(const char *path, const char *matched_pathspec, void
 
     emacs_value args[2];
     args[0] = EM_STRING(path);
-    args[1] = matched_pathspec ? EM_STRING(matched_pathspec) : em_nil;
+    args[1] = matched_pathspec ? EM_STRING(matched_pathspec) : esym_nil;
     emacs_value retval = env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    if (EM_EQ(retval, em_abort))
+    if (EM_EQ(retval, esym_abort))
         return GIT_EUSER;
-    if (EM_EQ(retval, em_skip))
+    if (EM_EQ(retval, esym_skip))
         return 1;
     return 0;
 }
@@ -292,15 +292,15 @@ emacs_value egit_index_add_all(
     git_index_add_option_t options = GIT_INDEX_ADD_DEFAULT;
     {
         EM_DOLIST(car, _opts, options);
-        if (EM_EQ(car, em_force))
+        if (EM_EQ(car, esym_force))
             options |= GIT_INDEX_ADD_FORCE;
-        else if (EM_EQ(car, em_disable_pathspec_match))
+        else if (EM_EQ(car, esym_disable_pathspec_match))
             options |= GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH;
-        else if (EM_EQ(car, em_check_pathspec))
+        else if (EM_EQ(car, esym_check_pathspec))
             options |= GIT_INDEX_ADD_CHECK_PATHSPEC;
         else {
             em_signal_wrong_value(env, car);
-            return em_nil;
+            return esym_nil;
         }
         EM_DOLIST_END(options);
     }
@@ -314,16 +314,16 @@ emacs_value egit_index_add_all(
 
     git_strarray pathspec;
     if (!egit_strarray_from_list(&pathspec, env, _pathspec))
-        return em_nil;
+        return esym_nil;
 
     int retval = git_index_add_all(index, &pathspec, options, callback, &payload);
     egit_strarray_dispose(&pathspec);
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_add_bypath, "INDEX PATH",
@@ -340,7 +340,7 @@ emacs_value egit_index_add_bypath(emacs_env *env, emacs_value _index, emacs_valu
     free(path);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_clear, "INDEX", "Clear the entries from an index.");
@@ -350,7 +350,7 @@ emacs_value egit_index_clear(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     int retval = git_index_clear(index);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_read, "INDEX &optional FORCE",
@@ -362,7 +362,7 @@ emacs_value egit_index_read(emacs_env *env, emacs_value _index, emacs_value forc
     git_index *index = EGIT_EXTRACT(_index);
     int retval = git_index_read(index, EM_EXTRACT_BOOLEAN(force));
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_write, "INDEX", "Write the index to disk.");
@@ -372,7 +372,7 @@ emacs_value egit_index_write(emacs_env *env, emacs_value _index)
     git_index *index = EGIT_EXTRACT(_index);
     int retval = git_index_write(index);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(index_write_tree, "INDEX &optional REPO",

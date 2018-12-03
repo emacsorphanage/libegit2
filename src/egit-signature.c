@@ -43,7 +43,7 @@ emacs_value egit_signature_new(emacs_env *env, emacs_value _name, emacs_value _e
 
     intmax_t timestamp, offset;
     if (!em_encode_time(env, _time, &timestamp, &offset))
-        return em_nil;
+        return esym_nil;
 
     char *name = EM_EXTRACT_STRING(_name);
     char *email = EM_EXTRACT_STRING(_email);

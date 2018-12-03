@@ -62,7 +62,7 @@ emacs_value egit_tree_entry_byid(emacs_env *env, emacs_value _tree, emacs_value 
     EGIT_EXTRACT_OID(_oid, oid);
     const git_tree_entry *entry = git_tree_entry_byid(tree, &oid);
     if (!entry)
-        return em_nil; // TODO: Should we signal an error instead?
+        return esym_nil; // TODO: Should we signal an error instead?
     return egit_tree_entry_to_emacs(env, entry);
 }
 
@@ -92,7 +92,7 @@ emacs_value egit_tree_entry_byindex(emacs_env *env, emacs_value _tree, emacs_val
     const git_tree_entry *entry = git_tree_entry_byindex(tree, index);
     if (!entry) {
         em_signal_args_out_of_range(env, index);
-        return em_nil;
+        return esym_nil;
     }
     return egit_tree_entry_to_emacs(env, entry);
 }
@@ -109,7 +109,7 @@ emacs_value egit_tree_entry_byname(emacs_env *env, emacs_value _tree, emacs_valu
     const git_tree_entry *entry = git_tree_entry_byname(tree, name);
     free(name);
     if (!entry)
-        return em_nil; // TODO: Should we signal an error instead?
+        return esym_nil; // TODO: Should we signal an error instead?
     return egit_tree_entry_to_emacs(env, entry);
 }
 
@@ -174,7 +174,7 @@ static int tree_walk_callback(const char *root, const git_tree_entry *entry, voi
     emacs_value ret = env->funcall(env, ctx->func, 2, args);
 
     EM_RETURN_IF_NLE(GIT_EUSER);
-    return EM_EQ(ret, em_skip) ? 1 : 0;
+    return EM_EQ(ret, esym_skip) ? 1 : 0;
 }
 
 EGIT_DOC(tree_walk, "TREE ORDER FUNCTION",
@@ -191,13 +191,13 @@ emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order,
     EM_ASSERT_FUNCTION(function);
 
     git_treewalk_mode mode;
-    if (EM_EQ(order, em_pre))
+    if (EM_EQ(order, esym_pre))
         mode = GIT_TREEWALK_PRE;
-    else if (EM_EQ(order, em_post))
+    else if (EM_EQ(order, esym_post))
         mode = GIT_TREEWALK_POST;
     else {
         em_signal_wrong_value(env, order);
-        return em_nil;
+        return esym_nil;
     }
 
     git_tree *tree = EGIT_EXTRACT(_tree);
@@ -208,5 +208,5 @@ emacs_value egit_tree_walk(emacs_env *env, emacs_value _tree, emacs_value order,
     if (retval != GIT_EUSER)
         EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }

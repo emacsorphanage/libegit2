@@ -21,8 +21,8 @@ static emacs_value egit_describe_options_parse(
     retval = git_describe_init_format_options(fopts, GIT_DESCRIBE_FORMAT_OPTIONS_VERSION);
     EGIT_CHECK_ERROR(retval);
 
-    emacs_value pattern = em_nil;
-    emacs_value dirty_suffix = em_nil;
+    emacs_value pattern = esym_nil;
+    emacs_value dirty_suffix = esym_nil;
 
     // Main loop through the options alist
     {
@@ -33,37 +33,37 @@ static emacs_value egit_describe_options_parse(
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (EM_EQ(car, em_max_candidates_tags)) {
+        if (EM_EQ(car, esym_max_candidates_tags)) {
             EM_ASSERT_INTEGER(cdr);
             dopts->max_candidates_tags = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_strategy)) {
+        else if (EM_EQ(car, esym_strategy)) {
             if (!EM_EXTRACT_BOOLEAN(cdr))
                 dopts->describe_strategy = GIT_DESCRIBE_DEFAULT;
-            else if (EM_EQ(cdr, em_tags))
+            else if (EM_EQ(cdr, esym_tags))
                 dopts->describe_strategy = GIT_DESCRIBE_TAGS;
-            else if (EM_EQ(cdr, em_all))
+            else if (EM_EQ(cdr, esym_all))
                 dopts->describe_strategy = GIT_DESCRIBE_ALL;
             else {
                 em_signal_wrong_value(env, cdr);
-                return em_nil;
+                return esym_nil;
             }
         }
-        else if (EM_EQ(car, em_pattern)) {
+        else if (EM_EQ(car, esym_pattern)) {
             EM_ASSERT_STRING(cdr);
             pattern = cdr;
         }
-        else if (EM_EQ(car, em_only_follow_first_parent))
+        else if (EM_EQ(car, esym_only_follow_first_parent))
             dopts->only_follow_first_parent = EM_EXTRACT_BOOLEAN(cdr);
-        else if (EM_EQ(car, em_show_commit_oid_as_fallback))
+        else if (EM_EQ(car, esym_show_commit_oid_as_fallback))
             dopts->show_commit_oid_as_fallback = EM_EXTRACT_BOOLEAN(cdr);
-        else if (EM_EQ(car, em_abbreviated_size)) {
+        else if (EM_EQ(car, esym_abbreviated_size)) {
             EM_ASSERT_INTEGER(cdr);
             fopts->abbreviated_size = EM_EXTRACT_INTEGER(cdr);
         }
-        else if (EM_EQ(car, em_always_use_long_format))
+        else if (EM_EQ(car, esym_always_use_long_format))
             fopts->always_use_long_format = EM_EXTRACT_BOOLEAN(cdr);
-        else if (EM_EQ(car, em_dirty_suffix)) {
+        else if (EM_EQ(car, esym_dirty_suffix)) {
             EM_ASSERT_STRING(cdr);
             dirty_suffix = cdr;
         }
@@ -76,7 +76,7 @@ static emacs_value egit_describe_options_parse(
     if (EM_EXTRACT_BOOLEAN(dirty_suffix))
         fopts->dirty_suffix = EM_EXTRACT_STRING(dirty_suffix);
 
-    return em_nil;
+    return esym_nil;
 }
 
 static void egit_describe_options_release(

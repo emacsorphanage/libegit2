@@ -192,17 +192,17 @@ emacs_value egit_reference_peel(emacs_env *env, emacs_value _ref, emacs_value _t
     git_otype type;
     if (!EM_EXTRACT_BOOLEAN(_type))
         type = GIT_OBJ_ANY;
-    else if (EM_EQ(_type, em_commit))
+    else if (EM_EQ(_type, esym_commit))
         type = GIT_OBJ_COMMIT;
-    else if (EM_EQ(_type, em_tree))
+    else if (EM_EQ(_type, esym_tree))
         type = GIT_OBJ_TREE;
-    else if (EM_EQ(_type, em_blob))
+    else if (EM_EQ(_type, esym_blob))
         type = GIT_OBJ_BLOB;
-    else if (EM_EQ(_type, em_tag))
+    else if (EM_EQ(_type, esym_tag))
         type = GIT_OBJ_TAG;
     else {
         em_signal_wrong_value(env, _type);
-        return em_nil;
+        return esym_nil;
     }
 
     git_reference *ref = EGIT_EXTRACT(_ref);
@@ -251,7 +251,7 @@ emacs_value egit_reference_target(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     const git_oid *oid = git_reference_target(ref);
-    if (!oid) return em_nil;
+    if (!oid) return esym_nil;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -263,7 +263,7 @@ emacs_value egit_reference_target_peel(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     const git_oid *oid = git_reference_target_peel(ref);
-    if (!oid) return em_nil;
+    if (!oid) return esym_nil;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
@@ -274,7 +274,7 @@ emacs_value egit_reference_type(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     git_ref_t type = git_reference_type(ref);
-    return type == GIT_REF_OID ? em_direct : em_symbolic;
+    return type == GIT_REF_OID ? esym_direct : esym_symbolic;
 }
 
 
@@ -288,7 +288,7 @@ emacs_value egit_reference_delete(emacs_env *env, emacs_value _ref)
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_delete(ref);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reference_ensure_log, "REPO REFNAME",
@@ -307,7 +307,7 @@ emacs_value egit_reference_ensure_log(emacs_env *env, emacs_value _repo, emacs_v
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reference_remove, "REF", "Remove an existing reference by name.");
@@ -325,7 +325,7 @@ emacs_value egit_reference_remove(emacs_env *env, emacs_value _repo, emacs_value
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -338,7 +338,7 @@ emacs_value egit_reference_branch_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_branch(ref);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_direct_p, "REF", "Non-nil if REF is direct.");
@@ -347,7 +347,7 @@ emacs_value egit_reference_direct_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     git_ref_t type = git_reference_type(ref);
-    return type == GIT_REF_OID ? em_t : em_nil;
+    return type == GIT_REF_OID ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_has_log_p, "REPO REFNAME",
@@ -366,7 +366,7 @@ emacs_value egit_reference_has_log_p(emacs_env *env, emacs_value _repo, emacs_va
     }
     EGIT_CHECK_ERROR(retval);
 
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_note_p, "REF", "Check if REF is a note.");
@@ -375,7 +375,7 @@ emacs_value egit_reference_note_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_note(ref);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_remote_p, "REF", "Check if REF is a remote tracking branch.");
@@ -384,7 +384,7 @@ emacs_value egit_reference_remote_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_remote(ref);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_symbolic_p, "REF", "Non-nil if REF is symbolic.");
@@ -393,7 +393,7 @@ emacs_value egit_reference_symbolic_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     git_ref_t type = git_reference_type(ref);
-    return type == GIT_REF_SYMBOLIC ? em_t : em_nil;
+    return type == GIT_REF_SYMBOLIC ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_tag_p, "REF", "Check if REF is a tag.");
@@ -402,7 +402,7 @@ emacs_value egit_reference_tag_p(emacs_env *env, emacs_value _ref)
     EGIT_ASSERT_REFERENCE(_ref);
     git_reference *ref = EGIT_EXTRACT(_ref);
     int retval = git_reference_is_tag(ref);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(reference_valid_name_p, "REFNAME", "Check if a reference name is well-formed.");
@@ -417,7 +417,7 @@ emacs_value egit_reference_valid_name_p(emacs_env *env, emacs_value _refname)
         free(refname);
     }
 
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 
@@ -460,9 +460,9 @@ emacs_value egit_reference_foreach(emacs_env *env, emacs_value _repo, emacs_valu
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reference_foreach_glob, "REPO GLOB FUNC",
@@ -481,9 +481,9 @@ emacs_value egit_reference_foreach_glob(emacs_env *env, emacs_value _repo, emacs
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(reference_foreach_name, "REPO FUNC", "Call FUNC for every reference name in REPO.");
@@ -498,7 +498,7 @@ emacs_value egit_reference_foreach_name(emacs_env *env, emacs_value _repo, emacs
 
     EM_RETURN_NIL_IF_NLE();
     if (retval == GIT_EUSER)
-        return em_nil;
+        return esym_nil;
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }

@@ -55,7 +55,7 @@ emacs_value egit_treebuilder_get(emacs_env *env, emacs_value _builder, emacs_val
     free(path);
 
     if (!entry)
-        return em_nil;
+        return esym_nil;
     return egit_tree_entry_to_emacs(env, entry);
 }
 
@@ -69,7 +69,7 @@ emacs_value egit_treebuilder_clear(emacs_env *env, emacs_value _builder)
     EGIT_ASSERT_TREEBUILDER(_builder);
     git_treebuilder *bld = EGIT_EXTRACT(_builder);
     git_treebuilder_clear(bld);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(treebuilder_insert, "BUILDER PATH ID MODE",
@@ -85,19 +85,19 @@ emacs_value egit_treebuilder_insert(
     EM_ASSERT_STRING(_oid);
 
     git_filemode_t mode;
-    if (EM_EQ(_mode, em_tree))
+    if (EM_EQ(_mode, esym_tree))
         mode = GIT_FILEMODE_TREE;
-    else if (EM_EQ(_mode, em_blob))
+    else if (EM_EQ(_mode, esym_blob))
         mode = GIT_FILEMODE_BLOB;
-    else if (EM_EQ(_mode, em_blob_executable))
+    else if (EM_EQ(_mode, esym_blob_executable))
         mode = GIT_FILEMODE_BLOB_EXECUTABLE;
-    else if (EM_EQ(_mode, em_link))
+    else if (EM_EQ(_mode, esym_link))
         mode = GIT_FILEMODE_LINK;
-    else if (EM_EQ(_mode, em_commit))
+    else if (EM_EQ(_mode, esym_commit))
         mode = GIT_FILEMODE_COMMIT;
     else {
         em_signal_wrong_value(env, _mode);
-        return em_nil;
+        return esym_nil;
     }
 
     git_treebuilder *bld = EGIT_EXTRACT(_builder);
@@ -108,7 +108,7 @@ emacs_value egit_treebuilder_insert(
     int retval = git_treebuilder_insert(NULL, bld, path, &oid, mode);
     free(path);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(treebuilder_remove, "BUILDER PATH",
@@ -123,7 +123,7 @@ emacs_value egit_treebuilder_remove(emacs_env *env, emacs_value _builder, emacs_
     int retval = git_treebuilder_remove(bld, path);
     free(path);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(treebuilder_write, "BUILDER",
@@ -176,5 +176,5 @@ emacs_value egit_treebuilder_filter(emacs_env *env, emacs_value _builder, emacs_
     egit_generic_payload payload = {.env = env, .func = func, .parent = NULL};
     git_treebuilder *bld = EGIT_EXTRACT(_builder);
     git_treebuilder_filter(bld, &filter_callback, &payload);
-    return em_nil;
+    return esym_nil;
 }

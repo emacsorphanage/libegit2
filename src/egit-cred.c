@@ -133,5 +133,5 @@ emacs_value egit_cred_username_p(emacs_env *env, emacs_value _cred)
 {
     EGIT_ASSERT_CRED(_cred);
     git_cred *cred = EGIT_EXTRACT(_cred);
-    return git_cred_has_username(cred) ? em_t : em_nil;
+    return git_cred_has_username(cred) ? esym_t : esym_nil;
 }

@@ -53,9 +53,9 @@ emacs_value egit_branch_create_from_annotated(
 
     // TODO: Deal with this more robustly
     if (!oid) {
-        em_signal(env, em_giterr, "Reference is not direct");
+        em_signal(env, esym_giterr, "Reference is not direct");
         git_reference_free(target_ref);
-        return em_nil;
+        return esym_nil;
     }
 
     git_annotated_commit *commit;
@@ -107,7 +107,7 @@ emacs_value egit_branch_delete(emacs_env *env, emacs_value _ref)
     int retval = git_branch_delete(ref);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(branch_checked_out_p, "REF", "Check if branch at REF is checked out.");
@@ -119,7 +119,7 @@ emacs_value egit_branch_checked_out_p(emacs_env *env, emacs_value _ref)
     int retval = git_branch_is_checked_out(ref);
     EGIT_CHECK_ERROR(retval);
 
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(branch_head_p, "REF", "Check if branch at REF is HEAD.");
@@ -131,7 +131,7 @@ emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
     int retval = git_branch_is_head(ref);
     EGIT_CHECK_ERROR(retval);
 
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(branch_name, "REF", "Return the name of the branch at REF.");

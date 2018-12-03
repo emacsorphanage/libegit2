@@ -19,8 +19,8 @@ emacs_value egit_refspec_direction(emacs_env *env, emacs_value _refspec)
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
     git_direction dir = git_refspec_direction(refspec);
     if (dir == GIT_DIRECTION_FETCH)
-        return em_fetch;
-    return em_push;
+        return esym_fetch;
+    return esym_push;
 }
 
 EGIT_DOC(refspec_dst, "REFSPEC", "Get the destination specifier of REFSPEC.");
@@ -64,7 +64,7 @@ emacs_value egit_refspec_dst_matches_p(emacs_env *env, emacs_value _refspec, ema
     char *refname = EM_EXTRACT_STRING(_refname);
     int ret = git_refspec_dst_matches(refspec, refname);
     free(refname);
-    return ret ? em_t : em_nil;
+    return ret ? esym_t : esym_nil;
 }
 
 EGIT_DOC(refspec_force_p, "REFSPEC", "Non-nil if the force setting of REFSPEC is set.");
@@ -72,7 +72,7 @@ emacs_value egit_refspec_force_p(emacs_env *env, emacs_value _refspec)
 {
     EGIT_ASSERT_REFSPEC(_refspec);
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
-    return git_refspec_force(refspec) ? em_t : em_nil;
+    return git_refspec_force(refspec) ? esym_t : esym_nil;
 }
 
 EGIT_DOC(refspec_src_matches_p, "REFSPEC REFNAME",
@@ -85,5 +85,5 @@ emacs_value egit_refspec_src_matches_p(emacs_env *env, emacs_value _refspec, ema
     char *refname = EM_EXTRACT_STRING(_refname);
     int ret = git_refspec_src_matches(refspec, refname);
     free(refname);
-    return ret ? em_t : em_nil;
+    return ret ? esym_t : esym_nil;
 }

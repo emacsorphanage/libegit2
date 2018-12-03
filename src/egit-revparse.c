@@ -27,9 +27,9 @@ emacs_value egit_revparse(emacs_env *env, emacs_value _repo, emacs_value _spec)
     if (revspec.flags & GIT_REVPARSE_SINGLE)
         return egit_wrap(env, EGIT_OBJECT, revspec.from, EM_EXTRACT_USER_PTR(_repo));
     emacs_value ret;
-    ret = em_cons(env, egit_wrap(env, EGIT_OBJECT, revspec.to, EM_EXTRACT_USER_PTR(_repo)), em_nil);
+    ret = em_cons(env, egit_wrap(env, EGIT_OBJECT, revspec.to, EM_EXTRACT_USER_PTR(_repo)), esym_nil);
     ret = em_cons(env, egit_wrap(env, EGIT_OBJECT, revspec.from, EM_EXTRACT_USER_PTR(_repo)), ret);
-    ret = em_cons(env, revspec.flags & GIT_REVPARSE_MERGE_BASE ? em_t : em_nil, ret);
+    ret = em_cons(env, revspec.flags & GIT_REVPARSE_MERGE_BASE ? esym_t : esym_nil, ret);
     return ret;
 }
 
@@ -54,7 +54,7 @@ emacs_value egit_revparse_ext(emacs_env *env, emacs_value _repo, emacs_value _sp
     EGIT_CHECK_ERROR(retval);
 
     emacs_value robj = egit_wrap(env, EGIT_OBJECT, obj, EM_EXTRACT_USER_PTR(_repo));
-    emacs_value rref = em_nil;
+    emacs_value rref = esym_nil;
     if (ref)
         rref = egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 

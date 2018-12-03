@@ -46,5 +46,5 @@ emacs_value egit_graph_descendant_p(
 
     int retval = git_graph_descendant_of(repo, &commit, &ancestor);
     EGIT_CHECK_ERROR(retval);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }

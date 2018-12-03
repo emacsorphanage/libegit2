@@ -102,7 +102,7 @@ emacs_value egit_repository_get_namespace(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *namespace = git_repository_get_namespace(repo);
-    return namespace ? EM_STRING(namespace) : em_nil;
+    return namespace ? EM_STRING(namespace) : esym_nil;
 }
 
 EGIT_DOC(repository_head, "REPO",
@@ -147,8 +147,8 @@ emacs_value egit_repository_ident(emacs_env *env, emacs_value _repo)
     const char *name, *email;
     int retval = git_repository_ident(&name, &email, repo);
     EGIT_CHECK_ERROR(retval);
-    emacs_value _name = name ? EM_STRING(name) : em_nil;
-    emacs_value _email = email ? EM_STRING(email) : em_nil;
+    emacs_value _name = name ? EM_STRING(name) : esym_nil;
+    emacs_value _email = email ? EM_STRING(email) : esym_nil;
     return em_cons(env, _name, _email);
 }
 
@@ -172,7 +172,7 @@ emacs_value egit_repository_message(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_buf buf = {NULL, 0, 0};
     int retval = git_repository_message(&buf, repo);
-    if (retval == GIT_ENOTFOUND) return em_nil;
+    if (retval == GIT_ENOTFOUND) return esym_nil;
     EGIT_CHECK_ERROR(retval);
     EGIT_RET_BUF_AS_STRING(buf);
 }
@@ -211,18 +211,18 @@ emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_repository_state_t state = git_repository_state(repo);
     switch (state) {
-    case GIT_REPOSITORY_STATE_MERGE: return em_merge;
-    case GIT_REPOSITORY_STATE_REVERT: return em_revert;
-    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return em_revert_sequence;
-    case GIT_REPOSITORY_STATE_CHERRYPICK: return em_cherrypick;
-    case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return em_cherrypick_sequence;
-    case GIT_REPOSITORY_STATE_BISECT: return em_bisect;
-    case GIT_REPOSITORY_STATE_REBASE: return em_rebase;
-    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE: return em_rebase_interactive;
-    case GIT_REPOSITORY_STATE_REBASE_MERGE: return em_rebase_merge;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX: return em_apply_mailbox;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return em_apply_mailbox_or_rebase;
-    default: return em_nil;
+    case GIT_REPOSITORY_STATE_MERGE: return esym_merge;
+    case GIT_REPOSITORY_STATE_REVERT: return esym_revert;
+    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return esym_revert_sequence;
+    case GIT_REPOSITORY_STATE_CHERRYPICK: return esym_cherrypick;
+    case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return esym_cherrypick_sequence;
+    case GIT_REPOSITORY_STATE_BISECT: return esym_bisect;
+    case GIT_REPOSITORY_STATE_REBASE: return esym_rebase;
+    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE: return esym_rebase_interactive;
+    case GIT_REPOSITORY_STATE_REBASE_MERGE: return esym_rebase_merge;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX: return esym_apply_mailbox;
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return esym_apply_mailbox_or_rebase;
+    default: return esym_nil;
     }
 }
 
@@ -233,7 +233,7 @@ emacs_value egit_repository_workdir(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     const char *path = git_repository_workdir(repo);
     if (!path)
-        return em_nil;
+        return esym_nil;
     emacs_value retval = EM_STRING(path);
     EM_NORMALIZE_PATH(retval);
     return retval;
@@ -254,7 +254,7 @@ emacs_value egit_repository_detach_head(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_detach_head(repo);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_message_remove, "REPO",
@@ -266,7 +266,7 @@ emacs_value egit_repository_message_remove(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_message_remove(repo);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_set_head, "REPO REFNAME",
@@ -285,7 +285,7 @@ emacs_value egit_repository_set_head(emacs_env *env, emacs_value _repo, emacs_va
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_set_head_detached, "REPO COMMITISH",
@@ -302,7 +302,7 @@ emacs_value egit_repository_set_head_detached(emacs_env *env, emacs_value _repo,
     int retval = git_repository_set_head_detached(repo, &commitish);
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_set_ident, "REPO &optional NAME EMAIL",
@@ -325,7 +325,7 @@ emacs_value egit_repository_set_ident(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_set_namespace, "REPO NAMESPACE",
@@ -345,7 +345,7 @@ emacs_value egit_repository_set_namespace(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_set_workdir, "REPO WORKDIR &optional UPDATE-GITLINK",
@@ -367,7 +367,7 @@ emacs_value egit_repository_set_workdir(
     }
     EGIT_CHECK_ERROR(retval);
 
-    return em_nil;
+    return esym_nil;
 }
 
 EGIT_DOC(repository_state_cleanup, "REPO",
@@ -379,7 +379,7 @@ emacs_value egit_repository_state_cleanup(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_state_cleanup(repo);
     EGIT_CHECK_ERROR(retval);
-    return em_nil;
+    return esym_nil;
 }
 
 
@@ -391,7 +391,7 @@ emacs_value egit_repository_bare_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
-    return git_repository_is_bare(repo) ? em_t : em_nil;
+    return git_repository_is_bare(repo) ? esym_t : esym_nil;
 }
 
 EGIT_DOC(repository_empty_p, "REPO", "Return non-nil if REPO is empty.");
@@ -401,7 +401,7 @@ emacs_value egit_repository_empty_p(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_is_empty(repo);
     EGIT_CHECK_ERROR(retval);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(repository_head_detached_p, "REPO", "Return non-nil if REPO is in detached head state.");
@@ -411,7 +411,7 @@ emacs_value egit_repository_head_detached_p(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_head_detached(repo);
     EGIT_CHECK_ERROR(retval);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(repository_head_unborn_p, "REPO", "Return non-nil if REPO's HEAD is unborn.");
@@ -421,7 +421,7 @@ emacs_value egit_repository_head_unborn_p(emacs_env *env, emacs_value _repo)
     git_repository *repo = EGIT_EXTRACT(_repo);
     int retval = git_repository_head_unborn(repo);
     EGIT_CHECK_ERROR(retval);
-    return retval ? em_t : em_nil;
+    return retval ? esym_t : esym_nil;
 }
 
 EGIT_DOC(repository_shallow_p, "REPO", "Return non-nil if REPO was a shallow clone.");
@@ -429,7 +429,7 @@ emacs_value egit_repository_shallow_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
-    return git_repository_is_shallow(repo) ? em_t : em_nil;
+    return git_repository_is_shallow(repo) ? esym_t : esym_nil;
 }
 
 EGIT_DOC(repository_worktree_p, "REPO", "Return non-nil if REPO is a linked worktree.");
@@ -437,7 +437,7 @@ emacs_value egit_repository_worktree_p(emacs_env *env, emacs_value _repo)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
-    return git_repository_is_worktree(repo) ? em_t : em_nil;
+    return git_repository_is_worktree(repo) ? esym_t : esym_nil;
 }
 
 

@@ -157,7 +157,7 @@ emacs_value egit_commit_parent_id(emacs_env *env, emacs_value _commit, emacs_val
     const git_oid *oid = git_commit_parent_id(commit, n);
     if (!oid) {
         em_signal_args_out_of_range(env, n);
-        return em_nil;
+        return esym_nil;
     }
 
     const char *oid_s = git_oid_tostr_s(oid);
@@ -237,9 +237,9 @@ emacs_value egit_commit_create(
     EM_ASSERT_STRING(_msg);
     EGIT_ASSERT_TREE(_tree);
 
-    ptrdiff_t i = 0, nparents = egit_assert_list(env, EGIT_COMMIT, em_libgit_commit_p, _parents);
+    ptrdiff_t i = 0, nparents = egit_assert_list(env, EGIT_COMMIT, esym_libgit_commit_p, _parents);
     if (nparents < 0)
-        return em_nil;
+        return esym_nil;
     const git_commit *parents[nparents];
     {
         EM_DOLIST(p, _parents, get_parents);

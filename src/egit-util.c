@@ -8,7 +8,7 @@ bool egit_strarray_from_list(git_strarray *array, emacs_env *env, emacs_value li
     array->count = 0;
     array->strings = NULL;
 
-    ptrdiff_t nelems = em_assert_list(env, em_stringp, list);
+    ptrdiff_t nelems = em_assert_list(env, esym_stringp, list);
     if (nelems < 0)
         return false;
     if (nelems == 0)
@@ -77,23 +77,23 @@ emacs_value egit_tree_entry_to_emacs(emacs_env *env, const git_tree_entry *entry
 
     emacs_value list_args[4];
 
-    list_args[0] = em_nil;
+    list_args[0] = esym_nil;
     switch (mode) {
-    case GIT_FILEMODE_UNREADABLE: list_args[0] = em_unreadable; break;
-    case GIT_FILEMODE_TREE: list_args[0] = em_tree; break;
-    case GIT_FILEMODE_BLOB: list_args[0] = em_blob; break;
-    case GIT_FILEMODE_BLOB_EXECUTABLE: list_args[0] = em_blob_executable; break;
-    case GIT_FILEMODE_LINK: list_args[0] = em_link; break;
-    case GIT_FILEMODE_COMMIT: list_args[0] = em_commit; break;
+    case GIT_FILEMODE_UNREADABLE: list_args[0] = esym_unreadable; break;
+    case GIT_FILEMODE_TREE: list_args[0] = esym_tree; break;
+    case GIT_FILEMODE_BLOB: list_args[0] = esym_blob; break;
+    case GIT_FILEMODE_BLOB_EXECUTABLE: list_args[0] = esym_blob_executable; break;
+    case GIT_FILEMODE_LINK: list_args[0] = esym_link; break;
+    case GIT_FILEMODE_COMMIT: list_args[0] = esym_commit; break;
     default: break;
     }
 
-    list_args[1] = em_nil;
+    list_args[1] = esym_nil;
     switch (type) {
-    case GIT_OBJ_COMMIT: list_args[1] = em_commit; break;
-    case GIT_OBJ_TREE: list_args[1] = em_tree; break;
-    case GIT_OBJ_BLOB: list_args[1] = em_blob; break;
-    case GIT_OBJ_TAG: list_args[1] = em_tag; break;  // Probably impossible, but why assume
+    case GIT_OBJ_COMMIT: list_args[1] = esym_commit; break;
+    case GIT_OBJ_TREE: list_args[1] = esym_tree; break;
+    case GIT_OBJ_BLOB: list_args[1] = esym_blob; break;
+    case GIT_OBJ_TAG: list_args[1] = esym_tag; break;  // Probably impossible, but why assume
     default: break;
     }
 

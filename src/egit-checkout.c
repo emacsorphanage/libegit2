@@ -23,9 +23,9 @@
         egit_checkout_options_release(&options);     \
         EM_RETURN_NIL_IF_NLE();                      \
         if (retval == GIT_EUSER)                     \
-            return em_nil;                           \
+            return esym_nil;                         \
         EGIT_CHECK_ERROR(retval);                    \
-        return em_nil;                               \
+        return esym_nil;                             \
     } while (0)
 
 EGIT_DOC(checkout_head, "REPO &optional OPTIONS",
@@ -92,8 +92,8 @@ emacs_value egit_checkout_tree(emacs_env *env, emacs_value _repo, emacs_value _t
     if (EM_EXTRACT_BOOLEAN(_treeish)) {
         egit_type treeish_type = egit_get_type(env, _treeish);
         if (treeish_type != EGIT_COMMIT && treeish_type != EGIT_TREE && treeish_type != EGIT_TAG) {
-            em_signal_wrong_type(env, em_libgit_tree_p, _treeish);
-            return em_nil;
+            em_signal_wrong_type(env, esym_libgit_tree_p, _treeish);
+            return esym_nil;
         }
     }
 
