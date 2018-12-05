@@ -319,6 +319,7 @@ MKFINDSYM(git_status_show_t, status_show);
 
 MKFINDENUM(git_delta_t, delta);
 MKFINDENUM(git_direction, direction);
+MKFINDENUM(git_error_t, error);
 MKFINDENUM(git_merge_preference_t, merge_preference);
 MKFINDENUM(git_otype, otype);
 MKFINDENUM(git_submodule_ignore_t, submodule_ignore);

@@ -257,43 +257,9 @@ bool egit_dispatch_error(emacs_env *env, int retval)
     const git_error *err = giterr_last();
     if (!err) return false;
 
-    emacs_value error;
-    switch (err->klass) {
-    case GITERR_NOMEMORY: error = esym_giterr_nomemory; break;
-    case GITERR_OS: error = esym_giterr_os; break;
-    case GITERR_INVALID: error = esym_giterr_invalid; break;
-    case GITERR_REFERENCE: error = esym_giterr_reference; break;
-    case GITERR_ZLIB: error = esym_giterr_zlib; break;
-    case GITERR_REPOSITORY: error = esym_giterr_repository; break;
-    case GITERR_CONFIG: error = esym_giterr_config; break;
-    case GITERR_REGEX: error = esym_giterr_regex; break;
-    case GITERR_ODB: error = esym_giterr_odb; break;
-    case GITERR_INDEX: error = esym_giterr_index; break;
-    case GITERR_OBJECT: error = esym_giterr_object; break;
-    case GITERR_NET: error = esym_giterr_net; break;
-    case GITERR_TAG: error = esym_giterr_tag; break;
-    case GITERR_TREE: error = esym_giterr_tree; break;
-    case GITERR_INDEXER: error = esym_giterr_indexer; break;
-    case GITERR_SSL: error = esym_giterr_ssl; break;
-    case GITERR_SUBMODULE: error = esym_giterr_submodule; break;
-    case GITERR_THREAD: error = esym_giterr_thread; break;
-    case GITERR_STASH: error = esym_giterr_stash; break;
-    case GITERR_CHECKOUT: error = esym_giterr_checkout; break;
-    case GITERR_FETCHHEAD: error = esym_giterr_fetchhead; break;
-    case GITERR_MERGE: error = esym_giterr_merge; break;
-    case GITERR_SSH: error = esym_giterr_ssh; break;
-    case GITERR_FILTER: error = esym_giterr_filter; break;
-    case GITERR_REVERT: error = esym_giterr_revert; break;
-    case GITERR_CALLBACK: error = esym_giterr_callback; break;
-    case GITERR_CHERRYPICK: error = esym_giterr_cherrypick; break;
-    case GITERR_DESCRIBE: error = esym_giterr_describe; break;
-    case GITERR_REBASE: error = esym_giterr_rebase; break;
-    case GITERR_FILESYSTEM: error = esym_giterr_filesystem; break;
-    case GITERR_PATCH: error = esym_giterr_patch; break;
-    case GITERR_WORKTREE: error = esym_giterr_worktree; break;
-    case GITERR_SHA1: error = esym_giterr_sha1; break;
-    default: error = esym_giterr; break;
-    }
+    emacs_value error = em_findenum_error(err->klass);
+    if (!EM_EXTRACT_BOOLEAN(error))
+        error = esym_giterr;
 
     em_signal(env, error, err->message);
     return true;
