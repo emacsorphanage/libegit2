@@ -338,6 +338,7 @@ bool em_findsym_status_show(git_status_show_t *out, emacs_env *env, emacs_value 
 
 emacs_value em_findenum_delta(git_delta_t value);
 emacs_value em_findenum_direction(git_direction value);
+emacs_value em_findenum_error(git_error_t value);
 emacs_value em_findenum_merge_preference(git_merge_preference_t value);
 emacs_value em_findenum_otype(git_otype value);
 emacs_value em_findenum_submodule_ignore(git_submodule_ignore_t value);

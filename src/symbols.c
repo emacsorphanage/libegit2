@@ -464,6 +464,42 @@ esym_map esym_direction_map[3] = {
     {&esym_push, {.direction = GIT_DIRECTION_PUSH}},
     {NULL, {0}}
 };
+esym_map esym_error_map[34] = {
+    {&esym_giterr_nomemory, {.error = GITERR_NOMEMORY}},
+    {&esym_giterr_os, {.error = GITERR_OS}},
+    {&esym_giterr_invalid, {.error = GITERR_INVALID}},
+    {&esym_giterr_reference, {.error = GITERR_REFERENCE}},
+    {&esym_giterr_zlib, {.error = GITERR_ZLIB}},
+    {&esym_giterr_repository, {.error = GITERR_REPOSITORY}},
+    {&esym_giterr_config, {.error = GITERR_CONFIG}},
+    {&esym_giterr_regex, {.error = GITERR_REGEX}},
+    {&esym_giterr_odb, {.error = GITERR_ODB}},
+    {&esym_giterr_index, {.error = GITERR_INDEX}},
+    {&esym_giterr_object, {.error = GITERR_OBJECT}},
+    {&esym_giterr_net, {.error = GITERR_NET}},
+    {&esym_giterr_tag, {.error = GITERR_TAG}},
+    {&esym_giterr_tree, {.error = GITERR_TREE}},
+    {&esym_giterr_indexer, {.error = GITERR_INDEXER}},
+    {&esym_giterr_ssl, {.error = GITERR_SSL}},
+    {&esym_giterr_submodule, {.error = GITERR_SUBMODULE}},
+    {&esym_giterr_thread, {.error = GITERR_THREAD}},
+    {&esym_giterr_stash, {.error = GITERR_STASH}},
+    {&esym_giterr_checkout, {.error = GITERR_CHECKOUT}},
+    {&esym_giterr_fetchhead, {.error = GITERR_FETCHHEAD}},
+    {&esym_giterr_merge, {.error = GITERR_MERGE}},
+    {&esym_giterr_ssh, {.error = GITERR_SSH}},
+    {&esym_giterr_filter, {.error = GITERR_FILTER}},
+    {&esym_giterr_revert, {.error = GITERR_REVERT}},
+    {&esym_giterr_callback, {.error = GITERR_CALLBACK}},
+    {&esym_giterr_cherrypick, {.error = GITERR_CHERRYPICK}},
+    {&esym_giterr_describe, {.error = GITERR_DESCRIBE}},
+    {&esym_giterr_rebase, {.error = GITERR_REBASE}},
+    {&esym_giterr_filesystem, {.error = GITERR_FILESYSTEM}},
+    {&esym_giterr_patch, {.error = GITERR_PATCH}},
+    {&esym_giterr_worktree, {.error = GITERR_WORKTREE}},
+    {&esym_giterr_sha1, {.error = GITERR_SHA1}},
+    {NULL, {0}}
+};
 esym_map esym_feature_map[5] = {
     {&esym_threads, {.feature = GIT_FEATURE_THREADS}},
     {&esym_https, {.feature = GIT_FEATURE_HTTPS}},
@@ -471,10 +507,11 @@ esym_map esym_feature_map[5] = {
     {&esym_nsec, {.feature = GIT_FEATURE_NSEC}},
     {NULL, {0}}
 };
-esym_map esym_fetch_prune_map[4] = {
+esym_map esym_fetch_prune_map[5] = {
     {&esym_unspecified, {.fetch_prune = GIT_FETCH_PRUNE_UNSPECIFIED}},
     {&esym_on, {.fetch_prune = GIT_FETCH_PRUNE}},
     {&esym_off, {.fetch_prune = GIT_FETCH_NO_PRUNE}},
+    {&esym_nil, {.fetch_prune = GIT_FETCH_PRUNE_UNSPECIFIED}},
     {NULL, {0}}
 };
 esym_map esym_filemode_map[7] = {
@@ -535,9 +572,9 @@ esym_map esym_merge_flag_map[5] = {
     {NULL, {0}}
 };
 esym_map esym_merge_preference_map[4] = {
-    {&esym_nil, {.merge_preference = GIT_MERGE_PREFERENCE_NONE}},
     {&esym_no_fastforward, {.merge_preference = GIT_MERGE_PREFERENCE_NO_FASTFORWARD}},
     {&esym_fastforward_only, {.merge_preference = GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY}},
+    {&esym_nil, {.merge_preference = GIT_MERGE_PREFERENCE_NONE}},
     {NULL, {0}}
 };
 esym_map esym_otype_map[7] = {
@@ -549,17 +586,18 @@ esym_map esym_otype_map[7] = {
     {&esym_nil, {.otype = GIT_OBJ_ANY}},
     {NULL, {0}}
 };
-esym_map esym_proxy_map[4] = {
+esym_map esym_proxy_map[5] = {
     {&esym_none, {.proxy = GIT_PROXY_NONE}},
     {&esym_auto, {.proxy = GIT_PROXY_AUTO}},
     {&esym_specified, {.proxy = GIT_PROXY_SPECIFIED}},
+    {&esym_nil, {.proxy = GIT_PROXY_NONE}},
     {NULL, {0}}
 };
 esym_map esym_remote_autotag_option_map[5] = {
-    {&esym_nil, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED}},
     {&esym_auto, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_AUTO}},
     {&esym_none, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_NONE}},
     {&esym_all, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_ALL}},
+    {&esym_nil, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED}},
     {NULL, {0}}
 };
 esym_map esym_repository_state_map[13] = {
