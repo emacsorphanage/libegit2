@@ -132,15 +132,7 @@ emacs_value egit_index_entry_stage(emacs_env *env, emacs_value _entry)
     EGIT_ASSERT_INDEX_ENTRY(_entry);
     git_index_entry *entry = EGIT_EXTRACT(_entry);
     int stage = git_index_entry_stage(entry);
-    switch (stage) {
-    case 0: return esym_nil;
-    case 1: return esym_base;
-    case 2: return esym_ours;
-    case 3: return esym_theirs;
-    }
-
-    // Should be unreachable
-    return esym_nil;
+    return em_findenum_stage(stage);
 }
 
 EGIT_DOC(index_entrycount, "INDEX", "Get the number of entries in INDEX.");

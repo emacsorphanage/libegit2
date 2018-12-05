@@ -267,12 +267,6 @@ emacs_value egit_revwalk_foreach(
         EM_ASSERT_FUNCTION(hide_pred);
         ctx = malloc(sizeof(hide_context));
         *ctx = (hide_context) {env, hide_pred};
-
-        // This function can only error if a callback is already set,
-        // however we don't expose git_revwalk_add_hide_cb to Emacs,
-        // so we have full control over it.
-
-        // TODO: Get resolution from libgit2 on #4887
         git_revwalk_add_hide_cb(revwalk, &revwalk_hide_callback, ctx);
     }
 
@@ -293,7 +287,6 @@ emacs_value egit_revwalk_foreach(
 
   cleanup:
     free(ctx);
-    // TODO: Get resolution from libgit2 on #4887
     git_revwalk_add_hide_cb(revwalk, NULL, NULL);
     git_revwalk_reset(revwalk);
     return esym_nil;

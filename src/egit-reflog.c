@@ -62,22 +62,19 @@ emacs_value egit_reflog_entry_committer(emacs_env *env, emacs_value _entry)
     return egit_wrap(env, EGIT_SIGNATURE, new, NULL);
 }
 
-EGIT_DOC(reflog_entry_id, "REFLOG-ENTRY SIDE",
-         "Get the ID of REFLOG-ENTRY. SIDE is either `old' or `new'.");
-emacs_value egit_reflog_entry_id(emacs_env *env, emacs_value _entry, emacs_value side)
+EGIT_DOC(reflog_entry_id, "REFLOG-ENTRY &optional NEW",
+         "Get the ID of REFLOG-ENTRY.\n"
+         "If NEW is non-nil, get the new side, otherwise the old side.");
+emacs_value egit_reflog_entry_id(emacs_env *env, emacs_value _entry, emacs_value _new)
 {
     EGIT_ASSERT_REFLOG_ENTRY(_entry);
     const git_reflog_entry *entry = EGIT_EXTRACT(_entry);
 
     const git_oid *oid;
-    if (EM_EQ(side, esym_new))
+    if (EM_EXTRACT_BOOLEAN(_new))
         oid = git_reflog_entry_id_new(entry);
-    else if (EM_EQ(side, esym_old))
+    else
         oid = git_reflog_entry_id_old(entry);
-    else {
-        em_signal_wrong_value(env, side);
-        return esym_nil;
-    }
 
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);

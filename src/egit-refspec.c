@@ -18,9 +18,7 @@ emacs_value egit_refspec_direction(emacs_env *env, emacs_value _refspec)
     EGIT_ASSERT_REFSPEC(_refspec);
     git_refspec *refspec = EGIT_EXTRACT(_refspec);
     git_direction dir = git_refspec_direction(refspec);
-    if (dir == GIT_DIRECTION_FETCH)
-        return esym_fetch;
-    return esym_push;
+    return em_findenum_direction(dir);
 }
 
 EGIT_DOC(refspec_dst, "REFSPEC", "Get the destination specifier of REFSPEC.");

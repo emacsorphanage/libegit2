@@ -159,9 +159,7 @@ emacs_value egit_submodule_fetch_recurse_submodules(emacs_env *env, emacs_value 
     EGIT_ASSERT_SUBMODULE(_sub);
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_recurse_t rec = git_submodule_fetch_recurse_submodules(sub);
-    if (rec == GIT_SUBMODULE_RECURSE_ONDEMAND)
-        return esym_ondemand;
-    return (rec == GIT_SUBMODULE_RECURSE_NO) ? esym_nil : esym_t;
+    return em_findenum_submodule_recurse(rec);
 }
 
 EGIT_DOC(submodule_head_id, "SUBMODULE", "Get the ID for SUBMODULE in HEAD.");
@@ -184,13 +182,7 @@ emacs_value egit_submodule_ignore(emacs_env *env, emacs_value _sub)
     EGIT_ASSERT_SUBMODULE(_sub);
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_ignore_t ignore = git_submodule_ignore(sub);
-    switch (ignore) {
-    case GIT_SUBMODULE_IGNORE_NONE: return esym_none;
-    case GIT_SUBMODULE_IGNORE_UNTRACKED: return esym_untracked;
-    case GIT_SUBMODULE_IGNORE_DIRTY: return esym_dirty;
-    case GIT_SUBMODULE_IGNORE_ALL: return esym_all;
-    default: return esym_nil;  // Should be unreachable
-    }
+    return em_findenum_submodule_ignore(ignore);
 }
 
 EGIT_DOC(submodule_index_id, "SUBMODULE", "Get the ID for SUBMODULE in the index.");
@@ -318,13 +310,7 @@ emacs_value egit_submodule_update_strategy(emacs_env *env, emacs_value _sub)
     EGIT_ASSERT_SUBMODULE(_sub);
     git_submodule *sub = EGIT_EXTRACT(_sub);
     git_submodule_update_t update = git_submodule_update_strategy(sub);
-    switch (update) {
-    case GIT_SUBMODULE_UPDATE_NONE: return esym_none;
-    case GIT_SUBMODULE_UPDATE_CHECKOUT: return esym_checkout;
-    case GIT_SUBMODULE_UPDATE_MERGE: return esym_merge;
-    case GIT_SUBMODULE_UPDATE_REBASE: return esym_rebase;
-    default: return esym_nil;  // Should be unreachable
-    }
+    return em_findenum_submodule_update(update);
 }
 
 EGIT_DOC(submodule_url, "SUBMODULE", "Get the url of SUBMODULE.");

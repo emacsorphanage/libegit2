@@ -43,10 +43,10 @@
         (should (= 1 (libgit-remote-refspec-count remote-a)))
         (should (= 2 (libgit-remote-refspec-count remote-b)))
         (should (equal '("+refs/heads/*:refs/remotes/rema/*")
-                       (libgit-remote-get-refspecs remote-a 'fetch)))
+                       (libgit-remote-get-refspecs remote-a)))
         (should (equal '("+refs/heads/branchname:refs/remotes/remb/branchname"
                          "+refs/heads/otherbranch:refs/remotes/remb/otherbranch")
-                       (libgit-remote-get-refspecs remote-b 'fetch)))
+                       (libgit-remote-get-refspecs remote-b)))
         (should-not (libgit-remote-get-refspecs remote-a 'push))
         (should-not (libgit-remote-get-refspecs remote-b 'push))
         (let ((spec (libgit-remote-get-refspec remote-b 0)))
