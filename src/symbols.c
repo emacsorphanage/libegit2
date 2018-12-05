@@ -535,7 +535,7 @@ esym_map esym_merge_flag_map[5] = {
     {NULL, {0}}
 };
 esym_map esym_merge_preference_map[4] = {
-    {&esym_none, {.merge_preference = GIT_MERGE_PREFERENCE_NONE}},
+    {&esym_nil, {.merge_preference = GIT_MERGE_PREFERENCE_NONE}},
     {&esym_no_fastforward, {.merge_preference = GIT_MERGE_PREFERENCE_NO_FASTFORWARD}},
     {&esym_fastforward_only, {.merge_preference = GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY}},
     {NULL, {0}}
@@ -549,8 +549,21 @@ esym_map esym_otype_map[7] = {
     {&esym_nil, {.otype = GIT_OBJ_ANY}},
     {NULL, {0}}
 };
+esym_map esym_proxy_map[4] = {
+    {&esym_none, {.proxy = GIT_PROXY_NONE}},
+    {&esym_auto, {.proxy = GIT_PROXY_AUTO}},
+    {&esym_specified, {.proxy = GIT_PROXY_SPECIFIED}},
+    {NULL, {0}}
+};
+esym_map esym_remote_autotag_option_map[5] = {
+    {&esym_nil, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED}},
+    {&esym_auto, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_AUTO}},
+    {&esym_none, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_NONE}},
+    {&esym_all, {.remote_autotag_option = GIT_REMOTE_DOWNLOAD_TAGS_ALL}},
+    {NULL, {0}}
+};
 esym_map esym_repository_state_map[13] = {
-    {&esym_none, {.repository_state = GIT_REPOSITORY_STATE_NONE}},
+    {&esym_nil, {.repository_state = GIT_REPOSITORY_STATE_NONE}},
     {&esym_merge, {.repository_state = GIT_REPOSITORY_STATE_MERGE}},
     {&esym_revert, {.repository_state = GIT_REPOSITORY_STATE_REVERT}},
     {&esym_revert_sequence, {.repository_state = GIT_REPOSITORY_STATE_REVERT_SEQUENCE}},
@@ -562,6 +575,12 @@ esym_map esym_repository_state_map[13] = {
     {&esym_rebase_merge, {.repository_state = GIT_REPOSITORY_STATE_REBASE_MERGE}},
     {&esym_apply_mailbox, {.repository_state = GIT_REPOSITORY_STATE_APPLY_MAILBOX}},
     {&esym_apply_mailbox_or_rebase, {.repository_state = GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE}},
+    {NULL, {0}}
+};
+esym_map esym_reset_map[4] = {
+    {&esym_soft, {.reset = GIT_RESET_SOFT}},
+    {&esym_mixed, {.reset = GIT_RESET_MIXED}},
+    {&esym_hard, {.reset = GIT_RESET_HARD}},
     {NULL, {0}}
 };
 esym_map esym_status_opt_map[17] = {
@@ -605,18 +624,6 @@ esym_map esym_status_map[15] = {
     {&esym_wt_unreadable, {.status = GIT_STATUS_WT_UNREADABLE}},
     {&esym_ignored, {.status = GIT_STATUS_IGNORED}},
     {&esym_conflicted, {.status = GIT_STATUS_CONFLICTED}},
-    {NULL, {0}}
-};
-esym_map esym_proxy_map[4] = {
-    {&esym_none, {.proxy = GIT_PROXY_NONE}},
-    {&esym_auto, {.proxy = GIT_PROXY_AUTO}},
-    {&esym_specified, {.proxy = GIT_PROXY_SPECIFIED}},
-    {NULL, {0}}
-};
-esym_map esym_reset_map[4] = {
-    {&esym_soft, {.reset = GIT_RESET_SOFT}},
-    {&esym_mixed, {.reset = GIT_RESET_MIXED}},
-    {&esym_hard, {.reset = GIT_RESET_HARD}},
     {NULL, {0}}
 };
 esym_map esym_sort_map[5] = {

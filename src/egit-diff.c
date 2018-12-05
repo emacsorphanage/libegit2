@@ -642,26 +642,26 @@ emacs_value egit_diff_print(
 // =============================================================================
 // Getters - delta
 
-EGIT_DOC(diff_delta_file_id, "DELTA SIDE",
+EGIT_DOC(diff_delta_file_id, "DELTA NEW",
          "Get the file ID of a side in DELTA.\n"
-         "SIDE must be either `old' or `new'.");
-emacs_value egit_diff_delta_file_id(emacs_env *env, emacs_value _delta, emacs_value side)
+         "If NEW is non-nil, get the new side, else the old side.");
+emacs_value egit_diff_delta_file_id(emacs_env *env, emacs_value _delta, emacs_value _new)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    const git_oid *oid = EM_EQ(side, esym_old) ? &delta->old_file.id : &delta->new_file.id;
+    const git_oid *oid = EM_EXTRACT_BOOLEAN(_new) ? &delta->new_file.id : &delta->old_file.id;
     const char *oid_s = git_oid_tostr_s(oid);
     return EM_STRING(oid_s);
 }
 
-EGIT_DOC(diff_delta_file_path, "DELTA SIDE",
+EGIT_DOC(diff_delta_file_path, "DELTA &optional NEW",
          "Get the file path of a side in DELTA.\n"
-         "SIDE must be either `old' or `new'.");
-emacs_value egit_diff_delta_file_path(emacs_env *env, emacs_value _delta, emacs_value side)
+         "If NEW is non-nil, get the new side, else the old side.");
+emacs_value egit_diff_delta_file_path(emacs_env *env, emacs_value _delta, emacs_value _new)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    const char *path = EM_EQ(side, esym_old) ? delta->old_file.path : delta->new_file.path;
+    const char *path = EM_EXTRACT_BOOLEAN(_new) ? delta->new_file.path : delta->old_file.path;
     return EM_STRING(path);
 }
 
@@ -693,36 +693,21 @@ emacs_value egit_diff_delta_status(emacs_env *env, emacs_value _delta)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-
-    switch (delta->status) {
-    case GIT_DELTA_UNMODIFIED: return esym_unmodified;
-    case GIT_DELTA_ADDED: return esym_added;
-    case GIT_DELTA_DELETED: return esym_deleted;
-    case GIT_DELTA_MODIFIED: return esym_modified;
-    case GIT_DELTA_RENAMED: return esym_renamed;
-    case GIT_DELTA_COPIED: return esym_copied;
-    case GIT_DELTA_IGNORED: return esym_ignored;
-    case GIT_DELTA_UNTRACKED: return esym_untracked;
-    case GIT_DELTA_TYPECHANGE: return esym_typechange;
-    case GIT_DELTA_UNREADABLE: return esym_unreadable;
-    case GIT_DELTA_CONFLICTED: return esym_conflicted;
-    }
-
-    return esym_nil;  // Should be unreachable
+    return em_findenum_delta(delta->status);
 }
 
 
 // =============================================================================
 // Predicates - delta
 
-EGIT_DOC(diff_delta_file_exists_p, "DELTA SIDE",
+EGIT_DOC(diff_delta_file_exists_p, "DELTA &optional NEW",
          "Non-nil if the file exists on this side of DELTA.\n"
-         "SIDE must be either `old' or `new'.");
-emacs_value egit_diff_delta_file_exists_p(emacs_env *env, emacs_value _delta, emacs_value side)
+         "If NEW is non-nil, get the new side, else the old side.");
+emacs_value egit_diff_delta_file_exists_p(emacs_env *env, emacs_value _delta, emacs_value _new)
 {
     EGIT_ASSERT_DIFF_DELTA(_delta);
     git_diff_delta *delta = EGIT_EXTRACT(_delta);
-    int flags = EM_EQ(side, esym_old) ? delta->old_file.flags : delta->new_file.flags;
+    int flags = EM_EXTRACT_BOOLEAN(_new) ? delta->new_file.flags : delta->old_file.flags;
     return (flags & GIT_DIFF_FLAG_EXISTS) ? esym_t : esym_nil;
 }
 
@@ -738,25 +723,25 @@ emacs_value egit_diff_hunk_header(emacs_env *env, emacs_value _hunk)
     return env->make_string(env, &hunk->header[0], hunk->header_len);
 }
 
-EGIT_DOC(diff_hunk_lines, "HUNK SIDE",
+EGIT_DOC(diff_hunk_lines, "HUNK &optional NEW",
          "Return the number of lines of HUNK.\n"
-         "SIDE must be either `old' or `new'.");
-emacs_value egit_diff_hunk_lines(emacs_env *env, emacs_value _hunk, emacs_value side)
+         "If NEW is non-nil, get the new side, else the old side.");
+emacs_value egit_diff_hunk_lines(emacs_env *env, emacs_value _hunk, emacs_value _new)
 {
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
-    int num = EM_EQ(side, esym_old) ? hunk->old_lines : hunk->new_lines;
+    int num = EM_EXTRACT_BOOLEAN(_new) ? hunk->new_lines : hunk->old_lines;
     return EM_INTEGER(num);
 }
 
-EGIT_DOC(diff_hunk_start, "HUNK SIDE",
+EGIT_DOC(diff_hunk_start, "HUNK &optional NEW",
          "Return starting line number of HUNK.\n"
-         "SIDE must be either `old' or `new'.");
-emacs_value egit_diff_hunk_start(emacs_env *env, emacs_value _hunk, emacs_value side)
+         "If NEW is non-nil, get the new side, else the old side.");
+emacs_value egit_diff_hunk_start(emacs_env *env, emacs_value _hunk, emacs_value _new)
 {
     EGIT_ASSERT_DIFF_HUNK(_hunk);
     git_diff_hunk *hunk = EGIT_EXTRACT(_hunk);
-    int num = EM_EQ(side, esym_old) ? hunk->old_start : hunk->new_start;
+    int num = EM_EXTRACT_BOOLEAN(_new) ? hunk->new_start : hunk->old_start;
     return EM_INTEGER(num);
 }
 

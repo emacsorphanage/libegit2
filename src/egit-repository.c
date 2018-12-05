@@ -210,20 +210,7 @@ emacs_value egit_repository_state(emacs_env *env, emacs_value _repo)
     EGIT_ASSERT_REPOSITORY(_repo);
     git_repository *repo = EGIT_EXTRACT(_repo);
     git_repository_state_t state = git_repository_state(repo);
-    switch (state) {
-    case GIT_REPOSITORY_STATE_MERGE: return esym_merge;
-    case GIT_REPOSITORY_STATE_REVERT: return esym_revert;
-    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return esym_revert_sequence;
-    case GIT_REPOSITORY_STATE_CHERRYPICK: return esym_cherrypick;
-    case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return esym_cherrypick_sequence;
-    case GIT_REPOSITORY_STATE_BISECT: return esym_bisect;
-    case GIT_REPOSITORY_STATE_REBASE: return esym_rebase;
-    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE: return esym_rebase_interactive;
-    case GIT_REPOSITORY_STATE_REBASE_MERGE: return esym_rebase_merge;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX: return esym_apply_mailbox;
-    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return esym_apply_mailbox_or_rebase;
-    default: return esym_nil;
-    }
+    return em_findenum_repository_state(state);
 }
 
 EGIT_DOC(repository_workdir, "REPO", "Return the path to the working directory of REPO, or nil.");

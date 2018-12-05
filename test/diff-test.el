@@ -5,7 +5,7 @@
      diff
      (lambda (delta _)
        (push `(delta
-               ,(libgit-diff-delta-file-path delta 'old)
+               ,(libgit-diff-delta-file-path delta)
                ,(libgit-diff-delta-file-path delta 'new)
                ,(libgit-diff-delta-nfiles delta)
                ,(libgit-diff-delta-status delta))
@@ -14,8 +14,8 @@
        (push 'binary data))
      (lambda (_ hunk)
        (push `(hunk
-               ,(libgit-diff-hunk-start hunk 'old)
-               ,(libgit-diff-hunk-lines hunk 'old)
+               ,(libgit-diff-hunk-start hunk)
+               ,(libgit-diff-hunk-lines hunk)
                ,(libgit-diff-hunk-start hunk 'new)
                ,(libgit-diff-hunk-lines hunk 'new)
                ,(libgit-diff-hunk-header hunk))

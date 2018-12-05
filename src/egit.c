@@ -561,16 +561,16 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-diff-foreach", diff_foreach, 2, 5);
     DEFUN("libgit-diff-print", diff_print, 1, 3);
 
-    DEFUN("libgit-diff-delta-file-id", diff_delta_file_id, 2, 2);
-    DEFUN("libgit-diff-delta-file-path", diff_delta_file_path, 2, 2);
+    DEFUN("libgit-diff-delta-file-id", diff_delta_file_id, 1, 2);
+    DEFUN("libgit-diff-delta-file-path", diff_delta_file_path, 1, 2);
     DEFUN("libgit-diff-delta-nfiles", diff_delta_nfiles, 1, 1);
     DEFUN("libgit-diff-delta-similarity", diff_delta_similarity, 1, 1);
     DEFUN("libgit-diff-delta-status", diff_delta_status, 1, 1);
-    DEFUN("libgit-diff-delta-file-exists-p", diff_delta_file_exists_p, 2, 2);
+    DEFUN("libgit-diff-delta-file-exists-p", diff_delta_file_exists_p, 1, 2);
 
     DEFUN("libgit-diff-hunk-header", diff_hunk_header, 1, 1);
-    DEFUN("libgit-diff-hunk-lines", diff_hunk_lines, 2, 2);
-    DEFUN("libgit-diff-hunk-start", diff_hunk_start, 2, 2);
+    DEFUN("libgit-diff-hunk-lines", diff_hunk_lines, 1, 2);
+    DEFUN("libgit-diff-hunk-start", diff_hunk_start, 1, 2);
 
     DEFUN("libgit-diff-line-origin", diff_line_origin, 1, 1);
     DEFUN("libgit-diff-line-lineno", diff_line_lineno, 2, 2);
@@ -670,7 +670,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reflog-read", reflog_read, 1, 2);
     DEFUN("libgit-reflog-entry-byindex", reflog_entry_byindex, 2, 2);
     DEFUN("libgit-reflog-entry-committer", reflog_entry_committer, 1, 1);
-    DEFUN("libgit-reflog-entry-id", reflog_entry_id, 2, 2);
+    DEFUN("libgit-reflog-entry-id", reflog_entry_id, 1, 2);
     DEFUN("libgit-reflog-entry-message", reflog_entry_message, 1, 1);
     DEFUN("libgit-reflog-entrycount", reflog_entrycount, 1, 1);
     DEFUN("libgit-reflog-append", reflog_append, 3, 4);
@@ -693,7 +693,7 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-remote-autotag", remote_autotag, 1, 1);
     DEFUN("libgit-remote-get-refspec", remote_get_refspec, 2, 2);
-    DEFUN("libgit-remote-get-refspecs", remote_get_refspecs, 2, 2);
+    DEFUN("libgit-remote-get-refspecs", remote_get_refspecs, 1, 2);
     DEFUN("libgit-remote-name", remote_name, 1, 1);
     DEFUN("libgit-remote-owner", remote_owner, 1, 1);
     DEFUN("libgit-remote-pushurl", remote_pushurl, 1, 1);
@@ -702,7 +702,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-remote-list", remote_list, 1, 1);
     DEFUN("libgit-remote-valid-name-p", remote_valid_name_p, 1, 1);
 
-    DEFUN("libgit-remote-add-refspec", remote_add_refspec, 4, 4);
+    DEFUN("libgit-remote-add-refspec", remote_add_refspec, 3, 4);
     DEFUN("libgit-remote-fetch", remote_fetch, 1, 4);
     DEFUN("libgit-remote-push", remote_push, 1, 3);
 

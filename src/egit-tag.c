@@ -181,14 +181,7 @@ emacs_value egit_tag_target_type(emacs_env *env, emacs_value _tag)
     EGIT_ASSERT_TAG(_tag);
     git_tag *tag = EGIT_EXTRACT(_tag);
     git_otype type = git_tag_target_type(tag);
-
-    switch (type) {
-    case GIT_OBJ_COMMIT: return esym_commit; break;
-    case GIT_OBJ_TREE: return esym_tree; break;
-    case GIT_OBJ_BLOB: return esym_blob; break;
-    case GIT_OBJ_TAG: return esym_tag; break;
-    default: return esym_nil;
-    }
+    return em_findenum_otype(type);
 }
 
 

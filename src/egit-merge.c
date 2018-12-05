@@ -123,11 +123,7 @@ emacs_value egit_merge_analysis(emacs_env *env, emacs_value _repo, emacs_value _
         _analysis[nanal++] = esym_unborn;
 
     // These are bit flags but only one can be set
-    emacs_value _preference = esym_nil;
-    if (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD)
-        _preference = esym_no_fastforward;
-    if (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)
-        _preference = esym_fastforward_only;
+    emacs_value _preference = em_findenum_merge_preference(preference);
 
     return em_cons(env, em_list(env, _analysis, nanal), _preference);
 }

@@ -62,12 +62,7 @@ emacs_value egit_remote_autotag(emacs_env *env, emacs_value _remote)
     EGIT_ASSERT_REMOTE(_remote);
     git_remote *remote = EGIT_EXTRACT(_remote);
     git_remote_autotag_option_t ret = git_remote_autotag(remote);
-    switch (ret) {
-    case GIT_REMOTE_DOWNLOAD_TAGS_AUTO: return esym_auto;
-    case GIT_REMOTE_DOWNLOAD_TAGS_NONE: return esym_none;
-    case GIT_REMOTE_DOWNLOAD_TAGS_ALL: return esym_all;
-    default: return esym_nil;
-    }
+    return em_findenum_remote_autotag_option(ret);
 }
 
 EGIT_DOC(remote_get_refspec, "REMOTE N", "Get the Nth refspec of REMOTE.");
@@ -87,24 +82,20 @@ emacs_value egit_remote_get_refspec(emacs_env *env, emacs_value _remote, emacs_v
     return egit_wrap(env, EGIT_REFSPEC, refspec, EM_EXTRACT_USER_PTR(_remote));
 }
 
-EGIT_DOC(remote_get_refspecs, "REMOTE DIRECTION",
+EGIT_DOC(remote_get_refspecs, "REMOTE &optional PUSH",
          "Get the list of the refspecs of REMOTE.\n"
-         "DIRECTION is either `push' or `fetch'.");
-emacs_value egit_remote_get_refspecs(emacs_env *env, emacs_value _remote, emacs_value dir)
+         "If PUSH is non-nil get the push refspecs, else the fetch refspecs.");
+emacs_value egit_remote_get_refspecs(emacs_env *env, emacs_value _remote, emacs_value _push)
 {
     EGIT_ASSERT_REMOTE(_remote);
     git_remote *remote = EGIT_EXTRACT(_remote);
 
     git_strarray out = {NULL, 0};
     int retval;
-    if (EM_EQ(dir, esym_fetch))
+    if (!EM_EXTRACT_BOOLEAN(_push))
         retval = git_remote_get_fetch_refspecs(&out, remote);
-    else if (EM_EQ(dir, esym_push))
+    else
         retval = git_remote_get_push_refspecs(&out, remote);
-    else {
-        em_signal_wrong_value(env, dir);
-        return esym_nil;
-    }
     EGIT_CHECK_ERROR(retval);
 
     EGIT_RET_STRARRAY(out);
@@ -189,7 +180,7 @@ emacs_value egit_remote_valid_name_p(emacs_env *env, emacs_value _name)
 // =============================================================================
 // Operations
 
-EGIT_DOC(remote_add_refspec, "REPO NAME REFSPEC PUSH",
+EGIT_DOC(remote_add_refspec, "REPO NAME REFSPEC &optional PUSH",
          "Add a new REFSPEC to the remote named NAME in REPO.\n"
          "If PUSH is non-nil, add a push refspec, else a fetch refspec.");
 emacs_value egit_remote_add_refspec(

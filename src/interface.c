@@ -304,3 +304,28 @@ MKFINDSYM(int, stage);
 MKFINDSYM(git_status_show_t, status_show);
 
 #undef MKFINDSYM
+
+#define MKFINDENUM(type, mapname)                                       \
+    emacs_value em_findenum_##mapname(type value)                       \
+    {                                                                   \
+        esym_map *map = esym_##mapname##_map;                           \
+        while (map->symbol != NULL) {                                   \
+            if (map->value.mapname == value)                            \
+                return *map->symbol;                                    \
+            map++;                                                      \
+        }                                                               \
+        return esym_nil;                                                \
+    }
+
+MKFINDENUM(git_delta_t, delta);
+MKFINDENUM(git_direction, direction);
+MKFINDENUM(git_merge_preference_t, merge_preference);
+MKFINDENUM(git_otype, otype);
+MKFINDENUM(git_submodule_ignore_t, submodule_ignore);
+MKFINDENUM(git_submodule_update_t, submodule_update);
+MKFINDENUM(git_submodule_recurse_t, submodule_recurse);
+MKFINDENUM(git_remote_autotag_option_t, remote_autotag_option);
+MKFINDENUM(git_repository_state_t, repository_state);
+MKFINDENUM(int, stage);
+
+#undef MKFINDENUM
