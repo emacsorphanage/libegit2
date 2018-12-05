@@ -178,18 +178,8 @@ emacs_value egit_index_get_bypath(emacs_env *env, emacs_value _index, emacs_valu
     EM_ASSERT_STRING(_path);
 
     int stage;
-    if (!EM_EXTRACT_BOOLEAN(_stage))
-        stage = 0;
-    else if (EM_EQ(_stage, esym_base))
-        stage = 1;
-    else if (EM_EQ(_stage, esym_ours))
-        stage = 2;
-    else if (EM_EQ(_stage, esym_theirs))
-        stage = 3;
-    else {
-        em_signal_wrong_value(env, _stage);
+    if (!em_findsym_stage(&stage, env, _stage, true))
         return esym_nil;
-    }
 
     git_index *index = EGIT_EXTRACT(_index);
     char *path = EM_EXTRACT_STRING(_path);

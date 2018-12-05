@@ -255,3 +255,52 @@ emacs_value em_string_as_unibyte(emacs_env *env, emacs_value str)
 {
     return em_funcall(env, esym_string_as_unibyte, 1, str);
 }
+
+
+// =============================================================================
+// Symbol <-> enum map functions
+
+static bool em_findsym(esym_enumval *out, emacs_env *env, emacs_value value, esym_map *map, bool required)
+{
+    while (map->symbol != NULL) {
+        if (EM_EQ(*map->symbol, value)) {
+            *out = map->value;
+            return true;
+        }
+        map++;
+    }
+
+    if (required)
+        em_signal_wrong_value(env, value);
+    return false;
+}
+
+#define MKFINDSYM(type, map)                                            \
+    bool em_findsym_##map(                                              \
+        type *out, emacs_env *env, emacs_value value, bool required)    \
+    {                                                                   \
+        esym_enumval val;                                               \
+        bool retval = em_findsym(                                       \
+            &val, env, value, esym_##map##_map, required);              \
+        *out = val.map;                                                 \
+        return retval;                                                  \
+    }
+
+MKFINDSYM(git_checkout_strategy_t, checkout_strategy);
+MKFINDSYM(git_config_level_t, config_level);
+MKFINDSYM(git_describe_strategy_t, describe_strategy);
+MKFINDSYM(git_delta_t, delta);
+MKFINDSYM(git_diff_format_t, diff_format);
+MKFINDSYM(git_fetch_prune_t, fetch_prune);
+MKFINDSYM(git_merge_file_favor_t, merge_file_favor);
+MKFINDSYM(git_otype, otype);
+MKFINDSYM(git_proxy_t, proxy);
+MKFINDSYM(git_remote_autotag_option_t, remote_autotag_option);
+MKFINDSYM(git_reset_t, reset);
+MKFINDSYM(git_submodule_ignore_t, submodule_ignore);
+MKFINDSYM(git_submodule_recurse_t, submodule_recurse);
+MKFINDSYM(git_submodule_update_t, submodule_update);
+MKFINDSYM(int, stage);
+MKFINDSYM(git_status_show_t, status_show);
+
+#undef MKFINDSYM

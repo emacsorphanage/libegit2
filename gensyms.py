@@ -96,7 +96,8 @@ def gen_header(spec):
     for secname, section in spec.items():
         if secname in RESERVED_SECS:
             continue
-        union.append('{} {};'.format(secname, mapname(secname, raw=True)))
+        typename = section.get('__type', secname)
+        union.append('{} {};'.format(typename, mapname(secname, raw=True)))
         declarations.append('extern esym_map {}[{}];'.format(
             mapname(secname), len(unique_syms(section))+1))
     for sym in unique_syms(spec):
@@ -116,19 +117,17 @@ def gen_impl(spec):
         inits.append('{} = env->make_global_ref(env, env->intern(env, "{}"));'.format(sym_to_c(sym), sym))
 
     for secname, section in spec.items():
-        if '__prefix' not in section:
-            continue
         if secname in RESERVED_SECS:
             continue
         mname = mapname(secname)
         syms = all_syms(section)
-        prefix = section['__prefix']
+        prefix = section.get('__prefix', '')
 
         map_inits = []
         for sym, val in syms:
             if val is None:
                 val = sym.upper().replace('-', '_')
-            cname = prefix + '_' + val
+            cname = prefix + val
             map_inits.append('{{&{}, {{.{} = {}}}}}'.format(sym_to_c(sym), mapname(secname, raw=True), cname))
         map_inits.append('{NULL, {0}}')
         map_inits = join_indent(map_inits, levels=1, sep=',\n')

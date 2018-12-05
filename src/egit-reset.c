@@ -32,16 +32,8 @@ emacs_value egit_reset(emacs_env *env, emacs_value _repo, emacs_value _obj,
     git_object *obj = EGIT_EXTRACT(_obj);
 
     git_reset_t type;
-    if (EM_EQ(_type, esym_soft))
-        type = GIT_RESET_SOFT;
-    else if (EM_EQ(_type, esym_mixed))
-        type = GIT_RESET_MIXED;
-    else if (EM_EQ(_type, esym_hard))
-        type = GIT_RESET_HARD;
-    else {
-        em_signal_wrong_value(env, _type);
+    if (!em_findsym_reset(&type, env, _type, true))
         return esym_nil;
-    }
 
     git_checkout_options opts;
     egit_checkout_options_parse(env, _opts, &opts);
@@ -78,16 +70,8 @@ emacs_value egit_reset_from_annotated(emacs_env *env, emacs_value _repo,
     git_annotated_commit *ann = EGIT_EXTRACT(_ann);
 
     git_reset_t type;
-    if (EM_EQ(_type, esym_soft))
-        type = GIT_RESET_SOFT;
-    else if (EM_EQ(_type, esym_mixed))
-        type = GIT_RESET_MIXED;
-    else if (EM_EQ(_type, esym_hard))
-        type = GIT_RESET_HARD;
-    else {
-        em_signal_wrong_value(env, _type);
+    if (!em_findsym_reset(&type, env, _type, true))
         return esym_nil;
-    }
 
     git_checkout_options opts;
     egit_checkout_options_parse(env, _opts, &opts);

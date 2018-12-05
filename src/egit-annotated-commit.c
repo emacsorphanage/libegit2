@@ -108,4 +108,3 @@ emacs_value egit_annotated_commit_id(emacs_env *env,
     const char *oid_s = git_oid_tostr_s(oid);
     return env->make_string(env, oid_s, strlen(oid_s));
 }
-

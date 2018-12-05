@@ -38,16 +38,8 @@ static emacs_value egit_describe_options_parse(
             dopts->max_candidates_tags = EM_EXTRACT_INTEGER(cdr);
         }
         else if (EM_EQ(car, esym_strategy)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr))
-                dopts->describe_strategy = GIT_DESCRIBE_DEFAULT;
-            else if (EM_EQ(cdr, esym_tags))
-                dopts->describe_strategy = GIT_DESCRIBE_TAGS;
-            else if (EM_EQ(cdr, esym_all))
-                dopts->describe_strategy = GIT_DESCRIBE_ALL;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_describe_strategy(&dopts->describe_strategy, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_pattern)) {
             EM_ASSERT_STRING(cdr);

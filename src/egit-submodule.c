@@ -296,18 +296,8 @@ emacs_value egit_submodule_status(
     EM_ASSERT_STRING(_name);
 
     git_submodule_ignore_t ignore;
-    if (!EM_EXTRACT_BOOLEAN(_ignore) || EM_EQ(_ignore, esym_none))
-        ignore = GIT_SUBMODULE_IGNORE_NONE;
-    else if (EM_EQ(_ignore, esym_untracked))
-        ignore = GIT_SUBMODULE_IGNORE_UNTRACKED;
-    else if (EM_EQ(_ignore, esym_dirty))
-        ignore = GIT_SUBMODULE_IGNORE_DIRTY;
-    else if (EM_EQ(_ignore, esym_all))
-        ignore = GIT_SUBMODULE_IGNORE_ALL;
-    else {
-        em_signal_wrong_value(env, _ignore);
+    if (!em_findsym_submodule_ignore(&ignore, env, _ignore, true))
         return esym_nil;
-    }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     char *name = EM_EXTRACT_STRING(_name);
@@ -493,11 +483,7 @@ emacs_value egit_submodule_set_fetch_recurse_submodules(
     EM_ASSERT_STRING(_name);
 
     git_submodule_recurse_t value;
-    if (!EM_EXTRACT_BOOLEAN(_value))
-        value = GIT_SUBMODULE_RECURSE_NO;
-    else if (EM_EQ(_value, esym_ondemand))
-        value = GIT_SUBMODULE_RECURSE_ONDEMAND;
-    else
+    if (!em_findsym_submodule_recurse(&value, env, _value, false))
         value = GIT_SUBMODULE_RECURSE_YES;
 
     git_repository *repo = EGIT_EXTRACT(_repo);
@@ -509,7 +495,7 @@ emacs_value egit_submodule_set_fetch_recurse_submodules(
     return esym_nil;
 }
 
-EGIT_DOC(submodule_set_ignore, "REPO NAME &optional VALUE",
+EGIT_DOC(submodule_set_ignore, "REPO NAME VALUE",
          "Set the ignore rule for submodule NAME.\n"
          "Possible VALUE are `none', `dirty', `untracked' and `all'.");
 emacs_value egit_submodule_set_ignore(
@@ -519,18 +505,8 @@ emacs_value egit_submodule_set_ignore(
     EM_ASSERT_STRING(_name);
 
     git_submodule_ignore_t value;
-    if (EM_EQ(_value, esym_none))
-        value = GIT_SUBMODULE_IGNORE_NONE;
-    else if (EM_EQ(_value, esym_dirty))
-        value = GIT_SUBMODULE_IGNORE_DIRTY;
-    else if (EM_EQ(_value, esym_untracked))
-        value = GIT_SUBMODULE_IGNORE_UNTRACKED;
-    else if (EM_EQ(_value, esym_all))
-        value = GIT_SUBMODULE_IGNORE_ALL;
-    else {
-        em_signal_wrong_value(env, _value);
+    if (!em_findsym_submodule_ignore(&value, env, _value, true))
         return esym_nil;
-    }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     char *name = EM_EXTRACT_STRING(_name);
@@ -541,7 +517,7 @@ emacs_value egit_submodule_set_ignore(
     return esym_nil;
 }
 
-EGIT_DOC(submodule_set_update, "REPO NAME &optional VALUE",
+EGIT_DOC(submodule_set_update, "REPO NAME VALUE",
          "Set the ignore rule for submodule NAME.\n"
          "Possible VALUE are `checkout', `rebase', `merge' and `none'.");
 emacs_value egit_submodule_set_update(
@@ -551,18 +527,8 @@ emacs_value egit_submodule_set_update(
     EM_ASSERT_STRING(_name);
 
     git_submodule_update_t value;
-    if (EM_EQ(_value, esym_checkout))
-        value = GIT_SUBMODULE_UPDATE_CHECKOUT;
-    else if (EM_EQ(_value, esym_rebase))
-        value = GIT_SUBMODULE_UPDATE_REBASE;
-    else if (EM_EQ(_value, esym_merge))
-        value = GIT_SUBMODULE_UPDATE_MERGE;
-    else if (EM_EQ(_value, esym_none))
-        value = GIT_SUBMODULE_UPDATE_NONE;
-    else {
-        em_signal_wrong_value(env, _value);
+    if (!em_findsym_submodule_update(&value, env, _value, true))
         return esym_nil;
-    }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     char *name = EM_EXTRACT_STRING(_name);

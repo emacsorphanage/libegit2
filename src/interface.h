@@ -315,4 +315,25 @@ void em_insert(emacs_env *env, const char *ptr, size_t length);
  */
 emacs_value em_string_as_unibyte(emacs_env *env, emacs_value str);
 
+
+// =============================================================================
+// Symbol <-> enum map functions
+
+bool em_findsym_checkout_strategy(git_checkout_strategy_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_config_level(git_config_level_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_delta(git_delta_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_diff_format(git_diff_format_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_describe_strategy(git_describe_strategy_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_fetch_prune(git_fetch_prune_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_merge_file_favor(git_merge_file_favor_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_otype(git_otype *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_proxy(git_proxy_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_remote_autotag_option(git_remote_autotag_option_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_reset(git_reset_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_submodule_ignore(git_submodule_ignore_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_submodule_recurse(git_submodule_recurse_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_submodule_update(git_submodule_update_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_stage(int *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_status_show(git_status_show_t *out, emacs_env *env, emacs_value value, bool required);
+
 #endif /* INTERFACE_H */
