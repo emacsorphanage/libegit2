@@ -140,20 +140,8 @@ static emacs_value egit_diff_options_parse(emacs_env *env, emacs_value alist, gi
         else if (EM_EQ(car, esym_indent_heuristic))
             EGIT_SET_BIT(opts->flags, GIT_DIFF_INDENT_HEURISTIC, cdr);
         else if (EM_EQ(car, esym_ignore_submodules)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr))
-                opts->ignore_submodules = GIT_SUBMODULE_IGNORE_UNSPECIFIED;
-            else if (EM_EQ(cdr, esym_none))
-                opts->ignore_submodules = GIT_SUBMODULE_IGNORE_NONE;
-            else if (EM_EQ(cdr, esym_untracked))
-                opts->ignore_submodules = GIT_SUBMODULE_IGNORE_UNTRACKED;
-            else if (EM_EQ(cdr, esym_dirty))
-                opts->ignore_submodules = GIT_SUBMODULE_IGNORE_DIRTY;
-            else if (EM_EQ(cdr, esym_all))
-                opts->ignore_submodules = GIT_SUBMODULE_IGNORE_ALL;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_submodule_ignore(&opts->ignore_submodules, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_pathspec))
             pathspec = cdr;  // Parse outside the main loop
@@ -634,20 +622,8 @@ emacs_value egit_diff_print(
     if (EM_EXTRACT_BOOLEAN(func)) EM_ASSERT_FUNCTION(func);
 
     git_diff_format_t format;
-    if (!EM_EXTRACT_BOOLEAN(_format) || EM_EQ(_format, esym_patch))
-        format = GIT_DIFF_FORMAT_PATCH;
-    else if (EM_EQ(_format, esym_patch_header))
-        format = GIT_DIFF_FORMAT_PATCH_HEADER;
-    else if (EM_EQ(_format, esym_raw))
-        format = GIT_DIFF_FORMAT_RAW;
-    else if (EM_EQ(_format, esym_name_only))
-        format = GIT_DIFF_FORMAT_NAME_ONLY;
-    else if (EM_EQ(_format, esym_name_status))
-        format = GIT_DIFF_FORMAT_NAME_STATUS;
-    else {
-        em_signal_wrong_value(env, _format);
+    if (!em_findsym_diff_format(&format, env, _format, true))
         return esym_nil;
-    }
 
     git_diff *diff = EGIT_EXTRACT(_diff);
     diff_print_ctx ctx = {env, EM_EXTRACT_USER_PTR(_diff), func};
@@ -863,31 +839,11 @@ emacs_value egit_diff_num_deltas(emacs_env *env, emacs_value _diff, emacs_value 
     size_t num;
     if (!EM_EXTRACT_BOOLEAN(_type))
         num = git_diff_num_deltas(diff);
-    else if (EM_EQ(_type, esym_unmodified))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNMODIFIED);
-    else if (EM_EQ(_type, esym_added))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_ADDED);
-    else if (EM_EQ(_type, esym_deleted))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_DELETED);
-    else if (EM_EQ(_type, esym_modified))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_MODIFIED);
-    else if (EM_EQ(_type, esym_renamed))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_RENAMED);
-    else if (EM_EQ(_type, esym_copied))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_COPIED);
-    else if (EM_EQ(_type, esym_ignored))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_IGNORED);
-    else if (EM_EQ(_type, esym_untracked))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNTRACKED);
-    else if (EM_EQ(_type, esym_typechange))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_TYPECHANGE);
-    else if (EM_EQ(_type, esym_unreadable))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_UNREADABLE);
-    else if (EM_EQ(_type, esym_conflicted))
-        num = git_diff_num_deltas_of_type(diff, GIT_DELTA_CONFLICTED);
     else {
-        em_signal_wrong_value(env, _type);
-        return esym_nil;
+        git_delta_t type;
+        if (!em_findsym_delta(&type, env, _type, true))
+            return esym_nil;
+        num = git_diff_num_deltas_of_type(diff, type);
     }
 
     return EM_INTEGER(num);

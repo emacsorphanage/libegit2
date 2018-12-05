@@ -9,7 +9,6 @@ emacs_value esym_abbreviated_size;
 emacs_value esym_abort;
 emacs_value esym_added;
 emacs_value esym_all;
-emacs_value esym_allow_conflicts;
 emacs_value esym_always_use_long_format;
 emacs_value esym_annotated_commit;
 emacs_value esym_any;
@@ -38,8 +37,6 @@ emacs_value esym_cherrypick_sequence;
 emacs_value esym_commit;
 emacs_value esym_config;
 emacs_value esym_conflict;
-emacs_value esym_conflict_style_diff3;
-emacs_value esym_conflict_style_merge;
 emacs_value esym_conflicted;
 emacs_value esym_cons;
 emacs_value esym_consp;
@@ -64,10 +61,6 @@ emacs_value esym_direct;
 emacs_value esym_dirty;
 emacs_value esym_dirty_suffix;
 emacs_value esym_disable_pathspec_match;
-emacs_value esym_dont_overwrite_ignored;
-emacs_value esym_dont_remove_existing;
-emacs_value esym_dont_update_index;
-emacs_value esym_dont_write_index;
 emacs_value esym_download_tags;
 emacs_value esym_enable_fast_untracked_dirs;
 emacs_value esym_encode_time;
@@ -208,7 +201,6 @@ emacs_value esym_new;
 emacs_value esym_new_prefix;
 emacs_value esym_newest_commit;
 emacs_value esym_nil;
-emacs_value esym_no;
 emacs_value esym_no_fastforward;
 emacs_value esym_no_filemode;
 emacs_value esym_no_recursive;
@@ -245,7 +237,6 @@ emacs_value esym_raw;
 emacs_value esym_rebase;
 emacs_value esym_rebase_interactive;
 emacs_value esym_rebase_merge;
-emacs_value esym_recreate_missing;
 emacs_value esym_recurse_ignored_dirs;
 emacs_value esym_recurse_untracked_dirs;
 emacs_value esym_recursion_limit;
@@ -254,8 +245,6 @@ emacs_value esym_reflog;
 emacs_value esym_reflog_entry;
 emacs_value esym_refspec;
 emacs_value esym_remote;
-emacs_value esym_remove_ignored;
-emacs_value esym_remove_untracked;
 emacs_value esym_rename_threshold;
 emacs_value esym_renamed;
 emacs_value esym_renames_from_rewrites;
@@ -277,9 +266,7 @@ emacs_value esym_signature;
 emacs_value esym_simplify_alnum;
 emacs_value esym_skip;
 emacs_value esym_skip_binary_check;
-emacs_value esym_skip_locked_directories;
 emacs_value esym_skip_reuc;
-emacs_value esym_skip_unmerged;
 emacs_value esym_soft;
 emacs_value esym_sort_case_insensitively;
 emacs_value esym_sort_case_sensitively;
@@ -326,14 +313,9 @@ emacs_value esym_untracked;
 emacs_value esym_up_to_date;
 emacs_value esym_update_fetchhead;
 emacs_value esym_update_index;
-emacs_value esym_update_only;
-emacs_value esym_update_submodules;
-emacs_value esym_update_submodules_if_changed;
 emacs_value esym_updated;
 emacs_value esym_url;
 emacs_value esym_use_mailmap;
-emacs_value esym_use_ours;
-emacs_value esym_use_theirs;
 emacs_value esym_user_ptrp;
 emacs_value esym_username;
 emacs_value esym_userpass_plaintext;
@@ -356,7 +338,6 @@ emacs_value esym_wt_typechange;
 emacs_value esym_wt_unreadable;
 emacs_value esym_x509;
 emacs_value esym_xdg;
-emacs_value esym_yes;
 esym_map esym_blame_flag_map[8] = {
     {&esym_normal, {.blame_flag = GIT_BLAME_NORMAL}},
     {&esym_track_copies_same_file, {.blame_flag = GIT_BLAME_TRACK_COPIES_SAME_FILE}},
@@ -389,29 +370,11 @@ esym_map esym_checkout_notify_map[8] = {
     {&esym_all, {.checkout_notify = GIT_CHECKOUT_NOTIFY_ALL}},
     {NULL, {0}}
 };
-esym_map esym_checkout_strategy_map[23] = {
+esym_map esym_checkout_strategy_map[5] = {
     {&esym_none, {.checkout_strategy = GIT_CHECKOUT_NONE}},
     {&esym_safe, {.checkout_strategy = GIT_CHECKOUT_SAFE}},
     {&esym_force, {.checkout_strategy = GIT_CHECKOUT_FORCE}},
-    {&esym_recreate_missing, {.checkout_strategy = GIT_CHECKOUT_RECREATE_MISSING}},
-    {&esym_allow_conflicts, {.checkout_strategy = GIT_CHECKOUT_ALLOW_CONFLICTS}},
-    {&esym_remove_untracked, {.checkout_strategy = GIT_CHECKOUT_REMOVE_UNTRACKED}},
-    {&esym_remove_ignored, {.checkout_strategy = GIT_CHECKOUT_REMOVE_IGNORED}},
-    {&esym_update_only, {.checkout_strategy = GIT_CHECKOUT_UPDATE_ONLY}},
-    {&esym_dont_update_index, {.checkout_strategy = GIT_CHECKOUT_DONT_UPDATE_INDEX}},
-    {&esym_no_refresh, {.checkout_strategy = GIT_CHECKOUT_NO_REFRESH}},
-    {&esym_skip_unmerged, {.checkout_strategy = GIT_CHECKOUT_SKIP_UNMERGED}},
-    {&esym_use_ours, {.checkout_strategy = GIT_CHECKOUT_USE_OURS}},
-    {&esym_use_theirs, {.checkout_strategy = GIT_CHECKOUT_USE_THEIRS}},
-    {&esym_disable_pathspec_match, {.checkout_strategy = GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH}},
-    {&esym_skip_locked_directories, {.checkout_strategy = GIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES}},
-    {&esym_dont_overwrite_ignored, {.checkout_strategy = GIT_CHECKOUT_DONT_OVERWRITE_IGNORED}},
-    {&esym_conflict_style_merge, {.checkout_strategy = GIT_CHECKOUT_CONFLICT_STYLE_MERGE}},
-    {&esym_conflict_style_diff3, {.checkout_strategy = GIT_CHECKOUT_CONFLICT_STYLE_DIFF3}},
-    {&esym_dont_remove_existing, {.checkout_strategy = GIT_CHECKOUT_DONT_REMOVE_EXISTING}},
-    {&esym_dont_write_index, {.checkout_strategy = GIT_CHECKOUT_DONT_WRITE_INDEX}},
-    {&esym_update_submodules, {.checkout_strategy = GIT_CHECKOUT_UPDATE_SUBMODULES}},
-    {&esym_update_submodules_if_changed, {.checkout_strategy = GIT_CHECKOUT_UPDATE_SUBMODULES_IF_CHANGED}},
+    {&esym_nil, {.checkout_strategy = GIT_CHECKOUT_NONE}},
     {NULL, {0}}
 };
 esym_map esym_config_level_map[7] = {
@@ -433,10 +396,11 @@ esym_map esym_credtype_map[8] = {
     {&esym_ssh_memory, {.credtype = GIT_CREDTYPE_SSH_MEMORY}},
     {NULL, {0}}
 };
-esym_map esym_describe_strategy_map[4] = {
+esym_map esym_describe_strategy_map[5] = {
     {&esym_default, {.describe_strategy = GIT_DESCRIBE_DEFAULT}},
     {&esym_tags, {.describe_strategy = GIT_DESCRIBE_TAGS}},
     {&esym_all, {.describe_strategy = GIT_DESCRIBE_ALL}},
+    {&esym_nil, {.describe_strategy = GIT_DESCRIBE_DEFAULT}},
     {NULL, {0}}
 };
 esym_map esym_delta_map[12] = {
@@ -453,12 +417,13 @@ esym_map esym_delta_map[12] = {
     {&esym_conflicted, {.delta = GIT_DELTA_CONFLICTED}},
     {NULL, {0}}
 };
-esym_map esym_diff_format_map[6] = {
+esym_map esym_diff_format_map[7] = {
     {&esym_patch, {.diff_format = GIT_DIFF_FORMAT_PATCH}},
     {&esym_patch_header, {.diff_format = GIT_DIFF_FORMAT_PATCH_HEADER}},
     {&esym_raw, {.diff_format = GIT_DIFF_FORMAT_RAW}},
     {&esym_name_only, {.diff_format = GIT_DIFF_FORMAT_NAME_ONLY}},
     {&esym_name_status, {.diff_format = GIT_DIFF_FORMAT_NAME_STATUS}},
+    {&esym_nil, {.diff_format = GIT_DIFF_FORMAT_PATCH}},
     {NULL, {0}}
 };
 esym_map esym_diff_option_map[31] = {
@@ -576,12 +541,12 @@ esym_map esym_merge_preference_map[4] = {
     {NULL, {0}}
 };
 esym_map esym_otype_map[7] = {
-    {&esym_nil, {.otype = GIT_OBJ_ANY}},
     {&esym_any, {.otype = GIT_OBJ_ANY}},
     {&esym_blob, {.otype = GIT_OBJ_BLOB}},
     {&esym_commit, {.otype = GIT_OBJ_COMMIT}},
     {&esym_tag, {.otype = GIT_OBJ_TAG}},
     {&esym_tree, {.otype = GIT_OBJ_TREE}},
+    {&esym_nil, {.otype = GIT_OBJ_ANY}},
     {NULL, {0}}
 };
 esym_map esym_repository_state_map[13] = {
@@ -619,10 +584,10 @@ esym_map esym_status_opt_map[17] = {
     {NULL, {0}}
 };
 esym_map esym_status_show_map[5] = {
-    {&esym_nil, {.status_show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR}},
     {&esym_index_and_workdir, {.status_show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR}},
     {&esym_index_only, {.status_show = GIT_STATUS_SHOW_INDEX_ONLY}},
     {&esym_workdir_only, {.status_show = GIT_STATUS_SHOW_WORKDIR_ONLY}},
+    {&esym_nil, {.status_show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR}},
     {NULL, {0}}
 };
 esym_map esym_status_map[15] = {
@@ -678,17 +643,18 @@ esym_map esym_submodule_status_map[15] = {
     {&esym_wd_untracked, {.submodule_status = GIT_SUBMODULE_STATUS_WD_UNTRACKED}},
     {NULL, {0}}
 };
-esym_map esym_submodule_ignore_map[5] = {
+esym_map esym_submodule_ignore_map[6] = {
     {&esym_none, {.submodule_ignore = GIT_SUBMODULE_IGNORE_NONE}},
     {&esym_untracked, {.submodule_ignore = GIT_SUBMODULE_IGNORE_UNTRACKED}},
     {&esym_dirty, {.submodule_ignore = GIT_SUBMODULE_IGNORE_DIRTY}},
     {&esym_all, {.submodule_ignore = GIT_SUBMODULE_IGNORE_ALL}},
+    {&esym_nil, {.submodule_ignore = GIT_SUBMODULE_IGNORE_UNSPECIFIED}},
     {NULL, {0}}
 };
 esym_map esym_submodule_recurse_map[4] = {
-    {&esym_no, {.submodule_recurse = GIT_SUBMODULE_RECURSE_NO}},
-    {&esym_yes, {.submodule_recurse = GIT_SUBMODULE_RECURSE_YES}},
+    {&esym_t, {.submodule_recurse = GIT_SUBMODULE_RECURSE_YES}},
     {&esym_ondemand, {.submodule_recurse = GIT_SUBMODULE_RECURSE_ONDEMAND}},
+    {&esym_nil, {.submodule_recurse = GIT_SUBMODULE_RECURSE_NO}},
     {NULL, {0}}
 };
 esym_map esym_submodule_update_map[5] = {
@@ -698,6 +664,13 @@ esym_map esym_submodule_update_map[5] = {
     {&esym_none, {.submodule_update = GIT_SUBMODULE_UPDATE_NONE}},
     {NULL, {0}}
 };
+esym_map esym_stage_map[5] = {
+    {&esym_nil, {.stage = 0}},
+    {&esym_base, {.stage = 1}},
+    {&esym_ours, {.stage = 2}},
+    {&esym_theirs, {.stage = 3}},
+    {NULL, {0}}
+};
 
 void esyms_init(emacs_env *env)
 {
@@ -705,7 +678,6 @@ void esyms_init(emacs_env *env)
     esym_abort = env->make_global_ref(env, env->intern(env, "abort"));
     esym_added = env->make_global_ref(env, env->intern(env, "added"));
     esym_all = env->make_global_ref(env, env->intern(env, "all"));
-    esym_allow_conflicts = env->make_global_ref(env, env->intern(env, "allow-conflicts"));
     esym_always_use_long_format = env->make_global_ref(env, env->intern(env, "always-use-long-format"));
     esym_annotated_commit = env->make_global_ref(env, env->intern(env, "annotated-commit"));
     esym_any = env->make_global_ref(env, env->intern(env, "any"));
@@ -734,8 +706,6 @@ void esyms_init(emacs_env *env)
     esym_commit = env->make_global_ref(env, env->intern(env, "commit"));
     esym_config = env->make_global_ref(env, env->intern(env, "config"));
     esym_conflict = env->make_global_ref(env, env->intern(env, "conflict"));
-    esym_conflict_style_diff3 = env->make_global_ref(env, env->intern(env, "conflict-style-diff3"));
-    esym_conflict_style_merge = env->make_global_ref(env, env->intern(env, "conflict-style-merge"));
     esym_conflicted = env->make_global_ref(env, env->intern(env, "conflicted"));
     esym_cons = env->make_global_ref(env, env->intern(env, "cons"));
     esym_consp = env->make_global_ref(env, env->intern(env, "consp"));
@@ -760,10 +730,6 @@ void esyms_init(emacs_env *env)
     esym_dirty = env->make_global_ref(env, env->intern(env, "dirty"));
     esym_dirty_suffix = env->make_global_ref(env, env->intern(env, "dirty-suffix"));
     esym_disable_pathspec_match = env->make_global_ref(env, env->intern(env, "disable-pathspec-match"));
-    esym_dont_overwrite_ignored = env->make_global_ref(env, env->intern(env, "dont-overwrite-ignored"));
-    esym_dont_remove_existing = env->make_global_ref(env, env->intern(env, "dont-remove-existing"));
-    esym_dont_update_index = env->make_global_ref(env, env->intern(env, "dont-update-index"));
-    esym_dont_write_index = env->make_global_ref(env, env->intern(env, "dont-write-index"));
     esym_download_tags = env->make_global_ref(env, env->intern(env, "download-tags"));
     esym_enable_fast_untracked_dirs = env->make_global_ref(env, env->intern(env, "enable-fast-untracked-dirs"));
     esym_encode_time = env->make_global_ref(env, env->intern(env, "encode-time"));
@@ -904,7 +870,6 @@ void esyms_init(emacs_env *env)
     esym_new_prefix = env->make_global_ref(env, env->intern(env, "new-prefix"));
     esym_newest_commit = env->make_global_ref(env, env->intern(env, "newest-commit"));
     esym_nil = env->make_global_ref(env, env->intern(env, "nil"));
-    esym_no = env->make_global_ref(env, env->intern(env, "no"));
     esym_no_fastforward = env->make_global_ref(env, env->intern(env, "no-fastforward"));
     esym_no_filemode = env->make_global_ref(env, env->intern(env, "no-filemode"));
     esym_no_recursive = env->make_global_ref(env, env->intern(env, "no-recursive"));
@@ -941,7 +906,6 @@ void esyms_init(emacs_env *env)
     esym_rebase = env->make_global_ref(env, env->intern(env, "rebase"));
     esym_rebase_interactive = env->make_global_ref(env, env->intern(env, "rebase-interactive"));
     esym_rebase_merge = env->make_global_ref(env, env->intern(env, "rebase-merge"));
-    esym_recreate_missing = env->make_global_ref(env, env->intern(env, "recreate-missing"));
     esym_recurse_ignored_dirs = env->make_global_ref(env, env->intern(env, "recurse-ignored-dirs"));
     esym_recurse_untracked_dirs = env->make_global_ref(env, env->intern(env, "recurse-untracked-dirs"));
     esym_recursion_limit = env->make_global_ref(env, env->intern(env, "recursion-limit"));
@@ -950,8 +914,6 @@ void esyms_init(emacs_env *env)
     esym_reflog_entry = env->make_global_ref(env, env->intern(env, "reflog-entry"));
     esym_refspec = env->make_global_ref(env, env->intern(env, "refspec"));
     esym_remote = env->make_global_ref(env, env->intern(env, "remote"));
-    esym_remove_ignored = env->make_global_ref(env, env->intern(env, "remove-ignored"));
-    esym_remove_untracked = env->make_global_ref(env, env->intern(env, "remove-untracked"));
     esym_rename_threshold = env->make_global_ref(env, env->intern(env, "rename-threshold"));
     esym_renamed = env->make_global_ref(env, env->intern(env, "renamed"));
     esym_renames_from_rewrites = env->make_global_ref(env, env->intern(env, "renames-from-rewrites"));
@@ -973,9 +935,7 @@ void esyms_init(emacs_env *env)
     esym_simplify_alnum = env->make_global_ref(env, env->intern(env, "simplify-alnum"));
     esym_skip = env->make_global_ref(env, env->intern(env, "skip"));
     esym_skip_binary_check = env->make_global_ref(env, env->intern(env, "skip-binary-check"));
-    esym_skip_locked_directories = env->make_global_ref(env, env->intern(env, "skip-locked-directories"));
     esym_skip_reuc = env->make_global_ref(env, env->intern(env, "skip-reuc"));
-    esym_skip_unmerged = env->make_global_ref(env, env->intern(env, "skip-unmerged"));
     esym_soft = env->make_global_ref(env, env->intern(env, "soft"));
     esym_sort_case_insensitively = env->make_global_ref(env, env->intern(env, "sort-case-insensitively"));
     esym_sort_case_sensitively = env->make_global_ref(env, env->intern(env, "sort-case-sensitively"));
@@ -1022,14 +982,9 @@ void esyms_init(emacs_env *env)
     esym_up_to_date = env->make_global_ref(env, env->intern(env, "up-to-date"));
     esym_update_fetchhead = env->make_global_ref(env, env->intern(env, "update-fetchhead"));
     esym_update_index = env->make_global_ref(env, env->intern(env, "update-index"));
-    esym_update_only = env->make_global_ref(env, env->intern(env, "update-only"));
-    esym_update_submodules = env->make_global_ref(env, env->intern(env, "update-submodules"));
-    esym_update_submodules_if_changed = env->make_global_ref(env, env->intern(env, "update-submodules-if-changed"));
     esym_updated = env->make_global_ref(env, env->intern(env, "updated"));
     esym_url = env->make_global_ref(env, env->intern(env, "url"));
     esym_use_mailmap = env->make_global_ref(env, env->intern(env, "use-mailmap"));
-    esym_use_ours = env->make_global_ref(env, env->intern(env, "use-ours"));
-    esym_use_theirs = env->make_global_ref(env, env->intern(env, "use-theirs"));
     esym_user_ptrp = env->make_global_ref(env, env->intern(env, "user-ptrp"));
     esym_username = env->make_global_ref(env, env->intern(env, "username"));
     esym_userpass_plaintext = env->make_global_ref(env, env->intern(env, "userpass-plaintext"));
@@ -1052,5 +1007,4 @@ void esyms_init(emacs_env *env)
     esym_wt_unreadable = env->make_global_ref(env, env->intern(env, "wt-unreadable"));
     esym_x509 = env->make_global_ref(env, env->intern(env, "x509"));
     esym_xdg = env->make_global_ref(env, env->intern(env, "xdg"));
-    esym_yes = env->make_global_ref(env, env->intern(env, "yes"));
 }

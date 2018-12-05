@@ -189,26 +189,18 @@ emacs_value egit_remote_valid_name_p(emacs_env *env, emacs_value _name)
 // =============================================================================
 // Operations
 
-EGIT_DOC(remote_add_refspec, "REPO NAME REFSPEC DIRECTION",
+EGIT_DOC(remote_add_refspec, "REPO NAME REFSPEC PUSH",
          "Add a new REFSPEC to the remote named NAME in REPO.\n"
-         "DIRECTION may be either `fetch' or `push'.");
+         "If PUSH is non-nil, add a push refspec, else a fetch refspec.");
 emacs_value egit_remote_add_refspec(
     emacs_env *env, emacs_value _repo, emacs_value _name,
-    emacs_value _refspec, emacs_value direction)
+    emacs_value _refspec, emacs_value _push)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_STRING(_name);
     EM_ASSERT_STRING(_refspec);
 
-    bool push;
-    if (EM_EQ(direction, esym_push))
-        push = true;
-    else if (EM_EQ(direction, esym_fetch))
-        push = false;
-    else {
-        em_signal_wrong_value(env, direction);
-        return esym_nil;
-    }
+    bool push = EM_EXTRACT_BOOLEAN(_push);
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     char *name = EM_EXTRACT_STRING(_name);

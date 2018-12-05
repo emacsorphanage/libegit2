@@ -52,24 +52,8 @@ emacs_value egit_config_open_level(emacs_env *env, emacs_value _config, emacs_va
     EGIT_ASSERT_CONFIG(_config);
 
     git_config_level_t level;
-    if (!EM_EXTRACT_BOOLEAN(_level))
-        level = GIT_CONFIG_HIGHEST_LEVEL;
-    else if (EM_EQ(_level, esym_programdata))
-        level = GIT_CONFIG_LEVEL_PROGRAMDATA;
-    else if (EM_EQ(_level, esym_system))
-        level = GIT_CONFIG_LEVEL_SYSTEM;
-    else if (EM_EQ(_level, esym_xdg))
-        level = GIT_CONFIG_LEVEL_XDG;
-    else if (EM_EQ(_level, esym_global))
-        level = GIT_CONFIG_LEVEL_GLOBAL;
-    else if (EM_EQ(_level, esym_local))
-        level = GIT_CONFIG_LEVEL_LOCAL;
-    else if (EM_EQ(_level, esym_app))
-        level = GIT_CONFIG_LEVEL_APP;
-    else {
-        em_signal_wrong_value(env, _level);
+    if (!em_findsym_config_level(&level, env, _level, true))
         return esym_nil;
-    }
 
     git_config *config = EGIT_EXTRACT(_config);
     git_config *new;
@@ -256,22 +240,8 @@ emacs_value egit_config_add_file_ondisk(
         EGIT_ASSERT_REPOSITORY(_repo);
 
     git_config_level_t level;
-    if (EM_EQ(_level, esym_programdata))
-        level = GIT_CONFIG_LEVEL_PROGRAMDATA;
-    else if (EM_EQ(_level, esym_system))
-        level = GIT_CONFIG_LEVEL_SYSTEM;
-    else if (EM_EQ(_level, esym_xdg))
-        level = GIT_CONFIG_LEVEL_XDG;
-    else if (EM_EQ(_level, esym_global))
-        level = GIT_CONFIG_LEVEL_GLOBAL;
-    else if (EM_EQ(_level, esym_local))
-        level = GIT_CONFIG_LEVEL_LOCAL;
-    else if (EM_EQ(_level, esym_app))
-        level = GIT_CONFIG_LEVEL_APP;
-    else {
-        em_signal_wrong_value(env, _level);
+    if (!em_findsym_config_level(&level, env, _level, true))
         return esym_nil;
-    }
 
     git_config *config = EGIT_EXTRACT(_config);
     char *path = EM_EXTRACT_STRING(_path);

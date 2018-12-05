@@ -112,12 +112,8 @@ emacs_value egit_checkout_options_parse(emacs_env *env, emacs_value alist, git_c
 
         // TODO: Support the whole range of checkout strategies and options
         if (EM_EQ(car, esym_strategy)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr) || EM_EQ(cdr, esym_none))
-                opts->checkout_strategy = GIT_CHECKOUT_NONE;
-            else if (EM_EQ(cdr, esym_safe))
-                opts->checkout_strategy = GIT_CHECKOUT_SAFE;
-            else if (EM_EQ(cdr, esym_force))
-                opts->checkout_strategy = GIT_CHECKOUT_FORCE;
+            if (!em_findsym_checkout_strategy(&opts->checkout_strategy, env, cdr, true))
+                return esym_nil;
         }
         else if (EM_EQ(car, esym_notify_when)) {
             if (EM_EQ(cdr, esym_all))
@@ -226,18 +222,8 @@ emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merg
             opts->default_driver = EM_EXTRACT_STRING(cdr);
         }
         else if (EM_EQ(car, esym_file_favor)) {
-            if (EM_EQ(cdr, esym_normal))
-                opts->file_favor = GIT_MERGE_FILE_FAVOR_NORMAL;
-            else if (EM_EQ(cdr, esym_ours))
-                opts->file_favor = GIT_MERGE_FILE_FAVOR_OURS;
-            else if (EM_EQ(cdr, esym_theirs))
-                opts->file_favor = GIT_MERGE_FILE_FAVOR_THEIRS;
-            else if (EM_EQ(cdr, esym_union))
-                opts->file_favor = GIT_MERGE_FILE_FAVOR_UNION;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_merge_file_favor(&opts->file_favor, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_file_flags))
             file_flags = cdr;
@@ -481,16 +467,8 @@ static emacs_value egit_proxy_options_parse(emacs_env *env, emacs_value alist, g
         cdr = em_cdr(env, cell);
 
         if (EM_EQ(car, esym_type)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr))
-                opts->type = GIT_PROXY_NONE;
-            else if (EM_EQ(cdr, esym_auto))
-                opts->type = GIT_PROXY_AUTO;
-            else if (EM_EQ(cdr, esym_specified))
-                opts->type = GIT_PROXY_SPECIFIED;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_proxy(&opts->type, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_url)) {
             EM_ASSERT_STRING(cdr);
@@ -549,30 +527,12 @@ emacs_value egit_fetch_options_parse(emacs_env *env, emacs_value alist, git_fetc
         else if (EM_EQ(car, esym_proxy))
             proxy = cdr;
         else if (EM_EQ(car, esym_prune)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr))
-                opts->prune = GIT_FETCH_PRUNE_UNSPECIFIED;
-            else if (EM_EQ(cdr, esym_on))
-                opts->prune = GIT_FETCH_PRUNE;
-            else if (EM_EQ(cdr, esym_off))
-                opts->prune = GIT_FETCH_NO_PRUNE;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_fetch_prune(&opts->prune, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_download_tags)) {
-            if (!EM_EXTRACT_BOOLEAN(cdr))
-                opts->download_tags = GIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED;
-            else if (EM_EQ(cdr, esym_auto))
-                opts->download_tags = GIT_REMOTE_DOWNLOAD_TAGS_AUTO;
-            else if (EM_EQ(cdr, esym_none))
-                opts->download_tags = GIT_REMOTE_DOWNLOAD_TAGS_NONE;
-            else if (EM_EQ(cdr, esym_all))
-                opts->download_tags = GIT_REMOTE_DOWNLOAD_TAGS_ALL;
-            else {
-                em_signal_wrong_value(env, cdr);
+            if (!em_findsym_remote_autotag_option(&opts->download_tags, env, cdr, true))
                 return esym_nil;
-            }
         }
         else if (EM_EQ(car, esym_update_fetchhead))
             opts->update_fetchhead = EM_EXTRACT_BOOLEAN(cdr);

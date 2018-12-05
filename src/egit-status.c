@@ -8,9 +8,7 @@
 
 static int foreach_callback(const char *, unsigned int, void*);
 
-static bool convert_show_option(git_status_show_t *, emacs_env *, emacs_value);
 static bool convert_flags_option(git_status_opt_t *, emacs_env *, emacs_value);
-static bool convert_baseline_option(git_tree **, emacs_env *, emacs_value);
 
 EGIT_DOC(status_decode, "STATUS",
          "Decode git file STATUS.\n\n"
@@ -103,26 +101,6 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
     EGIT_CHECK_ERROR(rv);
 
     return ignored == 0 ? esym_nil : esym_t;
-}
-
-bool convert_show_option(git_status_show_t *out, emacs_env *env,
-                         emacs_value arg)
-{
-    if (EM_EQ(arg, esym_index_only)) {
-        *out = GIT_STATUS_SHOW_INDEX_ONLY;
-        return true;
-    } else if (EM_EQ(arg, esym_workdir_only)) {
-        *out = GIT_STATUS_SHOW_WORKDIR_ONLY;
-        return true;
-    } else if (EM_EQ(arg, esym_index_and_workdir)) {
-        *out = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-        return true;
-    } else if (EM_EXTRACT_BOOLEAN(arg)) {
-        em_signal_wrong_value(env, arg);
-        return false;
-    }
-    *out = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-    return true;
 }
 
 bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
@@ -258,21 +236,20 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(function);
+    if (EM_EXTRACT_BOOLEAN(baseline))
+        EGIT_ASSERT_TREE(baseline);
 
     git_status_options options;
     git_status_init_options(&options, GIT_STATUS_OPTIONS_VERSION);
+    options.baseline = EGIT_EXTRACT_OR_NULL(baseline);
 
-    if (!convert_show_option(&options.show, env, show)) {
+    if (!em_findsym_status_show(&options.show, env, show, true)) {
         return esym_nil;
     }
     if (!convert_flags_option(&options.flags, env, flags)) {
         return esym_nil;
     }
     if (!egit_strarray_from_list(&options.pathspec, env, pathspec)) {
-        return esym_nil;
-    }
-    if (!convert_baseline_option(&options.baseline, env, baseline)) {
-        egit_strarray_dispose(&options.pathspec);
         return esym_nil;
     }
 
