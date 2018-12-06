@@ -63,7 +63,7 @@ extern esym_map esym_credtype_map[8];
 extern esym_map esym_describe_strategy_map[5];
 extern esym_map esym_delta_map[12];
 extern esym_map esym_diff_format_map[7];
-extern esym_map esym_diff_option_map[31];
+extern esym_map esym_diff_option_map[30];
 extern esym_map esym_direction_map[3];
 extern esym_map esym_error_map[34];
 extern esym_map esym_feature_map[5];

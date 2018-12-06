@@ -8,8 +8,6 @@
 
 static int foreach_callback(const char *, unsigned int, void*);
 
-static bool convert_flags_option(git_status_opt_t *, emacs_env *, emacs_value);
-
 EGIT_DOC(status_decode, "STATUS",
          "Decode git file STATUS.\n\n"
          "The return value is the same as that of `libgit-status-file'.");
@@ -103,68 +101,6 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
     return ignored == 0 ? esym_nil : esym_t;
 }
 
-bool convert_flags_option(git_status_opt_t *out, emacs_env *env,
-                          emacs_value arg)
-{
-    if (!EM_EXTRACT_BOOLEAN(arg)) {
-        *out = GIT_STATUS_OPT_DEFAULTS;
-        return true;
-    }
-
-    if (em_assert_list(env, esym_nil, arg) < 0)
-        return false;
-
-    *out = 0;
-    emacs_value flag;
-    while (EM_EXTRACT_BOOLEAN(arg)) {
-        flag = em_car(env, arg);
-        arg = em_cdr(env, arg);
-
-#define CHECK(symbol, enum)                                     \
-        if (EM_EQ(flag, esym_##symbol)) {                  \
-            *out |= GIT_STATUS_OPT_##enum;                      \
-            continue;                                           \
-        }
-
-        CHECK(include_untracked, INCLUDE_UNTRACKED);
-        CHECK(include_ignored, INCLUDE_IGNORED);
-        CHECK(include_unmodified, INCLUDE_UNMODIFIED);
-        CHECK(exclude_submodules, EXCLUDE_SUBMODULES);
-        CHECK(recurse_untracked_dirs, RECURSE_UNTRACKED_DIRS);
-        CHECK(disable_pathspec_match, DISABLE_PATHSPEC_MATCH);
-        CHECK(recurse_ignored_dirs, RECURSE_IGNORED_DIRS);
-        CHECK(renames_head_to_index, RENAMES_HEAD_TO_INDEX);
-        CHECK(renames_index_to_workdir, RENAMES_INDEX_TO_WORKDIR);
-        CHECK(sort_case_sensitively, SORT_CASE_SENSITIVELY);
-        CHECK(sort_case_insensitively, SORT_CASE_INSENSITIVELY);
-        CHECK(renames_from_rewrites, RENAMES_FROM_REWRITES);
-        CHECK(no_refresh, NO_REFRESH);
-        CHECK(update_index, UPDATE_INDEX);
-        CHECK(include_unreadable, INCLUDE_UNREADABLE);
-        CHECK(include_unreadable_as_untracked, INCLUDE_UNREADABLE_AS_UNTRACKED);
-#undef CHECK
-
-        em_signal_wrong_value(env, flag);
-        return false;
-    }
-
-    return true;
-}
-
-bool convert_baseline_option(git_tree **out, emacs_env *env, emacs_value arg)
-{
-    if (!EM_EXTRACT_BOOLEAN(arg)) {
-        *out = NULL;
-        return true;
-    }
-    if (!egit_assert_type(env, arg, EGIT_TREE, esym_libgit_tree_p)) {
-        return false;
-    }
-
-    *out = EGIT_EXTRACT(arg);
-    return true;
-}
-
 EGIT_DOC(status_foreach, "REPO FUNCTION &optional SHOW FLAGS PATHSPEC BASELINE",
          "Gather file statuses in REPO and call FUNCTION for each one.\n\n"
          "FUNCTION is called with two arguments: FILE and STATUS.\n"
@@ -243,15 +179,16 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
     git_status_init_options(&options, GIT_STATUS_OPTIONS_VERSION);
     options.baseline = EGIT_EXTRACT_OR_NULL(baseline);
 
-    if (!em_findsym_status_show(&options.show, env, show, true)) {
+    if (!em_findsym_status_show(&options.show, env, show, true))
         return esym_nil;
-    }
-    if (!convert_flags_option(&options.flags, env, flags)) {
+
+    if (!EM_EXTRACT_BOOLEAN(flags))
+        options.flags = GIT_STATUS_OPT_DEFAULTS;
+    else if (!em_setflags_list(&options.flags, env, flags, true, em_setflag_status_opt))
         return esym_nil;
-    }
-    if (!egit_strarray_from_list(&options.pathspec, env, pathspec)) {
+
+    if (!egit_strarray_from_list(&options.pathspec, env, pathspec))
         return esym_nil;
-    }
 
     git_repository *repo = EGIT_EXTRACT(_repo);
     egit_generic_payload ctx = {.env = env, .func = function};
@@ -266,7 +203,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
     return esym_nil;
 }
 
-int foreach_callback(const char *path, unsigned int flags, void *payload)
+static int foreach_callback(const char *path, unsigned int flags, void *payload)
 {
     egit_generic_payload *ctx;
     emacs_env *env;

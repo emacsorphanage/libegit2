@@ -330,3 +330,66 @@ MKFINDENUM(git_repository_state_t, repository_state);
 MKFINDENUM(int, stage);
 
 #undef MKFINDENUM
+
+#define MKSETFLAG(type, map)                                            \
+    bool em_setflag_##map(                                              \
+        void *out, emacs_env *env, emacs_value value,                   \
+        bool on, bool required)                                         \
+    {                                                                   \
+        esym_enumval val;                                               \
+        if (!em_findsym(&val, env, value, esym_##map##_map, required))  \
+            return false;                                               \
+        if (on)                                                         \
+            *((type*) out) |= val.map;                                  \
+        else                                                            \
+            *((type*) out) &= ~(val.map);                               \
+        return true;                                                    \
+    }
+
+MKSETFLAG(git_checkout_notify_t, checkout_notify);
+MKSETFLAG(git_diff_option_t, diff_option);
+MKSETFLAG(git_index_add_option_t, index_add_option);
+MKSETFLAG(git_merge_file_flag_t, merge_file_flag);
+MKSETFLAG(git_merge_flag_t, merge_flag);
+MKSETFLAG(git_sort_t, sort);
+MKSETFLAG(git_status_opt_t, status_opt);
+
+#undef MKSETFLAG
+
+bool em_setflags_list(void *out, emacs_env *env, emacs_value list,
+                      bool required, setter *setter)
+{
+    while (em_consp(env, list)) {
+        emacs_value car = em_car(env, list);
+        if (!setter(out, env, car, true, required)) {
+            if (required) return false;
+        }
+        list = em_cdr(env, list);
+    }
+    if (EM_EXTRACT_BOOLEAN(list)) {
+        em_signal_wrong_type(env, esym_consp, list);
+        return false;
+    }
+    return true;
+}
+
+bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist,
+                       bool required, setter *setter)
+{
+    while (em_consp(env, alist)) {
+        emacs_value cons = em_car(env, alist);
+        if (!em_assert(env, esym_consp, cons))
+            return false;
+        emacs_value car = em_car(env, cons);
+        emacs_value cdr = em_cdr(env, cons);
+        if (!setter(out, env, car, EM_EXTRACT_BOOLEAN(cdr), required)) {
+            if (required) return false;
+        }
+        alist = em_cdr(env, alist);
+    }
+    if (EM_EXTRACT_BOOLEAN(alist)) {
+        em_signal_wrong_type(env, esym_consp, alist);
+        return false;
+    }
+    return true;
+}

@@ -272,20 +272,8 @@ emacs_value egit_index_add_all(
     git_index *index = EGIT_EXTRACT(_index);
 
     git_index_add_option_t options = GIT_INDEX_ADD_DEFAULT;
-    {
-        EM_DOLIST(car, _opts, options);
-        if (EM_EQ(car, esym_force))
-            options |= GIT_INDEX_ADD_FORCE;
-        else if (EM_EQ(car, esym_disable_pathspec_match))
-            options |= GIT_INDEX_ADD_DISABLE_PATHSPEC_MATCH;
-        else if (EM_EQ(car, esym_check_pathspec))
-            options |= GIT_INDEX_ADD_CHECK_PATHSPEC;
-        else {
-            em_signal_wrong_value(env, car);
-            return esym_nil;
-        }
-        EM_DOLIST_END(options);
-    }
+    if (!em_setflags_list(&options, env, _opts, true, em_setflag_index_add_option))
+        return esym_nil;
 
     git_index_matched_path_cb callback = NULL;
     egit_generic_payload payload = {.env = env, .func = func, .parent = NULL};

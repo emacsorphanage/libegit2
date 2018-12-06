@@ -119,20 +119,8 @@ emacs_value egit_checkout_options_parse(emacs_env *env, emacs_value alist, git_c
             if (EM_EQ(cdr, esym_all))
                 opts->notify_flags |= GIT_CHECKOUT_NOTIFY_ALL;
             else {
-                EM_DOLIST(icar, cdr, notify_when);
-                if (EM_EQ(icar, esym_conflict))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_CONFLICT;
-                else if (EM_EQ(icar, esym_dirty))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_DIRTY;
-                else if (EM_EQ(icar, esym_updated))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_UPDATED;
-                else if (EM_EQ(icar, esym_untracked))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_UNTRACKED;
-                else if (EM_EQ(icar, esym_ignored))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_IGNORED;
-                else if (EM_EQ(icar, esym_all))
-                    opts->notify_flags |= GIT_CHECKOUT_NOTIFY_ALL;
-                EM_DOLIST_END(notify_when);
+                if (!em_setflags_list(&opts->notify_flags, env, cdr, true, em_setflag_checkout_notify))
+                    return esym_nil;
             }
         }
         else if (EM_EQ(car, esym_notify)) {
@@ -192,7 +180,9 @@ emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merg
 {
     git_merge_init_options(opts, GIT_MERGE_OPTIONS_VERSION);
 
-    emacs_value file_flags = esym_nil;
+    // Collect the flags
+    if (!em_setflags_alist(&opts->flags, env, alist, false, em_setflag_merge_flag))
+        return esym_nil;
 
     // Main loop through the options alist
     {
@@ -203,15 +193,7 @@ emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merg
         car = em_car(env, option);
         cdr = em_cdr(env, option);
 
-        if (EM_EQ(car, esym_find_renames))
-            EGIT_SET_BIT(opts->flags, GIT_MERGE_FIND_RENAMES, cdr);
-        else if (EM_EQ(car, esym_fail_on_conflict))
-            EGIT_SET_BIT(opts->flags, GIT_MERGE_FAIL_ON_CONFLICT, cdr);
-        else if (EM_EQ(car, esym_skip_reuc))
-            EGIT_SET_BIT(opts->flags, GIT_MERGE_SKIP_REUC, cdr);
-        else if (EM_EQ(car, esym_no_recursive))
-            EGIT_SET_BIT(opts->flags, GIT_MERGE_NO_RECURSIVE, cdr);
-        else if (EM_EQ(car, esym_rename_threshold))
+        if (EM_EQ(car, esym_rename_threshold))
             opts->rename_threshold = EM_EXTRACT_INTEGER(cdr);
         else if (EM_EQ(car, esym_target_limit))
             opts->target_limit = EM_EXTRACT_INTEGER(cdr);
@@ -225,43 +207,12 @@ emacs_value egit_merge_options_parse(emacs_env *env, emacs_value alist, git_merg
             if (!em_findsym_merge_file_favor(&opts->file_favor, env, cdr, true))
                 return esym_nil;
         }
-        else if (EM_EQ(car, esym_file_flags))
-            file_flags = cdr;
-
-        EM_DOLIST_END(options);
-    }
-
-    // File flags
-    {
-        emacs_value car, cdr;
-        EM_DOLIST(option, file_flags, flags);
-        EM_ASSERT_CONS(option);
-
-        car = em_car(env, option);
-        cdr = em_cdr(env, option);
-
-        if (EM_EQ(car, esym_style_merge))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_STYLE_MERGE, cdr);
-        else if (EM_EQ(car, esym_style_diff3))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_STYLE_DIFF3, cdr);
-        else if (EM_EQ(car, esym_simplify_alnum))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_SIMPLIFY_ALNUM, cdr);
-        else if (EM_EQ(car, esym_ignore_whitespace))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE, cdr);
-        else if (EM_EQ(car, esym_ignore_whitespace_change))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE, cdr);
-        else if (EM_EQ(car, esym_ignore_whitespace_eol))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_IGNORE_WHITESPACE_EOL, cdr);
-        else if (EM_EQ(car, esym_patience))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_DIFF_PATIENCE, cdr);
-        else if (EM_EQ(car, esym_minimal))
-            EGIT_SET_BIT(opts->file_flags, GIT_MERGE_FILE_DIFF_MINIMAL, cdr);
-        else {
-            em_signal_wrong_value(env, cdr);
-            return esym_nil;
+        else if (EM_EQ(car, esym_file_flags)) {
+            if (!em_setflags_list(&opts->file_flags, env, cdr, true, em_setflag_merge_file_flag))
+                return esym_nil;
         }
 
-        EM_DOLIST_END(flags);
+        EM_DOLIST_END(options);
     }
 
     return esym_nil;

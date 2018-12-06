@@ -348,4 +348,17 @@ emacs_value em_findenum_remote_autotag_option(git_remote_autotag_option_t value)
 emacs_value em_findenum_repository_state(git_repository_state_t value);
 emacs_value em_findenum_stage(int value);
 
+typedef bool setter(void *out, emacs_env *env, emacs_value value, bool on, bool required);
+
+setter em_setflag_checkout_notify;
+setter em_setflag_diff_option;
+setter em_setflag_index_add_option;
+setter em_setflag_merge_file_flag;
+setter em_setflag_merge_flag;
+setter em_setflag_sort;
+setter em_setflag_status_opt;
+
+bool em_setflags_list(void *out, emacs_env *env, emacs_value list, bool required, setter *setter);
+bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist, bool required, setter *setter);
+
 #endif /* INTERFACE_H */
