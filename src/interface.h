@@ -325,6 +325,7 @@ bool em_findsym_delta(git_delta_t *out, emacs_env *env, emacs_value value, bool 
 bool em_findsym_diff_format(git_diff_format_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_describe_strategy(git_describe_strategy_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_fetch_prune(git_fetch_prune_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_filemode(git_filemode_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_merge_file_favor(git_merge_file_favor_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_otype(git_otype *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_proxy(git_proxy_t *out, emacs_env *env, emacs_value value, bool required);
@@ -336,9 +337,11 @@ bool em_findsym_submodule_update(git_submodule_update_t *out, emacs_env *env, em
 bool em_findsym_stage(int *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_status_show(git_status_show_t *out, emacs_env *env, emacs_value value, bool required);
 
+emacs_value em_findenum_checkout_notify(git_checkout_notify_t value);
 emacs_value em_findenum_delta(git_delta_t value);
 emacs_value em_findenum_direction(git_direction value);
 emacs_value em_findenum_error(git_error_t value);
+emacs_value em_findenum_filemode(git_filemode_t value);
 emacs_value em_findenum_merge_preference(git_merge_preference_t value);
 emacs_value em_findenum_otype(git_otype value);
 emacs_value em_findenum_submodule_ignore(git_submodule_ignore_t value);
@@ -360,5 +363,11 @@ setter em_setflag_status_opt;
 
 bool em_setflags_list(void *out, emacs_env *env, emacs_value list, bool required, setter *setter);
 bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist, bool required, setter *setter);
+
+emacs_value em_getlist_credtype(emacs_env *env, git_credtype_t value);
+emacs_value em_getlist_indexcap(emacs_env *env, git_indexcap_t value);
+emacs_value em_getlist_merge_analysis(emacs_env *env, git_merge_analysis_t value);
+emacs_value em_getlist_status(emacs_env *env, git_status_t value);
+emacs_value em_getlist_submodule_status(emacs_env *env, git_submodule_status_t value);
 
 #endif /* INTERFACE_H */

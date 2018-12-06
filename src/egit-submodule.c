@@ -12,7 +12,7 @@
 // =============================================================================
 // Helpers - status values
 
-static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int status, bool full)
+static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int status)
 {
     if (EM_EXTRACT_BOOLEAN(flag)) {
         if (EM_EQ(flag, esym_in_head))
@@ -23,10 +23,6 @@ static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int 
             return status & GIT_SUBMODULE_STATUS_IN_CONFIG ? esym_t : esym_nil;
         else if (EM_EQ(flag, esym_in_wd))
             return status & GIT_SUBMODULE_STATUS_IN_WD ? esym_t : esym_nil;
-        else if (!full) {
-            em_signal_wrong_value(env, flag);
-            return esym_nil;
-        }
         else if (EM_EQ(flag, esym_index_added))
             return status & GIT_SUBMODULE_STATUS_INDEX_ADDED ? esym_t : esym_nil;
         else if (EM_EQ(flag, esym_index_deleted))
@@ -53,42 +49,7 @@ static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int 
         }
     }
 
-    emacs_value entries[15];
-    size_t i = 0;
-
-    if (status & GIT_SUBMODULE_STATUS_IN_HEAD)
-        entries[i++] = esym_in_head;
-    if (status & GIT_SUBMODULE_STATUS_IN_INDEX)
-        entries[i++] = esym_in_index;
-    if (status & GIT_SUBMODULE_STATUS_IN_CONFIG)
-        entries[i++] = esym_in_config;
-    if (status & GIT_SUBMODULE_STATUS_IN_WD)
-        entries[i++] = esym_in_wd;
-
-    if (full) {
-        if (status & GIT_SUBMODULE_STATUS_INDEX_ADDED)
-            entries[i++] = esym_index_added;
-        if (status & GIT_SUBMODULE_STATUS_INDEX_DELETED)
-            entries[i++] = esym_index_deleted;
-        if (status & GIT_SUBMODULE_STATUS_INDEX_MODIFIED)
-            entries[i++] = esym_index_modified;
-        if (status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED)
-            entries[i++] = esym_wd_uninitialized;
-        if (status & GIT_SUBMODULE_STATUS_WD_ADDED)
-            entries[i++] = esym_wd_added;
-        if (status & GIT_SUBMODULE_STATUS_WD_DELETED)
-            entries[i++] = esym_wd_deleted;
-        if (status & GIT_SUBMODULE_STATUS_WD_MODIFIED)
-            entries[i++] = esym_wd_modified;
-        if (status & GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED)
-            entries[i++] = esym_wd_index_modified;
-        if (status & GIT_SUBMODULE_STATUS_WD_WD_MODIFIED)
-            entries[i++] = esym_wd_wd_modified;
-        if (status & GIT_SUBMODULE_STATUS_WD_UNTRACKED)
-            entries[i++] = esym_wd_untracked;
-    }
-
-    return em_list(env, entries, i);
+    return em_getlist_submodule_status(env, status);
 }
 
 
@@ -211,7 +172,7 @@ emacs_value egit_submodule_location(emacs_env *env, emacs_value _sub, emacs_valu
     int retval = git_submodule_location(&loc, sub);
     EGIT_CHECK_ERROR(retval);
 
-    return status_decode(env, flag, loc, false);
+    return status_decode(env, flag, loc);
 }
 
 EGIT_DOC(submodule_name, "SUBMODULE", "Get the name of SUBMODULE.");
@@ -299,7 +260,7 @@ emacs_value egit_submodule_status(
     free(name);
     EGIT_CHECK_ERROR(retval);
 
-    return status_decode(env, flag, status, true);
+    return status_decode(env, flag, status);
 }
 
 EGIT_DOC(submodule_update_strategy, "SUBMODULE",

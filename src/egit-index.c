@@ -20,18 +20,7 @@ emacs_value egit_index_caps(emacs_env *env, emacs_value _index)
     EGIT_ASSERT_INDEX(_index);
     git_index *index = EGIT_EXTRACT(_index);
     int caps = git_index_caps(index);
-
-    emacs_value ret = esym_nil;
-    if (caps & GIT_INDEXCAP_FROM_OWNER)
-        ret = em_cons(env, esym_from_owner, ret);
-    if (caps & GIT_INDEXCAP_NO_SYMLINKS)
-        ret = em_cons(env, esym_no_symlinks, ret);
-    if (caps & GIT_INDEXCAP_NO_FILEMODE)
-        ret = em_cons(env, esym_no_filemode, ret);
-    if (caps & GIT_INDEXCAP_IGNORE_CASE)
-        ret = em_cons(env, esym_ignore_case, ret);
-
-    return ret;
+    return em_getlist_indexcap(env, caps);
 }
 
 EGIT_DOC(index_checksum, "INDEX", "Get the checksum of INDEX.");

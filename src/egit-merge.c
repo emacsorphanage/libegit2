@@ -110,22 +110,12 @@ emacs_value egit_merge_analysis(emacs_env *env, emacs_value _repo, emacs_value _
     int retval = git_merge_analysis(&analysis, &preference, repo, heads, nheads);
     EGIT_CHECK_ERROR(retval);
 
-    emacs_value _analysis[4];
-
-    ptrdiff_t nanal = 0;
-    if (analysis & GIT_MERGE_ANALYSIS_NORMAL)
-        _analysis[nanal++] = esym_normal;
-    if (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)
-        _analysis[nanal++] = esym_up_to_date;
-    if (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD)
-        _analysis[nanal++] = esym_fastforward;
-    if (analysis & GIT_MERGE_ANALYSIS_UNBORN)
-        _analysis[nanal++] = esym_unborn;
+    emacs_value _analysis = em_getlist_merge_analysis(env, analysis);
 
     // These are bit flags but only one can be set
     emacs_value _preference = em_findenum_merge_preference(preference);
 
-    return em_cons(env, em_list(env, _analysis, nanal), _preference);
+    return em_cons(env, _analysis, _preference);
 }
 
 EGIT_DOC(merge_base, "REPO IDS",

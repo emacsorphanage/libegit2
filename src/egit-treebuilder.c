@@ -85,20 +85,8 @@ emacs_value egit_treebuilder_insert(
     EM_ASSERT_STRING(_oid);
 
     git_filemode_t mode;
-    if (EM_EQ(_mode, esym_tree))
-        mode = GIT_FILEMODE_TREE;
-    else if (EM_EQ(_mode, esym_blob))
-        mode = GIT_FILEMODE_BLOB;
-    else if (EM_EQ(_mode, esym_blob_executable))
-        mode = GIT_FILEMODE_BLOB_EXECUTABLE;
-    else if (EM_EQ(_mode, esym_link))
-        mode = GIT_FILEMODE_LINK;
-    else if (EM_EQ(_mode, esym_commit))
-        mode = GIT_FILEMODE_COMMIT;
-    else {
-        em_signal_wrong_value(env, _mode);
+    if (!em_findsym_filemode(&mode, env, _mode, true))
         return esym_nil;
-    }
 
     git_treebuilder *bld = EGIT_EXTRACT(_builder);
     char *path = EM_EXTRACT_STRING(_path);
