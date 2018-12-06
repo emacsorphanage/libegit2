@@ -14,14 +14,9 @@ EGIT_DOC(libgit2_feature_p, "FEATURE",
 emacs_value egit_libgit2_feature_p(emacs_env *env, emacs_value feature)
 {
     git_feature_t features = git_libgit2_features();
-    if (EM_EQ(feature, esym_threads))
-        return (features & GIT_FEATURE_THREADS) ? esym_t : esym_nil;
-    else if (EM_EQ(feature, esym_https))
-        return (features & GIT_FEATURE_HTTPS) ? esym_t : esym_nil;
-    else if (EM_EQ(feature, esym_ssh))
-        return (features & GIT_FEATURE_SSH) ? esym_t : esym_nil;
-    em_signal_wrong_value(env, feature);
-    return esym_nil;
+    emacs_value retval;
+    em_checkflag_feature(&retval, env, feature, features, true);
+    return retval;
 }
 
 EGIT_DOC(libgit2_version, "", "Get the version of the underlying libgit2.");

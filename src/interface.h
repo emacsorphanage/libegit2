@@ -370,4 +370,8 @@ emacs_value em_getlist_merge_analysis(emacs_env *env, git_merge_analysis_t value
 emacs_value em_getlist_status(emacs_env *env, git_status_t value);
 emacs_value em_getlist_submodule_status(emacs_env *env, git_submodule_status_t value);
 
+bool em_checkflag_feature(emacs_value *out, emacs_env *env, emacs_value symbol, git_feature_t value, bool required);
+bool em_checkflag_submodule_status(emacs_value *out, emacs_env *env, emacs_value symbol,
+                                   git_submodule_status_t value, bool required);
+
 #endif /* INTERFACE_H */
