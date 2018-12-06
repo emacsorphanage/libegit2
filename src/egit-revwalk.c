@@ -200,22 +200,8 @@ emacs_value egit_revwalk_sorting(emacs_env *env, emacs_value _revwalk, emacs_val
     git_revwalk *revwalk = EGIT_EXTRACT(_revwalk);
 
     git_sort_t mode = GIT_SORT_NONE;
-    {
-        EM_DOLIST(car, _mode, list);
-
-        if (EM_EQ(car, esym_topological))
-            mode |= GIT_SORT_TOPOLOGICAL;
-        else if (EM_EQ(car, esym_time))
-            mode |= GIT_SORT_TIME;
-        else if (EM_EQ(car, esym_reverse))
-            mode |= GIT_SORT_REVERSE;
-        else {
-            em_signal_wrong_value(env, car);
-            return esym_nil;
-        }
-
-        EM_DOLIST_END(list);
-    }
+    if (!em_setflags_list(&mode, env, _mode, true, em_setflag_sort))
+        return esym_nil;
 
     git_revwalk_sorting(revwalk, mode);
     return esym_nil;

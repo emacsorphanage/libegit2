@@ -426,8 +426,7 @@ esym_map esym_diff_format_map[7] = {
     {&esym_nil, {.diff_format = GIT_DIFF_FORMAT_PATCH}},
     {NULL, {0}}
 };
-esym_map esym_diff_option_map[31] = {
-    {&esym_normal, {.diff_option = GIT_DIFF_NORMAL}},
+esym_map esym_diff_option_map[30] = {
     {&esym_reverse, {.diff_option = GIT_DIFF_REVERSE}},
     {&esym_include_ignored, {.diff_option = GIT_DIFF_INCLUDE_IGNORED}},
     {&esym_recurse_ignored_dirs, {.diff_option = GIT_DIFF_RECURSE_IGNORED_DIRS}},
