@@ -41,27 +41,8 @@ static int checkout_notify_callback(
     emacs_env *env = ctx->env;
 
     emacs_value args[2];
-    args[0] = esym_nil;
+    args[0] = em_findenum_checkout_notify(why);
     args[1] = EM_STRING(path);
-
-    switch (why) {
-    case GIT_CHECKOUT_NOTIFY_IGNORED:
-        args[0] = esym_ignored;
-        break;
-    case GIT_CHECKOUT_NOTIFY_UNTRACKED:
-        args[0] = esym_untracked;
-        break;
-    case GIT_CHECKOUT_NOTIFY_UPDATED:
-        args[0] = esym_updated;
-        break;
-    case GIT_CHECKOUT_NOTIFY_DIRTY:
-        args[0] = esym_dirty;
-        break;
-    case GIT_CHECKOUT_NOTIFY_CONFLICT:
-        args[0] = esym_conflict;
-        break;
-    default: break;
-    }
 
     emacs_value retval = env->funcall(env, ctx->func, 2, args);
     EM_RETURN_IF_NLE(GIT_EUSER);
@@ -297,24 +278,7 @@ static int credentials_cb(
     emacs_value args[3];
     args[0] = EM_STRING(url);
     args[1] = username_from_url ? EM_STRING(username_from_url) : esym_nil;
-
-    emacs_value types[7];
-    size_t ntypes = 0;
-    if (allowed_types & GIT_CREDTYPE_USERPASS_PLAINTEXT)
-        types[ntypes++] = esym_userpass_plaintext;
-    if (allowed_types & GIT_CREDTYPE_SSH_KEY)
-        types[ntypes++] = esym_ssh_key;
-    if (allowed_types & GIT_CREDTYPE_SSH_CUSTOM)
-        types[ntypes++] = esym_ssh_custom;
-    if (allowed_types & GIT_CREDTYPE_DEFAULT)
-        types[ntypes++] = esym_default;
-    if (allowed_types & GIT_CREDTYPE_SSH_INTERACTIVE)
-        types[ntypes++] = esym_ssh_interactive;
-    if (allowed_types & GIT_CREDTYPE_USERNAME)
-        types[ntypes++] = esym_username;
-    if (allowed_types & GIT_CREDTYPE_SSH_MEMORY)
-        types[ntypes++] = esym_ssh_memory;
-    args[2] = em_list(env, types, ntypes);
+    args[2] = em_getlist_credtype(env, allowed_types);
 
     emacs_value retval = env->funcall(env, ctx->credentials, 3, args);
     EM_RETURN_IF_NLE(GIT_EUSER);

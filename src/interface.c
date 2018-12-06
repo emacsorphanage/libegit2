@@ -292,6 +292,7 @@ MKFINDSYM(git_describe_strategy_t, describe_strategy);
 MKFINDSYM(git_delta_t, delta);
 MKFINDSYM(git_diff_format_t, diff_format);
 MKFINDSYM(git_fetch_prune_t, fetch_prune);
+MKFINDSYM(git_filemode_t, filemode);
 MKFINDSYM(git_merge_file_favor_t, merge_file_favor);
 MKFINDSYM(git_otype, otype);
 MKFINDSYM(git_proxy_t, proxy);
@@ -317,9 +318,11 @@ MKFINDSYM(git_status_show_t, status_show);
         return esym_nil;                                                \
     }
 
+MKFINDENUM(git_checkout_notify_t, checkout_notify);
 MKFINDENUM(git_delta_t, delta);
 MKFINDENUM(git_direction, direction);
 MKFINDENUM(git_error_t, error);
+MKFINDENUM(git_filemode_t, filemode);
 MKFINDENUM(git_merge_preference_t, merge_preference);
 MKFINDENUM(git_otype, otype);
 MKFINDENUM(git_submodule_ignore_t, submodule_ignore);
@@ -393,3 +396,25 @@ bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist,
     }
     return true;
 }
+
+#define MKGETLIST(type, mapname)                                        \
+    emacs_value em_getlist_##mapname(emacs_env *env, type value)        \
+    {                                                                   \
+        esym_map *map = esym_##mapname##_map;                           \
+        emacs_value ret = esym_nil;                                     \
+        ptrdiff_t nen = 0;                                              \
+        for (; map[nen].symbol != NULL; nen++);                         \
+        while ((nen--) > 0) {                                           \
+            if (map[nen].value.mapname & value)                         \
+                ret = em_cons(env, *map[nen].symbol, ret);              \
+        }                                                               \
+        return ret;                                                     \
+    }
+
+MKGETLIST(git_credtype_t, credtype);
+MKGETLIST(git_indexcap_t, indexcap);
+MKGETLIST(git_merge_analysis_t, merge_analysis);
+MKGETLIST(git_status_t, status);
+MKGETLIST(git_submodule_status_t, submodule_status);
+
+#undef MKGETLIST

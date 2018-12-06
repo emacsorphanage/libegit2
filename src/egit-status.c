@@ -14,36 +14,11 @@ EGIT_DOC(status_decode, "STATUS",
 emacs_value egit_status_decode(emacs_env *env, emacs_value status)
 {
     intmax_t flags;
-    emacs_value statuses[16];
-    int nstatuses;
 
     EM_ASSERT_INTEGER(status);
     flags = EM_EXTRACT_INTEGER(status);
 
-#define CHECK(name, symbol)                             \
-    do {                                                \
-        if (flags & GIT_STATUS_##name) {                \
-            statuses[nstatuses++] = esym_##symbol;      \
-        }                                               \
-    } while (false)
-
-    nstatuses = 0;
-    CHECK(INDEX_NEW, index_new);
-    CHECK(INDEX_MODIFIED, index_modified);
-    CHECK(INDEX_DELETED, index_deleted);
-    CHECK(INDEX_RENAMED, index_renamed);
-    CHECK(INDEX_TYPECHANGE, index_typechange);
-    CHECK(WT_NEW, wt_new);
-    CHECK(WT_MODIFIED, wt_modified);
-    CHECK(WT_DELETED, wt_deleted);
-    CHECK(WT_TYPECHANGE, wt_typechange);
-    CHECK(WT_RENAMED, wt_renamed);
-    CHECK(WT_UNREADABLE, wt_unreadable);
-    CHECK(IGNORED, ignored);
-    CHECK(CONFLICTED, conflicted);
-#undef CHECK
-
-    return em_list(env, statuses, nstatuses);
+    return em_getlist_status(env, flags);
 }
 
 EGIT_DOC(status_file, "REPO PATH", "Get status of PATH in REPO.\n\n"

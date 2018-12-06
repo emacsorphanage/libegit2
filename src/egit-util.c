@@ -77,26 +77,8 @@ emacs_value egit_tree_entry_to_emacs(emacs_env *env, const git_tree_entry *entry
 
     emacs_value list_args[4];
 
-    list_args[0] = esym_nil;
-    switch (mode) {
-    case GIT_FILEMODE_UNREADABLE: list_args[0] = esym_unreadable; break;
-    case GIT_FILEMODE_TREE: list_args[0] = esym_tree; break;
-    case GIT_FILEMODE_BLOB: list_args[0] = esym_blob; break;
-    case GIT_FILEMODE_BLOB_EXECUTABLE: list_args[0] = esym_blob_executable; break;
-    case GIT_FILEMODE_LINK: list_args[0] = esym_link; break;
-    case GIT_FILEMODE_COMMIT: list_args[0] = esym_commit; break;
-    default: break;
-    }
-
-    list_args[1] = esym_nil;
-    switch (type) {
-    case GIT_OBJ_COMMIT: list_args[1] = esym_commit; break;
-    case GIT_OBJ_TREE: list_args[1] = esym_tree; break;
-    case GIT_OBJ_BLOB: list_args[1] = esym_blob; break;
-    case GIT_OBJ_TAG: list_args[1] = esym_tag; break;  // Probably impossible, but why assume
-    default: break;
-    }
-
+    list_args[0] = em_findenum_filemode(mode);
+    list_args[1] = em_findenum_otype(type);
     list_args[2] = EM_STRING(oid_s);
     list_args[3] = EM_STRING(name);
 
