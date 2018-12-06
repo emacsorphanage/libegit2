@@ -15,38 +15,9 @@
 static emacs_value status_decode(emacs_env *env, emacs_value flag, unsigned int status)
 {
     if (EM_EXTRACT_BOOLEAN(flag)) {
-        if (EM_EQ(flag, esym_in_head))
-            return status & GIT_SUBMODULE_STATUS_IN_HEAD ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_in_index))
-            return status & GIT_SUBMODULE_STATUS_IN_INDEX ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_in_config))
-            return status & GIT_SUBMODULE_STATUS_IN_CONFIG ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_in_wd))
-            return status & GIT_SUBMODULE_STATUS_IN_WD ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_index_added))
-            return status & GIT_SUBMODULE_STATUS_INDEX_ADDED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_index_deleted))
-            return status & GIT_SUBMODULE_STATUS_INDEX_DELETED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_index_modified))
-            return status & GIT_SUBMODULE_STATUS_INDEX_MODIFIED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_uninitialized))
-            return status & GIT_SUBMODULE_STATUS_WD_UNINITIALIZED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_added))
-            return status & GIT_SUBMODULE_STATUS_WD_ADDED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_deleted))
-            return status & GIT_SUBMODULE_STATUS_WD_DELETED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_MODIFIED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_index_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_wd_modified))
-            return status & GIT_SUBMODULE_STATUS_WD_WD_MODIFIED ? esym_t : esym_nil;
-        else if (EM_EQ(flag, esym_wd_untracked))
-            return status & GIT_SUBMODULE_STATUS_WD_UNTRACKED ? esym_t : esym_nil;
-        else {
-            em_signal_wrong_value(env, flag);
-            return esym_nil;
-        }
+        emacs_value retval;
+        em_checkflag_submodule_status(&retval, env, flag, status, true);
+        return retval;
     }
 
     return em_getlist_submodule_status(env, status);

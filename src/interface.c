@@ -418,3 +418,20 @@ MKGETLIST(git_status_t, status);
 MKGETLIST(git_submodule_status_t, submodule_status);
 
 #undef MKGETLIST
+
+#define MKCHECKFLAG(type, map)                                          \
+    bool em_checkflag_##map(                                            \
+        emacs_value *out, emacs_env *env, emacs_value symbol,           \
+        type value, bool required)                                      \
+    {                                                                   \
+        esym_enumval val;                                               \
+        if (!em_findsym(&val, env, symbol, esym_##map##_map, required)) \
+            return false;                                               \
+        *out = (val.map & value) ? esym_t : esym_nil;                   \
+        return true;                                                    \
+    }
+
+MKCHECKFLAG(git_feature_t, feature);
+MKCHECKFLAG(git_submodule_status_t, submodule_status);
+
+#undef MKCHECKFLAG
