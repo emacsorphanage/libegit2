@@ -831,5 +831,5 @@ void egit_init(emacs_env *env)
 
     // Revert
     DEFUN("libgit-revert", revert, 2, 5);
-    /* DEFUN("libgit-reset-commit", revert_commit, 3, 4); */
+    DEFUN("libgit-revert-commit", revert_commit, 3, 5);
 }
