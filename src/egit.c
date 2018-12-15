@@ -34,6 +34,7 @@
 #include "egit-repository.h"
 #include "egit-reset.h"
 #include "egit-revparse.h"
+#include "egit-revert.h"
 #include "egit-revwalk.h"
 #include "egit-signature.h"
 #include "egit-status.h"
@@ -827,4 +828,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reset", reset, 3, 4);
     DEFUN("libgit-reset-from-annotated", reset_from_annotated, 3, 4);
     DEFUN("libgit-reset-default", reset_default, 3, 3);
+
+    // Revert
+    DEFUN("libgit-revert", revert, 2, 5);
+    /* DEFUN("libgit-reset-commit", revert_commit, 3, 4); */
 }
