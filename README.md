@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 319 (41.0%)
-- Should not implement: 164 (21.1%)
-- To do: 295 (37.9%)
+- Implemented: 321 (41.25%)
+- Should not implement: 165 (21.2%)
+- To do: 292 (37.5%)
 - Total: 778
 
 ### extra
@@ -968,9 +968,9 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 
 ### revert
 
-- :grey_question: `git-revert`
-- :grey_question: `git-revert-commit`
-- :grey_question: `git-revert-init-options`
+- :heavy_check_mark: `git-revert`
+- :heavy_check_mark: `git-revert-commit`
+- :x: `git-revert-init-options`
 
 ### revparse
 
