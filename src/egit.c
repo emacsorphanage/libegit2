@@ -831,5 +831,5 @@ void egit_init(emacs_env *env)
 
     // Cherrypick
     DEFUN("libgit-cherrypick", cherrypick, 2, 5);
-    /* DEFUN("libgit-cherrypick-commit", cherrypick_commit, 3, 5); */
+    DEFUN("libgit-cherrypick-commit", cherrypick_commit, 3, 5);
 }
