@@ -22,6 +22,7 @@ set(EGIT_TESTS
   blob
   branch
   checkout
+  cherrypick
   commit
   config
   describe

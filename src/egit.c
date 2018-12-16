@@ -14,6 +14,7 @@
 #include "egit-blob.h"
 #include "egit-branch.h"
 #include "egit-checkout.h"
+#include "egit-cherrypick.h"
 #include "egit-clone.h"
 #include "egit-commit.h"
 #include "egit-config.h"
@@ -827,4 +828,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-reset", reset, 3, 4);
     DEFUN("libgit-reset-from-annotated", reset_from_annotated, 3, 4);
     DEFUN("libgit-reset-default", reset_default, 3, 3);
+
+    // Cherrypick
+    DEFUN("libgit-cherrypick", cherrypick, 2, 5);
+    /* DEFUN("libgit-cherrypick-commit", cherrypick_commit, 3, 5); */
 }
