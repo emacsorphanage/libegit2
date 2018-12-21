@@ -157,9 +157,9 @@ a standard include (i.e. `#include "git2.h"`). For now, we will skip those on th
 they are more specialized.
 
 Estimates (updated periodically):
-- Implemented: 323 (41.5%)
-- Should not implement: 166 (21.3%)
-- To do: 289 (37.1%)
+- Implemented: 325 (41.8%)
+- Should not implement: 169 (21.7%)
+- To do: 284 (36.5%)
 - Total: 778
 
 ### extra
@@ -214,6 +214,7 @@ Getters for public structs:
 
 Iterators converted to map functions:
 
+- :heavy_check_mark: `git-branch-foreach`
 - :heavy_check_mark: `git-index-conflict-foreach`
 
 ### annotated
@@ -269,14 +270,14 @@ Iterators converted to map functions:
 - :heavy_check_mark: `git-branch-delete`
 - :heavy_check_mark: `git-branch-is-checked-out`
 - :heavy_check_mark: `git-branch-is-head`
-- :grey_question: `git-branch-iterator-free`
-- :grey_question: `git-branch-iterator-new`
+- :x: `git-branch-iterator-free`
+- :x: `git-branch-iterator-new`
 - :heavy_check_mark: `git-branch-lookup`
-- :grey_question: `git-branch-move`
+- :heavy_check_mark: `git-branch-move`
 - :heavy_check_mark: `git-branch-name`
-- :grey_question: `git-branch-next`
+- :x: `git-branch-next`
 - :heavy_check_mark: `git-branch-remote-name`
-- :grey_question: `git-branch-set-upstream`
+- :heavy_check_mark: `git-branch-set-upstream`
 - :heavy_check_mark: `git-branch-upstream`
 - :heavy_check_mark: `git-branch-upstream-name`
 - :heavy_check_mark: `git-branch-upstream-remote`
