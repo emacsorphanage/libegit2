@@ -1,5 +1,5 @@
 /build
-/.cquery_cached_index
+.cquery_cached_index
 /compile_commands.json
 /emake.el
 /emacs-travis.mk
