@@ -167,6 +167,23 @@ emacs_value egit_branch_remote_name(emacs_env *env, emacs_value _repo, emacs_val
     EGIT_RET_BUF_AS_STRING(remote_name);
 }
 
+EGIT_DOC(branch_set_upstream, "REF REFNAME",
+         "Set REFNAME as the upstream of the branch REF.");
+emacs_value egit_branch_set_upstream(emacs_env *env, emacs_value _ref, emacs_value _refname)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    EM_ASSERT_STRING_OR_NIL(_refname);
+
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    char *refname = EM_EXTRACT_STRING_OR_NULL(_refname);
+
+    int retval = git_branch_set_upstream(ref, refname);
+    free(refname);
+    EGIT_CHECK_ERROR(retval);
+
+    return esym_nil;
+}
+
 EGIT_DOC(branch_upstream, "REF",
          "Return the reference of a remote-tracking branch.\n"
          "REF is a local branch reference in REPO.");
