@@ -9,6 +9,7 @@ EGIT_DEFUN(branch_lookup, emacs_value _repo, emacs_value _name, emacs_value _rem
 EGIT_DEFUN(branch_delete, emacs_value _ref);
 EGIT_DEFUN(branch_checked_out_p, emacs_value _ref);
 EGIT_DEFUN(branch_head_p, emacs_value _ref);
+EGIT_DEFUN(branch_move, emacs_value _ref, emacs_value _refname, emacs_value force);
 EGIT_DEFUN(branch_name, emacs_value _ref);
 EGIT_DEFUN(branch_remote_name, emacs_value _repo, emacs_value _branch);
 EGIT_DEFUN(branch_set_upstream, emacs_value _ref, emacs_value _refname);
