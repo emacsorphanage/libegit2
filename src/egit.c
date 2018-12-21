@@ -454,6 +454,10 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-checkout-index", checkout_index, 1, 3);
     DEFUN("libgit-checkout-tree", checkout_tree, 1, 3);
 
+    // Cherrypick
+    DEFUN("libgit-cherrypick", cherrypick, 2, 5);
+    DEFUN("libgit-cherrypick-commit", cherrypick_commit, 3, 5);
+
     // Clone
     DEFUN("libgit-clone", clone, 2, 2);
 
@@ -709,6 +713,15 @@ void egit_init(emacs_env *env)
 
     DEFUN("libgit-repository-discover", repository_discover, 0, 3);
 
+    // Reset
+    DEFUN("libgit-reset", reset, 3, 4);
+    DEFUN("libgit-reset-from-annotated", reset_from_annotated, 3, 4);
+    DEFUN("libgit-reset-default", reset_default, 3, 3);
+
+    // Revert
+    DEFUN("libgit-revert", revert, 2, 5);
+    DEFUN("libgit-revert-commit", revert_commit, 3, 5);
+
     // Revparse
     DEFUN("libgit-revparse", revparse, 2, 2);
     DEFUN("libgit-revparse-ext", revparse_ext, 2, 2);
@@ -824,17 +837,4 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-treebuilder-remove", treebuilder_remove, 2, 2);
     DEFUN("libgit-treebuilder-write", treebuilder_write, 1, 1);
     DEFUN("libgit-treebuilder-filter", treebuilder_filter, 2, 2);
-
-    // Reset
-    DEFUN("libgit-reset", reset, 3, 4);
-    DEFUN("libgit-reset-from-annotated", reset_from_annotated, 3, 4);
-    DEFUN("libgit-reset-default", reset_default, 3, 3);
-
-    // Revert
-    DEFUN("libgit-revert", revert, 2, 5);
-    DEFUN("libgit-revert-commit", revert_commit, 3, 5);
-
-    // Cherrypick
-    DEFUN("libgit-cherrypick", cherrypick, 2, 5);
-    DEFUN("libgit-cherrypick-commit", cherrypick_commit, 3, 5);
 }
