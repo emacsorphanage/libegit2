@@ -445,6 +445,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-head-p", branch_head_p, 1, 1);
     DEFUN("libgit-branch-name", branch_name, 1, 1);
     DEFUN("libgit-branch-remote-name", branch_remote_name, 2, 2);
+    DEFUN("libgit-branch-set-upstream", branch_set_upstream, 2, 2);
     DEFUN("libgit-branch-upstream", branch_upstream, 1, 1);
     DEFUN("libgit-branch-upstream-name", branch_upstream_name, 2, 2);
     DEFUN("libgit-branch-upstream-remote", branch_upstream_remote, 2, 2);
