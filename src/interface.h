@@ -319,6 +319,7 @@ emacs_value em_string_as_unibyte(emacs_env *env, emacs_value str);
 // =============================================================================
 // Symbol <-> enum map functions
 
+bool em_findsym_branch(git_branch_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_checkout_strategy(git_checkout_strategy_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_config_level(git_config_level_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_delta(git_delta_t *out, emacs_env *env, emacs_value value, bool required);

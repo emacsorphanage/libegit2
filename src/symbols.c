@@ -348,6 +348,12 @@ esym_map esym_blame_flag_map[8] = {
     {&esym_use_mailmap, {.blame_flag = GIT_BLAME_USE_MAILMAP}},
     {NULL, {0}}
 };
+esym_map esym_branch_map[4] = {
+    {&esym_local, {.branch = GIT_BRANCH_LOCAL}},
+    {&esym_remote, {.branch = GIT_BRANCH_REMOTE}},
+    {&esym_all, {.branch = GIT_BRANCH_ALL}},
+    {NULL, {0}}
+};
 esym_map esym_cert_ssh_map[3] = {
     {&esym_md5, {.cert_ssh = GIT_CERT_SSH_MD5}},
     {&esym_sha1, {.cert_ssh = GIT_CERT_SSH_SHA1}},
