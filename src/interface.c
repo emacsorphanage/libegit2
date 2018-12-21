@@ -286,6 +286,7 @@ static bool em_findsym(esym_enumval *out, emacs_env *env, emacs_value value, esy
         return retval;                                                  \
     }
 
+MKFINDSYM(git_branch_t, branch);
 MKFINDSYM(git_checkout_strategy_t, checkout_strategy);
 MKFINDSYM(git_config_level_t, config_level);
 MKFINDSYM(git_describe_strategy_t, describe_strategy);

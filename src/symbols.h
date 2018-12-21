@@ -10,6 +10,7 @@
 
 typedef union {
     git_blame_flag_t blame_flag;
+    git_branch_t branch;
     git_cert_ssh_t cert_ssh;
     git_cert_t cert;
     git_checkout_notify_t checkout_notify;
@@ -54,6 +55,7 @@ typedef struct {
 } esym_map;
 
 extern esym_map esym_blame_flag_map[8];
+extern esym_map esym_branch_map[4];
 extern esym_map esym_cert_ssh_map[3];
 extern esym_map esym_cert_map[5];
 extern esym_map esym_checkout_notify_map[8];

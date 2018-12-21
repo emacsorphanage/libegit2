@@ -76,6 +76,46 @@ emacs_value egit_branch_create_from_annotated(
     return egit_wrap(env, EGIT_REFERENCE, ref, EM_EXTRACT_USER_PTR(_repo));
 }
 
+EGIT_DOC(branch_foreach, "REPO TYPE FUNC",
+         "Run FUNC for each branch in REPO.\n"
+         "FUNC is called with one argument, which is a reference object.\n"
+         "TYPE may be either `local', `remote' or `all'.");
+emacs_value egit_branch_foreach(emacs_env *env, emacs_value _repo, emacs_value _type, emacs_value func)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EM_ASSERT_FUNCTION(func);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_branch_t type;
+    if (!em_findsym_branch(&type, env, _type, true))
+        return esym_nil;
+
+    git_branch_iterator *iter;
+    int retval = git_branch_iterator_new(&iter, repo, type);
+    EGIT_CHECK_ERROR(retval);
+
+    git_reference *out;
+    git_branch_t out_type;
+    while (true) {
+        int retval = git_branch_next(&out, &out_type, iter);
+        if (retval != 0) {
+            git_branch_iterator_free(iter);
+            if (retval == GIT_ITEROVER)
+                return esym_nil;
+            EGIT_CHECK_ERROR(retval);
+            return esym_nil;  // Should be unreachable
+        }
+
+        emacs_value wrap = egit_wrap(env, EGIT_REFERENCE, out, EM_EXTRACT_USER_PTR(_repo));
+        env->funcall(env, func, 1, &wrap);
+
+        if (env->non_local_exit_check(env)) {
+            git_branch_iterator_free(iter);
+            return esym_nil;
+        }
+    }
+}
+
 EGIT_DOC(branch_lookup, "REPO NAME &optional REMOTE",
          "Lookup branch named NAME in REPO.\n\nIf REMOTE is non-nil, look for a remote branch.");
 emacs_value egit_branch_lookup(emacs_env *env, emacs_value _repo, emacs_value _name, emacs_value _remote)
