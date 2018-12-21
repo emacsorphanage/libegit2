@@ -300,9 +300,9 @@ Probably none of these functions are necessary, since we can expose buffers to E
 
 ### cherrypick
 
-- :grey_question: `git-cherrypick`
-- :grey_question: `git-cherrypick-commit`
-- :grey_question: `git-cherrypick-init-options`
+- :heavy_check_mark: `git-cherrypick`
+- :heavy_check_mark: `git-cherrypick-commit`
+- :x: `git-cherrypick-init-options`
 
 ### clone
 
