@@ -443,6 +443,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-delete", branch_delete, 1, 1);
     DEFUN("libgit-branch-checked-out-p", branch_checked_out_p, 1, 1);
     DEFUN("libgit-branch-head-p", branch_head_p, 1, 1);
+    DEFUN("libgit-branch-move", branch_move, 2, 3);
     DEFUN("libgit-branch-name", branch_name, 1, 1);
     DEFUN("libgit-branch-remote-name", branch_remote_name, 2, 2);
     DEFUN("libgit-branch-set-upstream", branch_set_upstream, 2, 2);

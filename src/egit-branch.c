@@ -134,6 +134,27 @@ emacs_value egit_branch_head_p(emacs_env *env, emacs_value _ref)
     return retval ? esym_t : esym_nil;
 }
 
+EGIT_DOC(branch_move, "REF NEWNAME &optional FORCE",
+         "Move REF to NEWNAME.\n"
+         "If FORCE is non-nil, overwrite existing branches.\n"
+         "Return the renamed reference.");
+emacs_value egit_branch_move(emacs_env *env, emacs_value _ref,
+                             emacs_value _newname, emacs_value force)
+{
+    EGIT_ASSERT_REFERENCE(_ref);
+    EM_ASSERT_STRING(_newname);
+
+    git_reference *ref = EGIT_EXTRACT(_ref);
+    char *newname = EM_EXTRACT_STRING(_newname);;
+
+    git_reference *out;
+    int retval = git_branch_move(&out, ref, newname, EM_EXTRACT_BOOLEAN(force));
+    free(newname);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_REFERENCE, out, EGIT_EXTRACT_PARENT(_ref));
+}
+
 EGIT_DOC(branch_name, "REF", "Return the name of the branch at REF.");
 emacs_value egit_branch_name(emacs_env *env, emacs_value _ref)
 {
