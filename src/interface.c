@@ -279,7 +279,7 @@ static bool em_findsym(esym_enumval *out, emacs_env *env, emacs_value value, esy
     bool em_findsym_##map(                                              \
         type *out, emacs_env *env, emacs_value value, bool required)    \
     {                                                                   \
-        esym_enumval val;                                               \
+        esym_enumval val = {0};                                         \
         bool retval = em_findsym(                                       \
             &val, env, value, esym_##map##_map, required);              \
         *out = val.map;                                                 \
