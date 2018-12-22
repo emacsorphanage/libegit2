@@ -120,3 +120,45 @@
       (should (string= "refs/remotes/upstream/master" (libgit-branch-upstream-name repo "refs/heads/second")))
       (should (string= "refs/remotes/upstream/master" (libgit-reference-name (libgit-branch-upstream ref))))
       (should (string= "upstream" (libgit-branch-upstream-remote repo "refs/heads/second"))))))
+
+(ert-deftest branch-set-upstream ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (run "git" "branch" "other")
+    (let* ((repo (libgit-repository-open path))
+           (master (libgit-reference-dwim repo "master")))
+      (libgit-branch-set-upstream master "other")
+      (should (string= "refs/heads/other" (libgit-reference-name (libgit-branch-upstream master))))
+      (should-error (libgit-branch-set-upstream master "zomg") :type 'giterr-reference))))
+
+(ert-deftest branch-move ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (let* ((repo (libgit-repository-open path))
+           (master (libgit-reference-dwim repo "master"))
+           (moved (libgit-branch-move master "zing")))
+      (should (string= "refs/heads/master" (libgit-reference-name master)))
+      (should (string= "refs/heads/zing" (libgit-reference-name moved)))
+      (should-error (libgit-reference-dwim repo "master") :type 'giterr-reference))))
+
+(ert-deftest branch-foreach ()
+  (with-temp-dir path
+    (init)
+    (commit-change "test" "content")
+    (run "git" "branch" "alpha")
+    (run "git" "branch" "bravo")
+    (run "git" "branch" "charlie")
+    (let* ((repo (libgit-repository-open path))
+           data)
+      (libgit-branch-foreach repo 'local (lambda (ref) (push (libgit-reference-name ref) data)))
+      (should (equal (reverse data)
+                     '("refs/heads/alpha"
+                       "refs/heads/bravo"
+                       "refs/heads/charlie"
+                       "refs/heads/master")))
+
+      (setq data nil)
+      (libgit-branch-foreach repo 'remote (lambda (ref) (push (libgit-reference-name ref) data)))
+      (should-not data))))
