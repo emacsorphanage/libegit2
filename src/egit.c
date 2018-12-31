@@ -762,6 +762,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-signature-time", signature_time, 1, 1);
 
     // Stash
+    DEFUN("libgit-stash-drop", stash_drop, 2, 2);
     DEFUN("libgit-stash-foreach", stash_foreach, 2, 2);
 
     // Status
