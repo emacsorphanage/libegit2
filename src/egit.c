@@ -764,6 +764,7 @@ void egit_init(emacs_env *env)
     // Stash
     DEFUN("libgit-stash-drop", stash_drop, 2, 2);
     DEFUN("libgit-stash-foreach", stash_foreach, 2, 2);
+    DEFUN("libgit-stash-save", stash_foreach, 2, 4);
 
     // Status
     DEFUN("libgit-status-decode", status_decode, 1, 1);

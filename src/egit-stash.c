@@ -62,3 +62,34 @@ emacs_value egit_stash_foreach(emacs_env *env, emacs_value _repo, emacs_value fu
     EGIT_CHECK_ERROR(retval);
     return esym_nil;
 }
+
+
+EGIT_DOC(stash_save, "REPO STASHER &optional MSG FLAGS",
+         "Save the local modifications to a new stash.\n"
+         "STASHER must be a valid signature object. MSG, if given, a description.\n"
+         "FLAGS is a list with any of the following symbols:\n"
+         "  - `keep-index': changes already added to the index are left intact in the WD\n"
+         "  - `include-untracked': untracked files are also stashed and cleaned up\n"
+         "  - `include-ignored': ignored files are also stashed and cleaned up");
+emacs_value egit_stash_save(emacs_env *env, emacs_value _repo, emacs_value _stasher,
+                            emacs_value _msg, emacs_value _flags)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_SIGNATURE(_stasher);
+    EM_ASSERT_STRING_OR_NIL(_msg);
+
+    uint32_t flags = GIT_STASH_DEFAULT;
+    if (!em_setflags_list(&flags, env, _flags, true, em_setflag_stash_flags))
+        return esym_nil;
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_signature *stasher = EGIT_EXTRACT(_stasher);
+    char *msg = EM_EXTRACT_STRING_OR_NULL(_msg);
+
+    git_oid oid;
+    int retval = git_stash_save(&oid, repo, stasher, msg, flags);
+    EGIT_CHECK_ERROR(retval);
+
+    const char *oid_s = git_oid_tostr_s(&oid);
+    return EM_STRING(oid_s);
+}
