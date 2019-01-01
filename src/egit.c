@@ -140,6 +140,8 @@ void egit_finalize(void* _obj)
     case EGIT_ANNOTATED_COMMIT: git_annotated_commit_free(obj->ptr); break;
     case EGIT_REVWALK: git_revwalk_free(obj->ptr); break;
     case EGIT_TREEBUILDER: git_treebuilder_free(obj->ptr); break;
+    case EGIT_PATHSPEC: git_pathspec_free(obj->ptr); break;
+    case EGIT_PATHSPEC_MATCH_LIST: git_pathspec_match_list_free(obj->ptr); break;
     default: break;
     }
 
@@ -289,6 +291,8 @@ static emacs_value egit_typeof(emacs_env *env, emacs_value val)
     case EGIT_DIFF_BINARY: return esym_diff_binary;
     case EGIT_DIFF_HUNK: return esym_diff_hunk;
     case EGIT_DIFF_LINE: return esym_diff_line;
+    case EGIT_PATHSPEC: return esym_pathspec;
+    case EGIT_PATHSPEC_MATCH_LIST: return esym_pathspec_match_list;
     case EGIT_REMOTE: return esym_remote;
     case EGIT_REFSPEC: return esym_refspec;
     case EGIT_SUBMODULE: return esym_submodule;
@@ -323,6 +327,8 @@ TYPECHECKER(DIFF_HUNK, diff_hunk, "diff hunk");
 TYPECHECKER(DIFF_LINE, diff_line, "diff line");
 TYPECHECKER(INDEX, index, "index.");
 TYPECHECKER(INDEX_ENTRY, index_entry, "index entry");
+TYPECHECKER(PATHSPEC, pathspec, "pathspec");
+TYPECHECKER(PATHSPEC_MATCH_LIST, pathspec_match_list, "pathspec match list");
 TYPECHECKER(REFERENCE, reference, "reference");
 TYPECHECKER(REFLOG, reflog, "reflog");
 TYPECHECKER(REFLOG_ENTRY, reflog_entry, "reflog entry");
@@ -385,6 +391,8 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-index-p", index_p, 1, 1);
     DEFUN("libgit-index-entry-p", index_entry_p, 1, 1);
     DEFUN("libgit-object-p", object_p, 1, 1);
+    DEFUN("libgit-pathspec-p", pathspec_p, 1, 1);
+    DEFUN("libgit-pathspec-match-list-p", pathspec_match_list_p, 1, 1);
     DEFUN("libgit-reference-p", reference_p, 1, 1);
     DEFUN("libgit-reflog-p", reflog_p, 1, 1);
     DEFUN("libgit-reflog-entry-p", reflog_entry_p, 1, 1);

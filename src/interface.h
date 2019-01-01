@@ -329,6 +329,7 @@ bool em_findsym_fetch_prune(git_fetch_prune_t *out, emacs_env *env, emacs_value 
 bool em_findsym_filemode(git_filemode_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_merge_file_favor(git_merge_file_favor_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_otype(git_otype *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_pathspec_flag(git_pathspec_flag_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_proxy(git_proxy_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_remote_autotag_option(git_remote_autotag_option_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_reset(git_reset_t *out, emacs_env *env, emacs_value value, bool required);

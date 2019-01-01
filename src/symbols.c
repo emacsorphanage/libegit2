@@ -67,11 +67,13 @@ emacs_value esym_encode_time;
 emacs_value esym_exclude_submodules;
 emacs_value esym_expand_file_name;
 emacs_value esym_fail_on_conflict;
+emacs_value esym_failures_only;
 emacs_value esym_fastforward;
 emacs_value esym_fastforward_only;
 emacs_value esym_fetch;
 emacs_value esym_file_favor;
 emacs_value esym_file_flags;
+emacs_value esym_find_failures;
 emacs_value esym_find_renames;
 emacs_value esym_first_parent;
 emacs_value esym_force;
@@ -169,6 +171,8 @@ emacs_value esym_libgit_diff_p;
 emacs_value esym_libgit_index_entry_p;
 emacs_value esym_libgit_index_p;
 emacs_value esym_libgit_object_p;
+emacs_value esym_libgit_pathspec_match_list_p;
+emacs_value esym_libgit_pathspec_p;
 emacs_value esym_libgit_reference_p;
 emacs_value esym_libgit_reflog_entry_p;
 emacs_value esym_libgit_reflog_p;
@@ -203,6 +207,8 @@ emacs_value esym_newest_commit;
 emacs_value esym_nil;
 emacs_value esym_no_fastforward;
 emacs_value esym_no_filemode;
+emacs_value esym_no_glob;
+emacs_value esym_no_match_error;
 emacs_value esym_no_recursive;
 emacs_value esym_no_refresh;
 emacs_value esym_no_symlinks;
@@ -223,6 +229,7 @@ emacs_value esym_ours;
 emacs_value esym_patch;
 emacs_value esym_patch_header;
 emacs_value esym_pathspec;
+emacs_value esym_pathspec_match_list;
 emacs_value esym_patience;
 emacs_value esym_pattern;
 emacs_value esym_post;
@@ -315,6 +322,7 @@ emacs_value esym_update_fetchhead;
 emacs_value esym_update_index;
 emacs_value esym_updated;
 emacs_value esym_url;
+emacs_value esym_use_case;
 emacs_value esym_use_mailmap;
 emacs_value esym_user_ptrp;
 emacs_value esym_username;
@@ -591,6 +599,15 @@ esym_map esym_otype_map[7] = {
     {&esym_nil, {.otype = GIT_OBJ_ANY}},
     {NULL, {0}}
 };
+esym_map esym_pathspec_flag_map[7] = {
+    {&esym_ignore_case, {.pathspec_flag = GIT_PATHSPEC_IGNORE_CASE}},
+    {&esym_use_case, {.pathspec_flag = GIT_PATHSPEC_USE_CASE}},
+    {&esym_no_glob, {.pathspec_flag = GIT_PATHSPEC_NO_GLOB}},
+    {&esym_no_match_error, {.pathspec_flag = GIT_PATHSPEC_NO_MATCH_ERROR}},
+    {&esym_find_failures, {.pathspec_flag = GIT_PATHSPEC_FIND_FAILURES}},
+    {&esym_failures_only, {.pathspec_flag = GIT_PATHSPEC_FAILURES_ONLY}},
+    {NULL, {0}}
+};
 esym_map esym_proxy_map[5] = {
     {&esym_none, {.proxy = GIT_PROXY_NONE}},
     {&esym_auto, {.proxy = GIT_PROXY_AUTO}},
@@ -786,11 +803,13 @@ void esyms_init(emacs_env *env)
     esym_exclude_submodules = env->make_global_ref(env, env->intern(env, "exclude-submodules"));
     esym_expand_file_name = env->make_global_ref(env, env->intern(env, "expand-file-name"));
     esym_fail_on_conflict = env->make_global_ref(env, env->intern(env, "fail-on-conflict"));
+    esym_failures_only = env->make_global_ref(env, env->intern(env, "failures-only"));
     esym_fastforward = env->make_global_ref(env, env->intern(env, "fastforward"));
     esym_fastforward_only = env->make_global_ref(env, env->intern(env, "fastforward-only"));
     esym_fetch = env->make_global_ref(env, env->intern(env, "fetch"));
     esym_file_favor = env->make_global_ref(env, env->intern(env, "file-favor"));
     esym_file_flags = env->make_global_ref(env, env->intern(env, "file-flags"));
+    esym_find_failures = env->make_global_ref(env, env->intern(env, "find-failures"));
     esym_find_renames = env->make_global_ref(env, env->intern(env, "find-renames"));
     esym_first_parent = env->make_global_ref(env, env->intern(env, "first-parent"));
     esym_force = env->make_global_ref(env, env->intern(env, "force"));
@@ -888,6 +907,8 @@ void esyms_init(emacs_env *env)
     esym_libgit_index_entry_p = env->make_global_ref(env, env->intern(env, "libgit-index-entry-p"));
     esym_libgit_index_p = env->make_global_ref(env, env->intern(env, "libgit-index-p"));
     esym_libgit_object_p = env->make_global_ref(env, env->intern(env, "libgit-object-p"));
+    esym_libgit_pathspec_match_list_p = env->make_global_ref(env, env->intern(env, "libgit-pathspec-match-list-p"));
+    esym_libgit_pathspec_p = env->make_global_ref(env, env->intern(env, "libgit-pathspec-p"));
     esym_libgit_reference_p = env->make_global_ref(env, env->intern(env, "libgit-reference-p"));
     esym_libgit_reflog_entry_p = env->make_global_ref(env, env->intern(env, "libgit-reflog-entry-p"));
     esym_libgit_reflog_p = env->make_global_ref(env, env->intern(env, "libgit-reflog-p"));
@@ -922,6 +943,8 @@ void esyms_init(emacs_env *env)
     esym_nil = env->make_global_ref(env, env->intern(env, "nil"));
     esym_no_fastforward = env->make_global_ref(env, env->intern(env, "no-fastforward"));
     esym_no_filemode = env->make_global_ref(env, env->intern(env, "no-filemode"));
+    esym_no_glob = env->make_global_ref(env, env->intern(env, "no-glob"));
+    esym_no_match_error = env->make_global_ref(env, env->intern(env, "no-match-error"));
     esym_no_recursive = env->make_global_ref(env, env->intern(env, "no-recursive"));
     esym_no_refresh = env->make_global_ref(env, env->intern(env, "no-refresh"));
     esym_no_symlinks = env->make_global_ref(env, env->intern(env, "no-symlinks"));
@@ -942,6 +965,7 @@ void esyms_init(emacs_env *env)
     esym_patch = env->make_global_ref(env, env->intern(env, "patch"));
     esym_patch_header = env->make_global_ref(env, env->intern(env, "patch-header"));
     esym_pathspec = env->make_global_ref(env, env->intern(env, "pathspec"));
+    esym_pathspec_match_list = env->make_global_ref(env, env->intern(env, "pathspec-match-list"));
     esym_patience = env->make_global_ref(env, env->intern(env, "patience"));
     esym_pattern = env->make_global_ref(env, env->intern(env, "pattern"));
     esym_post = env->make_global_ref(env, env->intern(env, "post"));
@@ -1034,6 +1058,7 @@ void esyms_init(emacs_env *env)
     esym_update_index = env->make_global_ref(env, env->intern(env, "update-index"));
     esym_updated = env->make_global_ref(env, env->intern(env, "updated"));
     esym_url = env->make_global_ref(env, env->intern(env, "url"));
+    esym_use_case = env->make_global_ref(env, env->intern(env, "use-case"));
     esym_use_mailmap = env->make_global_ref(env, env->intern(env, "use-mailmap"));
     esym_user_ptrp = env->make_global_ref(env, env->intern(env, "user-ptrp"));
     esym_username = env->make_global_ref(env, env->intern(env, "username"));

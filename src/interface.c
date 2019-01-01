@@ -296,6 +296,7 @@ MKFINDSYM(git_fetch_prune_t, fetch_prune);
 MKFINDSYM(git_filemode_t, filemode);
 MKFINDSYM(git_merge_file_favor_t, merge_file_favor);
 MKFINDSYM(git_otype, otype);
+MKFINDSYM(git_pathspec_flag_t, pathspec_flag);
 MKFINDSYM(git_proxy_t, proxy);
 MKFINDSYM(git_remote_autotag_option_t, remote_autotag_option);
 MKFINDSYM(git_reset_t, reset);
