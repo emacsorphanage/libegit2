@@ -88,6 +88,14 @@
 #define EGIT_ASSERT_OBJECT(val)                                         \
     do { if (!egit_assert_object(env, (val))) return esym_nil; } while (0)
 
+// Assert that VAL is a git pathspec, signal an error and return otherwise.
+#define EGIT_ASSERT_PATHSPEC(val)                                      \
+    do { if (!egit_assert_type(env, (val), EGIT_PATHSPEC, esym_libgit_pathspec_p)) return esym_nil; } while (0)
+
+// Assert that VAL is a git pathspec match list, signal an error and return otherwise.
+#define EGIT_ASSERT_PATHSPEC_MATCH_LIST(val)                                      \
+    do { if (!egit_assert_type(env, (val), EGIT_PATHSPEC_MATCH_LIST, esym_libgit_pathspec_match_list_p)) return esym_nil; } while (0)
+
 // Assert that VAL is a git reference, signal an error and return otherwise.
 #define EGIT_ASSERT_REFERENCE(val)                                      \
     do { if (!egit_assert_type(env, (val), EGIT_REFERENCE, esym_libgit_reference_p)) return esym_nil; } while (0)
@@ -258,6 +266,8 @@ typedef enum {
     EGIT_DIFF_BINARY,
     EGIT_DIFF_HUNK,
     EGIT_DIFF_LINE,
+    EGIT_PATHSPEC,
+    EGIT_PATHSPEC_MATCH_LIST,
     EGIT_REMOTE,
     EGIT_REFSPEC,
     EGIT_SUBMODULE,
