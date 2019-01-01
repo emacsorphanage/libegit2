@@ -32,6 +32,7 @@ set(EGIT_TESTS
   index
   merge
   message
+  pathspec
   reference
   reflog
   remote

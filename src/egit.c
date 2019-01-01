@@ -28,6 +28,7 @@
 #include "egit-merge.h"
 #include "egit-message.h"
 #include "egit-object.h"
+#include "egit-pathspec.h"
 #include "egit-reference.h"
 #include "egit-reflog.h"
 #include "egit-refspec.h"
@@ -612,6 +613,9 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-object-id", object_id, 1, 1);
     DEFUN("libgit-object-owner", object_owner, 1, 1);
     DEFUN("libgit-object-short-id", object_short_id, 1, 1);
+
+    // Pathspec
+    DEFUN("libgit-pathspec-new", pathspec_new, 1, 1);
 
     // Reference
     DEFUN("libgit-reference-create", reference_create, 3, 5);
