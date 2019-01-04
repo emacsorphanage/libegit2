@@ -617,6 +617,11 @@ void egit_init(emacs_env *env)
     // Pathspec
     DEFUN("libgit-pathspec-new", pathspec_new, 1, 1);
     DEFUN("libgit-pathspec-matches-path", pathspec_matches_path, 3, 3);
+    DEFUN("libgit-pathspec-match-list-entrycount", pathspec_match_list_entrycount, 1, 1);
+    DEFUN("libgit-pathspec-match-list-entry", pathspec_match_list_entry, 2, 2);
+    DEFUN("libgit-pathspec-match-list-diff-entry", pathspec_match_list_diff_entry, 2, 2);
+    DEFUN("libgit-pathspec-match-list-failed-entrycount", pathspec_match_list_failed_entrycount, 1, 1);
+    DEFUN("libgit-pathspec-match-list-failed-entry", pathspec_match_list_failed_entry, 2, 2);
 
     // Reference
     DEFUN("libgit-reference-create", reference_create, 3, 5);
