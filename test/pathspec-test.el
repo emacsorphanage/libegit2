@@ -93,3 +93,51 @@
                        (libgit-pathspec-match-list-failed-entry match-list 1)))
       (should (string= "file-d"
                        (libgit-pathspec-match-list-failed-entry match-list 2))))))
+
+(ert-deftest pathspec-match-tree ()
+  (with-temp-dir path
+    (init)
+    (commit-change "file-a" "content-a")
+    (commit-change "child/file-b" "content-b")
+    (commit-change "child/file-c" "content-c")
+
+    (let* ((repo (libgit-repository-open path))
+           (head (libgit-reference-name-to-id repo "HEAD"))
+           (commit (libgit-commit-lookup repo head))
+           (root (libgit-commit-tree commit))
+	   (child (libgit-tree-lookup
+		   repo (caddr (libgit-tree-entry-byname root "child"))))
+           (pathspec (libgit-pathspec-new
+		      '("file-a" "file-b" "file-c")))
+           (match-list-root (libgit-pathspec-match-tree root '(find-failures)
+							pathspec))
+	   (match-list-child (libgit-pathspec-match-tree child '(find-failures)
+							 pathspec)))
+      (should match-list-root)
+      (should match-list-child)
+
+      ;; Find matched files in root
+      (should (= 1 (libgit-pathspec-match-list-entrycount match-list-root)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-entry match-list-root 0)))
+
+      ;; Find matched files in child
+      (should (= 2 (libgit-pathspec-match-list-entrycount match-list-child)))
+      (should (string= "file-b"
+                       (libgit-pathspec-match-list-entry match-list-child 0)))
+      (should (string= "file-c"
+                       (libgit-pathspec-match-list-entry match-list-child 1)))
+
+      ;; Find all pathspecs that have no matches
+      (should (= 2 (libgit-pathspec-match-list-failed-entrycount match-list-root)))
+      (should (string= "file-b"
+                       (libgit-pathspec-match-list-failed-entry
+			match-list-root 0)))
+      (should (string= "file-c"
+                       (libgit-pathspec-match-list-failed-entry
+			match-list-root 1)))
+
+      (should (= 1 (libgit-pathspec-match-list-failed-entrycount match-list-child)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-failed-entry
+			match-list-child 0))))))
