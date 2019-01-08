@@ -28,4 +28,9 @@ EGIT_DEFUN(pathspec_match_list_failed_entry,
            emacs_value _match_list,
            emacs_value _pos);
 
+EGIT_DEFUN(pathspec_match_workdir,
+	   emacs_value _repo,
+	   emacs_value _flags,
+	   emacs_value _pathspec);
+
 #endif /* EGIT_REFSPEC_H */
