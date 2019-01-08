@@ -33,4 +33,9 @@ EGIT_DEFUN(pathspec_match_workdir,
 	   emacs_value _flags,
 	   emacs_value _pathspec);
 
+EGIT_DEFUN(pathspec_match_index,
+	   emacs_value _index,
+	   emacs_value _flags,
+	   emacs_value _pathspec);
+
 #endif /* EGIT_REFSPEC_H */

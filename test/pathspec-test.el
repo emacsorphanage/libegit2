@@ -54,3 +54,42 @@
                        (libgit-pathspec-match-list-failed-entry match-list 0)))
       (should (string= "file-d"
                        (libgit-pathspec-match-list-failed-entry match-list 1))))))
+
+(ert-deftest pathspec-match-index ()
+  (with-temp-dir path
+    (init)
+    (write "file-a" "content-a")
+    (write "file-b" "content-b")
+
+    ;; Only file-a should match - file-b is not in an index
+    (run "git" "add" "file-a")
+
+    ;; Test with glob
+    (let* ((index (libgit-repository-index (libgit-repository-open path)))
+           (pathspec (libgit-pathspec-new '("file-*")))
+           (match-list (libgit-pathspec-match-index index nil pathspec)))
+      (should match-list)
+      (should (= 1 (libgit-pathspec-match-list-entrycount match-list)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-entry match-list 0))))
+
+    (let* ((index (libgit-repository-index (libgit-repository-open path)))
+           (pathspec (libgit-pathspec-new
+		      '("file-a" "file-b" "file-c" "file-d")))
+           (match-list (libgit-pathspec-match-index index '(find-failures)
+                                                    pathspec)))
+      (should match-list)
+
+      ;; Find matched files
+      (should (= 1 (libgit-pathspec-match-list-entrycount match-list)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-entry match-list 0)))
+
+      ;; Find all pathspecs that have no matches
+      (should (= 3 (libgit-pathspec-match-list-failed-entrycount match-list)))
+      (should (string= "file-b"
+                       (libgit-pathspec-match-list-failed-entry match-list 0)))
+      (should (string= "file-c"
+                       (libgit-pathspec-match-list-failed-entry match-list 1)))
+      (should (string= "file-d"
+                       (libgit-pathspec-match-list-failed-entry match-list 2))))))
