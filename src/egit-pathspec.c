@@ -185,3 +185,42 @@ emacs_value egit_pathspec_match_workdir(emacs_env *env,
 
     return egit_wrap(env, EGIT_PATHSPEC_MATCH_LIST, match_list, NULL);
 }
+
+EGIT_DOC(pathspec_match_index, "INDEX FLAGS PATHSPEC",
+         "Match a PATHSPEC against an INDEX.\n"
+         "\n"
+         "FLAGS should be nil or a list with the following symbols:\n"
+         "  - ignore-case: forces match to ignore case\n"
+         "  - use-case: forces case sensitive match\n"
+         "  - no-glob: disables glob patterns and just uses simple string "
+         "comparison for matching\n"
+         "  - no-match-error: signal an error if no matches are found; "
+         "otherwise no matches is still success, but "
+         "`libgit-pathspec-match-list-entrycount' will indicate 0 matches.\n"
+         "  - find-failures: means that the `libgit-pathspec-match-list' object "
+         "should track which patterns matched which files so that at the end of "
+         "the match we can identify patterns that did not match any files.\n"
+         "  - failures-only: means that the `libgit-pathspec-match-list' object "
+         "does not need to keep the actual matching filenames. Use this to "
+         "just test if there were any matches at all or in combination with "
+         "`find-failures' to validate a pathspec.");
+emacs_value egit_pathspec_match_index(emacs_env *env,
+                                        emacs_value _index,
+                                        emacs_value _flags,
+                                        emacs_value _pathspec)
+{
+    EGIT_ASSERT_INDEX(_index);
+    EGIT_ASSERT_PATHSPEC(_pathspec);
+
+    git_index *index = EGIT_EXTRACT(_index);
+    git_pathspec *pathspec = EGIT_EXTRACT(_pathspec);
+    int32_t flags = 0;
+    extract_flags(&flags, env, _flags);
+
+    git_pathspec_match_list *match_list;
+    int retval = git_pathspec_match_index(&match_list, index, flags,
+                                          pathspec);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_PATHSPEC_MATCH_LIST, match_list, NULL);
+}
