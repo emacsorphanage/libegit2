@@ -140,3 +140,48 @@ emacs_value egit_pathspec_match_list_failed_entry(emacs_env *env,
     }
     return EM_STRING(filename);
 }
+
+EGIT_DOC(pathspec_match_workdir, "REPO FLAGS PATHSPEC",
+         "Match a PATHSPEC against the working directory of a REPO repository.\n"
+         "\n"
+         "This matches the pathspec against the current files in the working "
+         "directory of the repository. It is an error to invoke this on a bare"
+         "repo. This handles git ignores (i.e. ignored files will not be"
+         "considered to match the PATHSPEC unless the file is tracked in the "
+         "index).\n"
+         "\n"
+         "FLAGS should be nil or a list with the following symbols:\n"
+         "  - ignore-case: forces match to ignore case\n"
+         "  - use-case: forces case sensitive match\n"
+         "  - no-glob: disables glob patterns and just uses simple string "
+         "comparison for matching\n"
+         "  - no-match-error: signal an error if no matches are found; "
+         "otherwise no matches is still success, but "
+         "`libgit-pathspec-match-list-entrycount' will indicate 0 matches.\n"
+         "  - find-failures: means that the `libgit-pathspec-match-list' object "
+         "should track which patterns matched which files so that at the end of "
+         "the match we can identify patterns that did not match any files.\n"
+         "  - failures-only: means that the `libgit-pathspec-match-list' object "
+         "does not need to keep the actual matching filenames. Use this to "
+         "just test if there were any matches at all or in combination with "
+         "`find-failures' to validate a pathspec.");
+emacs_value egit_pathspec_match_workdir(emacs_env *env,
+                                        emacs_value _repo,
+                                        emacs_value _flags,
+                                        emacs_value _pathspec)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    EGIT_ASSERT_PATHSPEC(_pathspec);
+
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    git_pathspec *pathspec = EGIT_EXTRACT(_pathspec);
+    int32_t flags = 0;
+    extract_flags(&flags, env, _flags);
+
+    git_pathspec_match_list *match_list;
+    int retval = git_pathspec_match_workdir(&match_list, repo, flags,
+                                            pathspec);
+    EGIT_CHECK_ERROR(retval);
+
+    return egit_wrap(env, EGIT_PATHSPEC_MATCH_LIST, match_list, NULL);
+}

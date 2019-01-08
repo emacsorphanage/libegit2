@@ -20,3 +20,37 @@
 					  '(ignore-case) "FiLe-A"))
     (should (not (libgit-pathspec-matches-path pathspec-glob
 					       '(use-case) "FiLe-A")))))
+
+(ert-deftest pathspec-match-workdir ()
+  (with-temp-dir path
+    (init)
+    (commit-change "file-a" "content-a")
+    (commit-change "file-b" "content-b")
+
+    (let* ((repo (libgit-repository-open path))
+           (pathspec (libgit-pathspec-new '("file-*")))
+           (match-list (libgit-pathspec-match-workdir repo nil pathspec)))
+      (should match-list)
+      (should (= 2 (libgit-pathspec-match-list-entrycount match-list)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-entry match-list 0)))
+      (should (string= "file-b"
+                       (libgit-pathspec-match-list-entry match-list 1))))
+
+    (let* ((repo (libgit-repository-open path))
+           (pathspec (libgit-pathspec-new '("file-a" "file-c" "file-d")))
+           (match-list (libgit-pathspec-match-workdir repo '(find-failures)
+                                                      pathspec)))
+      (should match-list)
+
+      ;; Find matched files
+      (should (= 1 (libgit-pathspec-match-list-entrycount match-list)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-entry match-list 0)))
+
+      ;; Find all pathspecs that have no matches
+      (should (= 2 (libgit-pathspec-match-list-failed-entrycount match-list)))
+      (should (string= "file-c"
+                       (libgit-pathspec-match-list-failed-entry match-list 0)))
+      (should (string= "file-d"
+                       (libgit-pathspec-match-list-failed-entry match-list 1))))))
