@@ -43,4 +43,9 @@ EGIT_DEFUN(pathspec_match_tree,
 	   emacs_value _flags,
 	   emacs_value _pathspec);
 
+EGIT_DEFUN(pathspec_match_diff,
+	   emacs_value _diff,
+	   emacs_value _flags,
+	   emacs_value _pathspec);
+
 #endif /* EGIT_REFSPEC_H */

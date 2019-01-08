@@ -141,3 +141,32 @@
       (should (string= "file-a"
                        (libgit-pathspec-match-list-failed-entry
 			match-list-child 0))))))
+
+(ert-deftest pathspec-match-diff ()
+  (with-temp-dir path
+    (init)
+    (commit-change "file-a" "content-a")
+    (commit-change "file-b" "content-b")
+    (commit-change "file-b" "content-b-changed")
+
+    (let* ((repo (libgit-repository-open path))
+	   (new-tree (libgit-revparse-single repo "HEAD^{tree}"))
+           (old-tree (libgit-revparse-single repo "HEAD~1^{tree}"))
+           (diff (libgit-diff-tree-to-tree repo old-tree new-tree))
+           (pathspec (libgit-pathspec-new '("file-a" "file-b")))
+           (match-list (libgit-pathspec-match-diff diff '(find-failures)
+						   pathspec)))
+      (should match-list)
+
+      ;; Find matched files
+      (should (= 1 (libgit-pathspec-match-list-entrycount match-list)))
+      (should (not (libgit-pathspec-match-list-entry match-list 0)))
+      (let ((diff-delta (libgit-pathspec-match-list-diff-entry match-list 0)))
+	(should (string= "file-b" (libgit-diff-delta-file-path diff-delta nil)))
+	(should (string= "file-b" (libgit-diff-delta-file-path diff-delta t))))
+
+      ;; Find all pathspecs that have no matches
+      (should (= 1 (libgit-pathspec-match-list-failed-entrycount match-list)))
+      (should (string= "file-a"
+                       (libgit-pathspec-match-list-failed-entry
+			match-list 0))))))
