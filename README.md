@@ -742,18 +742,18 @@ Probably none of these functions will be necessary, since we can expose OIDs to 
 ### pathspec
 
 - :x: `git-pathspec-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-pathspec-match-diff`
-- :grey_question: `git-pathspec-match-index`
-- :grey_question: `git-pathspec-match-list-diff-entry`
-- :grey_question: `git-pathspec-match-list-entry`
-- :grey_question: `git-pathspec-match-list-entrycount`
-- :grey_question: `git-pathspec-match-list-failed-entry`
-- :grey_question: `git-pathspec-match-list-failed-entrycount`
+- :heavy_check_mark: `git-pathspec-match-diff`
+- :heavy_check_mark: `git-pathspec-match-index`
+- :heavy_check_mark: `git-pathspec-match-list-diff-entry`
+- :heavy_check_mark: `git-pathspec-match-list-entry`
+- :heavy_check_mark: `git-pathspec-match-list-entrycount`
+- :heavy_check_mark: `git-pathspec-match-list-failed-entry`
+- :heavy_check_mark: `git-pathspec-match-list-failed-entrycount`
 - :x: `git-pathspec-match-list-free` (memory management shouldn't be exposed to Emacs)
-- :grey_question: `git-pathspec-match-tree`
-- :grey_question: `git-pathspec-match-workdir`
-- :grey_question: `git-pathspec-matches-path`
-- :grey_question: `git-pathspec-new`
+- :heavy_check_mark: `git-pathspec-match-tree`
+- :heavy_check_mark: `git-pathspec-match-workdir`
+- :heavy_check_mark: `git-pathspec-matches-path`
+- :heavy_check_mark: `git-pathspec-new`
 
 ### proxy
 
