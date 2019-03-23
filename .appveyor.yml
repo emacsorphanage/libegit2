@@ -16,7 +16,7 @@ matrix:
 install:
   - git submodule update --init --recursive
   - set MSYSTEM=MINGW64
-  - C:\msys64\usr\bin\bash -l -c "cd /c/projects/libegit2 && make -f emacs-appveyor.mk install_emacs"
+  - C:\msys64\usr\bin\bash -l -c "cd /c/projects/libegit2 && make -f .appveyor.mk install_emacs"
 
 before_build:
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
