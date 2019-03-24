@@ -3,16 +3,12 @@ PACKAGE_BASENAME := libgit
 
 include emake.mk
 
-libgit2:                        ## pull down libgit2
-	git submodule init
-	git submodule update
+libgit2:
+	git submodule update --init
 
-build/libegit2.so: libgit2      ## build the module
+build/libegit2.so: libgit2
 	mkdir -p build
 	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
 
 test: EMACS_ARGS += -L build/ -l libegit2
-test: build/libegit2.so test-ert ## run tests
-
-clean:                          ## removes build directories
-	rm -rf build/
+test: build/libegit2.so test-ert
