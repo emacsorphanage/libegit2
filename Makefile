@@ -1,25 +1,3 @@
-ifeq "$(TRAVIS)" "true"
-## Makefile for Travis ###################################################
-#
-#  TODO Move this to a separate file ".travis.mk" once Emake supports
-#  that.  (Apparently it already does, but I couldn't get it to work.)
-
-EMAKE_SHA1       ?= 1b23379eb5a9f82d3e2d227d0f217864e40f23e0
-PACKAGE_BASENAME := libgit
-
-include emake.mk
-
-build/libegit2.so:
-	git submodule update --init
-	mkdir -p build
-	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
-
-test: EMACS_ARGS += -L build/ -l libegit2
-test: build/libegit2.so test-ert
-
-else
-## Makefile for local use ################################################
-
 -include .config.mk
 
 PKG = libgit
@@ -107,5 +85,3 @@ $(PKG)-autoloads.el: $(ELS)
 	(setq generated-autoload-file (expand-file-name \"$@\"))\
 	(setq find-file-visit-truename t)\
 	(update-directory-autoloads default-directory))"
-
-endif

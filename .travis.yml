@@ -13,7 +13,7 @@ cache:
 env:
   global:
     - PATH="$HOME/bin:$PATH"
-    - EMAKE_SHA1=1b23379eb5a9f82d3e2d227d0f217864e40f23e0
+    - EMAKE_SHA1=d8ab7790f5823547fd4e7aec2218771a3dda0638
   matrix:
     - EMACS_VERSION=25.3
     - EMACS_VERSION=26.1
@@ -26,9 +26,9 @@ matrix:
 
 before_install:
   - wget "https://raw.githubusercontent.com/vermiculus/emake.el/${EMAKE_SHA1}/emake.mk"
-  - make emacs
+  - make -f .travis.mk emacs
 
 script:
-  - make build/libegit2.so
-  - make compile
-  - make test
+  - make -f .travis.mk build/libegit2.so
+  - make -f .travis.mk compile
+  - make -f .travis.mk test
