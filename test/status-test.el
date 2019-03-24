@@ -97,20 +97,20 @@
       (delete-file "b")
 
       (delete-file ".gitignore")
-      (write "dir/foo" "")
-      (write "dir/bar" "")
-      (write "dir/baz" "")
+      (write "d/foo" "")
+      (write "d/bar" "")
+      (write "d/baz" "")
       (should (equal
                (foreach-collect
                 repo nil '(include-untracked recurse-untracked-dirs)
-                '("dir/f*"))
-               '(("dir/foo" . (wt-new)))))
+                '("d/f*"))
+               '(("d/foo" . (wt-new)))))
 
       (should (equal
                (foreach-collect
                 repo nil '(include-untracked recurse-untracked-dirs)
-                '("dir/f*" "dir/*z"))
-               '(("dir/baz" . (wt-new)) ("dir/foo" . (wt-new)))))
+                '("d/f*" "d/*z"))
+               '(("d/baz" . (wt-new)) ("d/foo" . (wt-new)))))
 
       (should-error (libgit-status-foreach repo nil) :type 'wrong-type-argument)
       (let ((i 0))
