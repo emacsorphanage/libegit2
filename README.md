@@ -76,18 +76,13 @@ Ensure that `libgit.el` is somewhere in your load path. Then
 
 If the dynamic module was not already built, you should be asked to do it manually.
 
-If you use [Borg](https://github.com/emacscollective/borg), the following `.gitmodules` entry should
-work.
+If you use [Borg](https://github.com/emacscollective/borg), then use the following `.gitmodules` entry.
 
 ```
 [submodule "libgit"]
     path = lib/libgit
     url = git@github.com:magit/libegit2.git
-    build-step = git submodule init
-    build-step = git submodule update
-    build-step = mkdir -p build
-    build-step = cd build && cmake ..
-    build-step = cd build && make
+    build-step = make
 ```
 
 ## Contributing
