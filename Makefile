@@ -9,10 +9,8 @@ PACKAGE_BASENAME := libgit
 
 include emake.mk
 
-libgit2:
+build/libegit2.so:
 	git submodule update --init
-
-build/libegit2.so: libgit2
 	mkdir -p build
 	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
 
@@ -34,7 +32,7 @@ EMACS_ARGS ?=
 
 LOAD_PATH  ?= -L . -L build
 
-.PHONY: test
+.PHONY: test libgit2 submodule-update
 
 all: lisp
 
@@ -70,11 +68,11 @@ test: libgit.elc build/libegit2.so
 
 submodule-init: libgit2
 
-submodule-update: libgit2
-	git submodule update
+submodule-update:
+	@git submodule update
 
 libgit2:
-	git submodule update --init
+	@git submodule update --init
 
 CLEAN  = $(ELCS) $(PKG)-autoloads.el build
 
