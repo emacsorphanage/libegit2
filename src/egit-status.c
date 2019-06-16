@@ -76,7 +76,7 @@ emacs_value egit_status_should_ignore_p(emacs_env *env, emacs_value _repo,
     return ignored == 0 ? esym_nil : esym_t;
 }
 
-EGIT_DOC(status_foreach, "REPO FUNCTION &optional SHOW FLAGS PATHSPEC BASELINE",
+EGIT_DOC(status_foreach_ext, "REPO FUNCTION &optional SHOW FLAGS PATHSPEC BASELINE",
          "Gather file statuses in REPO and call FUNCTION for each one.\n\n"
          "FUNCTION is called with two arguments: FILE and STATUS.\n"
          "FILE is path to a file, relative to the root directory.\n"
@@ -140,10 +140,10 @@ EGIT_DOC(status_foreach, "REPO FUNCTION &optional SHOW FLAGS PATHSPEC BASELINE",
          "BASELINE is the tree to be used for comparison to the working directory and\n"
          "index; defaults to HEAD."
     );
-emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
-                                emacs_value function, emacs_value show,
-                                emacs_value flags, emacs_value pathspec,
-                                emacs_value baseline)
+emacs_value egit_status_foreach_ext(emacs_env *env, emacs_value _repo,
+                                    emacs_value function, emacs_value show,
+                                    emacs_value flags, emacs_value pathspec,
+                                    emacs_value baseline)
 {
     EGIT_ASSERT_REPOSITORY(_repo);
     EM_ASSERT_FUNCTION(function);
@@ -158,7 +158,7 @@ emacs_value egit_status_foreach(emacs_env *env, emacs_value _repo,
         return esym_nil;
 
     if (!EM_EXTRACT_BOOLEAN(flags))
-        options.flags = GIT_STATUS_OPT_DEFAULTS;
+        options.flags = 0;
     else if (!em_setflags_list(&options.flags, env, flags, true, em_setflag_status_opt))
         return esym_nil;
 
