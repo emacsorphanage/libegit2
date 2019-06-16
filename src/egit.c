@@ -787,7 +787,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-status-decode", status_decode, 1, 1);
     DEFUN("libgit-status-file", status_file, 2, 2);
     DEFUN("libgit-status-should-ignore-p", status_should_ignore_p, 2, 2);
-    DEFUN("libgit-status-foreach", status_foreach, 2, 6);
+    DEFUN("libgit-status-foreach-ext", status_foreach_ext, 2, 6);
 
     // Submodule
     DEFUN("libgit-submodule-add-setup", submodule_add_setup, 3, 4);

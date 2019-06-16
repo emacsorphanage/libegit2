@@ -1,6 +1,6 @@
 (defun foreach-collect (repo &optional show flags pathspec baseline)
   (let (res)
-    (libgit-status-foreach
+    (libgit-status-foreach-ext
      repo
      (lambda (path status)
        (push (cons path (sort (libgit-status-decode status)
@@ -112,34 +112,37 @@
                 '("d/f*" "d/*z"))
                '(("d/baz" . (wt-new)) ("d/foo" . (wt-new)))))
 
-      (should-error (libgit-status-foreach repo nil) :type 'wrong-type-argument)
+      (should-error (libgit-status-foreach-ext repo nil) :type 'wrong-type-argument)
       (let ((i 0))
         (define-error 'foo "Foo")
         ;; Nonlocal exit test
-        (should-error (libgit-status-foreach
+        (should-error (libgit-status-foreach-ext
                        repo
                        (lambda (&rest args)
                          (when (= (cl-incf i) 2)
-                           (signal 'foo "f")))) :type 'foo)
+                           (signal 'foo "f")))
+		       nil
+		       '(include-untracked include-ignored include-unmodified))
+		       :type 'foo)
         (should (= i 2)))
-      (should-error (libgit-status-foreach repo #'ignore 'foo)
+      (should-error (libgit-status-foreach-ext repo #'ignore 'foo)
                     :type 'wrong-value-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil 1)
+      (should-error (libgit-status-foreach-ext repo #'ignore nil 1)
                     :type 'wrong-type-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil '(foo))
+      (should-error (libgit-status-foreach-ext repo #'ignore nil '(foo))
                     :type 'wrong-value-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil nil 1)
+      (should-error (libgit-status-foreach-ext repo #'ignore nil nil 1)
                     :type 'wrong-type-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil nil '(foo))
+      (should-error (libgit-status-foreach-ext repo #'ignore nil nil '(foo))
                     :type 'wrong-type-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil nil nil 1)
+      (should-error (libgit-status-foreach-ext repo #'ignore nil nil nil 1)
                     :type 'wrong-type-argument)
-      (should-error (libgit-status-foreach repo #'ignore nil
+      (should-error (libgit-status-foreach-ext repo #'ignore nil
                                            '(no-refresh update-index))
                     :type 'giterr-invalid)
 
       ;; Should not error
-      (libgit-status-foreach
+      (libgit-status-foreach-ext
        repo #'ignore nil nil nil
        (libgit-reference-peel (libgit-repository-head repo) 'tree)))))
 
