@@ -1,3 +1,18 @@
+CMAKE_CMD_LINE_OPTIONS=-DCMAKE_BUILD_TYPE=Debug
+
+ifeq '$(findstring ;,$(PATH))' ';'
+    UNAME := Windows
+else
+    UNAME := $(shell uname 2>/dev/null || echo Unknown)
+    UNAME := $(patsubst CYGWIN%,Cygwin,$(UNAME))
+    UNAME := $(patsubst MSYS%,MSYS,$(UNAME))
+    UNAME := $(patsubst MINGW%,MSYS,$(UNAME))
+endif
+
+ifeq ($(UNAME),MSYS)
+	CMAKE_CMD_LINE_OPTIONS+= -G "MSYS Makefiles"
+endif
+
 ifeq "$(TRAVIS)" "true"
 ## Makefile for Travis ###################################################
 #
@@ -12,7 +27,7 @@ include emake.mk
 build/libegit2.so:
 	git submodule update --init
 	mkdir -p build
-	cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
+	cd build && cmake .. $(CMAKE_CMD_LINE_OPTIONS) && make
 
 test: EMACS_ARGS += -L build/ -l libegit2
 test: build/libegit2.so test-ert
@@ -51,7 +66,7 @@ module: build/libegit2.so
 build/libegit2.so: libgit2
 	@printf "Building $<\n"
 	@mkdir -p build
-	@cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug && make
+	@cd build && cmake .. $(CMAKE_CMD_LINE_OPTIONS) && make
 
 lisp: $(ELCS) loaddefs module
 
