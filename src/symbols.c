@@ -26,6 +26,9 @@ emacs_value esym_blame;
 emacs_value esym_blame_hunk;
 emacs_value esym_blob;
 emacs_value esym_blob_executable;
+emacs_value esym_break_rewrites;
+emacs_value esym_break_rewrites_for_renames_only;
+emacs_value esym_break_rewrite_threshold;
 emacs_value esym_callbacks;
 emacs_value esym_car;
 emacs_value esym_cdr;
@@ -42,6 +45,7 @@ emacs_value esym_cons;
 emacs_value esym_consp;
 emacs_value esym_context_lines;
 emacs_value esym_copied;
+emacs_value esym_copy_threshold;
 emacs_value esym_cred;
 emacs_value esym_credentials;
 emacs_value esym_current;
@@ -73,9 +77,21 @@ emacs_value esym_fastforward_only;
 emacs_value esym_fetch;
 emacs_value esym_file_favor;
 emacs_value esym_file_flags;
+emacs_value esym_find_all;
+emacs_value esym_find_copies;
+emacs_value esym_find_copies_from_unmodified;
+emacs_value esym_find_dont_ignore_whitespace;
+emacs_value esym_find_exact_match_only;
 emacs_value esym_find_failures;
+emacs_value esym_find_for_untracked;
+emacs_value esym_find_ignore_leading_whitespace;
+emacs_value esym_find_ignore_whitespace;
+emacs_value esym_find_remove_unmodified;
 emacs_value esym_find_renames;
+emacs_value esym_find_renames_from_rewrites;
+emacs_value esym_find_rewrites;
 emacs_value esym_first_parent;
+emacs_value esym_flags;
 emacs_value esym_force;
 emacs_value esym_force_binary;
 emacs_value esym_force_text;
@@ -195,6 +211,7 @@ emacs_value esym_max_line;
 emacs_value esym_max_size;
 emacs_value esym_md5;
 emacs_value esym_merge;
+emacs_value esym_metric;
 emacs_value esym_min_line;
 emacs_value esym_minimal;
 emacs_value esym_mixed;
@@ -252,6 +269,9 @@ emacs_value esym_reflog;
 emacs_value esym_reflog_entry;
 emacs_value esym_refspec;
 emacs_value esym_remote;
+emacs_value esym_rename_threshold;
+emacs_value esym_rename_from_rewrite_threshold;
+emacs_value esym_rename_limit;
 emacs_value esym_rename_threshold;
 emacs_value esym_renamed;
 emacs_value esym_renames_from_rewrites;
@@ -738,6 +758,23 @@ esym_map esym_stage_map[5] = {
     {&esym_theirs, {.stage = 3}},
     {NULL, {0}}
 };
+esym_map esym_diff_find_map[15] = {
+    {&esym_find_renames, {.diff_find = GIT_DIFF_FIND_RENAMES}},
+    {&esym_find_renames_from_rewrites, {.diff_find = GIT_DIFF_FIND_RENAMES_FROM_REWRITES}},
+    {&esym_find_copies, {.diff_find = GIT_DIFF_FIND_COPIES}},
+    {&esym_find_copies_from_unmodified, {.diff_find = GIT_DIFF_FIND_COPIES_FROM_UNMODIFIED}},
+    {&esym_find_rewrites, {.diff_find = GIT_DIFF_FIND_REWRITES}},
+    {&esym_break_rewrites, {.diff_find = GIT_DIFF_BREAK_REWRITES}},
+    {&esym_find_for_untracked, {.diff_find = GIT_DIFF_FIND_FOR_UNTRACKED}},
+    {&esym_find_all, {.diff_find = GIT_DIFF_FIND_ALL}},
+    {&esym_find_ignore_leading_whitespace, {.diff_find = GIT_DIFF_FIND_IGNORE_LEADING_WHITESPACE}},
+    {&esym_find_ignore_whitespace, {.diff_find = GIT_DIFF_FIND_IGNORE_WHITESPACE}},
+    {&esym_find_dont_ignore_whitespace, {.diff_find = GIT_DIFF_FIND_DONT_IGNORE_WHITESPACE}},
+    {&esym_find_exact_match_only, {.diff_find = GIT_DIFF_FIND_EXACT_MATCH_ONLY}},
+    {&esym_break_rewrites_for_renames_only, {.diff_find = GIT_DIFF_BREAK_REWRITES_FOR_RENAMES_ONLY}},
+    {&esym_find_remove_unmodified, {.diff_find = GIT_DIFF_FIND_REMOVE_UNMODIFIED}},
+    {NULL, {0}}
+};
 
 void esyms_init(emacs_env *env)
 {
@@ -762,6 +799,9 @@ void esyms_init(emacs_env *env)
     esym_blame_hunk = env->make_global_ref(env, env->intern(env, "blame-hunk"));
     esym_blob = env->make_global_ref(env, env->intern(env, "blob"));
     esym_blob_executable = env->make_global_ref(env, env->intern(env, "blob-executable"));
+    esym_break_rewrites = env->make_global_ref(env, env->intern(env, "break-rewrites"));
+    esym_break_rewrites_for_renames_only = env->make_global_ref(env, env->intern(env, "break-rewrites-for-renames-only"));
+    esym_break_rewrite_threshold = env->make_global_ref(env, env->intern(env, "break_rewrite_threshold"));
     esym_callbacks = env->make_global_ref(env, env->intern(env, "callbacks"));
     esym_car = env->make_global_ref(env, env->intern(env, "car"));
     esym_cdr = env->make_global_ref(env, env->intern(env, "cdr"));
@@ -778,6 +818,7 @@ void esyms_init(emacs_env *env)
     esym_consp = env->make_global_ref(env, env->intern(env, "consp"));
     esym_context_lines = env->make_global_ref(env, env->intern(env, "context-lines"));
     esym_copied = env->make_global_ref(env, env->intern(env, "copied"));
+    esym_copy_threshold = env->make_global_ref(env, env->intern(env, "copy_threshold"));
     esym_cred = env->make_global_ref(env, env->intern(env, "cred"));
     esym_credentials = env->make_global_ref(env, env->intern(env, "credentials"));
     esym_current = env->make_global_ref(env, env->intern(env, "current"));
@@ -809,9 +850,21 @@ void esyms_init(emacs_env *env)
     esym_fetch = env->make_global_ref(env, env->intern(env, "fetch"));
     esym_file_favor = env->make_global_ref(env, env->intern(env, "file-favor"));
     esym_file_flags = env->make_global_ref(env, env->intern(env, "file-flags"));
+    esym_find_all = env->make_global_ref(env, env->intern(env, "find-all"));
+    esym_find_copies = env->make_global_ref(env, env->intern(env, "find-copies"));
+    esym_find_copies_from_unmodified = env->make_global_ref(env, env->intern(env, "find-copies-from-unmodified"));
+    esym_find_dont_ignore_whitespace = env->make_global_ref(env, env->intern(env, "find-dont-ignore-whitespace"));
+    esym_find_exact_match_only = env->make_global_ref(env, env->intern(env, "find-exact-match-only"));
     esym_find_failures = env->make_global_ref(env, env->intern(env, "find-failures"));
+    esym_find_for_untracked = env->make_global_ref(env, env->intern(env, "find-for-untracked"));
+    esym_find_ignore_leading_whitespace = env->make_global_ref(env, env->intern(env, "find-ignore-leading-whitespace"));
+    esym_find_ignore_whitespace = env->make_global_ref(env, env->intern(env, "find-ignore-whitespace"));
+    esym_find_remove_unmodified = env->make_global_ref(env, env->intern(env, "find-remove-unmodified"));
     esym_find_renames = env->make_global_ref(env, env->intern(env, "find-renames"));
+    esym_find_renames_from_rewrites = env->make_global_ref(env, env->intern(env, "find-renames-from-rewrites"));
+    esym_find_rewrites = env->make_global_ref(env, env->intern(env, "find-rewrites"));
     esym_first_parent = env->make_global_ref(env, env->intern(env, "first-parent"));
+    esym_flags = env->make_global_ref(env, env->intern(env, "flags"));
     esym_force = env->make_global_ref(env, env->intern(env, "force"));
     esym_force_binary = env->make_global_ref(env, env->intern(env, "force-binary"));
     esym_force_text = env->make_global_ref(env, env->intern(env, "force-text"));
@@ -931,6 +984,7 @@ void esyms_init(emacs_env *env)
     esym_max_size = env->make_global_ref(env, env->intern(env, "max-size"));
     esym_md5 = env->make_global_ref(env, env->intern(env, "md5"));
     esym_merge = env->make_global_ref(env, env->intern(env, "merge"));
+    esym_metric = env->make_global_ref(env, env->intern(env, "metric"));
     esym_min_line = env->make_global_ref(env, env->intern(env, "min-line"));
     esym_minimal = env->make_global_ref(env, env->intern(env, "minimal"));
     esym_mixed = env->make_global_ref(env, env->intern(env, "mixed"));
@@ -989,6 +1043,9 @@ void esyms_init(emacs_env *env)
     esym_refspec = env->make_global_ref(env, env->intern(env, "refspec"));
     esym_remote = env->make_global_ref(env, env->intern(env, "remote"));
     esym_rename_threshold = env->make_global_ref(env, env->intern(env, "rename-threshold"));
+    esym_rename_from_rewrite_threshold = env->make_global_ref(env, env->intern(env, "rename_from_rewrite_threshold"));
+    esym_rename_limit = env->make_global_ref(env, env->intern(env, "rename_limit"));
+    esym_rename_threshold = env->make_global_ref(env, env->intern(env, "rename_threshold"));
     esym_renamed = env->make_global_ref(env, env->intern(env, "renamed"));
     esym_renames_from_rewrites = env->make_global_ref(env, env->intern(env, "renames-from-rewrites"));
     esym_renames_head_to_index = env->make_global_ref(env, env->intern(env, "renames-head-to-index"));

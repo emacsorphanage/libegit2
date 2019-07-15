@@ -324,6 +324,7 @@ bool em_findsym_checkout_strategy(git_checkout_strategy_t *out, emacs_env *env, 
 bool em_findsym_config_level(git_config_level_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_delta(git_delta_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_diff_format(git_diff_format_t *out, emacs_env *env, emacs_value value, bool required);
+bool em_findsym_diff_find(git_diff_find_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_describe_strategy(git_describe_strategy_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_fetch_prune(git_fetch_prune_t *out, emacs_env *env, emacs_value value, bool required);
 bool em_findsym_filemode(git_filemode_t *out, emacs_env *env, emacs_value value, bool required);

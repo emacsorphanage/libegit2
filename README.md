@@ -414,8 +414,8 @@ Probably none of these functions are necessary, since we can expose buffers to E
 - :grey_question: `git-diff-blobs`
 - :grey_question: `git-diff-buffers`
 - :grey_question: `git-diff-commit-as-email`
-- :grey_question: `git-diff-find-init-options`
-- :grey_question: `git-diff-find-similar`
+- :x: `git-diff-find-init-options`
+- :heavy_check_mark: `git-diff-find-similar`
 - :heavy_check_mark: `git-diff-foreach`
 - :grey_question: `git-diff-format-email`
 - :grey_question: `git-diff-format-email-init-options`

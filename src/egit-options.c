@@ -551,3 +551,91 @@ void egit_push_options_release(git_push_options *opts)
     free((void*) opts->proxy_opts.url);
     free(opts->callbacks.payload);
 }
+
+static emacs_value egit_diff_find_flags_parse(emacs_env *env, emacs_value list,
+                                              uint32_t *out)
+{
+    EM_ASSERT_CONS(list);
+    *out = GIT_DIFF_FIND_BY_CONFIG;
+    {
+        EM_DOLIST(flag, list, flags_list);
+        git_diff_find_t flag_value = 0;
+        if (!em_findsym_diff_find(&flag_value, env, flag, /*required=*/true)) {
+            return esym_nil;
+        }
+        *out |= flag_value;
+        EM_DOLIST_END(flags_list);
+    }
+    return esym_t;
+}
+
+static bool
+assert_in_bounds_uint16(emacs_env *env, intmax_t value, emacs_value _value) {
+    if (value > UINT16_MAX || value < 0) {
+        em_signal_wrong_value(env, _value);
+        return false;
+    }
+    return true;
+}
+
+emacs_value egit_diff_find_options_parse(emacs_env *env, emacs_value alist, git_diff_find_options *opts)
+{
+    int retval =
+      git_diff_find_init_options(opts, GIT_DIFF_FIND_OPTIONS_VERSION);
+    EGIT_CHECK_ERROR(retval);
+
+    if (!EM_EXTRACT_BOOLEAN(alist)) {
+      return esym_nil;
+    }
+
+    // Main loop through the options alist
+    emacs_value car, cdr;
+    {
+        EM_DOLIST(cell, alist, options);
+        EM_ASSERT_CONS(cell);
+        car = em_car(env, cell);
+        cdr = em_cdr(env, cell);
+
+        if (EM_EQ(car, esym_flags)) {
+            if (esym_t != egit_diff_find_flags_parse(env, cdr, &opts->flags)) {
+                return esym_nil;
+            }
+        } else if (EM_EQ(car, esym_rename_threshold)) {
+            intmax_t threshold = EM_EXTRACT_INTEGER(cdr);
+            if (!assert_in_bounds_uint16(env, threshold, cdr)) {
+                return esym_nil;
+            }
+            opts->rename_threshold = (uint16_t) threshold;
+        } else if (EM_EQ(car, esym_rename_from_rewrite_threshold)) {
+            intmax_t threshold = EM_EXTRACT_INTEGER(cdr);
+            if (!assert_in_bounds_uint16(env, threshold, cdr)) {
+                return esym_nil;
+            }
+            opts->rename_from_rewrite_threshold = (uint16_t) threshold;
+        } else if (EM_EQ(car, esym_copy_threshold)) {
+            intmax_t threshold = EM_EXTRACT_INTEGER(cdr);
+            if (!assert_in_bounds_uint16(env, threshold, cdr)) {
+                return esym_nil;
+            }
+            opts->copy_threshold = (uint16_t) threshold;
+        } else if (EM_EQ(car, esym_break_rewrite_threshold)) {
+            intmax_t threshold = EM_EXTRACT_INTEGER(cdr);
+            if (!assert_in_bounds_uint16(env, threshold, cdr)) {
+                return esym_nil;
+            }
+            opts->break_rewrite_threshold = (uint16_t) threshold;
+        } else if (EM_EQ(car, esym_rename_limit)) {
+            intmax_t threshold = EM_EXTRACT_INTEGER(cdr);
+            if (!assert_in_bounds_uint16(env, threshold, cdr)) {
+                return esym_nil;
+            }
+            opts->rename_limit = (uint16_t) threshold;
+        } else if (EM_EQ(car, esym_metric)) {
+            // TODO: implement custom metric
+        }
+
+        EM_DOLIST_END(options);
+    }
+
+    return esym_nil;
+}
