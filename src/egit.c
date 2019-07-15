@@ -541,6 +541,7 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-diff-tree-to-tree", diff_tree_to_tree, 1, 4);
     DEFUN("libgit-diff-tree-to-workdir", diff_tree_to_workdir, 1, 3);
     DEFUN("libgit-diff-tree-to-workdir-with-index", diff_tree_to_workdir_with_index, 1, 3);
+    DEFUN("libgit-diff-find-similar", diff_find_similar, 1, 2);
 
     DEFUN("libgit-diff-foreach", diff_foreach, 2, 5);
     DEFUN("libgit-diff-print", diff_print, 1, 3);

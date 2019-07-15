@@ -305,6 +305,7 @@ MKFINDSYM(git_submodule_recurse_t, submodule_recurse);
 MKFINDSYM(git_submodule_update_t, submodule_update);
 MKFINDSYM(int, stage);
 MKFINDSYM(git_status_show_t, status_show);
+MKFINDSYM(git_diff_find_t, diff_find);
 
 #undef MKFINDSYM
 

@@ -38,4 +38,6 @@ EGIT_DEFUN(diff_line_content, emacs_value _line);
 EGIT_DEFUN(diff_get_delta, emacs_value _delta, emacs_value _index);
 EGIT_DEFUN(diff_num_deltas, emacs_value _diff, emacs_value _type);
 
+EGIT_DEFUN(diff_find_similar, emacs_value _diff, emacs_value _options);
+
 #endif /* EGIT_DIFF_H */

@@ -14,4 +14,6 @@ void egit_fetch_options_release(git_fetch_options *opts);
 emacs_value egit_push_options_parse(emacs_env *env, emacs_value alist, git_push_options *opts);
 void egit_push_options_release(git_push_options *opts);
 
+emacs_value egit_diff_find_options_parse(emacs_env *env, emacs_value alist, git_diff_find_options *opts);
+
 #endif /* EGIT_OPTIONS_H */
