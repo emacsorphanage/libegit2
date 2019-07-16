@@ -39,6 +39,7 @@ set(EGIT_TESTS
   repository
   reset
   revert
+  revparse
   revwalk
   signature
   status
