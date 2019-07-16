@@ -76,6 +76,17 @@ emacs_value egit_revparse_single(emacs_env *env, emacs_value _repo, emacs_value 
         free(spec);
     }
     EGIT_CHECK_ERROR(retval);
+    if (retval == GIT_ENOTFOUND) {
+      // We can only reach this if a giterr was not set by libgit.
+      // This is a bug in libgit, bug report and fix are TBD.
+      // Let's signal this error manually.
+      emacs_value error = em_findenum_error(GITERR_REFERENCE);
+      if (!EM_EXTRACT_BOOLEAN(error))
+        error = esym_giterr;
+      em_signal(env, error,
+		"previously checked out branch or commit not found");
+      return esym_nil;
+    }
 
     return egit_wrap(env, EGIT_OBJECT, obj, EM_EXTRACT_USER_PTR(_repo));
 }

@@ -29,3 +29,17 @@
           (should (car res))
           (should (string= c1 (libgit-commit-id (cadr res))))
           (should (string= c2 (libgit-commit-id (caddr res)))))))))
+
+(ert-deftest revparse-negative ()
+  (let (c1 c2 c3)
+    (with-temp-dir path
+      (init)
+      (commit-change "file1" "abcdef")
+      (let ((repo (libgit-repository-open path)))
+        (should-error (libgit-revparse-single repo "HEADDDD")
+		      :type 'giterr-reference)
+	(commit-change "file2" "abcdef")
+	(checkout "HEAD^")
+	(should (libgit-revparse-single repo "@{-1}"))
+	(should-error (libgit-revparse-single repo "@{-2}")
+		      :type 'giterr-reference)))))
