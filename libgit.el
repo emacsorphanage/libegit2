@@ -77,7 +77,7 @@ On successful exit, pass control on to the load step."
   "Load the `libegit2' dynamic module.
 If that fails, then raise an error."
   (unless (featurep 'libegit2)
-    (load-file libgit--module-file))
+    (load libgit--module-file nil t t))
   (unless (featurep 'libegit2)
     (error "libgit: unable to load the libegit2 dynamic module")))
 
