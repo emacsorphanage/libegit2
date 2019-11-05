@@ -110,7 +110,7 @@ To do this, we use a wrapper structure with a type information tag.
 
 Some objects expose data that belong to other objects. In many cases, libgit2 keeps reference-counts
 on these internally, but that's not always true. In particular, `git_repository` structs are not
-reference-counted (altough the data-owning sub-objects like `git_odb` are). Neither are lightweight
+reference-counted (although the data-owning sub-objects like `git_odb` are). Neither are lightweight
 public structs like `git_index_entry`, `git_diff_XYZ`, etc. In these cases, the *parent types* must
 be reference-counted on our side, and the *child types* must keep a reference to the parent alive.
 

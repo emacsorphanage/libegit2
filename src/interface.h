@@ -46,20 +46,20 @@
 #define EM_EXTRACT_BOOLEAN(val) (env->is_not_nil(env, (val)) ? 1 : 0)
 
 // Extract a string from an emacs_value.
-// Caller is reponsible for ensuring that the emacs_value represents a string.
+// Caller is responsible for ensuring that the emacs_value represents a string.
 #define EM_EXTRACT_STRING(val) em_get_string(env, (val));
 
 // Extract an integer from an emacs_value.
-// Caller is reponsible for ensuring that the emacs_value represents an integer.
+// Caller is responsible for ensuring that the emacs_value represents an integer.
 #define EM_EXTRACT_INTEGER(val) env->extract_integer(env, (val))
 
 // Extract an integer from an emacs_value with a default.
-// Caller is reponsible for ensuring that the emacs_value represents an integer or nil.
+// Caller is responsible for ensuring that the emacs_value represents an integer or nil.
 #define EM_EXTRACT_INTEGER_OR_DEFAULT(val, default)                     \
     (EM_EXTRACT_BOOLEAN(val) ? EM_EXTRACT_INTEGER(val) : (default))
 
 // Extract a string from an emacs_value, or NULL.
-// Caller is reponsible for ensuring that the emacs_value represents a string or nil.
+// Caller is responsible for ensuring that the emacs_value represents a string or nil.
 #define EM_EXTRACT_STRING_OR_NULL(val)                                  \
     (EM_EXTRACT_BOOLEAN(val) ? em_get_string(env, (val)) : NULL)
 

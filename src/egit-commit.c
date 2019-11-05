@@ -216,7 +216,7 @@ emacs_value egit_commit_tree_id(emacs_env *env, emacs_value _commit)
 // Operations
 
 EGIT_DOC(commit_create, "REPO REFNAME AUTHOR COMMITTER MESSAGE TREE &optional PARENTS",
-         "Create a new committ in REPO and return its ID.\n"
+         "Create a new commit in REPO and return its ID.\n"
          "REFNAME, if non-nil, must be the name of a reference that will\n"
          "be updated to point to the new commit. It will be created if it\n"
          "does not exist. Use \"HEAD\" to update the HEAD of the current branch.\n"

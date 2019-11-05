@@ -805,7 +805,7 @@ EGIT_DOC(diff_find_similar, "DIFF &optional OPTIONS",
          "    This is equivalent to the -C option (see git-diff(1)).\n"
          "    Defaults to 50.\n"
          "\n"
-         "  - `break-rewrite-threshold' is an integer treshold below which\n"
+         "  - `break-rewrite-threshold' is an integer threshold below which\n"
          "    similar files will be split into a delete/add pair.\n"
          "    This is equivalent to the last part of the -B option (see git-diff(1))\n"
          "    Defaults to 60.\n"
