@@ -87,9 +87,15 @@ If that fails, then raise an error."
 If the module is not available, then offer to build it."
   (interactive)
   (cond
-   ((file-exists-p libgit--module-file) (libgit--load))
-   ((y-or-n-p "libgit must be built, do so now?") (libgit--configure))
-   (t (error "libgit was not loaded!"))))
+   ((file-exists-p libgit--module-file)
+    (libgit--load))
+   ((and (not noninteractive)
+	 (y-or-n-p "libgit must be built, do so now?"))
+    (libgit--configure))
+   (noninteractive
+    (message "libgit was not loaded!"))
+   (t
+    (error "libgit was not loaded!"))))
 
 (libgit-load)
 
