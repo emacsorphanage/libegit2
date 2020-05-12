@@ -77,7 +77,7 @@
            (blame (libgit-blame-file repo "test")))
       (should (= 2 (libgit-blame-get-hunk-count blame))))
 
-    ;; we can achive the same if we specify lines range explicitly
+    ;; we can achieve the same if we specify lines range explicitly
     (let* ((repo (libgit-repository-open path))
            (options '((min-line . 1)
                       (max-line . 3)))
