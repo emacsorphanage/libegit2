@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 TheBB
 ;;
 ;; Author: Eivind Fonn <evfonn@gmail.com>
-;; URL: https://github.com/TheBB/libegit2
+;; URL: https://github.com/magit/libegit2
 ;; Version: 0.0.1
 ;; Keywords: git vc
 ;; Package-Requires: ((emacs "25.1"))
