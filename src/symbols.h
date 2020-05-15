@@ -27,7 +27,7 @@ typedef union {
     git_fetch_prune_t fetch_prune;
     git_filemode_t filemode;
     git_index_add_option_t index_add_option;
-    git_indexcap_t indexcap;
+    int indexcap;
     git_merge_analysis_t merge_analysis;
     git_merge_file_favor_t merge_file_favor;
     git_merge_file_flag_t merge_file_flag;

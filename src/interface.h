@@ -368,7 +368,7 @@ bool em_setflags_list(void *out, emacs_env *env, emacs_value list, bool required
 bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist, bool required, setter *setter);
 
 emacs_value em_getlist_credtype(emacs_env *env, git_credtype_t value);
-emacs_value em_getlist_indexcap(emacs_env *env, git_indexcap_t value);
+emacs_value em_getlist_indexcap(emacs_env *env, int value);
 emacs_value em_getlist_merge_analysis(emacs_env *env, git_merge_analysis_t value);
 emacs_value em_getlist_status(emacs_env *env, git_status_t value);
 emacs_value em_getlist_submodule_status(emacs_env *env, git_submodule_status_t value);

@@ -415,7 +415,7 @@ bool em_setflags_alist(void *out, emacs_env *env, emacs_value alist,
     }
 
 MKGETLIST(git_credtype_t, credtype);
-MKGETLIST(git_indexcap_t, indexcap);
+MKGETLIST(int, indexcap);
 MKGETLIST(git_merge_analysis_t, merge_analysis);
 MKGETLIST(git_status_t, status);
 MKGETLIST(git_submodule_status_t, submodule_status);
