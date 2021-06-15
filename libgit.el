@@ -90,7 +90,7 @@ If the module is not available, then offer to build it."
    ((file-exists-p libgit--module-file)
     (libgit--load))
    ((and (not noninteractive)
-	 (y-or-n-p "libgit must be built, do so now?"))
+         (y-or-n-p "libgit must be built, do so now?"))
     (libgit--configure))
    (noninteractive
     (message "libgit was not loaded!"))
