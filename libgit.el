@@ -41,7 +41,7 @@
   "Directory where the libegit2 dynamic module file should be built.")
 
 (defvar libgit--module-file
-  (expand-file-name (concat "libegit2" module-file-suffix) libgit--build-dir)
+  (expand-file-name (concat "libegit2" (if (string= system-type "darwin") ".so" module-file-suffix)) libgit--build-dir)
   "Path to the libegit2 dynamic module file.")
 
 (defun libgit--configure ()
