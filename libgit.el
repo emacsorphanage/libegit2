@@ -32,6 +32,15 @@
 (unless module-file-suffix
   (error "Module support not detected, libgit can't work"))
 
+(defgroup libgit nil
+  "Customizations for libgit."
+  :group 'magit)
+
+(defcustom libgit-auto-rebuild nil
+  "Whether libgit should be rebuilt noninteractively when it cannot be loaded."
+  :group 'libgit
+  :type 'boolean)
+
 (defvar libgit--root
   (file-name-directory (or load-file-name buffer-file-name))
   "Directory where libgit is installed.")
@@ -89,6 +98,8 @@ If the module is not available, then offer to build it."
   (cond
    ((file-exists-p libgit--module-file)
     (libgit--load))
+   (libgit-auto-rebuild
+    (libgit--configure))
    ((and (not noninteractive)
          (y-or-n-p "libgit must be built, do so now?"))
     (libgit--configure))
