@@ -85,7 +85,10 @@ If you use [Borg](https://github.com/emacscollective/borg), then use the followi
     build-step = make
 ```
 
-## Contributing
+## libgit2 headers
+
+This repository bundles the libgit2 headers in the libgit2 subdirectory. Currently they are at
+version 1.0.0 (revision 7d3c705 in the source repository).
 
 ### Adding a function
 

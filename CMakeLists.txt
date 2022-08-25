@@ -7,8 +7,6 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "shared" FORCE)
 set(BUILD_CLAR OFF CACHE BOOL "clar" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DEGIT_DEBUG")
 
-add_subdirectory(libgit2)
-
 find_library(git2 libgit2.a)
 add_subdirectory(src)
 
