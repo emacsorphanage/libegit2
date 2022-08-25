@@ -31,12 +31,9 @@ Quality-of-life convenience functionality is better implemented in Emacs Lisp th
 
 ## Building
 
-There is a loader file written in Emacs Lisp that will build the module for you, but the
-`git submodule` steps need to be run manually.
+There is a loader file written in Emacs Lisp that will build the module for you.
 
 ```
-git submodule init
-git submodule update
 mkdir build
 cd build
 cmake ..

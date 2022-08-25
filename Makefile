@@ -25,7 +25,6 @@ PACKAGE_BASENAME := libgit
 include emake.mk
 
 build/libegit2.so:
-	git submodule update --init
 	mkdir -p build
 	cd build && cmake .. $(BUILD_OPTIONS) && make
 
@@ -47,7 +46,7 @@ EMACS_ARGS ?=
 
 LOAD_PATH  ?= -L . -L build
 
-.PHONY: test libgit2 submodule-update
+.PHONY: test
 
 all: lisp
 
@@ -55,15 +54,13 @@ help:
 	$(info make all               - build everything)
 	$(info make module            - generate module)
 	$(info make lisp              - generate byte-code and autoloads)
-	$(info make submodule-init    - update the submodule)
-	$(info make submodule-update  - update the submodule)
 	$(info make test              - run tests)
 	$(info make clean             - remove generated files)
 	@printf "\n"
 
 module: build/libegit2.so
 
-build/libegit2.so: libgit2
+build/libegit2.so:
 	@printf "Building $<\n"
 	@mkdir -p build
 	@cd build && cmake .. $(BUILD_OPTIONS) && make
@@ -80,14 +77,6 @@ test: libgit.elc build/libegit2.so
 	$(EMACS) -Q --batch $(LOAD_PATH) -l libgit \
 	  $(addprefix -l test/,$(shell ls test)) \
 	  -f ert-run-tests-batch-and-exit
-
-submodule-init: libgit2
-
-submodule-update:
-	@git submodule update
-
-libgit2:
-	@git submodule update --init
 
 CLEAN  = $(ELCS) $(PKG)-autoloads.el build
 
