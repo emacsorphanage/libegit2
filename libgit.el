@@ -1,11 +1,13 @@
 ;;; libgit.el --- Thin bindings to libgit2. -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 TheBB
-;;
+;; Copyright (C) 2018-2020 Eivind Fonn
+;; Copyright (C) 2018-2023 The Magit Project Contributors
+
 ;; Author: Eivind Fonn <evfonn@gmail.com>
-;; URL: https://github.com/magit/libegit2
-;; Version: 0.0.1
+;; Homepage: https://github.com/magit/libegit2
 ;; Keywords: git vc
+
+;; Package-Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; SPDX-License-Identifier: GPL-2.0-or-later
