@@ -1,3 +1,11 @@
+DESTDIR     ?=
+PREFIX      ?= /usr
+DATADIR     ?= $(PREFIX)/share
+BINDIR      ?= $(PREFIX)/bin
+LIBDIR      ?= $(PREFIX)/lib
+ELDIR       ?= $(DATADIR)/emacs/site-lisp
+DYNMODDRIR  ?= $(LIBDIR)/emacs/site-lisp
+
 BUILD_OPTIONS=-DCMAKE_BUILD_TYPE=Debug
 
 ifeq '$(findstring ;,$(PATH))' ';'
@@ -54,7 +62,7 @@ EMACS_ARGS ?=
 
 LOAD_PATH  ?= -L . -L build
 
-.PHONY: test libgit2 submodule-update
+.PHONY: test libgit2 submodule-update install
 
 all: lisp
 
@@ -135,3 +143,17 @@ $(PKG)-autoloads.el: $(ELS)
 	(update-directory-autoloads default-directory))"
 
 endif
+
+install-%-dynamic-module:
+	$(if $<, install -m755 -d $(DESTDIR)$(DYNMODDRIR))
+	$(if $<, install -m755 $^ $(DESTDIR)$(DYNMODDRIR))
+
+install-%-el:
+	$(if $<, install -m755 -d $(DESTDIR)$(ELDIR))
+	$(if $<, install -m644 $^ $(DESTDIR)$(ELDIR))
+
+install: $(addprefix install-, libgit-el libgit-dynamic-module)
+
+install-libgit-el: $(ELS) $(ELCS) $(PKG)-autoloads.el
+
+install-libgit-dynamic-module: build/libegit2.so
