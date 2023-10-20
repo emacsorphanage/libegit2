@@ -62,7 +62,7 @@ EMACS_ARGS ?=
 
 LOAD_PATH  ?= -L . -L build
 
-.PHONY: test libgit2 submodule-update install
+.PHONY: test submodule-update install
 
 all: lisp
 
