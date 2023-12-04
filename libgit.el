@@ -53,8 +53,13 @@
   (expand-file-name "build" libgit--root)
   "Directory where the libegit2 dynamic module file should be built.")
 
-(defvar libgit--module-file
-  (expand-file-name "libegit2.so" libgit--build-dir)
+(defvar libgit--module-file-name
+  (file-name-with-extension "libegit2" module-file-suffix)
+  "Name of the libegit2 dynamic module file.")
+
+(defvar libgit--module-file-name-path
+  (expand-file-name libgit--module-file-name
+                    libgit--build-dir)
   "Path to the libegit2 dynamic module file.")
 
 (defun libgit--configure ()
@@ -90,7 +95,7 @@ On successful exit, pass control on to the load step."
   "Load the `libegit2' dynamic module.
 If that fails, then raise an error."
   (unless (featurep 'libegit2)
-    (load libgit--module-file nil t t))
+    (load libgit--module-file-name-path nil t t))
   (unless (featurep 'libegit2)
     (error "libgit: unable to load the libegit2 dynamic module")))
 
@@ -100,8 +105,11 @@ If that fails, then raise an error."
 If the module is not available, then offer to build it."
   (interactive)
   (cond
-   ((file-exists-p libgit--module-file)
-    (libgit--load))
+    ((file-exists-p libgit--module-file-name-path)
+     (libgit--load))
+    ((locate-library libgit--module-file-name t)
+     (setq libgit--module-file-name-path (locate-library libgit--module-file-name t))
+     (libgit--load))
    (libgit-auto-rebuild
     (libgit--configure))
    ((and (not noninteractive)
