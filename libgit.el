@@ -7,7 +7,7 @@
 ;; Homepage: https://github.com/emacsorphanage/libegit2
 ;; Keywords: git vc
 
-;; Package-Version: 0.0.1
+;; Package-Version: 0.0.2
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; SPDX-License-Identifier: GPL-2.0-or-later
