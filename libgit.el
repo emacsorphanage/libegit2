@@ -4,7 +4,7 @@
 ;; Copyright (C) 2018-2023 The Magit Project Contributors
 
 ;; Author: Eivind Fonn <evfonn@gmail.com>
-;; Homepage: https://github.com/magit/libegit2
+;; Homepage: https://github.com/emacsorphanage/libegit2
 ;; Keywords: git vc
 
 ;; Package-Version: 0.0.1
